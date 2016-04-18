@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
-@ComponentScan({"edu.ksu.canvas", "edu.ksu.lti", "edu.ksu.canvas.aviationReporting.jms"})
+@ComponentScan({"edu.ksu.canvas", "edu.ksu.lti", "edu.ksu.canvas.biodemo.jms"})
 @EntityScan(basePackages = "edu.ksu.canvas")
 @PropertySource({"classpath:application.properties","classpath:aviation-reporting" +
         ".properties"})

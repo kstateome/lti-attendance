@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviationReporting.controller;
 import edu.ksu.canvas.aviationReporting.config.AppConfig;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.repository.OauthTokenRepository;
+import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
 import edu.ksu.lti.model.LtiSession;
@@ -28,14 +29,9 @@ import java.util.List;
 @Scope("request")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
-    @Autowired
-    private AviationReportingController activityReportingRepository;
 
     @Autowired
-    private AviationReportingController activityReportingCanvasUtil;
-
-    @Autowired
-    private OauthTokenRepository tokenRepository;
+    protected LtiLaunch ltiLaunch;
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
@@ -45,9 +41,14 @@ public class AviationReportingController extends LtiLaunchController {
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
 
+    @RequestMapping("/index")
+    public ModelAndView index(HttpServletRequest request) {
+        return new ModelAndView("index");
+    }
+
     @Override
     protected String getInitialViewPath() {
-        return "showUsers";
+        return "/index";
     }
 
     @Override

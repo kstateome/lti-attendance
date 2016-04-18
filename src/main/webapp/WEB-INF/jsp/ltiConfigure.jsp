@@ -34,16 +34,10 @@
     &lt;blti:description&gt;Aviation Reporting&lt;/blti:description&gt;
     &lt;blti:launch_url&gt;${url}&lt;/blti:launch_url&gt;
     &lt;blti:extensions platform="canvas.instructure.com"&gt;
-      &lt;blti:custom&gt;
-        &lt;lticm:property name="user_roles"&gt;$Canvas.membership.roles&lt;/lticm:property&gt;
-      &lt;/blti:custom&gt;
       &lt;lticm:property name="privacy_level"&gt;public&lt;/lticm:property&gt;
-      &lt;lticm:options name="account_navigation"&gt;
+      &lt;lticm:options name="course_navigation"&gt;
         &lt;lticm:property name="enabled"&gt;true&lt;/lticm:property&gt;
         &lt;lticm:property name="visibility"&gt;admins&lt;/lticm:property&gt;
-        &lt;lticm:options names="custom_fields"&gt;
-          &lt;lticm:property name="canvas_membership_roles"&gt;$Canvas.membership.roles&lt;/ltcim:property&gt;
-        &lt;/ltcim:options&gt;
       &lt;/lticm:options&gt;
     &lt;/blti:extensions&gt;
 &lt;/cartridge_basiclti_link&gt;
