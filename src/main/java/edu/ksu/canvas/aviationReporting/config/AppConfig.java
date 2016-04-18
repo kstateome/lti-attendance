@@ -1,4 +1,4 @@
-package config;
+package edu.ksu.canvas.aviationReporting.config;
 
 import edu.ksu.lti.config.CommonAppConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,9 +11,10 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
-@ComponentScan({"edu.ksu.canvas", "edu.ksu.lti", "edu.ksu.canvas.biodemo.jms"})
+@ComponentScan({"edu.ksu.canvas", "edu.ksu.lti", "edu.ksu.canvas.aviationReporting.jms"})
 @EntityScan(basePackages = "edu.ksu.canvas")
 @PropertySource({"classpath:application.properties","classpath:aviation-reporting" +
         ".properties"})
 public class AppConfig extends CommonAppConfig {
+
 }
