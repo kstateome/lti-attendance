@@ -41,14 +41,15 @@ public class AviationReportingController extends LtiLaunchController {
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
 
-    @RequestMapping("/index")
-    public ModelAndView index(HttpServletRequest request) {
-        return new ModelAndView("index");
+    @RequestMapping("/showRoster")
+    public ModelAndView showRoster(HttpServletRequest request) {
+
+        return new ModelAndView("showRoster");
     }
 
     @Override
     protected String getInitialViewPath() {
-        return "/index";
+        return "/showRoster";
     }
 
     @Override
