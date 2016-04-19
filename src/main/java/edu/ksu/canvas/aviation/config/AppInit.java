@@ -1,4 +1,4 @@
-package edu.ksu.canvas.aviationReporting.config;
+package edu.ksu.canvas.aviation.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
