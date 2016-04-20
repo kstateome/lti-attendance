@@ -7,18 +7,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- Set context path -->
+    <c:set var="context" value="${pageContext.request.contextPath}" />
+
+    <!-- Load Bootstrap JS -->
+    <script src="${context}/bootstrap/js/bootstrap.js"></script>
+    <!-- LOAD BOOTSTRAP -->
+    <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.min.css"/>
     <title>Test Page</title>
 </head>
 <body>
-    <div>
-        <table>
+    <div class="container-fluid">
+        <div class="row">
             <c:forEach items="${rosterForm.enrollments}" var="enrollment">
-                Key = ${enrollment.key.courseId}, values =
-                <c:forEach items="${enrollment.value}" var="student" varStatus="loop">
-                    ${student.user.sortableName} ${!loop.last ? ', ' : ''}
-                </c:forEach><br>
+                <div class="row">
+                    <div class="col-md-3">
+                        Key = ${enrollment.key.courseId}
+                    </div>
+                </div>
+                <div class="row">
+                    <c:forEach items="${enrollment.value}" var="student" varStatus="loop">
+                        <div class="col-md-4">
+                            ${student.user.sortableName} ${!loop.last ? ', ' : ''}
+                        </div>
+                    </c:forEach>
+                </div>
             </c:forEach>
-        </table>
+        </div>
     </div>
 </body>
 </html>
