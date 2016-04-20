@@ -4,9 +4,21 @@ import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
+import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
+import edu.ksu.canvas.impl.EnrollmentsImpl;
+import edu.ksu.canvas.impl.SectionsImpl;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.SectionReader;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.net.RestClient;
+import edu.ksu.canvas.net.RestClientImpl;
+import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.lti.util.CanvasURLBuilder;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
@@ -18,12 +30,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,13 +46,22 @@ import java.util.Optional;
 @Scope("request")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
+    private static final int CANVAS_VERSION = 1;
 
     @Autowired
     protected LtiLaunch ltiLaunch;
 
     @Autowired
     private RoleChecker roleChecker;
+//
+//    @Autowired
+//    private SectionReader sectionReader;
 
+    @Autowired
+    private CanvasURLBuilder canvasURLBuilder;
+//
+//    @Autowired
+//    private RestClient restClient;
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
@@ -48,19 +72,41 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping("/showRoster")
-    public ModelAndView showRoster(HttpServletRequest request, @ModelAttribute RosterForm rosterForm) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView showRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
-        LtiLaunchData launchData = ltiSession.getLtiLaunchData();
-        String eid = ltiSession.getEid();
+//        LtiLaunchData launchData = ltiSession.getLtiLaunchData();
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+        RestClient restClient = new RestClientImpl();
 
+        String canvasBaseUrl = canvasURLBuilder.buildCanvasUrl(CANVAS_VERSION, "courses/" + ltiSession.getCanvasCourseId(), Collections.emptyMap());
+        EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
 
-        LOG.info(eid + " opened AviationReporting and is privileged");
-        RosterForm roster = new RosterForm();
-        return new ModelAndView("showRoster");
+        String eid = ltiSession.getEid();
+        String courseID = ltiSession.getCanvasCourseId();
+        SectionIncludes studentsSection = SectionIncludes.students;
+
+        SectionReader sectionReader = new SectionsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
+        List<SectionIncludes> sectionIncludesList = new ArrayList<>();
+        sectionIncludesList.add(studentsSection);
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), sectionIncludesList);
+
+        EnrollmentType type = EnrollmentType.STUDENT;
+        List<EnrollmentType> enrollmentTypes = new ArrayList<>();
+        enrollmentTypes.add(type);
+
+        for(Section s: sections){
+            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
+            LOG.info(eid + " opened AviationReporting and is privileged");
+            rosterForm.setEnrollments(s, enrollments);
+        }
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("rosterForm", rosterForm);
+
+        return page;
     }
 
     @Override
