@@ -47,14 +47,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>rebel-remote.xml</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
     <dependencies>
         <dependency>

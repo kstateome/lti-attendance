@@ -29,8 +29,8 @@ import java.util.List;
 @PropertySource({"classpath:application.properties"})
 public class AppConfig extends CommonAppConfig {
 
-    @Autowired
-    private ConfigRepository configRepo;
+//    @Autowired
+//    private ConfigRepository configRepo;
 
     @Bean
     public RoleChecker roleChecker() {
@@ -40,14 +40,14 @@ public class AppConfig extends CommonAppConfig {
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
     }
-
-    @Bean(name = "canvasURLBuilder")
-    public CanvasURLBuilder canvasURLBuilder() {
-        ConfigItem configItem = configRepo.findByLtiApplicationAndKey("COMMON", "canvas_url");
-        CanvasURLBuilder canvasURLBuilder = new CanvasURLBuilder();
-        canvasURLBuilder.setCanvasBaseUrl(configItem.getValue());
-        return canvasURLBuilder;
-    }
+//
+//    @Bean(name = "canvasURLBuilder")
+//    public CanvasURLBuilder canvasURLBuilder() {
+//        ConfigItem configItem = configRepo.findByLtiApplicationAndKey("COMMON", "canvas_url");
+//        CanvasURLBuilder canvasURLBuilder = new CanvasURLBuilder();
+//        canvasURLBuilder.setCanvasBaseUrl(configItem.getValue());
+//        return canvasURLBuilder;
+//    }
 
 //    @Bean
 //    public EnrollmentsReader enrollmentsReader() {

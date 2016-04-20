@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.controller;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.util.RoleChecker;
+import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
@@ -57,8 +58,9 @@ public class AviationReportingController extends LtiLaunchController {
 //    @Autowired
 //    private SectionReader sectionReader;
 
+
     @Autowired
-    private CanvasURLBuilder canvasURLBuilder;
+    private ConfigRepository configRepository;
 //
 //    @Autowired
 //    private RestClient restClient;
@@ -78,11 +80,11 @@ public class AviationReportingController extends LtiLaunchController {
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
-//        LtiLaunchData launchData = ltiSession.getLtiLaunchData();
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         RestClient restClient = new RestClientImpl();
 
-        String canvasBaseUrl = canvasURLBuilder.buildCanvasUrl(CANVAS_VERSION, "courses/" + ltiSession.getCanvasCourseId(), Collections.emptyMap());
+        ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
+        String canvasBaseUrl = configItem.getValue();
         EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
 
         String eid = ltiSession.getEid();
@@ -100,7 +102,6 @@ public class AviationReportingController extends LtiLaunchController {
 
         for(Section s: sections){
             List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
-            LOG.info(eid + " opened AviationReporting and is privileged");
             rosterForm.setEnrollments(s, enrollments);
         }
         ModelAndView page = new ModelAndView("showRoster");

@@ -13,9 +13,9 @@
     <div>
         <table>
             <c:forEach items="${rosterForm.enrollments}" var="enrollment">
-                Key = ${enrollment.key}, values =
+                Key = ${enrollment.key.courseId}, values =
                 <c:forEach items="${enrollment.value}" var="student" varStatus="loop">
-                    ${student} ${!loop.last ? ', ' : ''}
+                    ${student.user.sortableName} ${!loop.last ? ', ' : ''}
                 </c:forEach><br>
             </c:forEach>
         </table>
