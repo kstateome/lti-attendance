@@ -18,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.util.List;
 
@@ -40,6 +41,12 @@ public class AppConfig extends CommonAppConfig {
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
     }
+//
+//    @Override
+//    public void addResourceHandlers (ResourceHandlerRegistry registry){
+//        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+//    }
+
 //
 //    @Bean(name = "canvasURLBuilder")
 //    public CanvasURLBuilder canvasURLBuilder() {

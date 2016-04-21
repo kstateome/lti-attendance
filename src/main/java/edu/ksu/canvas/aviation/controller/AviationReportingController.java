@@ -103,6 +103,9 @@ public class AviationReportingController extends LtiLaunchController {
         for(Section s: sections){
             List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
             rosterForm.setEnrollments(s, enrollments);
+            for(Enrollment e: enrollments) {
+                LOG.info(e.getUserId());
+            }
         }
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("rosterForm", rosterForm);
