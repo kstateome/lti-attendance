@@ -13,58 +13,70 @@
     <c:set var="context" value="${pageContext.request.contextPath}" />
 
     <!-- LOAD BOOTSTRAP -->
-    <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
+
+    <script src="${context}/js/jquery.2.1.3.min.js"></script>
+    <script src="${context}/js/moment.js"></script>
 
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
+ <form id="dayAttendance" action="${context}/singleDayAttendance" method="post">
     <div class="container">
         <div class="row">
             <c:forEach items="${rosterForm.enrollments}" var="enrollment">
                 <!-- Will have to implement sections in the future-->
-                <c:if test="${enrollment.key.name == 'CIS 200 A'}">
-                    <div class="row">
-                        <div class="col-md-1">Name</div>
+                <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
+                    <div class="row mainRow">
+                        <div class="col-md-2">Name</div>
                         <div class="col-md-1">ID</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Date</div>
-                        <div class="col-md-1">Total</div>
-                        <div class="col-md-1">Makeup</div>
+                        <div class="col-md-2">Date</div>
+                        <div class="col-md-2">Minutes Missed</div>
+                        <div class="col-md-2">Date Made Up</div>
+                        <div class="col-md-2">% of Course Missed</div>
                     </div>
-                </c:if>
+              <%--</c:if>--%>
                 <c:forEach items="${enrollment.value}" var="student" varStatus="loop">
                     <div class="row">
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             ${student.user.sortableName}
                         </div>
                         <div class="col-md-1">
                             ${student.user.sisUserId}
                         </div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">Present</div>
-                        <div class="col-md-1">0</div>
-                        <div class="col-md-1">1</div>
+                        <div class="col-md-2">
+                            <label>
+                                <select class="form-control no-padding no-width">
+                                    <option value="Present">Present</option>
+                                    <option value="Tardy">Tardy</option>
+                                    <option value="Absent">Absent</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="col-md-2" contenteditable="true">0</div>
 
+                        <div class='col-sm-2'>
+                            <label for="datepicker"></label><input type="text" id="datepicker">
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                var $j = jQuery.noConflict();
+                                $j("#datepicker4").datetimepicker();
+                            });
+                        </script>
+
+                        <div class="col-md-2" contenteditable="true">0%</div>
                     </div>
                 </c:forEach>
             </c:forEach>
         </div>
+        <br>
+        <button type="submit" class="btn btn-success">Save</button>
     </div>
+ </form>
     <!-- Load Bootstrap JS -->
-    <script src="${context}/js/jquery.2.1.3.min.js"></script>
-    <script src="${context}/bootstrap/js/bootstrap.js"></script>
     <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
