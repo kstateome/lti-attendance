@@ -63,16 +63,9 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Autowired
     private RoleChecker roleChecker;
-//
-//    @Autowired
-//    private SectionReader sectionReader;
-
 
     @Autowired
     private ConfigRepository configRepository;
-//
-//    @Autowired
-//    private RestClient restClient;
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
@@ -122,11 +115,9 @@ public class AviationReportingController extends LtiLaunchController {
                 student.setId(Integer.parseInt(e.getUser().getSisUserId()));
                 student.setName(e.getUser().getSortableName());
                 students.add(student);
-                LOG.info("Student: " + student.getName());
             }
             sectionInfo.setTotalStudents(students.size());
             if (students.size() > 0) {
-                LOG.info("SECTION SIZE: " + students.size());
                 sectionInfo.setStudents(students);
                 sectionInfo.setSectionId(s.getId());
                 sectionInfo.setSectionName(s.getName());
@@ -134,17 +125,9 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfoList.add(sectionInfo);
             }
             //TODO: Read in fake DAY and ATTENDANCE data from JSON
-//            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
-//            sectionInfo.setDays(days);
-//            for(Day day : sectionInfo.getDays()) {
-//                LOG.info("DATE: " + day.getDate());
-//                for(Attendance a : day.getAttendances()) {
-//                    LOG.info("Student ID: " + a.getId());
-//                    LOG.info("On Time: " + a.isOnTime());
-//                    LOG.info("Minutes missed: " + a.getMinutesMissed());
-//                }
-//            }
+            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
+            sectionInfo.setDays(days);
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
