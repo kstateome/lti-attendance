@@ -1,9 +1,15 @@
 package edu.ksu.canvas.aviation.controller;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.model.Day;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.model.Student;
+import edu.ksu.canvas.aviation.util.JsonFileParseUtil;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -36,7 +42,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,37 +117,38 @@ public class AviationReportingController extends LtiLaunchController {
             for (Enrollment e: enrollments) {
                 Student student = new Student();
                 // FIXME: This will be the WID
-                student.setId(e.getId());
+                student.setId(Integer.parseInt(e.getUser().getSisUserId()));
                 student.setName(e.getUser().getSortableName());
                 students.add(student);
                 LOG.info("Student: " + student.getName());
             }
             sectionInfo.setTotalStudents(students.size());
             if (students.size() > 0) {
+                LOG.info("SECTION SIZE: " + students.size());
                 sectionInfo.setStudents(students);
                 sectionInfo.setSectionId(s.getId());
                 sectionInfo.setSectionName(s.getName());
                 sectionInfo.setCourseId(s.getCourseId());
                 sectionInfoList.add(sectionInfo);
             }
-
-//            sectionInfo.setTotalStudents(s.getTotalStudents());
-
             //TODO: Read in fake DAY and ATTENDANCE data from JSON
-
+//            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+//            List<Day> days = new ArrayList<>();
+//
         }
+        rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("rosterForm", rosterForm);
 
         return page;
     }
 
-
-    @RequestMapping("/save")
-    public String save(@ModelAttribute RosterForm rosterForm) {
-
-        return "redirect:/displayRoster";
-    }
+//
+//    @RequestMapping("/save")
+//    public String save(@ModelAttribute RosterForm rosterForm) {
+//
+//        return "redirect:/displayRoster";
+//    }
 
     @Override
     protected String getInitialViewPath() {

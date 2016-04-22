@@ -25,12 +25,10 @@
 <body>
  <form id="dayAttendance" action="${context}/singleDayAttendance" method="post">
     <div class="container">
-        <div class="row">Empty</div>
         <div class="row">
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
                 <!-- Will have to implement sections in the future-->
                 <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
-                    <div class="row">${sectionInfo.sectionId}</div>
                     <div class="row mainRow">
                         <div class="col-md-2">Name</div>
                         <div class="col-md-1">ID</div>
