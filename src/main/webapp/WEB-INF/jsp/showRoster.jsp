@@ -15,10 +15,12 @@
     <!-- LOAD BOOTSTRAP -->
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-datetimepicker.css"/>
+    <link rel="stylesheet" href="${context}/stylesheets/jquery-ui.min.css"/>
     <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
 
     <script src="${context}/js/jquery.2.1.3.min.js"></script>
-    <script src="${context}/js/moment.js"></script>
+
 
     <title>Aviation Reporting Class Roster</title>
 </head>
@@ -58,24 +60,27 @@
                         <div class="col-md-2" contenteditable="true">0</div>
 
                         <div class='col-sm-2'>
-                            <label for="datepicker"></label><input type="text" id="datepicker">
+                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' />
                         </div>
-                        <script type="text/javascript">
-                            $(function() {
-                                var $j = jQuery.noConflict();
-                                $j("#datepicker4").datetimepicker();
-                            });
-                        </script>
 
                         <div class="col-md-2" contenteditable="true">0%</div>
                     </div>
                 </c:forEach>
             </c:forEach>
+            <script type="text/javascript">
+                $(function() {
+                    $('input.datetimepicker4').datetimepicker();
+                });
+            </script>
         </div>
         <br>
         <button type="submit" class="btn btn-success">Save</button>
     </div>
  </form>
+
+     <script src="${context}/js/jquery-ui.min.js"></script>
+     <script src="${context}/js/moment.js"></script>
+     <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
     <!-- Load Bootstrap JS -->
     <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 
