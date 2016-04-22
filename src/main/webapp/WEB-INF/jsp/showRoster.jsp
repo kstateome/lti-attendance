@@ -25,10 +25,12 @@
 <body>
  <form id="dayAttendance" action="${context}/singleDayAttendance" method="post">
     <div class="container">
+        <div class="row">Empty</div>
         <div class="row">
-            <c:forEach items="${rosterForm.enrollments}" var="enrollment">
+            <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
                 <!-- Will have to implement sections in the future-->
                 <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
+                    <div class="row">${sectionInfo.sectionId}</div>
                     <div class="row mainRow">
                         <div class="col-md-2">Name</div>
                         <div class="col-md-1">ID</div>
@@ -38,13 +40,13 @@
                         <div class="col-md-2">% of Course Missed</div>
                     </div>
               <%--</c:if>--%>
-                <c:forEach items="${enrollment.value}" var="student" varStatus="loop">
+                <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
                     <div class="row">
                         <div class="col-md-2">
-                            ${student.user.sortableName}
+                            ${student.name}
                         </div>
                         <div class="col-md-1">
-                            ${student.user.sisUserId}
+                            ${student.id}
                         </div>
                         <div class="col-md-2">
                             <label>

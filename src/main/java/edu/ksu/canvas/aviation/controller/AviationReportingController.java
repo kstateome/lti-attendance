@@ -99,13 +99,9 @@ public class AviationReportingController extends LtiLaunchController {
 
         // Get section data
         // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from database
-        for(Section s: sections){
+        List<SectionInfo> sectionInfoList = new ArrayList<>();
+        for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
-            sectionInfo.setSectionId(s.getId());
-            sectionInfo.setSectionName(s.getName());
-            sectionInfo.setCourseId(s.getCourseId());
-//            sectionInfo.setTotalStudents(s.getTotalStudents());
-
             List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
             List<Student> students = new ArrayList<>();
             for (Enrollment e: enrollments) {
@@ -114,12 +110,21 @@ public class AviationReportingController extends LtiLaunchController {
                 student.setId(e.getId());
                 student.setName(e.getUser().getSortableName());
                 students.add(student);
+                LOG.info("Student: " + student.getName());
             }
             sectionInfo.setTotalStudents(students.size());
-            sectionInfo.setStudents(students);
+            if (students.size() > 0) {
+                sectionInfo.setStudents(students);
+                sectionInfo.setSectionId(s.getId());
+                sectionInfo.setSectionName(s.getName());
+                sectionInfo.setCourseId(s.getCourseId());
+                sectionInfoList.add(sectionInfo);
+            }
 
+//            sectionInfo.setTotalStudents(s.getTotalStudents());
 
             //TODO: Read in fake DAY and ATTENDANCE data from JSON
+
         }
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("rosterForm", rosterForm);
@@ -127,9 +132,11 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
+
     @RequestMapping("/save")
     public String save(@ModelAttribute RosterForm rosterForm) {
-        return "redirect:/showRoster";
+
+        return "redirect:/displayRoster";
     }
 
     @Override
