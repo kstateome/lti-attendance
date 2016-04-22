@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.model.Attendance;
 import edu.ksu.canvas.aviation.model.Day;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.model.Student;
@@ -48,6 +49,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -133,8 +135,16 @@ public class AviationReportingController extends LtiLaunchController {
             }
             //TODO: Read in fake DAY and ATTENDANCE data from JSON
 //            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//            List<Day> days = new ArrayList<>();
-//
+//            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
+//            sectionInfo.setDays(days);
+//            for(Day day : sectionInfo.getDays()) {
+//                LOG.info("DATE: " + day.getDate());
+//                for(Attendance a : day.getAttendances()) {
+//                    LOG.info("Student ID: " + a.getId());
+//                    LOG.info("On Time: " + a.isOnTime());
+//                    LOG.info("Minutes missed: " + a.getMinutesMissed());
+//                }
+//            }
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
@@ -143,7 +153,7 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-//
+//    TODO: Implement Save
 //    @RequestMapping("/save")
 //    public String save(@ModelAttribute RosterForm rosterForm) {
 //
