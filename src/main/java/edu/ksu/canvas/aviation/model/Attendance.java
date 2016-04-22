@@ -8,22 +8,33 @@ import java.util.List;
  */
 public class Attendance {
 
-    private List<Day> days = new ArrayList<>();
+    private long id;
+    private boolean onTime;
+    private int minutes;
 
-    public void setDays(List<Day> days){ this.days = days; }
-
-    public List<Day> getDays() { return days; }
-
-    public void addDay(Day day) { this.days.add(day); }
-
-    public void removeDay(Day day) { this.days.remove(day); }
-
-    public String toString() {
-        StringBuffer stb = new StringBuffer();
-        stb.append("Days: \r\n");
-        for (Day day : this.getDays()){
-            stb.append(day.toSring());
-        }
-        return stb.toString();
+    public long getId() {
+        return id;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+
+    public boolean isOnTime() {
+        return onTime;
+    }
+
+    public void setOnTime(boolean onTime) {
+        this.onTime = onTime;
+    }
+
+    public int getMinutesMissed() {
+        return minutes;
+    }
+
+    public void setMinutesMissed(int minutesMissed) {
+        this.minutes = minutesMissed;
+    }
+
 }

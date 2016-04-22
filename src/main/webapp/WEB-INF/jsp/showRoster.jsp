@@ -14,7 +14,6 @@
 
     <!-- LOAD BOOTSTRAP -->
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.css"/>
-    <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
 
     <title>Aviation Reporting Class Roster</title>
@@ -47,7 +46,17 @@
                         <div class="col-md-1">
                             ${student.user.sisUserId}
                         </div>
-                        <div class="col-md-1">Present</div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Present</a>
+                                    <a class="dropdown-item" href="#">Tardy</a>
+                                    <a class="dropdown-item" href="#">Absent</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Excused</a>
+                                </div>
+                            </button>
+                        </div>
                         <div class="col-md-1">Present</div>
                         <div class="col-md-1">Present</div>
                         <div class="col-md-1">Present</div>
@@ -65,6 +74,5 @@
     <!-- Load Bootstrap JS -->
     <script src="${context}/js/jquery.2.1.3.min.js"></script>
     <script src="${context}/bootstrap/js/bootstrap.js"></script>
-    <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

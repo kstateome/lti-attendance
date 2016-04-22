@@ -1,15 +1,13 @@
 package edu.ksu.canvas.aviation.model;
 
-import java.util.Date;
 import java.util.List;
 
 /**
- * Created by shreyak
+ * Created by allanjay808
  */
-public class Day {
+public class Student {
 
     private long id;
-    private Date date;
     private List<Attendance> attendances;
 
     public long getId() {
@@ -21,18 +19,10 @@ public class Day {
     }
 
     public List<Attendance> getAttendances() {
-        return this.attendances;
+        return attendances;
     }
 
     public void setAttendances(List<Attendance> attendances) {
         this.attendances = attendances;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 }
