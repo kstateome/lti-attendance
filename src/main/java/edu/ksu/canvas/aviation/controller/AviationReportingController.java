@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.controller;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.model.Student;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -96,19 +97,39 @@ public class AviationReportingController extends LtiLaunchController {
         List<EnrollmentType> enrollmentTypes = new ArrayList<>();
         enrollmentTypes.add(type);
 
+        // Get section data
+        // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from database
         for(Section s: sections){
-            //TODO: Add info
             SectionInfo sectionInfo = new SectionInfo();
             sectionInfo.setSectionId(s.getId());
             sectionInfo.setSectionName(s.getName());
             sectionInfo.setCourseId(s.getCourseId());
-            sectionInfo.setTotalStudents(s.getTotalStudents());
+//            sectionInfo.setTotalStudents(s.getTotalStudents());
+
             List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
+            List<Student> students = new ArrayList<>();
+            for (Enrollment e: enrollments) {
+                Student student = new Student();
+                // FIXME: This will be the WID
+                student.setId(e.getId());
+                student.setName(e.getUser().getSortableName());
+                students.add(student);
+            }
+            sectionInfo.setTotalStudents(students.size());
+            sectionInfo.setStudents(students);
+
+
+            //TODO: Read in fake DAY and ATTENDANCE data from JSON
         }
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("rosterForm", rosterForm);
 
         return page;
+    }
+
+    @RequestMapping("/save")
+    public String save(@ModelAttribute RosterForm rosterForm) {
+        return "redirect:/showRoster";
     }
 
     @Override
