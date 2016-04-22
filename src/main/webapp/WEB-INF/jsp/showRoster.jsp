@@ -34,7 +34,7 @@
                     <div class="row mainRow">
                         <div class="col-md-2">Name</div>
                         <div class="col-md-1">ID</div>
-                        <div class="col-md-2">Date</div>
+                        <div class="col-md-2">${sectionInfo.day[0]}</div>
                         <div class="col-md-2">Minutes Missed</div>
                         <div class="col-md-2">Date Made Up</div>
                         <div class="col-md-2">% of Course Missed</div>

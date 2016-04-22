@@ -4,7 +4,9 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import edu.ksu.canvas.aviation.model.Attendance;
 import edu.ksu.canvas.aviation.model.Day;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,13 +19,22 @@ import java.util.List;
  * Created by allanjay808 on 4/22/16.
  */
 public class JsonFileParseUtil {
+    private static final Logger LOG = Logger.getLogger(JsonFileParseUtil.class);
 
     Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
-    public List<Day> parseDaysFromJSON(String fileName) throws IOException {
+    public List<Day> loadDaysFromJson(String fileName) throws IOException {
         Type listType = new TypeToken<List<Day>>() {
         }.getType();
         List<Day> days = gson.fromJson(getStringBuilder(fileName).toString(), listType);
+        for(Day day : days) {
+            LOG.info("DATE: " + day.getDate());
+            for(Attendance a : day.getAttendances()) {
+                LOG.info("Student ID: " + a.getId());
+                LOG.info("On Time: " + a.isOnTime());
+                LOG.info("Minutes missed: " + a.getMinutesMissed());
+            }
+        }
         return days;
     }
 
