@@ -14,7 +14,6 @@ public class Attendance {
     private int minutes;
     private Date madeup;
 
-
     public long getId() {
         return id;
     }

@@ -50,7 +50,7 @@ public class JsonFileParseUtil {
 
     public void writeDaysToJson(String filename, List<Day> list) throws IOException {
         FileOutputStream outputStream;
-        String s= gson.toJson(list);
+        String s = gson.toJson(list);
         try {
             outputStream = new FileOutputStream("src/main/resources/save.json");
             outputStream.write(s.getBytes());
