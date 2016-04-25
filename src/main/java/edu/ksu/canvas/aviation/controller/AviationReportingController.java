@@ -41,6 +41,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -56,7 +57,6 @@ import java.util.List;
 
 @Controller
 @Scope("session")
-@SessionAttributes("rosterForm")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
     private static final int CANVAS_VERSION = 1;
@@ -131,17 +131,18 @@ public class AviationReportingController extends LtiLaunchController {
             sectionInfo.setDays(days);
         }
         rosterForm.setSectionInfoList(sectionInfoList);
-//        ModelAndView page = new ModelAndView("showRoster");
-        modelMap.addAttribute("rosterForm", rosterForm);
-//        page.addObject("rosterForm", rosterForm);
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("rosterForm", rosterForm);
 
         return "showRoster";
     }
 
     // FIXME: This is saved to a JSON file, this will change later
     // TODO: Implement Save
-    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
-    public String saveAttendance(@ModelAttribute RosterForm rosterForm) throws IOException {
+    @RequestMapping(value = "/saveAttendance")
+    public String saveAttendance(@RequestParam RosterForm rosterForm) throws IOException, NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         // TODO: Parse changes to json file
         JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
         List<Day> days = new ArrayList<>();
@@ -152,7 +153,7 @@ public class AviationReportingController extends LtiLaunchController {
             }
         }
         jsonFileParseUtil.writeDaysToJson("generated2.json", days);
-        return "showRoster";
+        return "redirect:/showRoster";
     }
 
 //    @RequestMapping("/displayRoster")
