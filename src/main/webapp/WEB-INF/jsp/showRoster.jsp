@@ -27,43 +27,52 @@
     <div class="container">
         <div class="row">
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
+                <c:set var="currentDate" value="${sectionInfo.days[0].date}"/>
                 <!-- Will have to implement sections in the future-->
                 <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
+                <c:if test="${sectionInfo.sectionName == 'CIS 200 A'}">
                     <div class="row mainRow">
                         <div class="col-md-2">Name</div>
-                        <div class="col-md-1">ID</div>
-                        <div class="col-md-2">Date</div>
+                        <div class="col-md-1">WID</div>
+                        <div class="col-md-2">${currentDate}</div>
                         <div class="col-md-2">Minutes Missed</div>
                         <div class="col-md-2">Date Made Up</div>
                         <div class="col-md-2">% of Course Missed</div>
                     </div>
-              <%--</c:if>--%>
-                <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
-                    <div class="row">
-                        <div class="col-md-2">
-                            ${student.name}
-                        </div>
-                        <div class="col-md-1">
-                            ${student.id}
-                        </div>
-                        <div class="col-md-2">
-                            <label>
-                                <select class="form-control no-padding no-width">
-                                    <option value="Present">Present</option>
-                                    <option value="Tardy">Tardy</option>
-                                    <option value="Absent">Absent</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div class="col-md-2" contenteditable="true">0</div>
 
-                        <div class='col-sm-2'>
-                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' />
+                    <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
+                        <div class="row">
+                            <div class="col-md-2">
+                                    ${student.name}
+                            </div>
+                            <div class="col-md-1">
+                                    ${student.id}
+                            </div>
+                            <div class="col-md-2">
+                                <label>
+                                    <select class="form-control no-padding no-width">
+                                        <option value="Present">Present</option>
+                                        <option value="Tardy">Tardy</option>
+                                        <option value="Absent">Absent</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-md-2" contenteditable="true">
+                                <c:forEach items="${sectionInfo.days}" var="day">
+                                    <c:forEach items="${day.attendances}" var="attendance">
+                                        <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                            ${attendance.minutesMissed}
+                                        </c:if>
+                                    </c:forEach>
+                                </c:forEach>
+                            </div>
+                            <div class='col-sm-2'>
+                                <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
+                            </div>
+                            <div class="col-md-2" contenteditable="true">0%</div>
                         </div>
-
-                        <div class="col-md-2" contenteditable="true">0%</div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </c:if>
             </c:forEach>
             <script type="text/javascript">
                 $(function() {
@@ -71,7 +80,7 @@
                 });
             </script>
         </div>
-        <div class="row">
+        <div>
             <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
         </div>
     </div>

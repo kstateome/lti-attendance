@@ -90,7 +90,6 @@ public class AviationReportingController extends LtiLaunchController {
         String canvasBaseUrl = configItem.getValue();
         EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
 
-//        String eid = ltiSession.getEid();
         String courseID = ltiSession.getCanvasCourseId();
         SectionIncludes studentsSection = SectionIncludes.students;
 
@@ -108,7 +107,7 @@ public class AviationReportingController extends LtiLaunchController {
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
-            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments(oauthToken.getToken(), (int)s.getId(), enrollmentTypes);
+            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int)s.getId(), enrollmentTypes);
             List<Student> students = new ArrayList<>();
             for (Enrollment e: enrollments) {
                 Student student = new Student();
@@ -137,23 +136,22 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-//    //TODO: Implement Save
-//    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
-//    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
-//        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//        rosterForm.getSectionInfoList()
-//        return "redirect:/displayRoster";
-//    }
+    //TODO: Implement Save
+    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
+    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
 
-    @RequestMapping("/displayRoster")
-    public ModelAndView displayRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws OauthTokenRequiredException, NoLtiSessionException, IOException {
-        ltiLaunch.ensureApiTokenPresent(getApplicationName());
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        assertPrivilegedUser(ltiSession);
-        ModelAndView page = new ModelAndView("showRoster");
-        page.addObject("rosterForm", rosterForm);
-        return page;
+        return "redirect:/showRoster";
     }
+
+//    @RequestMapping("/displayRoster")
+//    public ModelAndView displayRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws OauthTokenRequiredException, NoLtiSessionException, IOException {
+//        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+//        LtiSession ltiSession = ltiLaunch.getLtiSession();
+//        assertPrivilegedUser(ltiSession);
+//        ModelAndView page = new ModelAndView("showRoster");
+//        page.addObject("rosterForm", rosterForm);
+//        return page;
+//    }
 
     @Override
     protected String getInitialViewPath() {
