@@ -41,6 +41,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +55,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Controller
-@Scope("request")
+@Scope("session")
+@SessionAttributes("rosterForm")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
     private static final int CANVAS_VERSION = 1;
@@ -77,7 +79,7 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping("/showRoster")
-    public ModelAndView showRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public String showRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
 
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
@@ -103,7 +105,7 @@ public class AviationReportingController extends LtiLaunchController {
         enrollmentTypes.add(type);
 
         // Get section data
-        // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from database
+        // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
@@ -111,7 +113,6 @@ public class AviationReportingController extends LtiLaunchController {
             List<Student> students = new ArrayList<>();
             for (Enrollment e: enrollments) {
                 Student student = new Student();
-                // FIXME: This will be the WID
                 student.setId(Integer.parseInt(e.getUser().getSisUserId()));
                 student.setName(e.getUser().getSortableName());
                 students.add(student);
@@ -130,17 +131,28 @@ public class AviationReportingController extends LtiLaunchController {
             sectionInfo.setDays(days);
         }
         rosterForm.setSectionInfoList(sectionInfoList);
-        ModelAndView page = new ModelAndView("showRoster");
-        page.addObject("rosterForm", rosterForm);
+//        ModelAndView page = new ModelAndView("showRoster");
+        modelMap.addAttribute("rosterForm", rosterForm);
+//        page.addObject("rosterForm", rosterForm);
 
-        return page;
+        return "showRoster";
     }
 
-    //TODO: Implement Save
+    // FIXME: This is saved to a JSON file, this will change later
+    // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
-    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
-
-        return "redirect:/showRoster";
+    public String saveAttendance(@ModelAttribute RosterForm rosterForm) throws IOException {
+        // TODO: Parse changes to json file
+        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+        List<Day> days = new ArrayList<>();
+        LOG.info("Roster form size: " + rosterForm.getSectionInfoList());
+        for (int i = 0; i < rosterForm.getSectionInfoList().size(); i++) {
+            if (rosterForm.getSectionInfoList().get(i).getSectionName().equals("CIS 200 A")) {
+                days = rosterForm.getSectionInfoList().get(i).getDays();
+            }
+        }
+        jsonFileParseUtil.writeDaysToJson("generated2.json", days);
+        return "showRoster";
     }
 
 //    @RequestMapping("/displayRoster")

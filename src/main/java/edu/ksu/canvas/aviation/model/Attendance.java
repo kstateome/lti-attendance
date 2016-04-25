@@ -13,6 +13,7 @@ public class Attendance {
     private boolean onTime;
     private int minutes;
     private Date madeup;
+    private double percentageMissed;
 
     public long getId() {
         return id;
@@ -39,4 +40,20 @@ public class Attendance {
         this.minutes = minutesMissed;
     }
 
+    public Date getMadeup() {
+        return madeup;
+    }
+
+    public void setMadeup(Date madeup) {
+        this.madeup = madeup;
+    }
+
+    public double getPercentageMissed() {
+        return percentageMissed;
+    }
+
+    // FIXME: This will be hardcoded for now, change later
+    public void setPercentageMissed() {
+        this.percentageMissed = (this.minutes/100);
+    }
 }
