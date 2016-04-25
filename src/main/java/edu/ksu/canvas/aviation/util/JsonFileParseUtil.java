@@ -8,7 +8,9 @@ import edu.ksu.canvas.aviation.model.Attendance;
 import edu.ksu.canvas.aviation.model.Day;
 import org.apache.log4j.Logger;
 
+import javax.naming.Context;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,5 +46,17 @@ public class JsonFileParseUtil {
         reader.close();
         fileData.close();
         return stringBuilder;
+    }
+
+    public void writeDaysToJson(String filename, List<Day> list) throws IOException {
+        FileOutputStream outputStream;
+        String s= gson.toJson(list);
+        try {
+            outputStream = new FileOutputStream("src/main/resources/save.json");
+            outputStream.write(s.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

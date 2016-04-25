@@ -40,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -136,12 +137,23 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-//    TODO: Implement Save
-//    @RequestMapping("/save")
-//    public String save(@ModelAttribute RosterForm rosterForm) {
-//
+//    //TODO: Implement Save
+//    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
+//    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
+//        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+//        rosterForm.getSectionInfoList()
 //        return "redirect:/displayRoster";
 //    }
+
+    @RequestMapping("/displayRoster")
+    public ModelAndView displayRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws OauthTokenRequiredException, NoLtiSessionException, IOException {
+        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        assertPrivilegedUser(ltiSession);
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("rosterForm", rosterForm);
+        return page;
+    }
 
     @Override
     protected String getInitialViewPath() {

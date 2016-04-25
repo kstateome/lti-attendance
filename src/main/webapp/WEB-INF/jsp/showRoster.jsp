@@ -18,14 +18,12 @@
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-datetimepicker.css"/>
     <link rel="stylesheet" href="${context}/stylesheets/jquery-ui.min.css"/>
     <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
-
-    <script src="${context}/js/jquery.2.1.3.min.js"></script>
-
+    <link rel="stylesheet" href="${context}/css/buttonOverrides.css"/>
 
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
- <form id="dayAttendance" action="${context}/singleDayAttendance" method="post">
+ <form:form action="${context}/saveAttendance" method="POST">
     <div class="container">
         <div class="row">
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
@@ -73,11 +71,12 @@
                 });
             </script>
         </div>
-        <br>
-        <button type="submit" class="btn btn-success">Save</button>
+        <div class="row">
+            <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
+        </div>
     </div>
- </form>
-
+</form:form>
+     <script src="${context}/js/jquery.2.1.3.min.js"></script>
      <script src="${context}/js/jquery-ui.min.js"></script>
      <script src="${context}/js/moment.js"></script>
      <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
