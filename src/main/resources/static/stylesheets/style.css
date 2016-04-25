@@ -1,0 +1,14 @@
+.row + .row {
+    border: 1px solid;
+}
+
+.mainRow {
+    border: 3px solid;
+}
+
+.no-padding {
+    padding: 0;
+}
+.no-width {
+    width: auto;
+}

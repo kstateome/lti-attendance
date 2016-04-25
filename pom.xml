@@ -47,14 +47,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>rebel-remote.xml</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
     <dependencies>
         <dependency>
@@ -63,9 +55,14 @@
             <version>1.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.5.4</version>
+            <groupId>edu.ksu.canvas</groupId>
+            <artifactId>canvas-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -73,24 +70,13 @@
             <version>4.2.0.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>edu.ksu.ome.lti</groupId>
-            <artifactId>lti-testConfiguration</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-            <version>1.3.1.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>2.2.1</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
