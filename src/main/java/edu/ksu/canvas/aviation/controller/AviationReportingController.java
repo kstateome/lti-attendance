@@ -37,10 +37,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -136,6 +135,11 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
+    @RequestMapping(value = "/selectSection", method = RequestMethod.POST)
+    public String selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, Model model){
+        model.addAttribute(sectionInfo);
+        return "showRoster";
+    }
     //TODO: Implement Save
     @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
     public String saveAttendance(@ModelAttribute RosterForm rosterForm) {

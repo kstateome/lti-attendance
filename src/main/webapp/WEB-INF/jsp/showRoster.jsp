@@ -20,17 +20,28 @@
     <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
     <link rel="stylesheet" href="${context}/css/buttonOverrides.css"/>
 
+    <%--This needs to be here..--%>
+    <script src="${context}/js/jquery.2.1.3.min.js"></script>
+    <script src="${context}/js/jquery-ui.min.js"></script>
+
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
+<form:form modelAttribute="selectedSection" method="POST" action="${context}/selectSectionDropdown">
+    <label>
+        <select name="section">
+            <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
+                <option value="${sectionInfo.sectionId}">${sectionInfo.sectionName}</option>
+            </c:forEach>
+        </select>
+    </label>
+</form:form>
  <form:form action="${context}/saveAttendance" method="POST">
     <div class="container">
         <div class="row">
-            <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
-                <c:set var="currentDate" value="${sectionInfo.days[0].date}"/>
-                <!-- Will have to implement sections in the future-->
-                <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
-                <c:if test="${sectionInfo.sectionName == 'CIS 200 A'}">
+            <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
+                <c:if test="${sectionInfo != null}">
+                    <c:set var="currentDate" value="${sectionInfo.days[0].date}"/>
                     <div class="row mainRow">
                         <div class="col-md-2">Name</div>
                         <div class="col-md-1">WID</div>
@@ -85,8 +96,7 @@
         </div>
     </div>
 </form:form>
-     <script src="${context}/js/jquery.2.1.3.min.js"></script>
-     <script src="${context}/js/jquery-ui.min.js"></script>
+
      <script src="${context}/js/moment.js"></script>
      <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
     <!-- Load Bootstrap JS -->
