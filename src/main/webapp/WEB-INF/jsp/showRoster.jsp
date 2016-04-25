@@ -58,7 +58,8 @@
                         <div class="col-md-2" contenteditable="true">0</div>
 
                         <div class='col-sm-2'>
-                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' />
+                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
+
                         </div>
 
                         <div class="col-md-2" contenteditable="true">0%</div>

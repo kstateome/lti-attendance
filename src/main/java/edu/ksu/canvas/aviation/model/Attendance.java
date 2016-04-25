@@ -1,6 +1,7 @@
 package edu.ksu.canvas.aviation.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,6 +12,8 @@ public class Attendance {
     private long id;
     private boolean onTime;
     private int minutes;
+    private Date madeup;
+
 
     public long getId() {
         return id;

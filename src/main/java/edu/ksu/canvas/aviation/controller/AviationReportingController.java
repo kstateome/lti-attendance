@@ -137,13 +137,12 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-//    //TODO: Implement Save
-//    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
-//    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
-//        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//        rosterForm.getSectionInfoList()
-//        return "redirect:/displayRoster";
-//    }
+    //TODO: Implement Save
+    @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
+    public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
+
+        return "redirect:/displayRoster";
+    }
 
     @RequestMapping("/displayRoster")
     public ModelAndView displayRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws OauthTokenRequiredException, NoLtiSessionException, IOException {
