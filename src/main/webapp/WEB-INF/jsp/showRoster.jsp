@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="html" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,7 +24,7 @@
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
-<form action="${context}/saveAttendance" method="post">
+<s:form action="${context}/saveAttendance" method="post" modelAttribute="rosterForm">
 <div class="container">
     <div class="row">
         <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
@@ -82,10 +83,9 @@
     </div>
     <div>
         <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
-        <input type="hidden" id="rosterForm" name="rosterForm" value="${rosterForm}"/>
     </div>
 </div>
-</form>
+</s:form>
      <script src="${context}/js/jquery.2.1.3.min.js"></script>
      <script src="${context}/js/jquery-ui.min.js"></script>
      <script src="${context}/js/moment.js"></script>

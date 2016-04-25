@@ -57,6 +57,7 @@ import java.util.List;
 
 @Controller
 @Scope("session")
+@SessionAttributes("rosterForm")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
     private static final int CANVAS_VERSION = 1;
@@ -79,8 +80,8 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping("/showRoster")
-    public String showRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-
+    public ModelAndView showRoster() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        RosterForm rosterForm = new RosterForm();
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -134,18 +135,17 @@ public class AviationReportingController extends LtiLaunchController {
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("rosterForm", rosterForm);
 
-        return "showRoster";
+        return page;
     }
 
     // FIXME: This is saved to a JSON file, this will change later
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
-    public String saveAttendance(@RequestParam RosterForm rosterForm) throws IOException, NoLtiSessionException {
+    public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         // TODO: Parse changes to json file
         JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-        List<Day> days = new ArrayList<>();
+        List<Day> days = new ArrayList<Day>();
         LOG.info("Roster form size: " + rosterForm.getSectionInfoList());
         for (int i = 0; i < rosterForm.getSectionInfoList().size(); i++) {
             if (rosterForm.getSectionInfoList().get(i).getSectionName().equals("CIS 200 A")) {
@@ -153,7 +153,7 @@ public class AviationReportingController extends LtiLaunchController {
             }
         }
         jsonFileParseUtil.writeDaysToJson("generated2.json", days);
-        return "redirect:/showRoster";
+        return "showRoster";
     }
 
 //    @RequestMapping("/displayRoster")
