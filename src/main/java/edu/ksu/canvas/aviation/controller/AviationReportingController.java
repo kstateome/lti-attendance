@@ -48,9 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @Scope("request")
@@ -135,11 +133,33 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    @RequestMapping(value = "/selectSection", method = RequestMethod.POST)
-    public String selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, Model model){
-        model.addAttribute(sectionInfo);
-        return "showRoster";
+    @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
+    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm){
+
+        //NOTE: this is temporary, set to get date 2016/04/21
+        Calendar myCal = Calendar.getInstance();
+        myCal.set(Calendar.YEAR, 2016);
+        myCal.set(Calendar.MONTH, 4);
+        myCal.set(Calendar.DAY_OF_MONTH, 21);
+        Date theDate = myCal.getTime();
+
+        Day day = sectionInfo.getDays().stream()
+                .filter(x -> x.getDate() == theDate)
+                .findFirst()
+                .get();
+
+        Student students = sectionInfo.getStudents().stream()
+                .filter(x -> x.getId() == day.getId())
+                .findFirst()
+                .get();
+
+        LOG.info("THINGS AND STUFF");
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("selectedSection", sectionInfo);
+        page.addObject("rosterForm", rosterForm);
+        return page;
     }
+
     //TODO: Implement Save
     @RequestMapping(value = "/saveAttendance", method = RequestMethod.POST)
     public String saveAttendance(@ModelAttribute RosterForm rosterForm) {
