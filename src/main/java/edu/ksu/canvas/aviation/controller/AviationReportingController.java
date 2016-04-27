@@ -152,14 +152,14 @@ public class AviationReportingController extends LtiLaunchController {
                 days = rosterForm.getSectionInfoList().get(i).getDays();
             }
         }
-        for(int i = 0; i < days.size(); i++){
-            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
-                LOG.debug(days.get(i).getAttendances().get(j).getId());
-                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
-                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
-                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
-            }
-        }
+//        for(int i = 0; i < days.size(); i++){
+//            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
+//                LOG.debug(days.get(i).getAttendances().get(j).getId());
+//                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
+//                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
+//                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+//            }
+//        }
         jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
         return "showRoster";
     }

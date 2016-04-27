@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import javax.naming.Context;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,14 +50,17 @@ public class JsonFileParseUtil {
     }
 
     public void writeDaysToJson(String fileName, List<Day> list) throws IOException {
-        FileOutputStream outputStream;
-        String s = gson.toJson(list);
-        try {
-            outputStream = new FileOutputStream(fileName);
-            outputStream.write(s.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        File f = new File(fileName);
+        LOG.info("Path to file: " + f.getPath());
+        LOG.info("Absolute Path to file: " + f.getAbsolutePath());
+        LOG.info("Canonical to file: " + f.getCanonicalPath());
+//        String s = gson.toJson(list);
+//        try {
+//            outputStream = new FileOutputStream(fileName);
+//            outputStream.write(s.getBytes());
+//            outputStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }
