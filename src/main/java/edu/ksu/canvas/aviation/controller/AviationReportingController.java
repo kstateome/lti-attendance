@@ -152,7 +152,7 @@ public class AviationReportingController extends LtiLaunchController {
                 days = rosterForm.getSectionInfoList().get(i).getDays();
             }
         }
-        jsonFileParseUtil.writeDaysToJson("generated2.json", days);
+        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
         return "showRoster";
     }
 
