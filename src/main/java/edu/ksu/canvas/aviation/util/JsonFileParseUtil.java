@@ -23,7 +23,7 @@ import java.util.List;
 public class JsonFileParseUtil {
     private static final Logger LOG = Logger.getLogger(JsonFileParseUtil.class);
 
-    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").serializeNulls().create();
 
     public List<Day> loadDaysFromJson(String fileName) throws IOException {
         Type listType = new TypeToken<List<Day>>() {
