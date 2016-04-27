@@ -1,0 +1,4300 @@
+[
+  {
+    "id": 17982,
+    "date": "2016-04-03",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "832260465",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "841903118",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "835247642",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.09
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-04",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "805198315",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "896279560",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "807197635",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "832260465",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "841903118",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "830205169",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "835247642",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.05
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-05",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "869262882",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "805198315",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852312580",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "841903118",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.02
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-06",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "869262882",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "853666255",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "849516968",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-07",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "852312580",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "898440738",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "841903118",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.01
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-08",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "853666255",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "831814992",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "849516968",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "855014652",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.04
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-09",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "869262882",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "898440738",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "832260465",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.03
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-10",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "852312580",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "853666255",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "832260465",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "831814992",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-11",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "805198315",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "896279560",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "852312580",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "807197635",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "832260465",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "855014652",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.05
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-12",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "805198315",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "898440738",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "831814992",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.1
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-13",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "869262882",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "896279560",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "853666255",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "844629182",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "815862762",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "830205169",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "899113327",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "850512252",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "861827763",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-14",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "805198315",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "861685564",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "852768614",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "853666255",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "867139168",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "888318649",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "807197635",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "864971410",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "881550165",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "831814992",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "860459132",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "830205169",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "835247642",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "876707240",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "817283330",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "855014652",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-15",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "869262882",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "826282323",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "852312580",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "885156544",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "882606364",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "898440738",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "823124967",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "814475075",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "858113108",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "871550586",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "885360533",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "831814992",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "883504190",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "831192998",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "830205169",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "849516968",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "835247642",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "845815191",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "855014652",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "812628265",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "853781201",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "856463850",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      }
+    ]
+  },
+  {
+    "id": 17982,
+    "date": "2016-04-16",
+    "attendances": [
+      {
+        "id": "859501046",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "869262882",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "826282323",
+        "onTime": false,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "805198315",
+        "onTime": true,
+        "minutes": 9,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.09
+      },
+      {
+        "id": "896279560",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "861685564",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "852768614",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-08",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "852312580",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "853666255",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "844629182",
+        "onTime": false,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "885156544",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "867139168",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-09",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "815862762",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "882606364",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "898440738",
+        "onTime": false,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-03",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "888318649",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "807197635",
+        "onTime": true,
+        "minutes": 2,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.02
+      },
+      {
+        "id": "864971410",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "823124967",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "814475075",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "858113108",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "881550165",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "871550586",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-16",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "885360533",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "832260465",
+        "onTime": false,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "831814992",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "860459132",
+        "onTime": false,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "883504190",
+        "onTime": true,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "841903118",
+        "onTime": true,
+        "minutes": 0,
+        "dateMadeUp": "",
+        "percentageMissed": 0
+      },
+      {
+        "id": "831192998",
+        "onTime": false,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-14",
+        "percentageMissed": 0.04
+      },
+      {
+        "id": "830205169",
+        "onTime": true,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "849516968",
+        "onTime": false,
+        "minutes": 8,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.08
+      },
+      {
+        "id": "835247642",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-04",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "899113327",
+        "onTime": true,
+        "minutes": 6,
+        "dateMadeUp": "2016-04-11",
+        "percentageMissed": 0.06
+      },
+      {
+        "id": "876707240",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-15",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "850512252",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-05",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "845815191",
+        "onTime": true,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-10",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "817283330",
+        "onTime": false,
+        "minutes": 3,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.03
+      },
+      {
+        "id": "855014652",
+        "onTime": true,
+        "minutes": 1,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.01
+      },
+      {
+        "id": "812628265",
+        "onTime": true,
+        "minutes": 5,
+        "dateMadeUp": "2016-04-07",
+        "percentageMissed": 0.05
+      },
+      {
+        "id": "861827763",
+        "onTime": false,
+        "minutes": 10,
+        "dateMadeUp": "2016-04-12",
+        "percentageMissed": 0.1
+      },
+      {
+        "id": "853781201",
+        "onTime": true,
+        "minutes": 7,
+        "dateMadeUp": "2016-04-06",
+        "percentageMissed": 0.07
+      },
+      {
+        "id": "856463850",
+        "onTime": true,
+        "minutes": 4,
+        "dateMadeUp": "2016-04-13",
+        "percentageMissed": 0.04
+      }
+    ]
+  }
+]

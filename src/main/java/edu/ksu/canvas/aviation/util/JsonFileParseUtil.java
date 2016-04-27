@@ -48,11 +48,11 @@ public class JsonFileParseUtil {
         return stringBuilder;
     }
 
-    public void writeDaysToJson(String filename, List<Day> list) throws IOException {
+    public void writeDaysToJson(String fileName, List<Day> list) throws IOException {
         FileOutputStream outputStream;
         String s = gson.toJson(list);
         try {
-            outputStream = new FileOutputStream("src/main/resources/save.json");
+            outputStream = new FileOutputStream(fileName);
             outputStream.write(s.getBytes());
             outputStream.close();
         } catch (Exception e) {
