@@ -1,10 +1,16 @@
 package edu.ksu.canvas.aviation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.ArrayList;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
 
@@ -18,19 +24,32 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"))
+    private Student student;
+
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name="minutes_missed")
     private int minutes;
-    private List<Tracker> madeup;
-    private Date dateMadeUp;
+
+    @Column(name="date_of_class")
+    private Date dateOfClass;
+
+    @OneToMany
+    private List<MakeupTracker> madeup;
+
     private double percentageMissed;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+//    public long getId() {
+//        return studentId;
+//    }
+//
+//    public void setId(long id) {
+//        this.studentId = studentId;
+//    }
 
     public void setStatus(Status status) { this.status = status; }
 
@@ -44,16 +63,16 @@ public class Attendance {
         this.minutes = minutesMissed;
     }
 
-    public void setMadeup(List<Tracker> madeup) {this.madeup = madeup;}
+    public void setMadeup(List<MakeupTracker> madeup) {this.madeup = madeup;}
 
-    public List<Tracker> getMadeup() {return madeup;}
+    public List<MakeupTracker> getMadeup() {return madeup;}
 
-    public Date getDateMadeUp() {
-        return dateMadeUp;
+    public Date getDateOfClass() {
+        return dateOfClass;
     }
 
-    public void setDateMadeUp(Date dateMadeUp) {
-        this.dateMadeUp = dateMadeUp;
+    public void setDateOfClass(Date dateOfClass) {
+        this.dateOfClass = dateOfClass;
     }
 
     public double getPercentageMissed() {

@@ -89,12 +89,13 @@ public class AviationReportingController extends LtiLaunchController {
 
         ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
         String canvasBaseUrl = configItem.getValue();
-        EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
+        // FIXME: Timeouts need to change
+        EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient, 1000, 1000);
 
         String courseID = ltiSession.getCanvasCourseId();
         SectionIncludes studentsSection = SectionIncludes.students;
 
-        SectionReader sectionReader = new SectionsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
+        SectionReader sectionReader = new SectionsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient, 1000, 1000);
         List<SectionIncludes> sectionIncludesList = new ArrayList<>();
         sectionIncludesList.add(studentsSection);
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), sectionIncludesList);
@@ -104,7 +105,7 @@ public class AviationReportingController extends LtiLaunchController {
         enrollmentTypes.add(type);
 
         // Get section data
-        // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from a database
+        // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
@@ -124,7 +125,7 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfo.setCourseId(s.getCourseId());
                 sectionInfoList.add(sectionInfo);
             }
-            //TODO: Read in fake DAY and ATTENDANCE data from JSON
+            // replace
 //            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
 //            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
 //            sectionInfo.setDays(days);
@@ -136,7 +137,9 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    // FIXME: This is saved to a JSON file, this will change later
+    // TODO: implement
+    private RosterForm getRosterForm() { return null; }
+
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
     public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
@@ -155,7 +158,7 @@ public class AviationReportingController extends LtiLaunchController {
 ////                LOG.debug(days.get(i).getAttendances().get(j).getId());
 ////                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
 ////                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
-////                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+////                LOG.debug(days.get(i).getAttendances().get(j).getDateOfClass());
 ////            }
 ////        }
 //        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);

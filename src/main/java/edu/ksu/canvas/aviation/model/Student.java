@@ -1,9 +1,11 @@
 package edu.ksu.canvas.aviation.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 /**
@@ -16,8 +18,16 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private long sectionID;
+    @Column(name = "student_id")
+    private int studentId;
+
+    @Column
     private String name;
+
+    @Column(name = "section_id")
+    private long sectionID;
+
+    @OneToMany
     private List<Attendance> attendances;
 
     public long getId() {

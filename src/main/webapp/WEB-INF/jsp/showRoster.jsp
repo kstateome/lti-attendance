@@ -88,12 +88,12 @@
                             <c:forEach items="${sectionInfo.days}" var="day">
                                 <c:forEach items="${day.attendances}" var="attendance">
                                     <c:if test="${student.id == attendance.id && day.date == currentDate}">
-                                        <c:if test="${attendance.dateMadeUp != null } ">
+                                        <c:if test="${attendance.dateOfClass != null } ">
                                             <div class='col-sm-2' contenteditable="true" for="datetimepicker4" class="form-control datetimepicker4" id='datetimepicker4'>
-                                                ${attendance.dateMadeUp}
+                                                ${attendance.dateOfClass}
                                             </div>
                                         </c:if>
-                                        <c:if test="${attendance.dateMadeUp == null } ">
+                                        <c:if test="${attendance.dateOfClass == null } ">
                                             <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
                                         </c:if>
                                     </c:if>
