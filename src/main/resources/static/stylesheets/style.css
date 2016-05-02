@@ -1,5 +1,6 @@
 .row + .row {
     border: 1px solid;
+    text-align: center;
 }
 
 .mainRow {

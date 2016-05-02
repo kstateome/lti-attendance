@@ -29,8 +29,7 @@ public class JsonFileParseUtil {
     public List<Day> loadDaysFromJson(String fileName) throws IOException {
         Type listType = new TypeToken<List<Day>>() {
         }.getType();
-        List<Day> days = gson.fromJson(getStringBuilder(fileName).toString(), listType);
-        return days;
+        return gson.fromJson(getStringBuilder(fileName).toString(), listType);
     }
 
     private static StringBuilder getStringBuilder(String fileName) throws IOException {
@@ -43,7 +42,6 @@ public class JsonFileParseUtil {
             stringBuilder.append(bufferedReader.readLine());
         }
         bufferedReader.close();
-        ;
         reader.close();
         fileData.close();
         return stringBuilder;

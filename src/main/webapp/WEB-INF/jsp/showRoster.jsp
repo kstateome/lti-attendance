@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="html" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,6 +11,7 @@
     <!-- Set context path -->
     <c:set var="context" value="${pageContext.request.contextPath}" />
 
+
     <!-- LOAD BOOTSTRAP -->
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
@@ -21,17 +20,35 @@
     <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
     <link rel="stylesheet" href="${context}/css/buttonOverrides.css"/>
 
+    <%--This needs to be here..--%>
+    <script src="${context}/js/jquery.2.1.3.min.js"></script>
+    <script src="${context}/js/jquery-ui.min.js"></script>
+
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
-<s:form action="${context}/saveAttendance" method="post" modelAttribute="rosterForm">
-<div class="container">
-    <div class="row">
-        <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo">
-            <c:set var="currentDate" value="${sectionInfo.days[0].date}"/>
-            <!-- Will have to implement sections in the future-->
-            <%--<c:if test="${enrollment.key.name == 'CIS 200 A'}">--%>
-            <c:if test="${sectionInfo.sectionName == 'CIS 200 A'}">
+<form:form id="sectionSelect" modelAttribute="selectedSection" method="POST" action="${context}/selectSectionDropdown">
+    <label>
+        <select name="section"> <%--we'll need to query the database because rosterform won't be sent back in this request--%>
+            <form:select path="sectionId" items="${rosterForm.sectionInfoList}" itemValue="sectionId" itemLabel="sectionName"/>
+        </select>
+    </label>
+    <script type="text/javascript">
+        $('#sectionSelect').change(function(){
+            console.log("stuff");
+            $('#sectionSelect').submit();
+        });
+        //        $(document).on("pageload",function(){
+        //            $('#sectionSelect').submit();
+        //        })
+    </script>
+</form:form>
+<form:form action="${context}/saveAttendance" method="POST">
+    <div class="container">
+        <div class="row">
+                <%--<c:forEach items="${selectedSection}" var="sectionInfo" varStatus="loop">--%>
+            <c:if test="${selectedSection.students != null}">
+                <c:set var="currentDate" value="${selectedSection.days[0].date}"/>
                 <div class="row mainRow">
                     <div class="col-md-2">Name</div>
                     <div class="col-md-1">WID</div>
@@ -41,7 +58,7 @@
                     <div class="col-md-2">% of Course Missed</div>
                 </div>
 
-                <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
+                <c:forEach items="${selectedSection.students}" var="student" varStatus="loop">
                     <div class="row">
                         <div class="col-md-2">
                                 ${student.name}
@@ -59,7 +76,7 @@
                             </label>
                         </div>
                         <div class="col-md-2" contenteditable="true">
-                            <c:forEach items="${sectionInfo.days}" var="day">
+                            <c:forEach items="${selectedSection.days}" var="day">
                                 <c:forEach items="${day.attendances}" var="attendance">
                                     <c:if test="${student.id == attendance.id && day.date == currentDate}">
                                         ${attendance.minutesMissed}
@@ -74,24 +91,23 @@
                     </div>
                 </c:forEach>
             </c:if>
-        </c:forEach>
-        <script type="text/javascript">
-            $(function() {
-                $('input.datetimepicker4').datetimepicker();
-            });
-        </script>
+                <%--</c:forEach>--%>
+            <script type="text/javascript">
+                $(function() {
+                    $('input.datetimepicker4').datetimepicker();
+                });
+            </script>
+        </div>
+        <div>
+            <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
+        </div>
     </div>
-    <div>
-        <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
-    </div>
-</div>
-</s:form>
-     <script src="${context}/js/jquery.2.1.3.min.js"></script>
-     <script src="${context}/js/jquery-ui.min.js"></script>
-     <script src="${context}/js/moment.js"></script>
-     <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
-    <!-- Load Bootstrap JS -->
-    <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
+</form:form>
+
+<script src="${context}/js/moment.js"></script>
+<script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
+<!-- Load Bootstrap JS -->
+<script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 </html>

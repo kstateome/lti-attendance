@@ -37,12 +37,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,9 +53,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @Scope("session")
@@ -164,10 +164,32 @@ public class AviationReportingController extends LtiLaunchController {
         return "showRoster";
     }
 
-    // FIXME: This will be a hard coded value for now
-//    private static List<Attendance> calculatePercentMissed(List<Attendance> attendances) {
-//
-//    }
+    @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
+    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm){
+
+        //NOTE: this is temporary, set to get date 2016/04/21
+        Calendar myCal = Calendar.getInstance();
+        myCal.set(Calendar.YEAR, 2016);
+        myCal.set(Calendar.MONTH, 4);
+        myCal.set(Calendar.DAY_OF_MONTH, 21);
+        Date theDate = myCal.getTime();
+
+        Day day = sectionInfo.getDays().stream()
+                .filter(x -> x.getDate() == theDate)
+                .findFirst()
+                .get();
+
+        Student students = sectionInfo.getStudents().stream()
+                .filter(x -> x.getId() == day.getId())
+                .findFirst()
+                .get();
+
+        LOG.info("THINGS AND STUFF");
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("selectedSection", sectionInfo);
+        page.addObject("rosterForm", rosterForm);
+        return page;
+    }
 
 
      @Override
