@@ -7,10 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.Attendance;
-import edu.ksu.canvas.aviation.model.Day;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.model.Student;
-import edu.ksu.canvas.aviation.util.JsonFileParseUtil;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -127,9 +125,9 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfoList.add(sectionInfo);
             }
             //TODO: Read in fake DAY and ATTENDANCE data from JSON
-            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
-            sectionInfo.setDays(days);
+//            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+//            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
+//            sectionInfo.setDays(days);
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
@@ -142,25 +140,25 @@ public class AviationReportingController extends LtiLaunchController {
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
     public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        // TODO: Parse changes to json file
-        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-        List<Day> days = new ArrayList<Day>();
-        LOG.info("Roster form size: " + rosterForm.getSectionInfoList());
-        for (int i = 0; i < rosterForm.getSectionInfoList().size(); i++) {
-            if (rosterForm.getSectionInfoList().get(i).getSectionName().equals("CIS 200 A")) {
-                days = rosterForm.getSectionInfoList().get(i).getDays();
-            }
-        }
-//        for(int i = 0; i < days.size(); i++){
-//            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
-//                LOG.debug(days.get(i).getAttendances().get(j).getId());
-//                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
-//                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
-//                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+//        LtiSession ltiSession = ltiLaunch.getLtiSession();
+//        // TODO: Parse changes to json file
+//        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
+//        List<Day> days = new ArrayList<Day>();
+//        LOG.info("Roster form size: " + rosterForm.getSectionInfoList());
+//        for (int i = 0; i < rosterForm.getSectionInfoList().size(); i++) {
+//            if (rosterForm.getSectionInfoList().get(i).getSectionName().equals("CIS 200 A")) {
+//                days = rosterForm.getSectionInfoList().get(i).getDays();
 //            }
 //        }
-        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
+////        for(int i = 0; i < days.size(); i++){
+////            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
+////                LOG.debug(days.get(i).getAttendances().get(j).getId());
+////                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
+////                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
+////                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+////            }
+////        }
+//        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
         return "showRoster";
     }
 
@@ -174,15 +172,15 @@ public class AviationReportingController extends LtiLaunchController {
         myCal.set(Calendar.DAY_OF_MONTH, 21);
         Date theDate = myCal.getTime();
 
-        Day day = sectionInfo.getDays().stream()
-                .filter(x -> x.getDate() == theDate)
-                .findFirst()
-                .get();
-
-        Student students = sectionInfo.getStudents().stream()
-                .filter(x -> x.getId() == day.getId())
-                .findFirst()
-                .get();
+//        Day day = sectionInfo.getDays().stream()
+//                .filter(x -> x.getDate() == theDate)
+//                .findFirst()
+//                .get();
+//
+//        Student students = sectionInfo.getStudents().stream()
+//                .filter(x -> x.getId() == day.getId())
+//                .findFirst()
+//                .get();
 
         LOG.info("THINGS AND STUFF");
         ModelAndView page = new ModelAndView("showRoster");
