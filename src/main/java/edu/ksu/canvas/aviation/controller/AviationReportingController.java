@@ -1,12 +1,8 @@
 package edu.ksu.canvas.aviation.controller;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.model.Attendance;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.model.Student;
 import edu.ksu.canvas.aviation.util.RoleChecker;
@@ -35,22 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.*;
 
 @Controller
@@ -89,13 +77,14 @@ public class AviationReportingController extends LtiLaunchController {
 
         ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
         String canvasBaseUrl = configItem.getValue();
+        CanvasApiFactory canvasApiFactory = new CanvasApiFactory(canvasBaseUrl);
         // FIXME: Timeouts need to change
-        EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient, 1000, 1000);
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
         String courseID = ltiSession.getCanvasCourseId();
         SectionIncludes studentsSection = SectionIncludes.students;
 
-        SectionReader sectionReader = new SectionsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient, 1000, 1000);
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
         List<SectionIncludes> sectionIncludesList = new ArrayList<>();
         sectionIncludesList.add(studentsSection);
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), sectionIncludesList);

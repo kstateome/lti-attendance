@@ -1,16 +1,6 @@
 package edu.ksu.canvas.aviation.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +22,7 @@ public class Attendance {
     @Column(name="minutes_missed")
     private int minutes;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="date_of_class")
     private Date dateOfClass;
 

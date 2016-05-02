@@ -1,12 +1,6 @@
 package edu.ksu.canvas.aviation.model;
 
-import javax.persistence.Column;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 public class MakeupTracker {
@@ -19,9 +13,11 @@ public class MakeupTracker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_of_class")
     private Date dateOfClass;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_madeup")
     private Date dateMadeUp;
 
