@@ -14,9 +14,6 @@ import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by shreyak
- */
 @Entity
 public class Attendance {
 
@@ -41,16 +38,6 @@ public class Attendance {
     @OneToMany
     private List<MakeupTracker> madeup;
 
-    private double percentageMissed;
-
-//    public long getId() {
-//        return studentId;
-//    }
-//
-//    public void setId(long id) {
-//        this.studentId = studentId;
-//    }
-
     public void setStatus(Status status) { this.status = status; }
 
     public Status getStatus() { return status; }
@@ -73,13 +60,5 @@ public class Attendance {
 
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
-    }
-
-    public double getPercentageMissed() {
-        return percentageMissed;
-    }
-
-    public void setPercentageMissed(double percentageMissed) {
-        this.percentageMissed = percentageMissed;
     }
 }

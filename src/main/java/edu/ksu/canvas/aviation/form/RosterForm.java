@@ -10,9 +10,6 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by allanjay808
- */
 public class RosterForm {
 
     private List<SectionInfo> sectionInfoList;

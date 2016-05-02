@@ -2,9 +2,6 @@ package edu.ksu.canvas.aviation.model;
 
 import java.util.List;
 
-/**
- * Created by allanjay808
- */
 public class SectionInfo {
 
     private long sectionId;

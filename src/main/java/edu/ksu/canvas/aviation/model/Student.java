@@ -6,11 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.beans.Transient;
 import java.util.List;
 
-/**
- * Created by allanjay808
- */
 @Entity
 public class Student {
 
@@ -29,6 +27,8 @@ public class Student {
 
     @OneToMany
     private List<Attendance> attendances;
+
+    private double percentageOfCourseMissed;
 
     public long getId() {
         return id;
