@@ -152,21 +152,25 @@ public class AviationReportingController extends LtiLaunchController {
                 days = rosterForm.getSectionInfoList().get(i).getDays();
             }
         }
+//        for(int i = 0; i < days.size(); i++){
+//            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
+//                LOG.debug(days.get(i).getAttendances().get(j).getId());
+//                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
+//                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
+//                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+//            }
+//        }
         jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
         return "showRoster";
     }
 
-//    @RequestMapping("/displayRoster")
-//    public ModelAndView displayRoster(ModelMap modelMap, @ModelAttribute RosterForm rosterForm) throws OauthTokenRequiredException, NoLtiSessionException, IOException {
-//        ltiLaunch.ensureApiTokenPresent(getApplicationName());
-//        LtiSession ltiSession = ltiLaunch.getLtiSession();
-//        assertPrivilegedUser(ltiSession);
-//        ModelAndView page = new ModelAndView("showRoster");
-//        page.addObject("rosterForm", rosterForm);
-//        return page;
+    // FIXME: This will be a hard coded value for now
+//    private static List<Attendance> calculatePercentMissed(List<Attendance> attendances) {
+//
 //    }
 
-    @Override
+
+     @Override
     protected String getInitialViewPath() {
         return "/showRoster";
     }
