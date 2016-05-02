@@ -21,6 +21,7 @@ public class Attendance {
     private Status status;
     private int minutes;
     private List<Tracker> madeup;
+    private Date dateMadeUp;
     private double percentageMissed;
 
     public long getId() {
@@ -47,12 +48,19 @@ public class Attendance {
 
     public List<Tracker> getMadeup() {return madeup;}
 
+    public Date getDateMadeUp() {
+        return dateMadeUp;
+    }
+
+    public void setDateMadeUp(Date dateMadeUp) {
+        this.dateMadeUp = dateMadeUp;
+    }
+
     public double getPercentageMissed() {
         return percentageMissed;
     }
 
-    // FIXME: This will be hardcoded for now, change later
-    public void setPercentageMissed() {
-        this.percentageMissed = (this.minutes/100);
+    public void setPercentageMissed(double percentageMissed) {
+        this.percentageMissed = percentageMissed;
     }
 }

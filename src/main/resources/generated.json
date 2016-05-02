@@ -14,7 +14,7 @@
         "id": "869262882",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -77,7 +77,7 @@
         "id": "885156544",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -496,7 +496,7 @@
         "id": "860459132",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -552,7 +552,7 @@
         "id": "876707240",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -761,7 +761,7 @@
         "id": "858113108",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -838,14 +838,14 @@
         "id": "849516968",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
         "id": "835247642",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -935,7 +935,7 @@
         "id": "869262882",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1110,7 +1110,7 @@
         "id": "860459132",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1340,7 +1340,7 @@
         "id": "888318649",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1368,7 +1368,7 @@
         "id": "814475075",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1598,7 +1598,7 @@
         "id": "853666255",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1640,7 +1640,7 @@
         "id": "898440738",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1717,7 +1717,7 @@
         "id": "831814992",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1731,7 +1731,7 @@
         "id": "883504190",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -1780,7 +1780,7 @@
         "id": "876707240",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2129,7 +2129,7 @@
         "id": "861827763",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2170,7 +2170,7 @@
         "id": "826282323",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2303,14 +2303,14 @@
         "id": "881550165",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
         "id": "871550586",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2352,7 +2352,7 @@
         "id": "841903118",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2463,7 +2463,7 @@
         "id": "859501046",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2519,7 +2519,7 @@
         "id": "853666255",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2659,7 +2659,7 @@
         "id": "841903118",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2777,7 +2777,7 @@
         "id": "869262882",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2812,7 +2812,7 @@
         "id": "852768614",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2833,7 +2833,7 @@
         "id": "844629182",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2882,7 +2882,7 @@
         "id": "807197635",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -2896,7 +2896,7 @@
         "id": "823124967",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3057,7 +3057,7 @@
         "id": "853781201",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3140,14 +3140,14 @@
         "id": "844629182",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
         "id": "885156544",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3161,7 +3161,7 @@
         "id": "815862762",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3252,7 +3252,7 @@
         "id": "831814992",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3266,14 +3266,14 @@
         "id": "883504190",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
         "id": "841903118",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3357,7 +3357,7 @@
         "id": "861827763",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3426,7 +3426,7 @@
         "id": "852768614",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3468,7 +3468,7 @@
         "id": "815862762",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3698,7 +3698,7 @@
         "id": "869262882",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -3985,7 +3985,7 @@
         "id": "856463850",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       }
     ]
@@ -4145,7 +4145,7 @@
         "id": "881550165",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -4180,7 +4180,7 @@
         "id": "860459132",
         "onTime": false,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {
@@ -4194,7 +4194,7 @@
         "id": "841903118",
         "onTime": true,
         "minutes": 0,
-        "dateMadeUp": "",
+        "dateMadeUp": null,
         "percentageMissed": 0
       },
       {

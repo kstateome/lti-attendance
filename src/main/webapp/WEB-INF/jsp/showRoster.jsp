@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="${context}/stylesheets/jquery-ui.min.css"/>
     <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
     <link rel="stylesheet" href="${context}/css/buttonOverrides.css"/>
-
+    <script src="${context}/js/jquery.2.1.3.min.js"></script>
+    <script src="${context}/js/jquery-ui.min.js"></script>
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
@@ -68,9 +69,30 @@
                             </c:forEach>
                         </div>
                         <div class='col-sm-2'>
-                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
+                            <c:forEach items="${sectionInfo.days}" var="day">
+                                <c:forEach items="${day.attendances}" var="attendance">
+                                    <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                        <c:if test="${attendance.dateMadeUp != null } ">
+                                            <div class='col-sm-2' contenteditable="true" for="datetimepicker4" class="form-control datetimepicker4" id='datetimepicker4'>
+                                                ${attendance.dateMadeUp}
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${attendance.dateMadeUp == null } ">
+                                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
+                                        </c:if>
+                                    </c:if>
+                                </c:forEach>
+                            </c:forEach>
                         </div>
-                        <div class="col-md-2" contenteditable="true">0%</div>
+                        <div class="col-md-2" contenteditable="true">
+                            <c:forEach items="${sectionInfo.days}" var="day">
+                                <c:forEach items="${day.attendances}" var="attendance">
+                                    <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                        ${attendance.percentageMissed}
+                                    </c:if>
+                                </c:forEach>
+                            </c:forEach>
+                        </div>
                     </div>
                 </c:forEach>
             </c:if>
@@ -86,8 +108,7 @@
     </div>
 </div>
 </s:form>
-     <script src="${context}/js/jquery.2.1.3.min.js"></script>
-     <script src="${context}/js/jquery-ui.min.js"></script>
+
      <script src="${context}/js/moment.js"></script>
      <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
     <!-- Load Bootstrap JS -->
