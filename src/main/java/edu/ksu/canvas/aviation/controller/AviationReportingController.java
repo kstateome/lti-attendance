@@ -17,8 +17,6 @@ import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import edu.ksu.canvas.net.RestClient;
-import edu.ksu.canvas.net.RestClientImpl;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
