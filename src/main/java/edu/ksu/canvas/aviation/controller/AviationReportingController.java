@@ -42,7 +42,6 @@ import java.util.*;
 @SessionAttributes("rosterForm")
 public class AviationReportingController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
-    private static final int CANVAS_VERSION = 1;
 
     @Autowired
     protected LtiLaunch ltiLaunch;
