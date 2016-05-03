@@ -8,7 +8,6 @@ public class SectionInfo {
     private String sectionName;
     private Integer courseId;
     private Integer totalStudents;
-    //private List<Day> days;
     private List<Student> students;
 
     public long getSectionId() {
@@ -42,14 +41,6 @@ public class SectionInfo {
     public void setTotalStudents(Integer totalStudents) {
         this.totalStudents = totalStudents;
     }
-
-//    public List<Day> getDays() {
-//        return days;
-//    }
-//
-//    public void setDays(List<Day> days) {
-//        this.days = days;
-//    }
 
     public List<Student> getStudents() {
         return students;
