@@ -74,7 +74,6 @@ public class AviationReportingController extends LtiLaunchController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        RestClient restClient = new RestClientImpl();
 
         ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
         String canvasBaseUrl = configItem.getValue();
