@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "aviation_student")
 public class Student {
 
     @Id
@@ -14,13 +15,13 @@ public class Student {
     @Column(name = "student_id")
     private int studentId;
 
-    @Column
+    @Column(name = "student_name")
     private String name;
 
     @Column(name = "section_id")
     private long sectionID;
 
-    @OneToMany
+    @OneToMany(mappedBy = "student")
     private List<Attendance> attendances;
 
     @Transient

@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "aviation_makeup_tracker")
 public class MakeupTracker {
 
     @ManyToOne
