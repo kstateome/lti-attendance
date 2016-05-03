@@ -117,25 +117,6 @@ public class AviationReportingController extends LtiLaunchController {
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
     public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-//        LtiSession ltiSession = ltiLaunch.getLtiSession();
-//        // TODO: Parse changes to json file
-//        JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//        List<Day> days = new ArrayList<Day>();
-//        LOG.info("Roster form size: " + rosterForm.getSectionInfoList());
-//        for (int i = 0; i < rosterForm.getSectionInfoList().size(); i++) {
-//            if (rosterForm.getSectionInfoList().get(i).getSectionName().equals("CIS 200 A")) {
-//                days = rosterForm.getSectionInfoList().get(i).getDays();
-//            }
-//        }
-////        for(int i = 0; i < days.size(); i++){
-////            for(int j = 0; j < days.get(i).getAttendances().size(); j++){
-////                LOG.debug(days.get(i).getAttendances().get(j).getId());
-////                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
-////                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
-////                LOG.debug(days.get(i).getAttendances().get(j).getDateOfClass());
-////            }
-////        }
-//        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
         return "showRoster";
     }
 
