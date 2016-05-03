@@ -128,19 +128,7 @@ public class AviationReportingController extends LtiLaunchController {
         myCal.set(Calendar.YEAR, 2016);
         myCal.set(Calendar.MONTH, 4);
         myCal.set(Calendar.DAY_OF_MONTH, 21);
-        Date theDate = myCal.getTime();
 
-//        Day day = sectionInfo.getDays().stream()
-//                .filter(x -> x.getDate() == theDate)
-//                .findFirst()
-//                .get();
-//
-//        Student students = sectionInfo.getStudents().stream()
-//                .filter(x -> x.getId() == day.getId())
-//                .findFirst()
-//                .get();
-
-        LOG.info("THINGS AND STUFF");
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("selectedSection", sectionInfo);
         page.addObject("rosterForm", rosterForm);
