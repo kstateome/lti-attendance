@@ -27,11 +27,10 @@
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
-<form:form id="sectionSelect" modelAttribute="selectedSection" method="POST" action="${context}/selectSectionDropdown">
+<form:form id="sectionSelect" modelAttribute="rosterForm" method="POST" action="${context}/selectSectionDropdown">
     <label>
-        <select name="section"> <%--we'll need to query the database because rosterform won't be sent back in this request--%>
-            <form:select path="sectionId" items="${rosterForm.sectionInfoList}" itemValue="sectionId" itemLabel="sectionName"/>
-        </select>
+        <%--we'll need to query the database because rosterform won't be sent back in this request--%>
+        <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name"/>
     </label>
     <script type="text/javascript">
         $('#sectionSelect').change(function(){

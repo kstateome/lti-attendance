@@ -103,6 +103,7 @@ public class AviationReportingController extends LtiLaunchController {
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
 
         return page;
