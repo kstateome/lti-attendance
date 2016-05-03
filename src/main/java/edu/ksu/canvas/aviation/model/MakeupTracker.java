@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.model;
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity
 public class MakeupTracker {
 
     @ManyToOne

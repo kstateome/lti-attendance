@@ -13,8 +13,6 @@ import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.canvas.impl.EnrollmentsImpl;
-import edu.ksu.canvas.impl.SectionsImpl;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
@@ -39,7 +37,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @Scope("session")
