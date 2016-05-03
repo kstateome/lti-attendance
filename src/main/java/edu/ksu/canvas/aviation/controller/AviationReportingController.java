@@ -82,11 +82,11 @@ public class AviationReportingController extends LtiLaunchController {
         // Get section data
         // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
-        for(Section s: sections) {
+        for (Section s : sections) {
             SectionInfo sectionInfo = new SectionInfo();
-            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int)s.getId(), Collections.singletonList(EnrollmentType.STUDENT));
+            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) s.getId(), Collections.singletonList(EnrollmentType.STUDENT));
             List<Student> students = new ArrayList<>();
-            for (Enrollment e: enrollments) {
+            for (Enrollment e : enrollments) {
                 Student student = new Student();
                 student.setId(Integer.parseInt(e.getUser().getSisUserId()));
                 student.setName(e.getUser().getSortableName());
@@ -109,7 +109,9 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     // TODO: implement
-    private RosterForm getRosterForm() { return null; }
+    private RosterForm getRosterForm() {
+        return null;
+    }
 
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
@@ -118,7 +120,7 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
-    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm){
+    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
 
         //NOTE: this is temporary, set to get date 2016/04/21
         Calendar myCal = Calendar.getInstance();
@@ -133,7 +135,7 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
 
-     @Override
+    @Override
     protected String getInitialViewPath() {
         return "/showRoster";
     }
