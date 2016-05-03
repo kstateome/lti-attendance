@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "aviation_attendance")
 public class Attendance {
 
     @Id
@@ -26,8 +27,8 @@ public class Attendance {
     @Column(name="date_of_class")
     private Date dateOfClass;
 
-    @OneToMany
-    private List<MakeupTracker> madeup;
+    @OneToMany(mappedBy = "attendance")
+    private List<MakeupTracker> madeupTracker;
 
     public void setStatus(Status status) { this.status = status; }
 
@@ -41,9 +42,9 @@ public class Attendance {
         this.minutes = minutesMissed;
     }
 
-    public void setMadeup(List<MakeupTracker> madeup) {this.madeup = madeup;}
+    public void setMadeup(List<MakeupTracker> madeup) {this.madeupTracker = madeup;}
 
-    public List<MakeupTracker> getMadeup() {return madeup;}
+    public List<MakeupTracker> getMadeup() {return madeupTracker;}
 
     public Date getDateOfClass() {
         return dateOfClass;
