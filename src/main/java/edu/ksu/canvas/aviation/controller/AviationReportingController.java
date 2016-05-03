@@ -37,10 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @Scope("session")
@@ -82,23 +79,15 @@ public class AviationReportingController extends LtiLaunchController {
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
         String courseID = ltiSession.getCanvasCourseId();
-        SectionIncludes studentsSection = SectionIncludes.students;
-
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        List<SectionIncludes> sectionIncludesList = new ArrayList<>();
-        sectionIncludesList.add(studentsSection);
-        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), sectionIncludesList);
-
-        EnrollmentType type = EnrollmentType.STUDENT;
-        List<EnrollmentType> enrollmentTypes = new ArrayList<>();
-        enrollmentTypes.add(type);
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
 
         // Get section data
         // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
-            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int)s.getId(), enrollmentTypes);
+            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int)s.getId(), Collections.singletonList(EnrollmentType.STUDENT));
             List<Student> students = new ArrayList<>();
             for (Enrollment e: enrollments) {
                 Student student = new Student();
@@ -114,10 +103,6 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfo.setCourseId(s.getCourseId());
                 sectionInfoList.add(sectionInfo);
             }
-            // replace
-//            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
-//            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
-//            sectionInfo.setDays(days);
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
