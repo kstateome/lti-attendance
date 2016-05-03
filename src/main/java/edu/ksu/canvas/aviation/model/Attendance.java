@@ -1,16 +1,9 @@
 package edu.ksu.canvas.aviation.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by shreyak
- */
 @Entity
 public class Attendance {
 
@@ -18,19 +11,23 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"))
+    private Student student;
+
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @Column(name="minutes_missed")
     private int minutes;
-    private List<Tracker> madeup;
-    private Date dateMadeUp;
-    private double percentageMissed;
 
-    public long getId() {
-        return id;
-    }
+    @Temporal(TemporalType.DATE)
+    @Column(name="date_of_class")
+    private Date dateOfClass;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @OneToMany
+    private List<MakeupTracker> madeup;
 
     public void setStatus(Status status) { this.status = status; }
 
@@ -44,23 +41,15 @@ public class Attendance {
         this.minutes = minutesMissed;
     }
 
-    public void setMadeup(List<Tracker> madeup) {this.madeup = madeup;}
+    public void setMadeup(List<MakeupTracker> madeup) {this.madeup = madeup;}
 
-    public List<Tracker> getMadeup() {return madeup;}
+    public List<MakeupTracker> getMadeup() {return madeup;}
 
-    public Date getDateMadeUp() {
-        return dateMadeUp;
+    public Date getDateOfClass() {
+        return dateOfClass;
     }
 
-    public void setDateMadeUp(Date dateMadeUp) {
-        this.dateMadeUp = dateMadeUp;
-    }
-
-    public double getPercentageMissed() {
-        return percentageMissed;
-    }
-
-    public void setPercentageMissed(double percentageMissed) {
-        this.percentageMissed = percentageMissed;
+    public void setDateOfClass(Date dateOfClass) {
+        this.dateOfClass = dateOfClass;
     }
 }

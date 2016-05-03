@@ -1,14 +1,9 @@
 package edu.ksu.canvas.aviation.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 import java.util.List;
 
-/**
- * Created by allanjay808
- */
 @Entity
 public class Student {
 
@@ -16,9 +11,28 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private long sectionID;
+    @Column(name = "student_id")
+    private int studentId;
+
+    @Column
     private String name;
+
+    @Column(name = "section_id")
+    private long sectionID;
+
+    @OneToMany
     private List<Attendance> attendances;
+
+    @Transient
+    private double percentageOfCourseMissed;
+
+    public double getPercentageOfCourseMissed(){
+        return percentageOfCourseMissed;
+    }
+
+    public void setPercentageOfCourseMissed(double percentageOfCourseMissed){
+        this.percentageOfCourseMissed = percentageOfCourseMissed;
+    }
 
     public long getId() {
         return id;

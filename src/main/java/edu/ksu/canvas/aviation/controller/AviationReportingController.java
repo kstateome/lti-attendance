@@ -1,12 +1,8 @@
 package edu.ksu.canvas.aviation.controller;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.model.Attendance;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.model.Student;
 import edu.ksu.canvas.aviation.util.RoleChecker;
@@ -17,8 +13,6 @@ import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.canvas.impl.EnrollmentsImpl;
-import edu.ksu.canvas.impl.SectionsImpl;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
@@ -35,23 +29,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @Scope("session")
@@ -89,12 +78,14 @@ public class AviationReportingController extends LtiLaunchController {
 
         ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
         String canvasBaseUrl = configItem.getValue();
-        EnrollmentsReader enrollmentsReader = new EnrollmentsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
+        CanvasApiFactory canvasApiFactory = new CanvasApiFactory(canvasBaseUrl);
+        // FIXME: Timeouts need to change
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
         String courseID = ltiSession.getCanvasCourseId();
         SectionIncludes studentsSection = SectionIncludes.students;
 
-        SectionReader sectionReader = new SectionsImpl(canvasBaseUrl, CANVAS_VERSION, oauthToken.getToken(), restClient);
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
         List<SectionIncludes> sectionIncludesList = new ArrayList<>();
         sectionIncludesList.add(studentsSection);
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), sectionIncludesList);
@@ -104,7 +95,7 @@ public class AviationReportingController extends LtiLaunchController {
         enrollmentTypes.add(type);
 
         // Get section data
-        // FIXME: For now using JSON, will later save and retrieve data for dates, attendance, from a database
+        // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for(Section s: sections) {
             SectionInfo sectionInfo = new SectionInfo();
@@ -124,7 +115,7 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfo.setCourseId(s.getCourseId());
                 sectionInfoList.add(sectionInfo);
             }
-            //TODO: Read in fake DAY and ATTENDANCE data from JSON
+            // replace
 //            JsonFileParseUtil jsonFileParseUtil = new JsonFileParseUtil();
 //            List<Day> days = jsonFileParseUtil.loadDaysFromJson("generated.json");
 //            sectionInfo.setDays(days);
@@ -136,7 +127,9 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    // FIXME: This is saved to a JSON file, this will change later
+    // TODO: implement
+    private RosterForm getRosterForm() { return null; }
+
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
     public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
@@ -155,7 +148,7 @@ public class AviationReportingController extends LtiLaunchController {
 ////                LOG.debug(days.get(i).getAttendances().get(j).getId());
 ////                LOG.debug(days.get(i).getAttendances().get(j).getMinutesMissed());
 ////                LOG.debug(days.get(i).getAttendances().get(j).getPercentageMissed());
-////                LOG.debug(days.get(i).getAttendances().get(j).getDateMadeUp());
+////                LOG.debug(days.get(i).getAttendances().get(j).getDateOfClass());
 ////            }
 ////        }
 //        jsonFileParseUtil.writeDaysToJson("saveDates.json", days);
