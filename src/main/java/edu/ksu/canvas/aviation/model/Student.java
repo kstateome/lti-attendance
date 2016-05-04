@@ -27,11 +27,11 @@ public class Student {
     @Transient
     private double percentageOfCourseMissed;
 
-    public double getPercentageOfCourseMissed(){
+    public double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
     }
 
-    public void setPercentageOfCourseMissed(double percentageOfCourseMissed){
+    public void setPercentageOfCourseMissed(double percentageOfCourseMissed) {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
@@ -51,9 +51,13 @@ public class Student {
         this.name = name;
     }
 
-    public void setSectionID(long sectionID) { this.sectionID = sectionID; }
+    public void setSectionID(long sectionID) {
+        this.sectionID = sectionID;
+    }
 
-    public long getSectionID() { return sectionID; }
+    public long getSectionID() {
+        return sectionID;
+    }
 
     public List<Attendance> getAttendances() {
         return attendances;

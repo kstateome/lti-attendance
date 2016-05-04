@@ -14,6 +14,8 @@ public class RosterForm {
 
     private List<SectionInfo> sectionInfoList;
 
+    private long sectionId;
+
     public List<SectionInfo> getSectionInfoList() {
         return sectionInfoList;
     }
@@ -22,4 +24,11 @@ public class RosterForm {
         this.sectionInfoList = sectionInfoList;
     }
 
+    public long getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(long sectionId) {
+        this.sectionId = sectionId;
+    }
 }
