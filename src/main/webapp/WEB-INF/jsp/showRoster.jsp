@@ -43,6 +43,30 @@
     </script>
 </form:form>
 <form:form action="${context}/saveAttendance" method="POST">
+
+    <div class="container">
+        <div class="row">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker5'>
+                        <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(function () {
+                    $('#datetimepicker5').datetimepicker({
+                        defaultDate: "11/1/2013"
+
+                    });
+                });
+            </script>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
                 <%--<c:forEach items="${selectedSection}" var="sectionInfo" varStatus="loop">--%>
@@ -108,20 +132,22 @@
                                 </c:forEach>
                             </c:forEach>
                         </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('input.datetimepicker4').datetimepicker();
+                            });
+                        </script>
                     </div>
                 </c:forEach>
             </c:if>
                 <%--</c:forEach>--%>
-            <script type="text/javascript">
-                $(function() {
-                    $('input.datetimepicker4').datetimepicker();
-                });
-            </script>
+
         </div>
         <div>
             <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
         </div>
     </div>
+
 </form:form>
 
 <script src="${context}/js/moment.js"></script>
