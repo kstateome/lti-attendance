@@ -13,7 +13,7 @@ public class Student {
     private long id;
 
     @Column(name = "student_id")
-    private int studentId;
+    private String studentId;
 
     @Column(name = "student_name")
     private String name;
@@ -65,5 +65,13 @@ public class Student {
 
     public void setAttendances(List<Attendance> attendances) {
         this.attendances = attendances;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 }
