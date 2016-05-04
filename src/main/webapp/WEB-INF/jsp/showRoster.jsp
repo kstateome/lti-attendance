@@ -68,28 +68,28 @@
     </div>
 
     <div class="container">
-        <div class="row">
-                <%--<c:forEach items="${selectedSection}" var="sectionInfo" varStatus="loop">--%>
-            <c:if test="${selectedSection.students != null}">
-                <c:set var="currentDate" value="${selectedSection.days[0].date}"/>
-                <div class="row mainRow">
-                    <div class="col-md-2">Name</div>
-                    <div class="col-md-1">WID</div>
-                    <div class="col-md-2">${currentDate}</div>
-                    <div class="col-md-2">Minutes Missed</div>
-                    <div class="col-md-2">Date Made Up</div>
-                    <div class="col-md-2">% of Course Missed</div>
-                </div>
+        <table class="table table-bordered">
+            <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
+            <c:if test="${not empty sectionInfo.students}">
+                <%--<c:set var="currentDate" value="${sectionInfo.days[0].date}"/>--%>
+                <tr>
+                    <th>Name</th>
+                    <th>WID</th>
+                    <th>Current Date</th>
+                    <th>Minutes Missed</th>
+                    <th>Date Made Up</th>
+                    <th>% of Course Missed</th>
+                </tr>
 
-                <c:forEach items="${selectedSection.students}" var="student" varStatus="loop">
-                    <div class="row">
-                        <div class="col-md-2">
+                <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
+                    <tr>
+                        <td>
                                 ${student.name}
-                        </div>
-                        <div class="col-md-1">
-                                ${student.id}
-                        </div>
-                        <div class="col-md-2">
+                        </td>
+                        <td>
+                                ${student.studentId}
+                        </td>
+                        <td>
                             <label>
                                 <select class="form-control no-padding no-width">
                                     <option value="Present">Present</option>
@@ -97,9 +97,9 @@
                                     <option value="Absent">Absent</option>
                                 </select>
                             </label>
-                        </div>
-                        <div class="col-md-2" contenteditable="true">
-                            <c:forEach items="${selectedSection.days}" var="day">
+                        </td>
+                        <%--<div class="col-md-2" contenteditable="true">
+                            <c:forEach items="${sectionInfo.days}" var="day">
                                 <c:forEach items="${day.attendances}" var="attendance">
                                     <c:if test="${student.id == attendance.id && day.date == currentDate}">
                                         ${attendance.minutesMissed}
@@ -131,18 +131,18 @@
                                     </c:if>
                                 </c:forEach>
                             </c:forEach>
-                        </div>
+                        </div>--%>
                         <script type="text/javascript">
                             $(function() {
                                 $('input.datetimepicker4').datetimepicker();
                             });
                         </script>
-                    </div>
+                    </tr>
                 </c:forEach>
             </c:if>
-                <%--</c:forEach>--%>
+            </c:forEach>
 
-        </div>
+        </table>
         <div>
             <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
         </div>
