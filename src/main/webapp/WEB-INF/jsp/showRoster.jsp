@@ -23,24 +23,16 @@
     <%--This needs to be here..--%>
     <script src="${context}/js/jquery.2.1.3.min.js"></script>
     <script src="${context}/js/jquery-ui.min.js"></script>
+    <script src="${context}/js/scripts.js"></script>
 
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body>
 <form:form id="sectionSelect" modelAttribute="rosterForm" method="POST" action="${context}/selectSectionDropdown">
     <label>
-        <%--we'll need to query the database because rosterform won't be sent back in this request--%>
-        <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name"/>
+            <%--we'll need to query the database because rosterform won't be sent back in this request--%>
+        <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
     </label>
-    <script type="text/javascript">
-        $('#sectionSelect').change(function(){
-            console.log("stuff");
-            $('#sectionSelect').submit();
-        });
-        //        $(document).on("pageload",function(){
-        //            $('#sectionSelect').submit();
-        //        })
-    </script>
 </form:form>
 <form:form action="${context}/saveAttendance" method="POST">
 
@@ -68,80 +60,80 @@
     </div>
 
     <div class="container">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="visibility:hidden">
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
-            <c:if test="${not empty sectionInfo.students}">
-                <%--<c:set var="currentDate" value="${sectionInfo.days[0].date}"/>--%>
-                <tr>
-                    <th>Name</th>
-                    <th>WID</th>
-                    <th>Current Date</th>
-                    <th>Minutes Missed</th>
-                    <th>Date Made Up</th>
-                    <th>% of Course Missed</th>
-                </tr>
+                <c:if test="${not empty sectionInfo.students}">
+                    <%--<c:set var="currentDate" value="${sectionInfo.days[0].date}"/>--%>
 
-                <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
                     <tr>
-                        <td>
-                                ${student.name}
-                        </td>
-                        <td>
-                                ${student.studentId}
-                        </td>
-                        <td>
-                            <label>
-                                <select class="form-control no-padding no-width">
-                                    <option value="Present">Present</option>
-                                    <option value="Tardy">Tardy</option>
-                                    <option value="Absent">Absent</option>
-                                </select>
-                            </label>
-                        </td>
-                        <%--<div class="col-md-2" contenteditable="true">
-                            <c:forEach items="${sectionInfo.days}" var="day">
-                                <c:forEach items="${day.attendances}" var="attendance">
-                                    <c:if test="${student.id == attendance.id && day.date == currentDate}">
-                                        ${attendance.minutesMissed}
-                                    </c:if>
-                                </c:forEach>
-                            </c:forEach>
-                        </div>
-                        <div class='col-sm-2'>
-                            <c:forEach items="${sectionInfo.days}" var="day">
-                                <c:forEach items="${day.attendances}" var="attendance">
-                                    <c:if test="${student.id == attendance.id && day.date == currentDate}">
-                                        <c:if test="${attendance.dateOfClass != null } ">
-                                            <div class='col-sm-2' contenteditable="true" for="datetimepicker4" class="form-control datetimepicker4" id='datetimepicker4'>
-                                                ${attendance.dateOfClass}
-                                            </div>
-                                        </c:if>
-                                        <c:if test="${attendance.dateOfClass == null } ">
-                                            <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
-                                        </c:if>
-                                    </c:if>
-                                </c:forEach>
-                            </c:forEach>
-                        </div>
-                        <div class="col-md-2" contenteditable="true">
-                            <c:forEach items="${sectionInfo.days}" var="day">
-                                <c:forEach items="${day.attendances}" var="attendance">
-                                    <c:if test="${student.id == attendance.id && day.date == currentDate}">
-                                        ${attendance.percentageMissed}
-                                    </c:if>
-                                </c:forEach>
-                            </c:forEach>
-                        </div>--%>
-                        <script type="text/javascript">
-                            $(function() {
-                                $('input.datetimepicker4').datetimepicker();
-                            });
-                        </script>
+                        <th>Name</th>
+                        <th>WID</th>
+                        <th>Current Date</th>
+                        <th>Minutes Missed</th>
+                        <th>Date Made Up</th>
+                        <th>% of Course Missed</th>
                     </tr>
-                </c:forEach>
-            </c:if>
-            </c:forEach>
 
+                    <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
+                        <tr >
+                            <td>
+                                    ${student.name}
+                            </td>
+                            <td>
+                                    ${student.studentId}
+                            </td>
+                            <td>
+                                <label>
+                                    <select class="form-control no-padding no-width">
+                                        <option value="Present">Present</option>
+                                        <option value="Tardy">Tardy</option>
+                                        <option value="Absent">Absent</option>
+                                    </select>
+                                </label>
+                            </td>
+                                <%--<div class="col-md-2" contenteditable="true">
+                                    <c:forEach items="${sectionInfo.days}" var="day">
+                                        <c:forEach items="${day.attendances}" var="attendance">
+                                            <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                                ${attendance.minutesMissed}
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
+                                </div>
+                                <div class='col-sm-2'>
+                                    <c:forEach items="${sectionInfo.days}" var="day">
+                                        <c:forEach items="${day.attendances}" var="attendance">
+                                            <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                                <c:if test="${attendance.dateOfClass != null } ">
+                                                    <div class='col-sm-2' contenteditable="true" for="datetimepicker4" class="form-control datetimepicker4" id='datetimepicker4'>
+                                                        ${attendance.dateOfClass}
+                                                    </div>
+                                                </c:if>
+                                                <c:if test="${attendance.dateOfClass == null } ">
+                                                    <label for="datetimepicker4"></label><input type='text' class="form-control datetimepicker4" id='datetimepicker4' value=""/>
+                                                </c:if>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
+                                </div>
+                                <div class="col-md-2" contenteditable="true">
+                                    <c:forEach items="${sectionInfo.days}" var="day">
+                                        <c:forEach items="${day.attendances}" var="attendance">
+                                            <c:if test="${student.id == attendance.id && day.date == currentDate}">
+                                                ${attendance.percentageMissed}
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
+                                </div>--%>
+                            <script type="text/javascript">
+                                $(function() {
+                                    $('input.datetimepicker4').datetimepicker();
+                                });
+                            </script>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+            </c:forEach>
         </table>
         <div>
             <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
