@@ -2,9 +2,9 @@ package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
-import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.form.AttendanceForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
-import edu.ksu.canvas.aviation.model.Student;
+import edu.ksu.canvas.aviation.entity.Student;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -62,7 +62,7 @@ public class AviationReportingController extends LtiLaunchController {
 
     @RequestMapping("/showRoster")
     public ModelAndView showRoster() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        RosterForm rosterForm = new RosterForm();
+        AttendanceForm attendanceForm = new AttendanceForm();
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -72,7 +72,6 @@ public class AviationReportingController extends LtiLaunchController {
         ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
         String canvasBaseUrl = configItem.getValue();
         CanvasApiFactory canvasApiFactory = new CanvasApiFactory(canvasBaseUrl);
-        // FIXME: Timeouts need to change
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
         String courseID = ltiSession.getCanvasCourseId();
@@ -89,7 +88,6 @@ public class AviationReportingController extends LtiLaunchController {
             for (Enrollment e : enrollments) {
                 Student student = new Student();
                 student.setId(Integer.parseInt(e.getUser().getSisUserId()));
-                student.setName(e.getUser().getSortableName());
                 students.add(student);
             }
             sectionInfo.setTotalStudents(students.size());
@@ -101,27 +99,27 @@ public class AviationReportingController extends LtiLaunchController {
                 sectionInfoList.add(sectionInfo);
             }
         }
-        rosterForm.setSectionInfoList(sectionInfoList);
+        attendanceForm.setSectionInfoList(sectionInfoList);
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
-        page.addObject("rosterForm", rosterForm);
+        page.addObject("rosterForm", attendanceForm);
 
         return page;
     }
 
     // TODO: implement
-    private RosterForm getRosterForm() {
+    private AttendanceForm getRosterForm() {
         return null;
     }
 
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
-    public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+    public String saveAttendance(@ModelAttribute("rosterForm") AttendanceForm attendanceForm) throws IOException, NoLtiSessionException {
         return "showRoster";
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
-    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
+    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute AttendanceForm attendanceForm) {
 
         //NOTE: this is temporary, set to get date 2016/04/21
         Calendar myCal = Calendar.getInstance();
@@ -131,7 +129,7 @@ public class AviationReportingController extends LtiLaunchController {
 
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("selectedSection", sectionInfo);
-        page.addObject("rosterForm", rosterForm);
+        page.addObject("rosterForm", attendanceForm);
         return page;
     }
 
