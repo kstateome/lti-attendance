@@ -1,12 +1,15 @@
 package edu.ksu.canvas.aviation.entity;
 
-import edu.ksu.canvas.aviation.entity.Attendance;
-
 import javax.persistence.*;
+
+import org.hibernate.annotations.Check;
+
 import java.util.Date;
+
 
 @Entity
 @Table(name = "aviation_makeup_tracker")
+@Check(constraints="minutes_madeup >= 0")
 public class MakeupTracker {
 
     @Id
@@ -26,8 +29,8 @@ public class MakeupTracker {
     private int minutesMadeUp;
 
     @ManyToOne
-    @JoinColumn(name="attendance_id", foreignKey = @ForeignKey(name = "fk_attendance"))
-    private Attendance attendance;
+    @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable=false)
+    private Student student;
 
     public int getMakeupTrackerId() {
         return makeupTrackerId;
@@ -61,11 +64,11 @@ public class MakeupTracker {
         this.minutesMadeUp = minutesMadeUp;
     }
 
-    public Attendance getAttendance() {
-        return attendance;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setAttendance(Attendance attendance) {
-        this.attendance = attendance;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }
