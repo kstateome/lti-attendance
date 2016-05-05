@@ -4,7 +4,7 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
-import edu.ksu.canvas.aviation.model.Student;
+import edu.ksu.canvas.aviation.entity.Student;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
