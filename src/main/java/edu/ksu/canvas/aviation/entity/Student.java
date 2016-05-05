@@ -4,12 +4,16 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "aviation_student")
-public class Student {
+public class Student implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")

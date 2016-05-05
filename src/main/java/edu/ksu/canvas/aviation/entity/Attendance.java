@@ -6,14 +6,18 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Check;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "aviation_attendance")
 @Check(constraints="minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED')")
-public class Attendance {
+public class Attendance implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "attendance_id")

@@ -4,14 +4,18 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Check;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "aviation_makeup_tracker")
 @Check(constraints="minutes_madeup >= 0")
-public class MakeupTracker {
+public class MakeupTracker implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "makeup_tracker_id")
