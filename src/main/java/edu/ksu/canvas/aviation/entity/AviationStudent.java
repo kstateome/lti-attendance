@@ -20,15 +20,18 @@ public class AviationStudent implements Serializable {
     @Column(name = "student_id")
     private long studentId; //aviation project's local student Id
 
+    // Canvas has the authoritative data.
     @Column(name = "sis_user_id", nullable = false)
     private String sisUserId; //institution's student ID, e.g. WID
 
+    // Canvas has the authoritative data.
     @Column(name = "student_name")
     private String name;
 
     @Column(name = "course_id", nullable=false)
     private Long courseId;
     
+    // Canvas has the authoritative data.
     @Column(name = "section_id", nullable=false)
     private Long sectionId;
 
