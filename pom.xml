@@ -14,6 +14,25 @@
         <version>1.1.7</version>
     </parent>
 
+    <scm>
+        <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
+        <url>https://github.com/kstateome/aviation-reporting</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>ome-appdev-release</id>
+            <name>artifactory releases</name>
+            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>ome-appdev-snapshot</id>
+            <name>artifactory snapshots</name>
+            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin> <!-- copy .jsp files from lti-common -->

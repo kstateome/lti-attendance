@@ -88,7 +88,7 @@ public class AviationReportingController extends LtiLaunchController {
             List<Student> students = new ArrayList<>();
             for (Enrollment e : enrollments) {
                 Student student = new Student();
-                student.setStudentId(e.getUser().getSisUserId());
+                student.setSid(e.getUser().getSisUserId());
                 student.setName(e.getUser().getSortableName());
                 students.add(student);
             }

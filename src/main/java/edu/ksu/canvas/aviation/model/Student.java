@@ -10,10 +10,11 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
     @Column(name = "student_id")
-    private String studentId;
+    private long studentId; //aviation project's local student Id
+
+    @Column(name = "sid")
+    private String sid; //institution's student ID, e.g. WID
 
     @Column(name = "student_name")
     private String name;
@@ -35,12 +36,12 @@ public class Student {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
-    public long getId() {
-        return id;
+    public long getStudentId() {
+        return studentId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
     }
 
     public String getName() {
@@ -67,11 +68,11 @@ public class Student {
         this.attendances = attendances;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getSid() {
+        return sid;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setSid(String sid) {
+        this.sid = sid;
     }
 }
