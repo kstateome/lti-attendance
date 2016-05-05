@@ -4,7 +4,7 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
-import edu.ksu.canvas.aviation.entity.Student;
+import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -88,9 +88,9 @@ public class AviationReportingController extends LtiLaunchController {
         for (Section s : sections) {
             SectionInfo sectionInfo = new SectionInfo();
             List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) s.getId(), Collections.singletonList(EnrollmentType.STUDENT));
-            List<Student> students = new ArrayList<>();
+            List<AviationStudent> students = new ArrayList<>();
             for (Enrollment e : enrollments) {
-                Student student = new Student();
+                AviationStudent student = new AviationStudent();
                 student.setSisUserId(e.getUser().getSisUserId());
                 student.setName(e.getUser().getSortableName());
                 students.add(student);

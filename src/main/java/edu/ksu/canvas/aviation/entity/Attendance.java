@@ -26,7 +26,7 @@ public class Attendance implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"), nullable=false)
-    private Student student;
+    private AviationStudent student;
 
     @Column(name="status")
     @Enumerated(EnumType.STRING)
@@ -49,11 +49,11 @@ public class Attendance implements Serializable {
         this.attendanceId = attendanceId;
     }
 
-    public Student getStudent() {
+    public AviationStudent getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(AviationStudent student) {
         this.student = student;
     }
 

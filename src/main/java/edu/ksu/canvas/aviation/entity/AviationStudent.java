@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "aviation_student")
-public class Student implements Serializable {
+public class AviationStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
