@@ -3,11 +3,15 @@ package edu.ksu.canvas.aviation.entity;
 import edu.ksu.canvas.aviation.enums.Status;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Check;
+
 import java.util.Date;
 
 
 @Entity
 @Table(name = "aviation_attendance")
+@Check(constraints="minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED')")
 public class Attendance {
 
     @Id
@@ -16,7 +20,7 @@ public class Attendance {
     private long attendanceId;
 
     @ManyToOne
-    @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"))
+    @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"), nullable=false)
     private Student student;
 
     @Column(name="status")
