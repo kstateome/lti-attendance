@@ -32,6 +32,13 @@
     <label>
         <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
     </label>
+    <br/>
+    <div class="form-group">
+        <div class="col-md-3">
+            <input type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+        </div>
+    </div>
+    <br/><br/>
 </form:form>
 <form:form action="${context}/saveAttendance" method="POST">
 
@@ -59,6 +66,12 @@
     </div>
 
     <div class="container">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="text" id="dayWorth" class="form-control"  placeholder="Class Day Minutes" />
+                </div>
+            </div>
+            <br/><br/>
 
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
                 <c:if test="${not empty sectionInfo.students}">
