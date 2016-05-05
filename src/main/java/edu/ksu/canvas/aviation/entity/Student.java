@@ -21,7 +21,10 @@ public class Student {
     @Column(name = "student_name")
     private String name;
 
-    @Column(name = "section_id")
+    @Column(name = "course_id", nullable=false)
+    private long courseId;
+    
+    @Column(name = "section_id", nullable=false)
     private long sectionID;
 
     @OneToMany(mappedBy = "student")
@@ -77,4 +80,14 @@ public class Student {
     public void setSisUserId(String sisUserId) {
         this.sisUserId = sisUserId;
     }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
+    }
+    
+    
 }
