@@ -5,7 +5,7 @@ Aviation Reporting
 ###Technologies Used
 <ul>
 <li>Spring MVC 4
-<li>Maven 3
+<li>Maven 3.1.1
 <li>Java 8
 </ul>
 
