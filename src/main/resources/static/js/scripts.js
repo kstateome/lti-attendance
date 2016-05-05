@@ -1,3 +1,7 @@
-function toggleSection($val) {
-    console.log($val);
+function toggleSection(val) {
+    $(".sectionTable").each(function() {
+        $(this).hide();
+    });
+
+    $("#"+val).show();
 }
