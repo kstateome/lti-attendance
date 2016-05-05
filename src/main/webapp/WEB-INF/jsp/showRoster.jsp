@@ -63,7 +63,7 @@
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
                 <c:if test="${not empty sectionInfo.students}">
                     <%--<c:set var="currentDate" value="${sectionInfo.days[0].date}"/>--%>
-                <table class="table table-bordered hideme" style="display:none" id="${sectionInfo.sectionId}">
+                <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">
                     <%--<div style="visibility:hidden" id="${sectionInfo.sectionId}">--%>
                         <tr>
                             <th>Name</th>

@@ -1,5 +1,5 @@
 function toggleSection(val) {
-    $(".hideme").each(function() {
+    $(".sectionTable").each(function() {
         $(this).hide();
     });
 
