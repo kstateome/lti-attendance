@@ -1,4 +1,6 @@
-package edu.ksu.canvas.aviation.model;
+package edu.ksu.canvas.aviation.entity;
+
+import edu.ksu.canvas.aviation.entity.Attendance;
 
 import javax.persistence.*;
 
@@ -14,9 +16,6 @@ public class Student {
 
     @Column(name = "student_id")
     private String studentId;
-
-    @Column(name = "student_name")
-    private String name;
 
     @Column(name = "section_id")
     private long sectionID;
@@ -41,14 +40,6 @@ public class Student {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setSectionID(long sectionID) {
