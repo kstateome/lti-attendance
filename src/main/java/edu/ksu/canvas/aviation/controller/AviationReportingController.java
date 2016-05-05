@@ -37,10 +37,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 
+
 @Controller
 @Scope("session")
 @SessionAttributes("rosterForm")
 public class AviationReportingController extends LtiLaunchController {
+    
     private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
 
     @Autowired
@@ -52,6 +54,7 @@ public class AviationReportingController extends LtiLaunchController {
     @Autowired
     private ConfigRepository configRepository;
 
+    
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
         LOG.info("Showing Activity Reporting configuration XML");
@@ -157,4 +160,5 @@ public class AviationReportingController extends LtiLaunchController {
             throw new AccessDeniedException("You do not have sufficient privileges to use this tool");
         }
     }
+    
 }

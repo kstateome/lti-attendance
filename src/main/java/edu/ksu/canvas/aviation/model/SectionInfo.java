@@ -4,6 +4,7 @@ import edu.ksu.canvas.aviation.entity.Student;
 
 import java.util.List;
 
+
 public class SectionInfo {
 
     private long sectionId;
@@ -12,6 +13,7 @@ public class SectionInfo {
     private Integer totalStudents;
     private List<Student> students;
 
+    
     public long getSectionId() {
         return sectionId;
     }
@@ -51,4 +53,5 @@ public class SectionInfo {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+    
 }
