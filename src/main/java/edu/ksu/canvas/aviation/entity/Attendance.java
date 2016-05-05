@@ -38,6 +38,7 @@ public class Attendance implements Serializable {
     @Column(name="date_of_class")
     private Date dateOfClass;
 
+    
 
     public long getAttendanceId() {
         return attendanceId;
@@ -78,4 +79,5 @@ public class Attendance implements Serializable {
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
     }
+    
 }

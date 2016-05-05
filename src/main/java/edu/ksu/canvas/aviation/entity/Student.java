@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+
 @Entity
 @Table(name = "aviation_student")
 public class Student implements Serializable {
@@ -37,6 +38,8 @@ public class Student implements Serializable {
     @Transient
     private double percentageOfCourseMissed;
 
+    
+    
     public double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
     }
@@ -92,6 +95,5 @@ public class Student implements Serializable {
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
-    
     
 }

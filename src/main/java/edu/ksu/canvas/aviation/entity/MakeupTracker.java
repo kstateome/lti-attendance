@@ -36,6 +36,8 @@ public class MakeupTracker implements Serializable {
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable=false)
     private Student student;
 
+    
+    
     public int getMakeupTrackerId() {
         return makeupTrackerId;
     }
@@ -75,4 +77,5 @@ public class MakeupTracker implements Serializable {
     public void setStudent(Student student) {
         this.student = student;
     }
+      
 }

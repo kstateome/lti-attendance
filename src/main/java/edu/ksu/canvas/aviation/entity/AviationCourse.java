@@ -7,7 +7,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.Check;
 
 
-
 @Entity
 @Table(name = "aviation_course")
 @Check(constraints="default_minutes_per_session >= 0 and total_minutes >= 0")
