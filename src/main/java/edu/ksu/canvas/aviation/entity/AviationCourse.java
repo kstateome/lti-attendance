@@ -28,7 +28,7 @@ public class AviationCourse implements Serializable {
     private int defaultMinutesPerSession;
     
     @Column(name="canvas_course_id", nullable=false, unique=true)
-    private long canvasCourseId;
+    private Long canvasCourseId;
 
     
     
@@ -56,11 +56,11 @@ public class AviationCourse implements Serializable {
         this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
 
-    public long getCanvasCourseId() {
+    public Long getCanvasCourseId() {
         return canvasCourseId;
     }
 
-    public void setCanvasCourseId(long canvasCourseId) {
+    public void setCanvasCourseId(Long canvasCourseId) {
         this.canvasCourseId = canvasCourseId;
     }
     
