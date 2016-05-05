@@ -1,5 +1,7 @@
 package edu.ksu.canvas.aviation.model;
 
+import edu.ksu.canvas.aviation.entity.Student;
+
 import java.util.List;
 
 public class SectionInfo {
