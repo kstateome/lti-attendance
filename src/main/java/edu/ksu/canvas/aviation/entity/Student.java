@@ -25,7 +25,7 @@ public class Student {
     private long courseId;
     
     @Column(name = "section_id", nullable=false)
-    private long sectionID;
+    private long sectionId;
 
     @OneToMany(mappedBy = "student")
     private List<Attendance> attendances;
@@ -57,12 +57,12 @@ public class Student {
         this.name = name;
     }
 
-    public void setSectionID(long sectionID) {
-        this.sectionID = sectionID;
+    public void setSectionId(long sectionId) {
+        this.sectionId = sectionId;
     }
 
-    public long getSectionID() {
-        return sectionID;
+    public long getSectionId() {
+        return sectionId;
     }
 
     public List<Attendance> getAttendances() {
