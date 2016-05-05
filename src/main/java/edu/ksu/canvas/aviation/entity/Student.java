@@ -15,8 +15,8 @@ public class Student {
     @Column(name = "student_id")
     private long studentId; //aviation project's local student Id
 
-    @Column(name = "sid")
-    private String sid; //institution's student ID, e.g. WID
+    @Column(name = "sis_user_id", nullable = false)
+    private String sisUserId; //institution's student ID, e.g. WID
 
     @Column(name = "student_name")
     private String name;
@@ -70,11 +70,11 @@ public class Student {
         this.attendances = attendances;
     }
 
-    public String getSid() {
-        return sid;
+    public String getSisUserId() {
+        return sisUserId;
     }
 
-    public void setSid(String sid) {
-        this.sid = sid;
+    public void setSisUserId(String sisUserId) {
+        this.sisUserId = sisUserId;
     }
 }
