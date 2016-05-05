@@ -20,7 +20,7 @@ public class MakeupTracker implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "makeup_tracker_id")
-    private int makeupTrackerId;
+    private Long makeupTrackerId;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_class")
@@ -39,11 +39,11 @@ public class MakeupTracker implements Serializable {
 
     
     
-    public int getMakeupTrackerId() {
+    public Long getMakeupTrackerId() {
         return makeupTrackerId;
     }
 
-    public void setMakeupTrackerId(int makeupTrackerId) {
+    public void setMakeupTrackerId(Long makeupTrackerId) {
         this.makeupTrackerId = makeupTrackerId;
     }
 
@@ -63,11 +63,11 @@ public class MakeupTracker implements Serializable {
         this.dateMadeUp = dateMadeUp;
     }
 
-    public int getMinutesMadeUp() {
+    public Integer getMinutesMadeUp() {
         return minutesMadeUp;
     }
 
-    public void setMinutesMadeUp(int minutesMadeUp) {
+    public void setMinutesMadeUp(Integer minutesMadeUp) {
         this.minutesMadeUp = minutesMadeUp;
     }
 

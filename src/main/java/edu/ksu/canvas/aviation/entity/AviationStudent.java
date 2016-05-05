@@ -18,7 +18,7 @@ public class AviationStudent implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")
-    private long studentId; //aviation project's local student Id
+    private Long studentId; //aviation project's local student Id
 
     // Canvas has the authoritative data.
     @Column(name = "sis_user_id", nullable = false)
@@ -39,11 +39,11 @@ public class AviationStudent implements Serializable {
     private List<Attendance> attendances;
 
     @Transient
-    private double percentageOfCourseMissed;
+    private Double percentageOfCourseMissed;
 
     
     
-    public double getPercentageOfCourseMissed() {
+    public Double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
     }
 
@@ -51,11 +51,11 @@ public class AviationStudent implements Serializable {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
-    public long getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(long studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 

@@ -22,7 +22,7 @@ public class Attendance implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "attendance_id")
-    private long attendanceId;
+    private Long attendanceId;
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"), nullable=false)
@@ -33,7 +33,7 @@ public class Attendance implements Serializable {
     private Status status;
 
     @Column(name="minutes_missed")
-    private int minutesMissed;
+    private Integer minutesMissed;
 
     @Temporal(TemporalType.DATE)
     @Column(name="date_of_class")
@@ -41,11 +41,11 @@ public class Attendance implements Serializable {
 
     
 
-    public long getAttendanceId() {
+    public Long getAttendanceId() {
         return attendanceId;
     }
 
-    public void setAttendanceId(long attendanceId) {
+    public void setAttendanceId(Long attendanceId) {
         this.attendanceId = attendanceId;
     }
 
@@ -65,11 +65,11 @@ public class Attendance implements Serializable {
         return status;
     }
 
-    public int getMinutesMissed() {
+    public Integer getMinutesMissed() {
         return minutesMissed;
     }
 
-    public void setMinutesMissed(int minutesMissed) {
+    public void setMinutesMissed(Integer minutesMissed) {
         this.minutesMissed = minutesMissed;
     }
 
