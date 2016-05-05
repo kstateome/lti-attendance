@@ -10,6 +10,7 @@ public class Attendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "attendance_id")
     private long attendanceId;
 
     @ManyToOne

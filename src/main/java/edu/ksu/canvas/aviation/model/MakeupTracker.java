@@ -9,6 +9,7 @@ public class MakeupTracker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "makeup_tracker_id")
     private int makeupTrackerId;
 
     @Temporal(TemporalType.DATE)
