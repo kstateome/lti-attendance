@@ -4,7 +4,7 @@ import edu.ksu.canvas.aviation.enums.Status;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Table(name = "aviation_attendance")
@@ -30,8 +30,6 @@ public class Attendance {
     @Column(name="date_of_class")
     private Date dateOfClass;
 
-    @OneToMany(mappedBy = "attendance")
-    private List<MakeupTracker> madeupTracker;
 
     public long getAttendanceId() {
         return attendanceId;
@@ -63,14 +61,6 @@ public class Attendance {
 
     public void setMinutesMissed(int minutesMissed) {
         this.minutesMissed = minutesMissed;
-    }
-
-    public void setMadeup(List<MakeupTracker> madeup) {
-        this.madeupTracker = madeup;
-    }
-
-    public List<MakeupTracker> getMadeup() {
-        return madeupTracker;
     }
 
     public Date getDateOfClass() {
