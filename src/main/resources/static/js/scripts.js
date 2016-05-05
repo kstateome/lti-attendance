@@ -1,9 +1,7 @@
-function toggleSection($val) {
-    var elements = document.getElementsByClassName('hideme');
+function toggleSection(val) {
+    $(".hideme").each(function() {
+        $(this).hide();
+    });
 
-    for (var i = 0; i < elements.length; i++){
-        elements[i].style.display = "none";
-    }
-
-    document.getElementById($val).style.display = "block";
+    $("#"+val).show();
 }
