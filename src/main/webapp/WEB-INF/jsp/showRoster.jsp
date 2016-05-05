@@ -27,7 +27,7 @@
 
     <title>Aviation Reporting Class Roster</title>
 </head>
-<body>
+<body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
 <form:form id="sectionSelect" modelAttribute="rosterForm" method="POST" action="${context}/selectSectionDropdown">
     <label>
         <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
