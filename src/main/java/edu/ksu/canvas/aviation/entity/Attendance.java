@@ -1,4 +1,6 @@
-package edu.ksu.canvas.aviation.model;
+package edu.ksu.canvas.aviation.entity;
+
+import edu.ksu.canvas.aviation.enums.Status;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -1,12 +1,3 @@
-import edu.ksu.canvas.aviation.model.Attendance;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.test.annotation.DirtiesContext;
-
-import java.io.IOException;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
