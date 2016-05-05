@@ -10,7 +10,7 @@ public class Attendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long attendanceId;
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"))
@@ -21,7 +21,7 @@ public class Attendance {
     private Status status;
 
     @Column(name="minutes_missed")
-    private int minutes;
+    private int minutesMissed;
 
     @Temporal(TemporalType.DATE)
     @Column(name="date_of_class")
@@ -30,21 +30,45 @@ public class Attendance {
     @OneToMany(mappedBy = "attendance")
     private List<MakeupTracker> madeupTracker;
 
-    public void setStatus(Status status) { this.status = status; }
+    public long getAttendanceId() {
+        return attendanceId;
+    }
 
-    public Status getStatus() { return status; }
+    public void setAttendanceId(long attendanceId) {
+        this.attendanceId = attendanceId;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
 
     public int getMinutesMissed() {
-        return minutes;
+        return minutesMissed;
     }
 
     public void setMinutesMissed(int minutesMissed) {
-        this.minutes = minutesMissed;
+        this.minutesMissed = minutesMissed;
     }
 
-    public void setMadeup(List<MakeupTracker> madeup) {this.madeupTracker = madeup;}
+    public void setMadeup(List<MakeupTracker> madeup) {
+        this.madeupTracker = madeup;
+    }
 
-    public List<MakeupTracker> getMadeup() {return madeupTracker;}
+    public List<MakeupTracker> getMadeup() {
+        return madeupTracker;
+    }
 
     public Date getDateOfClass() {
         return dateOfClass;
