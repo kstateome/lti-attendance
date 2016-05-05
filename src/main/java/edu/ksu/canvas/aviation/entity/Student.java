@@ -21,8 +21,11 @@ public class Student {
     @Column(name = "student_name")
     private String name;
 
-    @Column(name = "section_id")
-    private long sectionID;
+    @Column(name = "course_id", nullable=false)
+    private Long courseId;
+    
+    @Column(name = "section_id", nullable=false)
+    private Long sectionId;
 
     @OneToMany(mappedBy = "student")
     private List<Attendance> attendances;
@@ -54,12 +57,12 @@ public class Student {
         this.name = name;
     }
 
-    public void setSectionID(long sectionID) {
-        this.sectionID = sectionID;
+    public void setSectionId(Long sectionId) {
+        this.sectionId = sectionId;
     }
 
-    public long getSectionID() {
-        return sectionID;
+    public Long getSectionId() {
+        return sectionId;
     }
 
     public List<Attendance> getAttendances() {
@@ -77,4 +80,14 @@ public class Student {
     public void setSisUserId(String sisUserId) {
         this.sisUserId = sisUserId;
     }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+    
+    
 }
