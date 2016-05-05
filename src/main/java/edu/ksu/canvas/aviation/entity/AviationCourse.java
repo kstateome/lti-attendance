@@ -62,5 +62,12 @@ public class AviationCourse implements Serializable {
     public void setCanvasCourseId(Long canvasCourseId) {
         this.canvasCourseId = canvasCourseId;
     }
+
+    
+    @Override
+    public String toString() {
+        return "AviationCourse [courseId=" + courseId + ", totalMinutes=" + totalMinutes + ", defaultMinutesPerSession="
+                + defaultMinutesPerSession + ", canvasCourseId=" + canvasCourseId + "]";
+    }
     
 }

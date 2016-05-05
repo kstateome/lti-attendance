@@ -7,6 +7,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Check;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -78,6 +79,17 @@ public class Attendance implements Serializable {
 
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
+    }
+
+    
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        
+        return "Attendance [attendanceId=" + attendanceId + ", student=" 
+                + (student == null ? null : student.getStudentId()) + ", status=" + status
+                + ", minutesMissed=" + minutesMissed + ", dateOfClass=" 
+                + (dateOfClass == null ? null : sdf.format(dateOfClass)) + "]";
     }
     
 }

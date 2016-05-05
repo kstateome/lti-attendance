@@ -95,5 +95,14 @@ public class Student implements Serializable {
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
     }
+
+    
+    @Override
+    public String toString() {
+        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", courseId="
+                + courseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
+                + percentageOfCourseMissed + "]";
+    }
+    
     
 }

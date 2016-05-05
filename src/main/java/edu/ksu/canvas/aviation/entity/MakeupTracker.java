@@ -5,6 +5,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Check;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -76,6 +77,18 @@ public class MakeupTracker implements Serializable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        
+        return "MakeupTracker [makeupTrackerId=" + makeupTrackerId + ", dateOfClass=" 
+                + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
+                + (dateMadeUp == null ? null : sdf.format(dateMadeUp)) 
+                + ", minutesMadeUp=" + minutesMadeUp + ", student=" 
+                + (student == null ? null : student.getStudentId()) + "]";
     }
       
 }
