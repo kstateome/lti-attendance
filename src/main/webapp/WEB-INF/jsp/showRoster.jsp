@@ -28,23 +28,28 @@
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
-<form:form id="sectionSelect" modelAttribute="rosterForm" method="POST" action="${context}/selectSectionDropdown">
+<form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/selectSectionDropdown">
     <label>
         <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
     </label>
+</form:form>
+<form:form id="courseMinutesWorth" modelAttribute="rosterForm" method="POST" action="${context}/editTotalClassMinutes">
     <br/>
     <div class="form-group">
         <div class="col-md-3">
             <input type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
         </div>
+        <div class="col-md-2">
+            <input class="hovering-purple-button pull-right" type="submit" value="Save Total Minutes"/>
+        </div>
     </div>
-    <br/><br/>
+    </br></br></br>
 </form:form>
 <form:form action="${context}/saveAttendance" method="POST">
 
     <div class="container">
         <div class="row">
-            <div class='col-sm-6'>
+            <div class='col-sm-4'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker5'>
                         <input type='text' class="form-control" />
@@ -52,6 +57,11 @@
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="text" id="dayWorth" class="form-control"  placeholder="Class Day Minutes" />
                 </div>
             </div>
             <script type="text/javascript">
@@ -66,12 +76,6 @@
     </div>
 
     <div class="container">
-            <div class="form-group">
-                <div class="col-md-3">
-                    <input type="text" id="dayWorth" class="form-control"  placeholder="Class Day Minutes" />
-                </div>
-            </div>
-            <br/><br/>
 
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
                 <c:if test="${not empty sectionInfo.students}">
