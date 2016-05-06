@@ -30,7 +30,7 @@
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
 <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/selectSectionDropdown">
     <label>
-        <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
+        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
     </label>
 </form:form>
 <form:form id="courseMinutesWorth" modelAttribute="rosterForm" method="POST" action="${context}/editTotalClassMinutes">
