@@ -1,4 +1,5 @@
-package edu.ksu.canvas.aviation.model;
+package edu.ksu.canvas.aviation.enums;
+
 
 public enum Status {
     PRESENT, TARDY, ABSENT, EXCUSED

@@ -1,6 +1,9 @@
 package edu.ksu.canvas.aviation.model;
 
+import edu.ksu.canvas.aviation.entity.AviationStudent;
+
 import java.util.List;
+
 
 public class SectionInfo {
 
@@ -8,8 +11,9 @@ public class SectionInfo {
     private String sectionName;
     private Integer courseId;
     private Integer totalStudents;
-    private List<Student> students;
+    private List<AviationStudent> students;
 
+    
     public long getSectionId() {
         return sectionId;
     }
@@ -42,11 +46,12 @@ public class SectionInfo {
         this.totalStudents = totalStudents;
     }
 
-    public List<Student> getStudents() {
+    public List<AviationStudent> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(List<AviationStudent> students) {
         this.students = students;
     }
+    
 }

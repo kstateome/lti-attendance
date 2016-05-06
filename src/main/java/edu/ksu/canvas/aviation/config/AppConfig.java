@@ -2,15 +2,8 @@ package edu.ksu.canvas.aviation.config;
 
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.entity.config.ConfigItem;
-import edu.ksu.canvas.impl.EnrollmentsImpl;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.net.RestClient;
-import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.config.CommonAppConfig;
-import edu.ksu.lti.util.CanvasURLBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import java.util.List;
+
 
 @Configuration
 @EnableAutoConfiguration
