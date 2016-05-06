@@ -91,13 +91,13 @@
                             <th>% of Course Missed</th>
                         </tr>
 
-                        <c:forEach items="${sectionInfo.students}" var="student" varStatus="loop">
+                        <c:forEach items="${sectionInfo.students}" var="aviationStudent" varStatus="loop">
                             <tr >
                                 <td>
-                                        ${student.name}
+                                        ${aviationStudent.name}
                                 </td>
                                 <td>
-                                        ${student.studentId}
+                                        ${aviationStudent.studentId}
                                 </td>
                                 <td>
                                     <label>
@@ -111,7 +111,7 @@
                                     <%--<div class="col-md-2" contenteditable="true">
                                         <c:forEach items="${sectionInfo.days}" var="day">
                                             <c:forEach items="${day.attendances}" var="attendance">
-                                                <c:if test="${student.studentId == attendance.studentId && day.date == currentDate}">
+                                                <c:if test="${aviationStudent.studentId == attendance.studentId && day.date == currentDate}">
                                                     ${attendance.minutesMissed}
                                                 </c:if>
                                             </c:forEach>
@@ -120,7 +120,7 @@
                                     <div class='col-sm-2'>
                                         <c:forEach items="${sectionInfo.days}" var="day">
                                             <c:forEach items="${day.attendances}" var="attendance">
-                                                <c:if test="${student.studentId == attendance.studentId && day.date == currentDate}">
+                                                <c:if test="${aviationStudent.studentId == attendance.studentId && day.date == currentDate}">
                                                     <c:if test="${attendance.dateOfClass != null } ">
                                                         <div class='col-sm-2' contenteditable="true" for="datetimepicker4" class="form-control datetimepicker4" id='datetimepicker4'>
                                                             ${attendance.dateOfClass}
@@ -136,7 +136,7 @@
                                     <div class="col-md-2" contenteditable="true">
                                         <c:forEach items="${sectionInfo.days}" var="day">
                                             <c:forEach items="${day.attendances}" var="attendance">
-                                                <c:if test="${student.studentId == attendance.studentId && day.date == currentDate}">
+                                                <c:if test="${aviationStudent.studentId == attendance.studentId && day.date == currentDate}">
                                                     ${attendance.percentageMissed}
                                                 </c:if>
                                             </c:forEach>

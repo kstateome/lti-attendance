@@ -26,7 +26,7 @@ public class Attendance implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student"), nullable=false)
-    private AviationStudent student;
+    private AviationStudent aviationStudent;
 
     @Column(name="status")
     @Enumerated(EnumType.STRING)
@@ -49,12 +49,12 @@ public class Attendance implements Serializable {
         this.attendanceId = attendanceId;
     }
 
-    public AviationStudent getStudent() {
-        return student;
+    public AviationStudent getAviationStudent() {
+        return aviationStudent;
     }
 
-    public void setStudent(AviationStudent student) {
-        this.student = student;
+    public void setAviationStudent(AviationStudent aviationStudent) {
+        this.aviationStudent = aviationStudent;
     }
 
     public void setStatus(Status status) {
@@ -86,8 +86,8 @@ public class Attendance implements Serializable {
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
-        return "Attendance [attendanceId=" + attendanceId + ", student=" 
-                + (student == null ? null : student.getStudentId()) + ", status=" + status
+        return "Attendance [attendanceId=" + attendanceId + ", aviationStudent="
+                + (aviationStudent == null ? null : aviationStudent.getStudentId()) + ", status=" + status
                 + ", minutesMissed=" + minutesMissed + ", dateOfClass=" 
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + "]";
     }
