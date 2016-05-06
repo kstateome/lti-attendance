@@ -137,7 +137,7 @@ public class AviationReportingController extends LtiLaunchController {
         return null;
     }
 
-    @RequestMapping(value = "/editTotalClassMinutes")
+    @RequestMapping(value = "/editTotalClassMinutes", method = RequestMethod.POST)
     public String saveTotalClassMinutes(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
         persistenceService.saveCourseMinutes(rosterForm, ltiLaunch.getLtiSession());
         ModelAndView page = new ModelAndView("showRoster");
