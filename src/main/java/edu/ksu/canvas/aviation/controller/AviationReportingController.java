@@ -9,6 +9,7 @@ import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -51,6 +52,9 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Autowired
     protected LtiLaunch ltiLaunch;
+
+    @Autowired
+    private PersistenceService persistenceService;
 
     @Autowired
     private RoleChecker roleChecker;
@@ -132,6 +136,12 @@ public class AviationReportingController extends LtiLaunchController {
         return null;
     }
 
+    @RequestMapping(value = "/editTotalClassMinutes")
+    public String saveTotalClassMinutes(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+        persistenceService.saveClassTotalMinutes(rosterForm, ltiLaunch.getLtiSession());
+        return "showRoster";
+    }
+
     // TODO: Implement Save
     @RequestMapping(value = "/saveAttendance")
     public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
@@ -152,6 +162,8 @@ public class AviationReportingController extends LtiLaunchController {
         page.addObject("rosterForm", rosterForm);
         return page;
     }
+
+
 
 
     @Override

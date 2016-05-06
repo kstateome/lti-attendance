@@ -37,7 +37,7 @@
     <br/>
     <div class="form-group">
         <div class="col-md-3">
-            <input type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+            <input name="classTotalMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
         </div>
         <div class="col-md-2">
             <input class="hovering-purple-button pull-right" type="submit" value="Save Total Minutes"/>

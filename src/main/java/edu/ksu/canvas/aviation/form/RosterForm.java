@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.form;
 
+import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public class RosterForm {
 
     private List<SectionInfo> sectionInfoList;
     private long sectionId;
+    private int classTotalMinutes;
 
     
     public List<SectionInfo> getSectionInfoList() {
@@ -26,5 +28,12 @@ public class RosterForm {
     public void setSectionId(long sectionId) {
         this.sectionId = sectionId;
     }
-    
+
+    public int getClassTotalMinutes() {
+        return classTotalMinutes;
+    }
+
+    public void setClassTotalMinutes(int classTotalMinutes) {
+        this.classTotalMinutes = classTotalMinutes;
+    }
 }
