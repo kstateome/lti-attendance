@@ -37,10 +37,13 @@
     <br/>
     <div class="form-group">
         <div class="col-md-3">
-            <input name="classTotalMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+            <form:input path="classTotalMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+        </div>
+        <div class="col-md-3">
+            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession" class="form-control" placeholder="Normal Class Length"/>
         </div>
         <div class="col-md-2">
-            <input class="hovering-purple-button pull-right" type="submit" value="Save Total Minutes"/>
+            <input class="hovering-purple-button pull-right" type="submit" value="Save Class Minutes"/>
         </div>
     </div>
     </br></br></br>

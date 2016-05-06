@@ -25,10 +25,29 @@ public class PersistenceService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
-    public void saveClassTotalMinutes(RosterForm rosterForm, LtiSession ltiSession) {
-        AviationCourse aviationCourse = aviationCourseRepository.findByCourseId(Long.parseLong(ltiSession.getCanvasCourseId()));
-        aviationCourse.setTotalMinutes(rosterForm.getClassTotalMinutes());
+    public void saveCourseMinutes(RosterForm rosterForm, LtiSession ltiSession) {
+
+        Long canvasCourseId = Long.parseLong(ltiSession.getCanvasCourseId());
+        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        if(aviationCourse == null){
+            aviationCourse = new AviationCourse(canvasCourseId, rosterForm.getClassTotalMinutes(), rosterForm.getDefaultMinutesPerSession());
+        }
+        else{
+            aviationCourse.setTotalMinutes(rosterForm.getClassTotalMinutes());
+        }
+        LOG.info("ROSTER FORM ========================================="+ rosterForm.getClassTotalMinutes());
+
         aviationCourseRepository.save(aviationCourse);
+    }
+
+    public RosterForm getCourseMinutes(RosterForm rosterForm, LtiSession ltiSession) {
+        Long canvasCourseId = Long.parseLong(ltiSession.getCanvasCourseId());
+        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        if(aviationCourse != null){
+            rosterForm.setClassTotalMinutes(aviationCourse.getTotalMinutes());
+            rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        }
+        return rosterForm;
     }
 
 }

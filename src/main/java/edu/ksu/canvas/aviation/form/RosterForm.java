@@ -11,6 +11,7 @@ public class RosterForm {
     private List<SectionInfo> sectionInfoList;
     private long sectionId;
     private int classTotalMinutes;
+    private int defaultMinutesPerSession;
 
     
     public List<SectionInfo> getSectionInfoList() {
@@ -35,5 +36,13 @@ public class RosterForm {
 
     public void setClassTotalMinutes(int classTotalMinutes) {
         this.classTotalMinutes = classTotalMinutes;
+    }
+
+    public int getDefaultMinutesPerSession() {
+        return defaultMinutesPerSession;
+    }
+
+    public void setDefaultMinutesPerSession(int defaultMinutesPerSession) {
+        this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
 }

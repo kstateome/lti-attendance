@@ -124,6 +124,7 @@ public class AviationReportingController extends LtiLaunchController {
             }
         }
         rosterForm.setSectionInfoList(sectionInfoList);
+        persistenceService.getCourseMinutes(rosterForm, ltiSession);
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
@@ -138,7 +139,9 @@ public class AviationReportingController extends LtiLaunchController {
 
     @RequestMapping(value = "/editTotalClassMinutes")
     public String saveTotalClassMinutes(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-        persistenceService.saveClassTotalMinutes(rosterForm, ltiLaunch.getLtiSession());
+        persistenceService.saveCourseMinutes(rosterForm, ltiLaunch.getLtiSession());
+        ModelAndView page = new ModelAndView("showRoster");
+        page.addObject(rosterForm);
         return "showRoster";
     }
 
