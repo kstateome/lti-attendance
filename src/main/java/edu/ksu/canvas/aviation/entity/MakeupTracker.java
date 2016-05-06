@@ -4,18 +4,23 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.Check;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "aviation_makeup_tracker")
 @Check(constraints="minutes_madeup >= 0")
-public class MakeupTracker {
+public class MakeupTracker implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "makeup_tracker_id")
-    private int makeupTrackerId;
+    private Long makeupTrackerId;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_class")
@@ -30,13 +35,15 @@ public class MakeupTracker {
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable=false)
-    private Student student;
+    private AviationStudent student;
 
-    public int getMakeupTrackerId() {
+    
+    
+    public Long getMakeupTrackerId() {
         return makeupTrackerId;
     }
 
-    public void setMakeupTrackerId(int makeupTrackerId) {
+    public void setMakeupTrackerId(Long makeupTrackerId) {
         this.makeupTrackerId = makeupTrackerId;
     }
 
@@ -56,19 +63,32 @@ public class MakeupTracker {
         this.dateMadeUp = dateMadeUp;
     }
 
-    public int getMinutesMadeUp() {
+    public Integer getMinutesMadeUp() {
         return minutesMadeUp;
     }
 
-    public void setMinutesMadeUp(int minutesMadeUp) {
+    public void setMinutesMadeUp(Integer minutesMadeUp) {
         this.minutesMadeUp = minutesMadeUp;
     }
 
-    public Student getStudent() {
+    public AviationStudent getStudent() {
         return student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(AviationStudent student) {
         this.student = student;
     }
+
+    
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        
+        return "MakeupTracker [makeupTrackerId=" + makeupTrackerId + ", dateOfClass=" 
+                + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
+                + (dateMadeUp == null ? null : sdf.format(dateMadeUp)) 
+                + ", minutesMadeUp=" + minutesMadeUp + ", student=" 
+                + (student == null ? null : student.getStudentId()) + "]";
+    }
+      
 }

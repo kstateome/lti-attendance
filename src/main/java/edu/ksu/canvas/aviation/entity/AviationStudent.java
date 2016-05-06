@@ -4,26 +4,34 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
+
 
 @Entity
 @Table(name = "aviation_student")
-public class Student {
+public class AviationStudent implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")
-    private long studentId; //aviation project's local student Id
+    private Long studentId; //aviation project's local student Id
 
+    // Canvas has the authoritative data.
     @Column(name = "sis_user_id", nullable = false)
     private String sisUserId; //institution's student ID, e.g. WID
 
+    // Canvas has the authoritative data.
     @Column(name = "student_name")
     private String name;
 
     @Column(name = "course_id", nullable=false)
     private Long courseId;
     
+    // Canvas has the authoritative data.
     @Column(name = "section_id", nullable=false)
     private Long sectionId;
 
@@ -31,9 +39,11 @@ public class Student {
     private List<Attendance> attendances;
 
     @Transient
-    private double percentageOfCourseMissed;
+    private Double percentageOfCourseMissed;
 
-    public double getPercentageOfCourseMissed() {
+    
+    
+    public Double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
     }
 
@@ -41,11 +51,11 @@ public class Student {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
-    public long getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(long studentId) {
+    public void setStudentId(Long studentId) {
         this.studentId = studentId;
     }
 
@@ -87,6 +97,14 @@ public class Student {
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+    
+    @Override
+    public String toString() {
+        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", courseId="
+                + courseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
+                + percentageOfCourseMissed + "]";
     }
     
     

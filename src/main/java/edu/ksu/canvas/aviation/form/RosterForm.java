@@ -4,12 +4,13 @@ import edu.ksu.canvas.aviation.model.SectionInfo;
 
 import java.util.List;
 
+
 public class RosterForm {
 
     private List<SectionInfo> sectionInfoList;
-
     private long sectionId;
 
+    
     public List<SectionInfo> getSectionInfoList() {
         return sectionInfoList;
     }
@@ -25,4 +26,5 @@ public class RosterForm {
     public void setSectionId(long sectionId) {
         this.sectionId = sectionId;
     }
+    
 }

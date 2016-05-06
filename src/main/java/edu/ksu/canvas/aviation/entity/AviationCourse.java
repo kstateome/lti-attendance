@@ -7,7 +7,6 @@ import javax.persistence.*;
 import org.hibernate.annotations.Check;
 
 
-
 @Entity
 @Table(name = "aviation_course")
 @Check(constraints="default_minutes_per_session >= 0 and total_minutes >= 0")
@@ -19,20 +18,20 @@ public class AviationCourse implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "course_id")
-    private long courseId;
+    private Long courseId;
     
     @Column(name="total_minutes")
-    private int totalMinutes;
+    private Integer totalMinutes;
     
     @Column(name="default_minutes_per_session")
-    private int defaultMinutesPerSession;
+    private Integer defaultMinutesPerSession;
     
     @Column(name="canvas_course_id", nullable=false, unique=true)
     private Long canvasCourseId;
 
     
     
-    public long getCourseId() {
+    public Long getCourseId() {
         return courseId;
     }
 
@@ -40,7 +39,7 @@ public class AviationCourse implements Serializable {
         this.courseId = courseId;
     }
 
-    public int getTotalMinutes() {
+    public Integer getTotalMinutes() {
         return totalMinutes;
     }
 
@@ -48,7 +47,7 @@ public class AviationCourse implements Serializable {
         this.totalMinutes = totalMinutes;
     }
 
-    public int getDefaultMinutesPerSession() {
+    public Integer getDefaultMinutesPerSession() {
         return defaultMinutesPerSession;
     }
 
@@ -62,6 +61,13 @@ public class AviationCourse implements Serializable {
 
     public void setCanvasCourseId(Long canvasCourseId) {
         this.canvasCourseId = canvasCourseId;
+    }
+
+    
+    @Override
+    public String toString() {
+        return "AviationCourse [courseId=" + courseId + ", totalMinutes=" + totalMinutes + ", defaultMinutesPerSession="
+                + defaultMinutesPerSession + ", canvasCourseId=" + canvasCourseId + "]";
     }
     
 }

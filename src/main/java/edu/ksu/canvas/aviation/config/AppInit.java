@@ -6,13 +6,16 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
 public class AppInit extends SpringBootServletInitializer {
 
+    
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AppConfig.class);
     }
+    
 }
