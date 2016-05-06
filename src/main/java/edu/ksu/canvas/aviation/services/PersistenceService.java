@@ -35,7 +35,6 @@ public class PersistenceService {
         else{
             aviationCourse.setTotalMinutes(rosterForm.getClassTotalMinutes());
         }
-        LOG.info("ROSTER FORM ========================================="+ rosterForm.getClassTotalMinutes());
 
         aviationCourseRepository.save(aviationCourse);
     }
