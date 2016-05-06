@@ -1,7 +1,5 @@
 package edu.ksu.canvas.aviation.entity;
 
-import edu.ksu.canvas.aviation.entity.Attendance;
-
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -35,7 +33,7 @@ public class AviationStudent implements Serializable {
     @Column(name = "section_id", nullable=false)
     private Long sectionId;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "aviationStudent")
     private List<Attendance> attendances;
 
     @Transient

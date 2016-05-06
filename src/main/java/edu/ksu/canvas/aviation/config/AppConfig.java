@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
 import java.util.List;
@@ -18,13 +19,11 @@ import java.util.List;
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
+@EnableJpaRepositories({"edu.ksu.canvas.aviation.repository"})
 @ComponentScan({"edu.ksu.canvas", "edu.ksu.lti"})
 @EntityScan({"edu.ksu.canvas", "edu.ksu.canvas.interfaces"})
 @PropertySource({"classpath:application.properties"})
 public class AppConfig extends CommonAppConfig {
-
-//    @Autowired
-//    private ConfigRepository configRepo;
 
     @Bean
     public RoleChecker roleChecker() {
@@ -34,26 +33,4 @@ public class AppConfig extends CommonAppConfig {
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
     }
-//
-//    @Override
-//    public void addResourceHandlers (ResourceHandlerRegistry registry){
-//        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-//    }
-
-//
-//    @Bean(name = "canvasURLBuilder")
-//    public CanvasURLBuilder canvasURLBuilder() {
-//        ConfigItem configItem = configRepo.findByLtiApplicationAndKey("COMMON", "canvas_url");
-//        CanvasURLBuilder canvasURLBuilder = new CanvasURLBuilder();
-//        canvasURLBuilder.setCanvasBaseUrl(configItem.getValue());
-//        return canvasURLBuilder;
-//    }
-
-//    @Bean
-//    public EnrollmentsReader enrollmentsReader() {
-//        String canvasBaseUrl = null;
-//        Integer apiVersion = 0;
-//        String oauthToken = null;
-//        return new EnrollmentsImpl(canvasBaseUrl, apiVersion, oauthToken, restClient);
-//    }
 }
