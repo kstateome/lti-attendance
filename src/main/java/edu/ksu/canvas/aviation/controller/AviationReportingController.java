@@ -32,13 +32,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.inject.Qualifier;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.util.*;
 
@@ -124,7 +128,7 @@ public class AviationReportingController extends LtiLaunchController {
             }
         }
         rosterForm.setSectionInfoList(sectionInfoList);
-        persistenceService.getCourseMinutes(rosterForm, ltiSession);
+        persistenceService.getCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
@@ -138,14 +142,19 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping(value = "/editTotalClassMinutes", method = RequestMethod.POST)
-    public String saveTotalClassMinutes(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+    public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+        //TODO: Figure out way to show roster form appropriately (maybe just call ShowRoster()..)
+        ModelAndView page = new ModelAndView("forward:showRoster");
+        if (bindingResult.hasErrors()){
+            LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
+            page.addObject("error", "Invalid input for minutes, please enter valid minutes");
+        }
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + rosterForm.getClassTotalMinutes() + ", per session: " + rosterForm.getDefaultMinutesPerSession());
-        persistenceService.saveCourseMinutes(rosterForm, ltiSession);
-        ModelAndView page = new ModelAndView("showRoster");
-        page.addObject(rosterForm);
-        return "showRoster";
+
+        persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        return page;
     }
 
     // TODO: Implement Save

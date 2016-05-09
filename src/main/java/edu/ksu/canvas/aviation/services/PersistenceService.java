@@ -25,26 +25,33 @@ public class PersistenceService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
-    public void saveCourseMinutes(RosterForm rosterForm, LtiSession ltiSession) {
+    public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
 
-        Long canvasCourseId = Long.parseLong(ltiSession.getCanvasCourseId());
+        Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if(aviationCourse == null){
-            aviationCourse = new AviationCourse(canvasCourseId, rosterForm.getClassTotalMinutes(), rosterForm.getDefaultMinutesPerSession());
+        if (aviationCourse == null){
+            aviationCourse = new AviationCourse(canvasCourseId);
         }
-        else{
+        if (rosterForm.getDefaultMinutesPerSession() != null) {
+            aviationCourse.setDefaultMinutesPerSession(rosterForm.getDefaultMinutesPerSession());
+        }
+        if (rosterForm.getClassTotalMinutes() != null) {
             aviationCourse.setTotalMinutes(rosterForm.getClassTotalMinutes());
         }
 
         aviationCourseRepository.save(aviationCourse);
     }
 
-    public RosterForm getCourseMinutes(RosterForm rosterForm, LtiSession ltiSession) {
-        Long canvasCourseId = Long.parseLong(ltiSession.getCanvasCourseId());
+    public RosterForm getCourseMinutes(RosterForm rosterForm, String courseId) {
+        Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
         if(aviationCourse != null){
-            rosterForm.setClassTotalMinutes(aviationCourse.getTotalMinutes());
-            rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+            if(aviationCourse.getDefaultMinutesPerSession() != null){
+                rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+            }
+            if (aviationCourse.getTotalMinutes() != null){
+                rosterForm.setClassTotalMinutes(aviationCourse.getTotalMinutes());
+            }
         }
         return rosterForm;
     }

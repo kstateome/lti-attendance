@@ -63,10 +63,8 @@ public class AviationCourse implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
-    public AviationCourse(Long canvasCourseId, Integer totalMinutes, Integer defaultMinutesPerSession){
+    public AviationCourse(Long canvasCourseId){
         this.canvasCourseId = canvasCourseId;
-        this.totalMinutes = totalMinutes;
-        this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
     public AviationCourse(){
 
