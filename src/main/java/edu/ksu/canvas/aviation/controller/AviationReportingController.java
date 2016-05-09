@@ -10,7 +10,6 @@ import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
@@ -21,7 +20,6 @@ import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
@@ -39,7 +37,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 
 @Controller
@@ -56,7 +57,7 @@ public class AviationReportingController extends LtiLaunchController {
     private RoleChecker roleChecker;
 
     @Autowired
-    private ConfigRepository configRepository;
+    private CanvasApiFactory canvasApiFactory;
 
     @Autowired
     private AttendanceRepository attendanceRepository;
@@ -87,9 +88,6 @@ public class AviationReportingController extends LtiLaunchController {
         assertPrivilegedUser(ltiSession);
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
-        ConfigItem configItem = configRepository.findByLtiApplicationAndKey("COMMON", "canvas_url");
-        String canvasBaseUrl = configItem.getValue();
-        CanvasApiFactory canvasApiFactory = new CanvasApiFactory(canvasBaseUrl);
         // FIXME: Timeouts need to change
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 

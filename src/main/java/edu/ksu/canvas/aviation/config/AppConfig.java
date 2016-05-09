@@ -1,9 +1,13 @@
 package edu.ksu.canvas.aviation.config;
 
 import com.google.common.collect.ImmutableList;
+import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.util.RoleChecker;
+import edu.ksu.canvas.entity.config.ConfigItem;
+import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.config.CommonAppConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +19,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 
 import java.util.List;
 
-
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
@@ -25,6 +28,9 @@ import java.util.List;
 @PropertySource({"classpath:application.properties"})
 public class AppConfig extends CommonAppConfig {
 
+    @Autowired
+    private ConfigRepository configRepo;
+
     @Bean
     public RoleChecker roleChecker() {
         final List<LtiLaunchData.InstitutionRole> validRoles = new ImmutableList.Builder<LtiLaunchData.InstitutionRole>()
@@ -32,5 +38,12 @@ public class AppConfig extends CommonAppConfig {
                 .add(LtiLaunchData.InstitutionRole.TeachingAssistant)
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
+    }
+
+    @Bean
+    public CanvasApiFactory canvasApiFactory() {
+        ConfigItem configItem = configRepo.findByLtiApplicationAndKey("COMMON", "canvas_url");
+        String canvasBaseUrl = configItem.getValue();
+        return new CanvasApiFactory(canvasBaseUrl);
     }
 }
