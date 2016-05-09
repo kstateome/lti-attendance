@@ -28,16 +28,43 @@
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
-<form:form id="sectionSelect" modelAttribute="rosterForm" method="POST" action="${context}/selectSectionDropdown">
+<div class="container-fluid">
+<form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/selectSectionDropdown">
     <label>
-        <form:select path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
+        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
     </label>
+</form:form>
+<c:if test="${not empty error}">
+    <div class="alert alert-info">
+        <p>${error}</p>
+    </div>
+</c:if>
+<form:form id="courseMinutesWorth" modelAttribute="rosterForm" method="POST" action="${context}/editTotalClassMinutes">
+    <br/>
+    <div class="form-group">
+        <div class="col-md-3">
+            <form:input path="classTotalMinutes" field="classTotalMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+            <form:errors cssClass="error" path="classTotalMinutes">
+                Invalid/empty input
+            </form:errors>
+        </div>
+        <div class="col-md-3">
+            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession" class="form-control" placeholder="Normal Class Length"/>
+            <form:errors cssClass="error" path="defaultMinutesPerSession">
+                Invalid/empty input
+            </form:errors>
+        </div>
+        <div class="col-md-2">
+            <input class="hovering-purple-button pull-right" type="submit" value="Save Class Minutes"/>
+        </div>
+    </div>
+    </br></br></br>
 </form:form>
 <form:form action="${context}/saveAttendance" method="POST">
 
     <div class="container">
         <div class="row">
-            <div class='col-sm-6'>
+            <div class='col-sm-4'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker5'>
                         <input type='text' class="form-control" />
@@ -45,6 +72,11 @@
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="text" id="dayWorth" class="form-control"  placeholder="Class Day Minutes" />
                 </div>
             </div>
             <script type="text/javascript">
@@ -142,7 +174,7 @@
     </div>
 
 </form:form>
-
+</div>
 <script src="${context}/js/moment.js"></script>
 <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>
 <!-- Load Bootstrap JS -->

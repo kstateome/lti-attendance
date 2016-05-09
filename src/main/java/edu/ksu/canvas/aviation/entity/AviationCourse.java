@@ -63,6 +63,12 @@ public class AviationCourse implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
+    public AviationCourse(Long canvasCourseId){
+        this.canvasCourseId = canvasCourseId;
+    }
+    public AviationCourse(){
+
+    }
     
     @Override
     public String toString() {
