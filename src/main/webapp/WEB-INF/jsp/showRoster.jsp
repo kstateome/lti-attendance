@@ -29,22 +29,20 @@
 </head>
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
 <div class="container-fluid">
-<form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/selectSectionDropdown">
+<form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
     <label>
-        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
+        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value)"/>
     </label>
-</form:form>
-<c:if test="${not empty error}">
-    <div class="alert alert-info">
-        <p>${error}</p>
-    </div>
-</c:if>
-<form:form id="courseMinutesWorth" modelAttribute="rosterForm" method="POST" action="${context}/editTotalClassMinutes">
+    <c:if test="${not empty error}">
+        <div class="alert alert-info">
+            <p>${error}</p>
+        </div>
+    </c:if>
     <br/>
     <div class="form-group">
         <div class="col-md-3">
-            <form:input path="classTotalMinutes" field="classTotalMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
-            <form:errors cssClass="error" path="classTotalMinutes">
+            <form:input path="totalClassMinutes" type="text" id="courseWorth" class="form-control"  placeholder="Total Class Minutes" />
+            <form:errors cssClass="error" path="totalClassMinutes">
                 Invalid/empty input
             </form:errors>
         </div>
@@ -55,13 +53,10 @@
             </form:errors>
         </div>
         <div class="col-md-2">
-            <input class="hovering-purple-button pull-right" type="submit" value="Save Class Minutes"/>
+            <input value="Save Class Minutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit">
         </div>
     </div>
-    </br></br></br>
-</form:form>
-<form:form action="${context}/saveAttendance" method="POST">
-
+    <br><br><br>
     <div class="container">
         <div class="row">
             <div class='col-sm-4'>
@@ -112,7 +107,7 @@
                                         ${aviationStudent.name}
                                 </td>
                                 <td>
-                                        ${aviationStudent.studentId}
+                                        ${aviationStudent.sisUserId}
                                 </td>
                                 <td>
                                     <label>
@@ -169,11 +164,12 @@
             </c:forEach>
 
         <div>
-            <input class="hovering-purple-button" type="submit" value="Save Attendance"/>
+            <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
         </div>
     </div>
+    </form:form>
 
-</form:form>
+</>
 </div>
 <script src="${context}/js/moment.js"></script>
 <script src="${context}/bootstrap/js/bootstrap-datetimepicker.js"></script>

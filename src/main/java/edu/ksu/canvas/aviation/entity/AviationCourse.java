@@ -1,10 +1,9 @@
 package edu.ksu.canvas.aviation.entity;
 
-import java.io.Serializable;
+import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
-
-import org.hibernate.annotations.Check;
+import java.io.Serializable;
 
 
 @Entity
@@ -29,8 +28,17 @@ public class AviationCourse implements Serializable {
     @Column(name="canvas_course_id", nullable=false, unique=true)
     private Long canvasCourseId;
 
-    
-    
+
+    public AviationCourse() {
+
+    }
+
+    public AviationCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
+        this.canvasCourseId = canvasCourseId;
+        this.totalMinutes = totalClassMinutes;
+        this.defaultMinutesPerSession = defaultMinutesPerSession;
+    }
+
     public Long getCourseId() {
         return courseId;
     }
@@ -63,12 +71,7 @@ public class AviationCourse implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
-    public AviationCourse(Long canvasCourseId){
-        this.canvasCourseId = canvasCourseId;
-    }
-    public AviationCourse(){
 
-    }
     
     @Override
     public String toString() {
