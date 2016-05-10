@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AviationStudentRepository extends CrudRepository<AviationStudent, Long> {
     AviationStudent findByStudentId(Long studentId);
+    AviationStudent findBysisUserId(String sisUserId);
 }

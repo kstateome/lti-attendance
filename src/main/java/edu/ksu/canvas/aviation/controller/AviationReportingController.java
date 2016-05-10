@@ -4,22 +4,15 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
-import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.repository.AttendanceRepository;
-import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
-import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
-import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
@@ -37,10 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.inject.Qualifier;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,18 +57,6 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Autowired
     private CanvasApiFactory canvasApiFactory;
-
-    @Autowired
-    private AttendanceRepository attendanceRepository;
-
-    @Autowired
-    private AviationCourseRepository aviationCourseRepository;
-
-    @Autowired
-    private AviationStudentRepository aviationStudentRepository;
-
-    @Autowired
-    private MakeupTrackerRepository makeupTrackerRepository;
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
@@ -106,22 +85,9 @@ public class AviationReportingController extends LtiLaunchController {
         // Get section data
         // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
-        for (Section s : sections) {
-            SectionInfo sectionInfo = new SectionInfo();
-            List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) s.getId(), Collections.singletonList(EnrollmentType.STUDENT));
-            List<AviationStudent> students = new ArrayList<>();
-            for (Enrollment e : enrollments) {
-                AviationStudent student = new AviationStudent();
-                student.setSisUserId(e.getUser().getSisUserId());
-                student.setName(e.getUser().getSortableName());
-                students.add(student);
-            }
-            sectionInfo.setTotalStudents(students.size());
-            if (students.size() > 0) {
-                sectionInfo.setStudents(students);
-                sectionInfo.setSectionId(s.getId());
-                sectionInfo.setSectionName(s.getName());
-                sectionInfo.setCourseId(s.getCourseId());
+        for (Section section : sections) {
+            SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
+            if(sectionInfo.getTotalStudents() > 0) {
                 sectionInfoList.add(sectionInfo);
             }
         }
@@ -139,7 +105,7 @@ public class AviationReportingController extends LtiLaunchController {
         return null;
     }
 
-    @RequestMapping(value = "/editTotalClassMinutes", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         //TODO: Figure out way to show roster form appropriately (maybe just call ShowRoster()..)
         ModelAndView page = new ModelAndView("forward:showRoster");
@@ -149,16 +115,24 @@ public class AviationReportingController extends LtiLaunchController {
         }
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
-                 + rosterForm.getClassTotalMinutes() + ", per session: " + rosterForm.getDefaultMinutesPerSession());
+                 + rosterForm.getTotalClassMinutes() + ", per session: " + rosterForm.getDefaultMinutesPerSession());
 
         persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         return page;
     }
 
     // TODO: Implement Save
-    @RequestMapping(value = "/saveAttendance")
-    public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-        return "showRoster";
+    @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
+    public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+
+        Section section = getSection(sectionId, oauthToken);
+        SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
+        persistenceService.saveClassAttendance(sectionInfo);
+        return showRoster();
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
@@ -200,5 +174,13 @@ public class AviationReportingController extends LtiLaunchController {
             throw new AccessDeniedException("You do not have sufficient privileges to use this tool");
         }
     }
+
+    private Section getSection(String sectionId, OauthToken oauthToken) throws IOException {
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        Section section = sectionReader.getSingleSection(sectionId);
+        return section;
+
+    }
+
     
 }

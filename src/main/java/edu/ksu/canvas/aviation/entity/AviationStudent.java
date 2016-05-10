@@ -26,8 +26,8 @@ public class AviationStudent implements Serializable {
     @Column(name = "student_name")
     private String name;
 
-    @Column(name = "course_id", nullable=false)
-    private Long courseId;
+    @Column(name = "canvas_course_id", nullable=false)
+    private Integer canvasCourseId;
     
     // Canvas has the authoritative data.
     @Column(name = "section_id", nullable=false)
@@ -89,19 +89,19 @@ public class AviationStudent implements Serializable {
         this.sisUserId = sisUserId;
     }
 
-    public Long getCourseId() {
-        return courseId;
+    public Integer getCanvasCourseId() {
+        return canvasCourseId;
     }
 
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
+    public void setCanvasCourseId(Integer canvasCourseId) {
+        this.canvasCourseId = canvasCourseId;
     }
 
     
     @Override
     public String toString() {
-        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", courseId="
-                + courseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
+        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="
+                + canvasCourseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
                 + percentageOfCourseMissed + "]";
     }
     
