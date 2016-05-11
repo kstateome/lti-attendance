@@ -1,11 +1,9 @@
 package edu.ksu.canvas.aviation.entity;
 
 import edu.ksu.canvas.aviation.enums.Status;
-
-import javax.persistence.*;
-
 import org.hibernate.annotations.Check;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +37,15 @@ public class Attendance implements Serializable {
     @Column(name="date_of_class")
     private Date dateOfClass;
 
-    
+    public Attendance() {
+    }
+
+    public Attendance(AviationStudent aviationStudent, Status status, Date dateOfClass) {
+        this.aviationStudent = aviationStudent;
+        this.status = status;
+        this.dateOfClass = dateOfClass;
+    }
+
 
     public Long getAttendanceId() {
         return attendanceId;

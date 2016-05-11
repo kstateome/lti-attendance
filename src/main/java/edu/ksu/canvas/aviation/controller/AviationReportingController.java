@@ -33,10 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -69,6 +66,7 @@ public class AviationReportingController extends LtiLaunchController {
     @RequestMapping("/showRoster")
     public ModelAndView showRoster() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         RosterForm rosterForm = new RosterForm();
+        rosterForm.setCurrentDate(new Date());
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -92,17 +90,13 @@ public class AviationReportingController extends LtiLaunchController {
             }
         }
         rosterForm.setSectionInfoList(sectionInfoList);
-        persistenceService.getCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        rosterForm = persistenceService.populateAttendanceForDay(rosterForm, new Date());
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
 
         return page;
-    }
-
-    // TODO: implement
-    private RosterForm getRosterForm() {
-        return null;
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
@@ -121,7 +115,6 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    // TODO: Implement Save
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -131,7 +124,7 @@ public class AviationReportingController extends LtiLaunchController {
 
         Section section = getSection(sectionId, oauthToken);
         SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
-        persistenceService.saveClassAttendance(sectionInfo);
+        persistenceService.saveClassAttendance(sectionInfo, rosterForm.getTotalClassMinutes());
         return showRoster();
     }
 
@@ -177,9 +170,7 @@ public class AviationReportingController extends LtiLaunchController {
 
     private Section getSection(String sectionId, OauthToken oauthToken) throws IOException {
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        Section section = sectionReader.getSingleSection(sectionId);
-        return section;
-
+        return sectionReader.getSingleSection(sectionId);
     }
 
     
