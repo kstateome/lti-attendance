@@ -59,7 +59,7 @@
     <br><br><br>
     <div class="container">
         <div class="row">
-            <div class='col-sm-4'>
+            <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
                     <div class='input-group date' id='datetimepicker5'>
                         <input type='text' class="form-control" />
