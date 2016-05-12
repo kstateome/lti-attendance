@@ -2,6 +2,7 @@ package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
+import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.services.PersistenceService;
@@ -55,6 +56,9 @@ public class AviationReportingController extends LtiLaunchController {
     @Autowired
     private CanvasApiFactory canvasApiFactory;
 
+    @Autowired
+    private SectionInfoFactory sectionInfoFactory;
+
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
         LOG.info("Showing Activity Reporting configuration XML");
@@ -84,11 +88,9 @@ public class AviationReportingController extends LtiLaunchController {
         // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for (Section section : sections) {
-            SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
-            if(sectionInfo.getTotalStudents() > 0) {
-                sectionInfoList.add(sectionInfo);
-            }
+            sectionInfoList.add(sectionInfoFactory.getSectionInfo(section, enrollmentsReader));
         }
+
         rosterForm.setSectionInfoList(sectionInfoList);
         rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         rosterForm = persistenceService.populateAttendanceForDay(rosterForm, new Date());
@@ -116,16 +118,16 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+    public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+        rosterForm.getSectionInfoList().stream().forEachOrdered(section -> {
+            LOG.debug("Max attendances in section: " + section.getStudents().stream().map(student -> student.getAttendances().size()).max(Integer::max).get());
+        });
 
-        Section section = getSection(sectionId, oauthToken);
-        SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
-        persistenceService.saveClassAttendance(sectionInfo, rosterForm.getTotalClassMinutes());
-        return showRoster();
+        persistenceService.saveClassAttendance(rosterForm);
+        return "redirect:/showRoster";
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)

@@ -50,20 +50,27 @@ public class PersistenceService {
 
         aviationCourseRepository.save(aviationCourse);
     }
-    
-    public void saveClassAttendance(SectionInfo sectionInfo, int totalClassMinutes) {
-        LOG.info("Saving section: " + sectionInfo);
-        for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
-            //Save students
-            AviationStudent persistedStudent = aviationStudentRepository.findBySisUserId(aviationStudent.getSisUserId());
-            if(persistedStudent == null) {
-                LOG.debug("Saving student: " + aviationStudent);
-                persistedStudent = aviationStudentRepository.save(aviationStudent);
-            }
 
-            //save attendance
-            //FIXME: This saves every attendance event, not just the ones displayed on the form. Should improve this.
-            attendanceRepository.save(aviationStudent.getAttendances());
+    public void saveClassAttendance(RosterForm rosterForm) {
+        for (SectionInfo sectionInfo : rosterForm.getSectionInfoList()){
+            LOG.info("Saving section: " + sectionInfo);
+            for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
+                //Save students
+                AviationStudent persistedStudent = aviationStudentRepository.findBySisUserIdAndSectionId(aviationStudent.getSisUserId(), sectionInfo.getSectionId());
+                if(persistedStudent == null) {
+                    LOG.debug("Saving student: " + aviationStudent);
+                    LOG.debug("Student has: " + aviationStudent.getAttendances().size() + " attendances. (Pre-save)");
+                    persistedStudent = aviationStudentRepository.save(aviationStudent);
+                } else {
+                    //Update the attendances
+                    persistedStudent.setAttendances(aviationStudent.getAttendances());
+                }
+                for (Attendance attendance : persistedStudent.getAttendances()) {
+                    attendance.setAviationStudent(persistedStudent);
+                }
+                LOG.debug("Student has: " + persistedStudent.getAttendances().size() + " attendances.");
+                attendanceRepository.save(persistedStudent.getAttendances());
+            }
         }
     }
     
@@ -89,6 +96,7 @@ public class PersistenceService {
         rosterForm.getSectionInfoList().forEach(section -> {
             section.getStudents().forEach(student -> {
                 if (student.getAttendances() == null) {
+                    LOG.debug("Initializing new attendance list for student: " + student);
                     student.setAttendances(new ArrayList<>());
                 }
                 if (student.getAttendances().stream()

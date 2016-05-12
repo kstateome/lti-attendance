@@ -1,7 +1,6 @@
 package edu.ksu.canvas.aviation.entity;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,8 +38,8 @@ public class AviationStudent implements Serializable {
     @Transient
     private Double percentageOfCourseMissed;
 
-    
-    
+
+
     public Double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
     }
@@ -104,6 +103,29 @@ public class AviationStudent implements Serializable {
                 + canvasCourseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
                 + percentageOfCourseMissed + "]";
     }
-    
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AviationStudent that = (AviationStudent) o;
+
+        if (canvasCourseId != null ? !canvasCourseId.equals(that.canvasCourseId) : that.canvasCourseId != null)
+            return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (sectionId != null ? !sectionId.equals(that.sectionId) : that.sectionId != null) return false;
+        if (sisUserId != null ? !sisUserId.equals(that.sisUserId) : that.sisUserId != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sisUserId != null ? sisUserId.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (canvasCourseId != null ? canvasCourseId.hashCode() : 0);
+        result = 31 * result + (sectionId != null ? sectionId.hashCode() : 0);
+        return result;
+    }
 }
