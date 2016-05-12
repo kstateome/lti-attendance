@@ -2,6 +2,7 @@ package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
+import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.services.PersistenceService;
@@ -24,19 +25,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -58,6 +53,9 @@ public class AviationReportingController extends LtiLaunchController {
     @Autowired
     private CanvasApiFactory canvasApiFactory;
 
+    @Autowired
+    private SectionInfoFactory sectionInfoFactory;
+
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
         LOG.info("Showing Activity Reporting configuration XML");
@@ -67,8 +65,13 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping("/showRoster")
-    public ModelAndView showRoster() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         RosterForm rosterForm = new RosterForm();
+        //Sets the date to today if not already set
+        if (date == null){
+            date = new Date();
+        }
+        rosterForm.setCurrentDate(date);
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -86,13 +89,12 @@ public class AviationReportingController extends LtiLaunchController {
         // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for (Section section : sections) {
-            SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
-            if(sectionInfo.getTotalStudents() > 0) {
-                sectionInfoList.add(sectionInfo);
-            }
+            sectionInfoList.add(sectionInfoFactory.getSectionInfo(section, enrollmentsReader));
         }
+
         rosterForm.setSectionInfoList(sectionInfoList);
-        persistenceService.getCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        rosterForm = persistenceService.populateAttendanceForDay(rosterForm, date);
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
@@ -100,9 +102,9 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    // TODO: implement
-    private RosterForm getRosterForm() {
-        return null;
+    @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
+    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+        return showRoster(rosterForm.getCurrentDate());
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
@@ -121,29 +123,21 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-    // TODO: Implement Save
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+        rosterForm.getSectionInfoList().stream().forEachOrdered(section -> {
+            LOG.debug("Max attendances in section: " + section.getStudents().stream().map(student -> student.getAttendances().size()).max(Integer::max).get());
+        });
 
-        Section section = getSection(sectionId, oauthToken);
-        SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
-        persistenceService.saveClassAttendance(sectionInfo);
-        return showRoster();
+        persistenceService.saveClassAttendance(rosterForm);
+        return showRoster(rosterForm.getCurrentDate());
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
     public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
-
-        //NOTE: this is temporary, set to get date 2016/04/21
-        Calendar myCal = Calendar.getInstance();
-        myCal.set(Calendar.YEAR, 2016);
-        myCal.set(Calendar.MONTH, 4);
-        myCal.set(Calendar.DAY_OF_MONTH, 21);
-
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("selectedSection", sectionInfo);
         page.addObject("rosterForm", rosterForm);
@@ -177,9 +171,7 @@ public class AviationReportingController extends LtiLaunchController {
 
     private Section getSection(String sectionId, OauthToken oauthToken) throws IOException {
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        Section section = sectionReader.getSingleSection(sectionId);
-        return section;
-
+        return sectionReader.getSingleSection(sectionId);
     }
 
     
