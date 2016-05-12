@@ -33,7 +33,7 @@
     <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value); false;"/>
   </label>
 </form>
-
+<a id="showRoster" href="${context}/showRoster/">Back to Roster</a>
   <br/>
 
   <div class="container">
