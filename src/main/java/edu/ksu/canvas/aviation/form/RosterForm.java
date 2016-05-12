@@ -2,6 +2,7 @@ package edu.ksu.canvas.aviation.form;
 
 import edu.ksu.canvas.aviation.model.SectionInfo;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -11,6 +12,7 @@ public class RosterForm {
     private long sectionId;
     private int totalClassMinutes;
     private int defaultMinutesPerSession;
+    private Date currentDate;
 
     
     public List<SectionInfo> getSectionInfoList() {
@@ -43,5 +45,13 @@ public class RosterForm {
 
     public void setDefaultMinutesPerSession(int defaultMinutesPerSession) {
         this.defaultMinutesPerSession = defaultMinutesPerSession;
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

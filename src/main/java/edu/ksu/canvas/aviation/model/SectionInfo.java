@@ -5,7 +5,6 @@ import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,8 +20,12 @@ public class SectionInfo {
     private Integer totalStudents;
     private List<AviationStudent> students;
 
-    private static final Logger LOG = Logger.getLogger(SectionInfo.class);
-
+    public SectionInfo(Section section){
+        sectionId = section.getId();
+        sectionName = section.getName();
+        canvasCourseId = section.getCourseId();
+    }
+    
     public SectionInfo(Section section, EnrollmentsReader enrollmentsReader) throws IOException {
         List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT));
         List<AviationStudent> students = new ArrayList<>();
