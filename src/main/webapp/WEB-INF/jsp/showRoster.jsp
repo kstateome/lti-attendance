@@ -23,7 +23,7 @@
     <%--This needs to be here..--%>
     <script src="${context}/js/jquery.2.1.3.min.js"></script>
     <script src="${context}/js/jquery-ui.min.js"></script>
-    <script src="${context}/js/scripts.js"></script>
+    <!--<script src="${context}/js/scripts.js"></script>-->
 
     <title>Aviation Reporting Class Roster</title>
 </head>
@@ -84,7 +84,7 @@
             </script>
         </div>
     </div>
-
+<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a>
     <div class="container">
 
             <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">

@@ -4,4 +4,6 @@ function toggleSection(val) {
     });
 
     $("#"+val).show();
+
+    $("#attendanceSummary").attr("href","/attendanceSummary/"+$('#sectionId option:selected').val());
 }

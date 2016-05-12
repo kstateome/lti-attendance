@@ -24,10 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -94,6 +91,40 @@ public class AviationReportingController extends LtiLaunchController {
         rosterForm.setSectionInfoList(sectionInfoList);
         persistenceService.getCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         ModelAndView page = new ModelAndView("showRoster");
+        page.addObject("sectionList", sections);
+        page.addObject("rosterForm", rosterForm);
+
+        return page;
+    }
+
+    @RequestMapping("/attendanceSummary/{sectionId}")
+    public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        RosterForm rosterForm = new RosterForm();
+        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+        ltiLaunch.validateOAuthToken();
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        assertPrivilegedUser(ltiSession);
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+
+        // FIXME: Timeouts need to change
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+
+        String courseID = ltiSession.getCanvasCourseId();
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
+
+        // Get section data
+        // FIXME: Retrieve data for dates, attendance, from a database
+        List<SectionInfo> sectionInfoList = new ArrayList<>();
+        for (Section section : sections) {
+            SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
+            if(sectionInfo.getTotalStudents() > 0) {
+                sectionInfoList.add(sectionInfo);
+            }
+        }
+        rosterForm.setSectionInfoList(sectionInfoList);
+        persistenceService.getCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        ModelAndView page = new ModelAndView("attendanceSummary");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
 
