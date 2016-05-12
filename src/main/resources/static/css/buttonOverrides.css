@@ -18,3 +18,8 @@
     background-color: #512888;
     border-color: #452274;
 }
+
+.keep-element-above
+{
+    z-index: 1;
+}
