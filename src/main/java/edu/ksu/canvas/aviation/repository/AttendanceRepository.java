@@ -8,8 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface AttendanceRepository extends CrudRepository<Attendance, Long> {
+    
+    
     List<Attendance> findByAviationStudent(AviationStudent aviationStudent);
+    
     Attendance findByAttendanceId(Long attendanceId);
+    
 }

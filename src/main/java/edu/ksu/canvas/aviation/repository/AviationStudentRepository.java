@@ -6,10 +6,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
+
 @Repository
 public interface AviationStudentRepository extends CrudRepository<AviationStudent, Long> {
+    
+    
     AviationStudent findByStudentId(Long studentId);
+    
     AviationStudent findBySisUserId(String sisUserId);
+    
     AviationStudent findBySisUserIdAndSectionId(String sisUserId, Long sectionId);
 
     Set<AviationStudent> findBySectionId(long sectionId);
