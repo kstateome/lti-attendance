@@ -5,6 +5,9 @@ import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.repository.ReportRepository;
+import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryEntry;
+import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryForSection;
 import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
@@ -55,6 +58,10 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Autowired
     private SectionInfoFactory sectionInfoFactory;
+    
+    @Autowired
+    private ReportRepository reportRepository;
+    
 
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
@@ -118,8 +125,6 @@ public class AviationReportingController extends LtiLaunchController {
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
 
-        // Get section data
-        // FIXME: Retrieve data for dates, attendance, from a database
         List<SectionInfo> sectionInfoList = new ArrayList<>();
         for (Section section : sections) {
             SectionInfo sectionInfo = new SectionInfo(section, enrollmentsReader);
@@ -129,10 +134,13 @@ public class AviationReportingController extends LtiLaunchController {
         }
         rosterForm.setSectionInfoList(sectionInfoList);
         persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        
         ModelAndView page = new ModelAndView("attendanceSummary");
         page.addObject("sectionList", sections);
-        page.addObject("rosterForm", rosterForm);
-
+        
+        List<AttendanceSummaryForSection> summaryForSections = reportRepository.getAttendanceSummary(new Long(sectionId));
+        page.addObject("attendanceSummaryForSections", summaryForSections);
+        
         return page;
     }
 

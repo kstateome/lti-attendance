@@ -15,7 +15,7 @@
   <!-- LOAD BOOTSTRAP -->
   <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
-  <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-datetimepicker.css"/>
+  <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-datepicker.min.css"/>
   <link rel="stylesheet" href="${context}/stylesheets/jquery-ui.min.css"/>
   <link rel="stylesheet" href="${context}/stylesheets/style.css"/>
   <link rel="stylesheet" href="${context}/css/buttonOverrides.css"/>
@@ -28,24 +28,18 @@
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
-<form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
+<form class="sectionDropdown" method="post" action="DoNotActuallyPost">
   <label>
-    <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value)"/>
+    <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value); false;"/>
   </label>
-  <c:if test="${not empty error}">
-    <div class="alert alert-info">
-      <p>${error}</p>
-    </div>
-  </c:if>
+</form>
+
   <br/>
 
   <div class="container">
 
-    <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="loop">
-      <c:if test="${not empty sectionInfo.students}">
-        <%--<c:set var="currentDate" value="${sectionInfo.days[0].date}"/>--%>
-        <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">
-            <%--<div style="visibility:hidden" id="${sectionInfo.sectionId}">--%>
+    <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
+        <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
           <tr>
             <th>Name</th>
             <th>Minutes Made Up</th>
@@ -54,26 +48,19 @@
             <th>% of Course Missed</th>
           </tr>
 
-          <c:forEach items="${sectionInfo.students}" var="aviationStudent" varStatus="loop">
+          <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
             <tr >
-              <td>
-                  ${aviationStudent.name}
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>${attendancesummaryEntry.studentName}</td>
+              <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
+              <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
+              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
+              <td>${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
         </table>
-      </c:if>
     </c:forEach>
-    <div>
-      <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
-    </div>
-  </div>
-</form:form>
 
+  </div>
 
 </body>
 </html>
