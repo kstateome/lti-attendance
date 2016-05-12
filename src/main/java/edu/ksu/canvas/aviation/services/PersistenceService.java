@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author jesusorr
@@ -54,12 +55,12 @@ public class PersistenceService {
     public void saveClassAttendance(RosterForm rosterForm) {
         for (SectionInfo sectionInfo : rosterForm.getSectionInfoList()){
             LOG.info("Saving section: " + sectionInfo);
+            List<Attendance> attendancesToSave = new ArrayList<>();
             for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
                 //Save students
                 AviationStudent persistedStudent = aviationStudentRepository.findBySisUserIdAndSectionId(aviationStudent.getSisUserId(), sectionInfo.getSectionId());
                 if(persistedStudent == null) {
                     LOG.debug("Saving student: " + aviationStudent);
-                    LOG.debug("Student has: " + aviationStudent.getAttendances().size() + " attendances. (Pre-save)");
                     persistedStudent = aviationStudentRepository.save(aviationStudent);
                 } else {
                     //Update the attendances
@@ -67,10 +68,12 @@ public class PersistenceService {
                 }
                 for (Attendance attendance : persistedStudent.getAttendances()) {
                     attendance.setAviationStudent(persistedStudent);
+                    if (DateUtils.isSameDay(attendance.getDateOfClass(), rosterForm.getCurrentDate())){
+                        attendancesToSave.add(attendance);
+                    }
                 }
-                LOG.debug("Student has: " + persistedStudent.getAttendances().size() + " attendances.");
-                attendanceRepository.save(persistedStudent.getAttendances());
             }
+            attendanceRepository.save(attendancesToSave);
         }
     }
     

@@ -89,11 +89,12 @@
                 $(function () {
                     var datePicker = $('#datePicker');
                     datePicker.datepicker({
-                        defaultDate: Date.now(),
                         autoclose: true
                     });
                     $('#currentDate').on("change", function(){
-                        //todo
+                        var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                        $("#sectionSelect").append($(dateChange));
+                        $("#sectionSelect").submit();
                     });
                 });
             </script>

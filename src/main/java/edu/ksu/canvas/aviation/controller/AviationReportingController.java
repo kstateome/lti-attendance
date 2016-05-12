@@ -25,10 +25,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,9 +65,13 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping("/showRoster")
-    public ModelAndView showRoster() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         RosterForm rosterForm = new RosterForm();
-        rosterForm.setCurrentDate(new Date());
+        //Sets the date to today if not already set
+        if (date == null){
+            date = new Date();
+        }
+        rosterForm.setCurrentDate(date);
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -93,12 +94,17 @@ public class AviationReportingController extends LtiLaunchController {
 
         rosterForm.setSectionInfoList(sectionInfoList);
         rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
-        rosterForm = persistenceService.populateAttendanceForDay(rosterForm, new Date());
+        rosterForm = persistenceService.populateAttendanceForDay(rosterForm, date);
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
 
         return page;
+    }
+
+    @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
+    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+        return showRoster(rosterForm.getCurrentDate());
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
@@ -118,7 +124,7 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
-    public String saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+    public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
@@ -127,18 +133,11 @@ public class AviationReportingController extends LtiLaunchController {
         });
 
         persistenceService.saveClassAttendance(rosterForm);
-        return "redirect:/showRoster";
+        return showRoster(rosterForm.getCurrentDate());
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
     public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
-
-        //NOTE: this is temporary, set to get date 2016/04/21
-        Calendar myCal = Calendar.getInstance();
-        myCal.set(Calendar.YEAR, 2016);
-        myCal.set(Calendar.MONTH, 4);
-        myCal.set(Calendar.DAY_OF_MONTH, 21);
-
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("selectedSection", sectionInfo);
         page.addObject("rosterForm", rosterForm);
