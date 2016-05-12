@@ -122,7 +122,7 @@ public class ReportRepository {
                 "sum_minutes_madeup, " +
                 "sum_minutes_missed - sum_minutes_madeup as remaining_minutes_madeup, " + 
                 "sum_minutes_missed, " +
-                "sum_minutes_missed / course_total_minutes * 100 as percent_course_missed " +
+                "round(sum_minutes_missed / course_total_minutes * 100,2) as percent_course_missed " +
                 "from ( " + 
                 "  select course.course_id, course.total_minutes as course_total_minutes, " + 
                 "  student.section_id, student.student_id, student.student_name, " + 
