@@ -25,9 +25,9 @@
   <script src="${context}/js/jquery-ui.min.js"></script>
   <script src="${context}/js/scripts.js"></script>
 
-  <title>Aviation Reporting Attendace Summary Page</title>
+  <title>Aviation Reporting Attendance Summary Page</title>
 </head>
-<body>
+<body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
 <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
   <label>
     <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value)"/>
