@@ -5,5 +5,5 @@ function toggleSection(val) {
 
     $("#"+val).show();
 
-    $("#attendanceSummary").attr("href","/attendanceSummary/"+$('#sectionId option:selected').val());
+    $("#attendanceSummary").attr("href","attendanceSummary/"+$('#sectionId option:selected').val());
 }
