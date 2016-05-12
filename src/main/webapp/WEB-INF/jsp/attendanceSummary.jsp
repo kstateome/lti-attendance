@@ -48,7 +48,6 @@
             <%--<div style="visibility:hidden" id="${sectionInfo.sectionId}">--%>
           <tr>
             <th>Name</th>
-            <th>Current Minutes Made Up</th>
             <th>Minutes Made Up</th>
             <th>Remaining Minutes Made up</th>
             <th>Total Minutes Missed</th>
@@ -60,7 +59,6 @@
               <td>
                   ${aviationStudent.name}
               </td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
