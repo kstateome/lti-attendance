@@ -68,7 +68,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-4">
+            <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
                     <div class="input-group date" id="datePicker">
                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
@@ -158,8 +158,6 @@
     </div>
     </form:form>
 
-</
->
 </div>
 <script src="${context}/js/moment.js"></script>
 <script src="${context}/bootstrap/js/bootstrap-datepicker.min.js"></script>
