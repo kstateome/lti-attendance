@@ -67,7 +67,8 @@
             </form:errors>
         </div>
         <div class="col-md-2">
-            <input value="Save Class Minutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit">
+            <label style="color:white;" for="saveClassMinutes">Save Attendance</label>
+            <input value="Save Class Minutes" id="saveClassMinutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit"/>
         </div>
     </div>
     </form:form>
