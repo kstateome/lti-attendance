@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 public class DropDownOrganizer {
 
+    /*
+     * Puts the selected section first in the list and sorts the rest alphabetically.
+     */
     public static List<Section> sortWithSelectedSectionFirst(List<Section> sections, String selectedSectionId) {
         Optional<Section> selectedSection = sections.stream().filter(s -> String.valueOf(s.getId()).equals(selectedSectionId)).findFirst();
         List<Section> remainingSections = sections.stream()
