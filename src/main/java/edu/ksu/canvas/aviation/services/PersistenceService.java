@@ -2,6 +2,7 @@ package edu.ksu.canvas.aviation.services;
 
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
@@ -10,6 +11,7 @@ import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
+import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.enums.EnrollmentType;
@@ -55,6 +57,9 @@ public class PersistenceService {
     
     @Autowired
     private AviationStudentRepository studentRepository;
+    
+    @Autowired
+    private AviationSectionRepository sectionRepository;
     
 
     public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
@@ -131,6 +136,26 @@ public class PersistenceService {
         }
         
         return aviationCourseRepository.save(aviationCourse);
+    }
+    
+    public List<AviationSection> loadOrCreateSections(List<Section> sections) {
+        List<AviationSection> ret = new ArrayList<>();
+        
+        for(Section section: sections) {
+            AviationSection aviationSection = sectionRepository.findByCanvasSectionId(Long.valueOf(section.getId()));
+            
+            if(aviationSection == null) {
+                aviationSection = new AviationSection();
+            }
+            
+            aviationSection.setName(section.getName());
+            aviationSection.setCanvasSectionId(Long.valueOf(section.getId()));
+            aviationSection.setCanvasCourseId(Long.valueOf(section.getCourseId()));
+            
+            sectionRepository.save(aviationSection);
+        }
+        
+        return ret;
     }
     
     public List<AviationStudent> loadOrCreateStudents(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {

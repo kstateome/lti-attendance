@@ -104,6 +104,7 @@ public class AviationReportingController extends LtiLaunchController {
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
 
         persistenceService.loadOrCreateCourse(Long.valueOf(ltiSession.getCanvasCourseId()));
+        persistenceService.loadOrCreateSections(sections);
         persistenceService.loadOrCreateStudents(sections, enrollmentsReader);
         
         return showRoster(new Date(), sections.get(0).getSisSectionId());
