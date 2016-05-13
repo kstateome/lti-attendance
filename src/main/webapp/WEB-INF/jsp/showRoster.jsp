@@ -32,25 +32,36 @@
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
 <td class="container-fluid">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
-    <label>
-        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name"
-                     onchange="toggleSection(value)"/>
-    </label>
+
+    <a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a><br/>
+    <a id="classSetup" href="classSetup/">Setup Class</a>
+    <br/><br/>
+
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>
     </div>
     </c:if>
-    <br/>
-
 
     <div class="container">
         <div class="row">
+          <div class='col-sm-4'>
+            <div class="form-group">
+               <label for="sectionId">Section</label>
+               <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
+            </div>
+          </div>
+        </div>
+        
+        <br/>
+        
+        <div class="row">
             <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
+                    <label for="currentDate">Day of Attendance</label>
                     <div class="input-group date" id="datePicker">
                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
-                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>
+                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>                  
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
@@ -59,7 +70,7 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="dayWorth">Class Day Minutes</label>
+                    <label for="dayWorth">Minutes in Class</label>
                     <input type="text" id="dayWorth" class="form-control" />
                 </div>
             </div>
@@ -76,10 +87,12 @@
                     });
                 });
             </script>
+            <div class="col-md-3 saveAttendanceButton">
+                <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
+                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+            </div>
         </div>
     </div>
-<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a><br/>
-<a id="classSetup" href="classSetup/">Setup Class</a>
 
 <div class="container">
 
