@@ -13,6 +13,7 @@ import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.aviation.repository.ReportRepository;
 import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryForSection;
 import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.SectionIncludes;
@@ -26,6 +27,7 @@ import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
 import edu.ksu.lti.model.LtiSession;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -120,7 +122,7 @@ public class AviationReportingController extends LtiLaunchController {
         rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         rosterForm = persistenceService.populateAttendanceForDay(rosterForm, date);
         ModelAndView page = new ModelAndView("showRoster");
-        page.addObject("sectionList", sections);
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         page.addObject("rosterForm", rosterForm);
         if (sectionId != null) {
             page.addObject("selectedSectionId", sectionId);
@@ -166,7 +168,7 @@ public class AviationReportingController extends LtiLaunchController {
         rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         rosterForm = persistenceService.populateAttendanceForDay(rosterForm, new Date());
         ModelAndView page = new ModelAndView("setupClass");
-        page.addObject("sectionList", sections);
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         page.addObject("rosterForm", rosterForm);
         if (sectionId != null) {
             page.addObject("selectedSectionId", sectionId);
@@ -205,7 +207,7 @@ public class AviationReportingController extends LtiLaunchController {
         persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         
         ModelAndView page = new ModelAndView("attendanceSummary");
-        page.addObject("sectionList", sections);
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         
         List<AttendanceSummaryForSection> summaryForSections = reportRepository.getAttendanceSummary(new Long(sectionId));
         page.addObject("attendanceSummaryForSections", summaryForSections);
@@ -385,5 +387,5 @@ public class AviationReportingController extends LtiLaunchController {
         return sectionReader.getSingleSection(sectionId);
     }
 
-    
+
 }
