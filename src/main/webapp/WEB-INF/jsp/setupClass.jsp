@@ -30,7 +30,17 @@
     <title>Aviation Reporting Class Setup</title>
 </head>
 <body>
-
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Aviation Attendance</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="<c:url value="/classSetup"/>">Configuration</a></li>
+            <li><a id="attendanceSummary" href="#">Attendance Summary</a></li>
+        </ul>
+    </div>
+</nav>
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
     <c:if test="${not empty error}">
     <div class="alert alert-info">

@@ -28,6 +28,17 @@
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
 <body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Aviation Attendance</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="<c:url value="/classSetup"/>">Configuration</a></li>
+            <li class="active"><a id="attendanceSummary" href="#">Attendance Summary</a></li>
+        </ul>
+    </div>
+</nav>
 <form class="sectionDropdown" method="post" action="DoNotActuallyPost">
   <label>
     <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value); false;"/>
