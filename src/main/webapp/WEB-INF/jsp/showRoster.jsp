@@ -100,6 +100,7 @@
             </script>
         </div>
     </div>
+<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a>
 
 <div class="container">
 

@@ -1,8 +1,14 @@
 package edu.ksu.canvas.aviation.model;
 
 import edu.ksu.canvas.aviation.entity.AviationStudent;
+import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -18,6 +24,26 @@ public class SectionInfo {
         sectionId = section.getId();
         sectionName = section.getName();
         canvasCourseId = section.getCourseId();
+    }
+    
+    public SectionInfo(Section section, EnrollmentsReader enrollmentsReader) throws IOException {
+        List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT));
+        List<AviationStudent> students = new ArrayList<>();
+        for (Enrollment e : enrollments) {
+            AviationStudent student = new AviationStudent();
+            student.setSisUserId(e.getUser().getSisUserId());
+            student.setName(e.getUser().getSortableName());
+            student.setSectionId(section.getId());
+            student.setCanvasCourseId(section.getCourseId());
+            students.add(student);
+        }
+        totalStudents = students.size();
+        if (students.size() > 0) {
+            this.students = students;
+            sectionId = section.getId();
+            sectionName = section.getName();
+            canvasCourseId = section.getCourseId();
+        }
     }
 
     public SectionInfo() {}

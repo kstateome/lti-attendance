@@ -10,6 +10,9 @@ import java.util.List;
 
 @Repository
 public interface MakeupTrackerRepository extends CrudRepository<MakeupTracker, Long> {
+    
     List<MakeupTracker> findByAviationStudent(AviationStudent aviationStudent);
+    
     MakeupTracker findByMakeupTrackerId(Long makeUpTrackerId);
+    
 }
