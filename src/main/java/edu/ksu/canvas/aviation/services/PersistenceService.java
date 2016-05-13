@@ -33,16 +33,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author jesusorr
- * 5/6/16
- */
+
 @Component
 public class PersistenceService {
-    private static final Logger LOG = Logger.getLogger(PersistenceService.class);
+    
+    private static final Logger LOG = Logger.getLogger(PersistenceService.class);    
     private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
     private static final int DEFAULT_MINUTES_PER_CLASS = 45;
 
+    
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
 
@@ -158,6 +157,7 @@ public class PersistenceService {
         return ret;
     }
     
+    
     public List<AviationStudent> loadOrCreateStudents(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
         List<AviationStudent> ret = new ArrayList<>();
         
@@ -185,26 +185,20 @@ public class PersistenceService {
         return ret;
     }
     
-    @Deprecated
-    public RosterForm loadOrCreateCourseMinutes(RosterForm rosterForm, String courseId) {
-        Long canvasCourseId = Long.parseLong(courseId);
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if (aviationCourse != null && aviationCourse.getTotalMinutes() != null && aviationCourse.getDefaultMinutesPerSession() != null){
-            rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-            rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
-        } else {
-            rosterForm.setTotalClassMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
-            rosterForm.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
-        }
-        return rosterForm;
+    public void loadCourseConfigurationIntoRoster(RosterForm rosterForm, Long courseId) {
+        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
+        
+        rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
+    
 
     /**
      * DO NOT USE ON POST BACK You will get a lazy load exception
      * @param date some date we want to populate
      * @return the same roster form you gave me but populated with attendance for this date
      */
-    public RosterForm populateAttendanceForDay(RosterForm rosterForm, Date date) {
+    public RosterForm populateAttendanceForDayIntoRoster(RosterForm rosterForm, Date date) {
         rosterForm.getSectionInfoList().forEach(section -> {
             section.getStudents().forEach(student -> {
                 if (student.getAttendances() == null) {

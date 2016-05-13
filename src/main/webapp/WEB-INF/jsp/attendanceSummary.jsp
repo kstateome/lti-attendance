@@ -48,7 +48,7 @@
           <div class='col-sm-4'>
             <div class="form-group">
                <label for="sectionId">Section</label>
-               <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
+               <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="canvasSectionId"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
             </div>
           </div>
         </div>

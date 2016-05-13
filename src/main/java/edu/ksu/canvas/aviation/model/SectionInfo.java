@@ -1,52 +1,27 @@
 package edu.ksu.canvas.aviation.model;
 
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.enums.EnrollmentType;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
 public class SectionInfo {
 
-    private long sectionId;
+    private long sectionId; //canvas section ID
     private String sectionName;
-    private Integer canvasCourseId;
-    private Integer totalStudents;
+    private Long canvasCourseId;
     private List<AviationStudent> students;
 
     public SectionInfo(Section section){
         sectionId = section.getId();
         sectionName = section.getName();
-        canvasCourseId = section.getCourseId();
+        canvasCourseId = section.getCourseId() == null ? null : Long.valueOf(section.getCourseId());
     }
     
-    public SectionInfo(Section section, EnrollmentsReader enrollmentsReader) throws IOException {
-        List<Enrollment> enrollments = enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT));
-        List<AviationStudent> students = new ArrayList<>();
-        for (Enrollment e : enrollments) {
-            AviationStudent student = new AviationStudent();
-            student.setSisUserId(e.getUser().getSisUserId());
-            student.setName(e.getUser().getSortableName());
-            student.setSectionId(section.getId());
-            student.setCanvasCourseId(section.getCourseId());
-            students.add(student);
-        }
-        totalStudents = students.size();
-        if (students.size() > 0) {
-            this.students = students;
-            sectionId = section.getId();
-            sectionName = section.getName();
-            canvasCourseId = section.getCourseId();
-        }
-    }
 
-    public SectionInfo() {}
+    public SectionInfo() { }
+    
 
     public long getSectionId() {
         return sectionId;
@@ -64,20 +39,12 @@ public class SectionInfo {
         this.sectionName = sectionName;
     }
 
-    public Integer getCanvasCourseId() {
+    public Long getCanvasCourseId() {
         return canvasCourseId;
     }
 
-    public void setCanvasCourseId(Integer canvasCourseId) {
+    public void setCanvasCourseId(Long canvasCourseId) {
         this.canvasCourseId = canvasCourseId;
-    }
-
-    public Integer getTotalStudents() {
-        return totalStudents;
-    }
-
-    public void setTotalStudents(Integer totalStudents) {
-        this.totalStudents = totalStudents;
     }
 
     public List<AviationStudent> getStudents() {
@@ -94,7 +61,6 @@ public class SectionInfo {
                 "sectionId=" + sectionId +
                 ", sectionName='" + sectionName + '\'' +
                 ", canvasCourseId=" + canvasCourseId +
-                ", totalStudents=" + totalStudents +
                 ", students=" + students +
                 '}';
     }

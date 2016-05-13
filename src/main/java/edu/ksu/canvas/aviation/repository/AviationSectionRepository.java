@@ -1,5 +1,7 @@
 package edu.ksu.canvas.aviation.repository;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +15,7 @@ public interface AviationSectionRepository extends CrudRepository<AviationSectio
     AviationSection findBySectionId(Long sectionId);
     
     AviationSection findByCanvasSectionId(Long canvasSectionId);
+    
+    List<AviationSection> findByCanvasCourseId(Long canvasCourseId);
     
 }
