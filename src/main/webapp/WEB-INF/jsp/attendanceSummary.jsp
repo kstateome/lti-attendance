@@ -50,7 +50,7 @@
 
           <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
             <tr >
-              <td>${attendancesummaryEntry.studentName}</td>
+              <td><a href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></td>
               <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
               <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
               <td>${attendancesummaryEntry.sumMinutesMissed}</td>

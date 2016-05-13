@@ -2,11 +2,15 @@ package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
+import edu.ksu.canvas.aviation.entity.AviationStudent;
+import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
+import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
+import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.aviation.repository.ReportRepository;
-import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryEntry;
 import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryForSection;
 import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
@@ -24,16 +28,19 @@ import edu.ksu.lti.controller.LtiLaunchController;
 import edu.ksu.lti.model.LtiSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -61,6 +68,12 @@ public class AviationReportingController extends LtiLaunchController {
     
     @Autowired
     private ReportRepository reportRepository;
+    
+    @Autowired
+    private AviationStudentRepository studentRepository;
+    
+    @Autowired
+    private MakeupTrackerRepository makeupTrackerRepository;
     
 
     @RequestMapping("/")
@@ -143,6 +156,40 @@ public class AviationReportingController extends LtiLaunchController {
         
         return page;
     }
+    
+    @RequestMapping("/studentMakeup/{sectionId}/{studentId}")
+    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) {
+        return studentMakeup(sectionId, studentId, false);
+    }
+
+    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
+        AviationStudent student = studentRepository.findByStudentId(new Long(studentId));
+        List<MakeupTracker> makeupTrackers = makeupTrackerRepository.findByAviationStudent(student);
+        if(addEmptyEntry) {
+            makeupTrackers.add(new MakeupTracker());
+        }
+        
+        MakeupTrackerForm makeupTrackerForm = new MakeupTrackerForm();
+        makeupTrackerForm.setEntries(makeupTrackers);
+        makeupTrackerForm.setSectionId(Long.valueOf(sectionId));
+        makeupTrackerForm.setStudentId(Long.valueOf(studentId));
+        
+        ModelAndView page = new ModelAndView("studentMakeup");
+        page.addObject("sectionId", sectionId);
+        page.addObject("student", student);
+        page.addObject("makeupTrackerForm", makeupTrackerForm);
+        
+        return page;
+    }
+    
+    @RequestMapping(value = "/deleteMakeup/{sectionId}/{studentId}/{makeupTrackerId}")
+    public ModelAndView deleteMakeup(@PathVariable String sectionId, @PathVariable String studentId, @PathVariable String makeupTrackerId) throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("Attempting to delete makeup data... User: " + ltiSession.getEid());
+        
+        persistenceService.deleteMakeup(makeupTrackerId);
+        return studentMakeup(sectionId, studentId);
+    }
 
     // TODO: implement
     private RosterForm getRosterForm() {
@@ -170,6 +217,12 @@ public class AviationReportingController extends LtiLaunchController {
         persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         return page;
     }
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
 
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
@@ -182,6 +235,26 @@ public class AviationReportingController extends LtiLaunchController {
 
         persistenceService.saveClassAttendance(rosterForm);
         return showRoster(rosterForm.getCurrentDate());
+    }
+    
+    
+    @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
+    public ModelAndView saveMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm) throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("Attempting to save makeup data... User: " + ltiSession.getEid());
+        
+        persistenceService.saveMakeups(makeupTrackerForm);
+        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()));
+    }
+    
+    @RequestMapping(value = "/save", params = "addMakeup", method = RequestMethod.POST)
+    public ModelAndView addMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm) throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("Attempting to save makeup data and add new entry... User: " + ltiSession.getEid());
+        
+        persistenceService.saveMakeups(makeupTrackerForm);
+        makeupTrackerForm.getEntries().add(new MakeupTracker());
+        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), true);
     }
 
     @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)

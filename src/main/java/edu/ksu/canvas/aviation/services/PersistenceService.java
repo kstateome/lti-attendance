@@ -3,12 +3,16 @@ package edu.ksu.canvas.aviation.services;
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
+import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
+import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
+import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,10 @@ public class PersistenceService {
 
     @Autowired
     private AttendanceRepository attendanceRepository;
+    
+    @Autowired
+    private MakeupTrackerRepository makeupTrackerRepository;
+    
 
     public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
 
@@ -50,6 +58,28 @@ public class PersistenceService {
         }
 
         aviationCourseRepository.save(aviationCourse);
+    }
+    
+    public void saveMakeups(MakeupTrackerForm form) {
+        
+        for(MakeupTracker makeup: form.getEntries()) {
+            if(makeup.getMakeupTrackerId() == null) {
+                AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
+                makeup.setAviationStudent(student);
+                makeupTrackerRepository.save(makeup);
+            } else {
+                MakeupTracker tracker = makeupTrackerRepository.findByMakeupTrackerId(makeup.getMakeupTrackerId());
+                tracker.setDateMadeUp(makeup.getDateMadeUp());
+                tracker.setDateOfClass(makeup.getDateOfClass());
+                tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
+                makeupTrackerRepository.save(tracker);
+            }
+
+        }
+    }
+    
+    public void deleteMakeup(String makeupTrackerId) {
+        makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
     }
 
     public void saveClassAttendance(RosterForm rosterForm) {
