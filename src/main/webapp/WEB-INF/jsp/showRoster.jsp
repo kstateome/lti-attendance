@@ -45,8 +45,6 @@
 <td class="container-fluid">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
 
-    <a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a><br/>
-    <a id="classSetup" href="classSetup/">Setup Class</a>
     <br/><br/>
 
     <c:if test="${not empty error}">

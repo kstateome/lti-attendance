@@ -45,9 +45,6 @@
     <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
   </label>
 </form>
-<a id="showRoster" href="${context}/showRoster/">Back to Roster</a>
-  <br/>
-
   <div class="container">
 
     <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
