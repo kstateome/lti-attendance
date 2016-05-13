@@ -29,7 +29,19 @@
 
     <title>Aviation Reporting Class Roster</title>
 </head>
-<body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
+<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Aviation Attendance</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
+            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
+        </ul>
+    </div>
+</nav>
 <td class="container-fluid">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
 
@@ -48,7 +60,7 @@
           <div class='col-sm-4'>
             <div class="form-group">
                <label for="sectionId">Section</label>
-               <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value)"/>
+               <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name" onchange="toggleSection(value, '${context}');"/>
             </div>
           </div>
         </div>

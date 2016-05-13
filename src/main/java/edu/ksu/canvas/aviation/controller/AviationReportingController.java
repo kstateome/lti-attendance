@@ -86,6 +86,11 @@ public class AviationReportingController extends LtiLaunchController {
 
     @RequestMapping("/showRoster")
     public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        return showRoster(date, null);
+    }
+
+    @RequestMapping("/showRoster/{sectionId}")
+    public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         RosterForm rosterForm = new RosterForm();
         //Sets the date to today if not already set
         if (date == null){
@@ -98,7 +103,6 @@ public class AviationReportingController extends LtiLaunchController {
         assertPrivilegedUser(ltiSession);
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
-        // FIXME: Timeouts need to change
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
         String courseID = ltiSession.getCanvasCourseId();
@@ -118,13 +122,22 @@ public class AviationReportingController extends LtiLaunchController {
         ModelAndView page = new ModelAndView("showRoster");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
-
+        if (sectionId != null) {
+            page.addObject("selectedSectionId", sectionId);
+        } else {
+            page.addObject("selectedSectionId", sections.get(0).getId());
+        }
         return page;
     }
-    
-    
+
     @RequestMapping("/classSetup")
     public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+        return classSetup(null);
+    }
+
+    
+    @RequestMapping("/classSetup/{sectionId}")
+    public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
         //FIX ME this is cut and paste from show Roster
         
         RosterForm rosterForm = new RosterForm();
@@ -155,6 +168,11 @@ public class AviationReportingController extends LtiLaunchController {
         ModelAndView page = new ModelAndView("setupClass");
         page.addObject("sectionList", sections);
         page.addObject("rosterForm", rosterForm);
+        if (sectionId != null) {
+            page.addObject("selectedSectionId", sectionId);
+        } else {
+            page.addObject("selectedSectionId", sections.get(0).getId());
+        }
 
         return page;
         
@@ -191,6 +209,8 @@ public class AviationReportingController extends LtiLaunchController {
         
         List<AttendanceSummaryForSection> summaryForSections = reportRepository.getAttendanceSummary(new Long(sectionId));
         page.addObject("attendanceSummaryForSections", summaryForSections);
+        LOG.info("selectedSectionId - " + sectionId);
+        page.addObject("selectedSectionId", sectionId);
         
         return page;
     }
