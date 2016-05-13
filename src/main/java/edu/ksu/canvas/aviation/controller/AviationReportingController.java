@@ -88,7 +88,28 @@ public class AviationReportingController extends LtiLaunchController {
     public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         return showRoster(date, null);
     }
+    
+    @RequestMapping("/initialize")
+    public ModelAndView initialize() throws OauthTokenRequiredException, InvalidInstanceException, NoLtiSessionException, IOException {
+        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+        ltiLaunch.validateOAuthToken();
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        assertPrivilegedUser(ltiSession);
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+
+        String courseID = ltiSession.getCanvasCourseId();
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
+
+        persistenceService.loadOrCreateCourse(Long.valueOf(ltiSession.getCanvasCourseId()));
+        persistenceService.loadOrCreateStudents(sections, enrollmentsReader);
+        
+        return showRoster(new Date(), sections.get(0).getSisSectionId());
+    }
+
+    
     @RequestMapping("/showRoster/{sectionId}")
     public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         RosterForm rosterForm = new RosterForm();
@@ -97,7 +118,7 @@ public class AviationReportingController extends LtiLaunchController {
             date = new Date();
         }
         rosterForm.setCurrentDate(date);
-        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+        ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
@@ -360,7 +381,7 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Override
     protected String getInitialViewPath() {
-        return "/showRoster";
+        return "/initialize";
     }
 
     @Override

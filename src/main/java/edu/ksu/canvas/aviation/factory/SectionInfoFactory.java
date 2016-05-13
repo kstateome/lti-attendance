@@ -8,7 +8,6 @@ import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +17,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+
 @Component
 public class SectionInfoFactory {
 
     @Autowired
     private AviationStudentRepository studentRepository;
 
-    private static final Logger LOG = Logger.getLogger(SectionInfoFactory.class);
 
+    @Deprecated
     public SectionInfo getSectionInfo(Section section, EnrollmentsReader enrollmentsReader) throws IOException {
         //Initialize a new section info with the basic information
         SectionInfo info = new SectionInfo(section);

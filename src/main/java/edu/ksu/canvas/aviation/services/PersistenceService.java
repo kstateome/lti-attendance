@@ -12,15 +12,24 @@ import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.exception.InvalidOauthTokenException;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author jesusorr
@@ -43,6 +52,9 @@ public class PersistenceService {
     
     @Autowired
     private MakeupTrackerRepository makeupTrackerRepository;
+    
+    @Autowired
+    private AviationStudentRepository studentRepository;
     
 
     public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
@@ -108,6 +120,47 @@ public class PersistenceService {
         }
     }
     
+    public AviationCourse loadOrCreateCourse(long canvasCourseId) {
+        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        
+        if(aviationCourse == null) {
+            aviationCourse = new AviationCourse();
+            aviationCourse.setTotalMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
+            aviationCourse.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
+            aviationCourse.setCanvasCourseId(canvasCourseId);
+        }
+        
+        return aviationCourseRepository.save(aviationCourse);
+    }
+    
+    public List<AviationStudent> loadOrCreateStudents(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+        List<AviationStudent> ret = new ArrayList<>();
+        
+        for(Section section: sections) {
+            Set<AviationStudent> existingStudents = studentRepository.findBySectionId(section.getId());
+            
+            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {    
+                List<AviationStudent> foundUsers = existingStudents.stream().filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()) ).collect(Collectors.toList());
+                
+                if(foundUsers.isEmpty()) {
+                    AviationStudent student = new AviationStudent();
+                    student.setSisUserId(enrollment.getUser().getSisUserId());
+                    student.setName(enrollment.getUser().getSortableName());
+                    student.setSectionId(section.getId());
+                    student.setCanvasCourseId(section.getCourseId());
+                    
+                    studentRepository.save(student);
+                    ret.add(student);
+                } else {
+                    ret.addAll(foundUsers);
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    @Deprecated
     public RosterForm loadOrCreateCourseMinutes(RosterForm rosterForm, String courseId) {
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
