@@ -239,21 +239,53 @@ public class AviationReportingController extends LtiLaunchController {
     
     
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
-    public ModelAndView saveMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm) throws NoLtiSessionException {
+    public ModelAndView saveMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save makeup data... User: " + ltiSession.getEid());
         
-        persistenceService.saveMakeups(makeupTrackerForm);
-        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()));
+        //FIXME: This is not appropriate!
+        if (bindingResult.hasErrors()) {
+            LOG.info("There were errors saving the Makeup form"+ bindingResult.getAllErrors());
+            String errorMessage = "Invalid user input...";
+            
+            ModelAndView page = new ModelAndView("studentMakeup");
+            AviationStudent student = studentRepository.findByStudentId(makeupTrackerForm.getStudentId());
+            page.addObject("sectionId", String.valueOf(makeupTrackerForm.getSectionId()));
+            page.addObject("student", student);
+            page.addObject("makeupTrackerForm", makeupTrackerForm);
+            page.addObject("error", errorMessage);
+            
+            return page;
+        } else {
+            persistenceService.saveMakeups(makeupTrackerForm);    
+        }
+        
+        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), false);
     }
     
     @RequestMapping(value = "/save", params = "addMakeup", method = RequestMethod.POST)
-    public ModelAndView addMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm) throws NoLtiSessionException {
+    public ModelAndView addMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save makeup data and add new entry... User: " + ltiSession.getEid());
         
-        persistenceService.saveMakeups(makeupTrackerForm);
-        makeupTrackerForm.getEntries().add(new MakeupTracker());
+        //FIXME: This is not appropriate!
+        if (bindingResult.hasErrors()){
+            LOG.info("There were errors saving the Makeup form"+ bindingResult.getAllErrors());
+            String errorMessage = "Invalid user input...";
+            
+            ModelAndView page = new ModelAndView("studentMakeup");
+            AviationStudent student = studentRepository.findByStudentId(makeupTrackerForm.getStudentId());
+            page.addObject("sectionId", String.valueOf(makeupTrackerForm.getSectionId()));
+            page.addObject("student", student);
+            page.addObject("makeupTrackerForm", makeupTrackerForm);
+            page.addObject("error", errorMessage);
+            
+            return page;
+        } else {
+            persistenceService.saveMakeups(makeupTrackerForm);
+            makeupTrackerForm.getEntries().add(new MakeupTracker());
+        }
+        
         return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), true);
     }
 

@@ -46,6 +46,12 @@
   
   <br/>
   <form:form id="makeupTrackerForm" modelAttribute="makeupTrackerForm" method="POST" action="${context}/save">
+    <c:if test="${not empty error}">
+    <div class="alert alert-info">
+        <p>${error}</p>
+    </div>
+    </c:if>
+  
         <form:input type="hidden" id="sectionId" path="sectionId" />
         <form:input type="hidden" id="studentId" path="studentId" />
 
