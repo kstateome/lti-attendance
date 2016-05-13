@@ -1,0 +1,27 @@
+package edu.ksu.canvas.aviation.util;
+
+import edu.ksu.canvas.model.Section;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+public class DropDownOrganizer {
+
+    /*
+     * Puts the selected section first in the list and sorts the rest alphabetically.
+     */
+    public static List<Section> sortWithSelectedSectionFirst(List<Section> sections, String selectedSectionId) {
+        Optional<Section> selectedSection = sections.stream().filter(s -> String.valueOf(s.getId()).equals(selectedSectionId)).findFirst();
+        List<Section> remainingSections = sections.stream()
+                .filter(s -> !String.valueOf(s.getId()).equals(selectedSectionId))
+                .sorted((s1, s2) -> s1.getName().compareTo(s2.getName()))
+                .collect(Collectors.toList());
+        List<Section> organizedDropDown = new ArrayList<>();
+        selectedSection.ifPresent(organizedDropDown::add);
+        organizedDropDown.addAll(remainingSections);
+        return organizedDropDown;
+    }
+
+}
