@@ -42,18 +42,18 @@
         <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
           <tr>
             <th>Name</th>
-            <th>Minutes Made Up</th>
-            <th>Remaining Minutes Made up</th>
             <th>Total Minutes Missed</th>
+            <th>Minutes Made Up</th>
+            <th>Minutes To Be Made up</th>
             <th>% of Course Missed</th>
           </tr>
 
           <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
             <tr >
               <td><a href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></td>
+              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
               <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
-              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
