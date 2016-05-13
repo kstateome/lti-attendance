@@ -29,6 +29,9 @@ public class MakeupTracker implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name = "date_madeup")
     private Date dateMadeUp;
+    
+    @Column(name = "project_description")
+    private String projectDescription;
 
     @Column(name = "minutes_madeup")
     private int minutesMadeUp;
@@ -78,6 +81,14 @@ public class MakeupTracker implements Serializable {
     public void setAviationStudent(AviationStudent aviationStudent) {
         this.aviationStudent = aviationStudent;
     }
+    
+    public String getProjectDescription() {
+        return projectDescription;
+    }
+
+    public void setProjectDescription(String projectDescription) {
+        this.projectDescription = projectDescription;
+    }
 
     
     @Override
@@ -88,7 +99,8 @@ public class MakeupTracker implements Serializable {
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
                 + (dateMadeUp == null ? null : sdf.format(dateMadeUp)) 
                 + ", minutesMadeUp=" + minutesMadeUp + ", aviationStudent="
-                + (aviationStudent == null ? null : aviationStudent.getStudentId()) + "]";
+                + (aviationStudent == null ? null : aviationStudent.getStudentId())
+                + "projectDescription='" + projectDescription + "']";
     }
       
 }

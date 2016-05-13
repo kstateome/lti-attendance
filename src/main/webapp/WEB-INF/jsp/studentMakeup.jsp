@@ -59,8 +59,9 @@
 			<thead>
 				<tr>
 					<th>Class Date</th>
-					<th>Made-up Date</th>
+					<th>Date Made-up</th>
 					<th>Minutes Made-up</th>
+					<th>Project Description</th>
 					<th><input class="hovering-purple-button" type="submit" name="addMakeup" value="Add Makeup" /></th>
 				</tr>
 			</thead>
@@ -87,6 +88,7 @@
 							</div>
 						</td>
 						<td><form:input path="entries[${makeupTrackerLoop.index}].minutesMadeUp" cssClass="form-control" size="5" /></td>
+                        <td><form:input path="entries[${makeupTrackerLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
 						<td><a href="${context}/deleteMakeup/${makeupTrackerForm.sectionId}/${makeupTrackerForm.studentId}/${makeupTrackerForm.entries[makeupTrackerLoop.index].makeupTrackerId}">Delete</a></td>
 					</tr>
 				</c:forEach>

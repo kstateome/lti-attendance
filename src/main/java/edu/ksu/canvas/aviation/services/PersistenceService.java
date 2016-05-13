@@ -72,6 +72,7 @@ public class PersistenceService {
                 tracker.setDateMadeUp(makeup.getDateMadeUp());
                 tracker.setDateOfClass(makeup.getDateOfClass());
                 tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
+                tracker.setProjectDescription(makeup.getProjectDescription());
                 makeupTrackerRepository.save(tracker);
             }
 
