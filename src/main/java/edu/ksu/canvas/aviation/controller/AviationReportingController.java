@@ -121,6 +121,44 @@ public class AviationReportingController extends LtiLaunchController {
 
         return page;
     }
+    
+    
+    @RequestMapping("/classSetup")
+    public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+        //FIX ME this is cut and paste from show Roster
+        
+        RosterForm rosterForm = new RosterForm();
+        rosterForm.setCurrentDate(new Date());
+        ltiLaunch.ensureApiTokenPresent(getApplicationName());
+        ltiLaunch.validateOAuthToken();
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        assertPrivilegedUser(ltiSession);
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+
+        // FIXME: Timeouts need to change
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+
+        String courseID = ltiSession.getCanvasCourseId();
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
+
+        // Get section data
+        // FIXME: Retrieve data for dates, attendance, from a database
+        List<SectionInfo> sectionInfoList = new ArrayList<>();
+        for (Section section : sections) {
+            sectionInfoList.add(sectionInfoFactory.getSectionInfo(section, enrollmentsReader));
+        }
+
+        rosterForm.setSectionInfoList(sectionInfoList);
+        rosterForm = persistenceService.loadOrCreateCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        rosterForm = persistenceService.populateAttendanceForDay(rosterForm, new Date());
+        ModelAndView page = new ModelAndView("setupClass");
+        page.addObject("sectionList", sections);
+        page.addObject("rosterForm", rosterForm);
+
+        return page;
+        
+    }
 
     @RequestMapping("/attendanceSummary/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
@@ -205,7 +243,7 @@ public class AviationReportingController extends LtiLaunchController {
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         //TODO: Figure out way to show roster form appropriately (maybe just call ShowRoster()..)
-        ModelAndView page = new ModelAndView("forward:showRoster");
+        ModelAndView page = new ModelAndView("forward:classSetup");
         if (bindingResult.hasErrors()){
             LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
             page.addObject("error", "Invalid input for minutes, please enter valid minutes");

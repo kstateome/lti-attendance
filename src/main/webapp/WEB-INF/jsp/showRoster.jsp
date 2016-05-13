@@ -43,28 +43,6 @@
     </c:if>
     <br/>
 
-    <div class="form-group">
-        <div class="col-md-3">
-            <label for="courseWorth">Total Class Minutes</label>
-            <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
-                        placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes">
-                Invalid/empty input
-            </form:errors>
-        </div>
-        <div class="col-md-3">
-            <label for="defaultMinutesPerSession">Normal Class Length</label>
-            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
-                        cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession">
-                Invalid/empty input
-            </form:errors>
-        </div>
-        <div class="col-md-2">
-            <input value="Save Class Minutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit">
-        </div>
-    </div>
-    <br><br><br>
 
     <div class="container">
         <div class="row">
@@ -100,7 +78,8 @@
             </script>
         </div>
     </div>
-<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a>
+<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a><br/>
+<a id="classSetup" href="classSetup/">Setup Class</a>
 
 <div class="container">
 
