@@ -40,14 +40,23 @@
     </ul>
   </div>
 </nav>
-<form class="sectionDropdown" method="post" action="DoNotActuallyPost">
-  <label>
-    <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
-  </label>
-</form>
+
   <div class="container">
 
-    <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
+    <form class="sectionDropdown" method="post" action="DoNotActuallyPost">
+        <div class="row">
+          <div class='col-sm-4'>
+            <div class="form-group">
+               <label for="sectionId">Section</label>
+               <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
+            </div>
+          </div>
+        </div>
+    </form>
+    <br/>
+
+    <div class="container">
+      <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
         <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
           <tr>
             <th>Name</th>
@@ -67,7 +76,8 @@
             </tr>
           </c:forEach>
         </table>
-    </c:forEach>
+      </c:forEach>
+    </div>
 
   </div>
 
