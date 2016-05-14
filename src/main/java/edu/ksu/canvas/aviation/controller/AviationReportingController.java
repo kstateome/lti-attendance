@@ -29,7 +29,6 @@ import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
 import edu.ksu.lti.model.LtiSession;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -242,7 +241,6 @@ public class AviationReportingController extends LtiLaunchController {
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         rosterForm.getSectionInfoList().stream().forEachOrdered(section -> {
             LOG.debug("Max attendances in section: " + section.getStudents().stream().map(student -> student.getAttendances().size()).max(Integer::max).get());
         });
