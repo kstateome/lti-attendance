@@ -27,6 +27,20 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
+    <script type="text/javascript">
+        $(function() {
+            $(".attendanceStatus").change(function () {
+                selectedIdSplit = $(this).find(':selected').attr('id').split("-");
+                status = selectedIdSplit[0];
+                studentId = selectedIdSplit[1];
+                if (status == 'tardy') {
+                    $('#minutesMissed' + studentId).removeAttr('disabled');
+                } else {
+                    $('#minutesMissed' + studentId).attr('disabled', 'true');
+                }
+            });
+        });
+    </script>
     <title>Aviation Reporting Class Roster</title>
 </head>
 <body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
@@ -129,17 +143,25 @@
                                     <td>
                                         <label>
                                             <form:select path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].status"
-                                                         cssClass="form-control no-padding no-width">
-                                                <form:option value="<%=Status.PRESENT%>">Present</form:option>
-                                                <form:option value="<%=Status.TARDY%>">Tardy</form:option>
-                                                <form:option value="<%=Status.ABSENT%>">Absent</form:option>
+                                                         cssClass="attendanceStatus form-control no-padding no-width">
+                                                <form:option id="present-${aviationStudent.studentId}" value="<%=Status.PRESENT%>">Present</form:option>
+                                                <form:option id="tardy-${aviationStudent.studentId}" value="<%=Status.TARDY%>">Tardy</form:option>
+                                                <form:option id="absent-${aviationStudent.studentId}" value="<%=Status.ABSENT%>">Absent</form:option>
                                             </form:select>
                                         </label>
                                     </td>
 
                                     <td>
-                                        <form:input path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
-                                                    cssClass="form-control" size="5"/>
+                                        <c:choose>
+                                            <c:when test="${attendance.status == 'TARDY'}">
+                                                <form:input id="minutesMissed${aviationStudent.studentId}" path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form:input id="minutesMissed${aviationStudent.studentId}" path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5" disabled="true"/>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                 </c:if>
                             </c:forEach>
