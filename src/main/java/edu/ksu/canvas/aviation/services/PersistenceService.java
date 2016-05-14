@@ -101,7 +101,7 @@ public class PersistenceService {
 
     public void saveClassAttendance(RosterForm rosterForm) {
         for (SectionInfo sectionInfo : rosterForm.getSectionInfoList()){
-            LOG.info("Saving section: " + sectionInfo);
+            LOG.debug("Saving section id: " + sectionInfo.getSectionId());
             List<Attendance> attendancesToSave = new ArrayList<>();
             for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
                 //Save students
@@ -198,7 +198,7 @@ public class PersistenceService {
      * @param date some date we want to populate
      * @return the same roster form you gave me but populated with attendance for this date
      */
-    public RosterForm populateAttendanceForDayIntoRoster(RosterForm rosterForm, Date date) {
+    public void populateAttendanceForDayIntoRoster(RosterForm rosterForm, Date date) {
         rosterForm.getSectionInfoList().forEach(section -> {
             section.getStudents().forEach(student -> {
                 if (student.getAttendances() == null) {
@@ -214,6 +214,5 @@ public class PersistenceService {
                 }
             });
         });
-        return rosterForm;
     }
 }
