@@ -246,7 +246,7 @@ public class AviationReportingController extends LtiLaunchController {
         });
 
         persistenceService.saveClassAttendance(rosterForm);
-        return showRoster(rosterForm.getCurrentDate());
+        return showRoster(rosterForm.getCurrentDate(), sectionId);
     }
     
     
