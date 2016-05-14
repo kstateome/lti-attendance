@@ -89,11 +89,6 @@ public class AviationReportingController extends LtiLaunchController {
         LOG.debug("LTI launch URL: " + ltiLaunchUrl);
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
-
-    @RequestMapping("/showRoster")
-    public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        return showRoster(date, null);
-    }
     
     @RequestMapping("/initialize")
     public ModelAndView initialize() throws OauthTokenRequiredException, InvalidInstanceException, NoLtiSessionException, IOException {
@@ -115,12 +110,7 @@ public class AviationReportingController extends LtiLaunchController {
         
         return showRoster(new Date(), String.valueOf(sections.get(0).getId()));
     }
-
-    @RequestMapping("/showRoster/{sectionId}")
-    public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        return setupPage(date, sectionId, "showRoster");
-    }
-
+    
     private ModelAndView setupPage(Date date, String sectionId, String viewName) throws NoLtiSessionException {
         ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
         
@@ -130,6 +120,7 @@ public class AviationReportingController extends LtiLaunchController {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
             aviationSections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
             aviationSection = aviationSections.get(0);
+            sectionId = String.valueOf(aviationSection.getCanvasSectionId());
         } else {
             aviationSection = sectionRepository.findByCanvasSectionId(Long.valueOf(sectionId));
             aviationSections = sectionRepository.findByCanvasCourseId(aviationSection.getCanvasCourseId());
@@ -152,19 +143,37 @@ public class AviationReportingController extends LtiLaunchController {
         
         return page;
     }
-
+    
+    @RequestMapping("/showRoster")
+    public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        return showRoster(date, null);
+    }
+  
+    @RequestMapping("/showRoster/{sectionId}")
+    public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        return setupPage(date, sectionId, "showRoster");
+    }
+    
     @RequestMapping("/classSetup")
     public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
         return classSetup(null);
     }
 
-    
     @RequestMapping("/classSetup/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
         return setupPage(new Date(), sectionId, "setupClass");
     }
 
-    //attendanceSummary
+    
+    @RequestMapping("/attendanceSummary")
+    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+            LtiSession ltiSession = ltiLaunch.getLtiSession();
+            List<AviationSection> aviationSections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
+            String sectionId = aviationSections.get(0).getCanvasSectionId().toString();
+            
+            return attendanceSummary(sectionId);
+    }
+
     @RequestMapping("/attendanceSummary/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         ModelAndView page = setupPage(new Date(), sectionId, "attendanceSummary");
@@ -174,6 +183,7 @@ public class AviationReportingController extends LtiLaunchController {
         
         return page;
     }
+    
     
     @RequestMapping("/studentMakeup/{sectionId}/{studentId}")
     public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) {
