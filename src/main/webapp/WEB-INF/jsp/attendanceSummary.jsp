@@ -27,7 +27,7 @@
 
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
-<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
+<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; console.log('value in body - ' + val); toggleSection(val, contextPath);">
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -40,7 +40,6 @@
     </ul>
   </div>
 </nav>
-
   <div class="container">
 
     <form class="sectionDropdown" method="post" action="DoNotActuallyPost">

@@ -69,17 +69,11 @@
                     <label for="currentDate">Day of Attendance</label>
                     <div class="input-group date" id="datePicker">
                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
-                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>                  
+                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="dayWorth">Minutes in Class</label>
-                    <input type="text" id="dayWorth" class="form-control" />
                 </div>
             </div>
             <script type="text/javascript">
@@ -90,6 +84,8 @@
                     });
                     $('#currentDate').on("change", function(){
                         var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                        $(".sectionTable").hide();
+                        $("#waitLoading").show();
                         $("#sectionSelect").append($(dateChange));
                         $("#sectionSelect").submit();
                     });
@@ -103,7 +99,9 @@
     </div>
 
 <div class="container">
-
+    <div id="waitLoading" class="text-center" style="display: none">
+        <img id="loading-image" src="${context}/img/ajax-loader.gif" alt="Please wait for content to finish loading"/>
+    </div>
     <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="sectionLoop">
         <c:if test="${not empty sectionInfo.students}">
             <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">

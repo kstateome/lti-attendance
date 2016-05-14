@@ -15,6 +15,7 @@ import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
 import edu.ksu.canvas.aviation.repository.ReportRepository;
 import edu.ksu.canvas.aviation.repository.ReportRepository.AttendanceSummaryForSection;
 import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.SectionIncludes;
@@ -28,6 +29,7 @@ import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
 import edu.ksu.lti.model.LtiSession;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -115,7 +117,6 @@ public class AviationReportingController extends LtiLaunchController {
         return showRoster(new Date(), String.valueOf(sections.get(0).getId()));
     }
 
-    
     @RequestMapping("/showRoster/{sectionId}")
     public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         return setupPage(date, sectionId, "showRoster");
@@ -147,7 +148,7 @@ public class AviationReportingController extends LtiLaunchController {
         
         ModelAndView page = new ModelAndView(viewName);
         page.addObject("rosterForm", rosterForm);
-        page.addObject("sectionList", aviationSections);
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(aviationSections, sectionId));
         page.addObject("selectedSectionId", sectionId);
         
         return page;
@@ -161,7 +162,7 @@ public class AviationReportingController extends LtiLaunchController {
     
     @RequestMapping("/classSetup/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
-        return setupPage(new Date(), sectionId, "setupClass");        
+        return setupPage(new Date(), sectionId, "setupClass");
     }
 
     //attendanceSummary
@@ -333,5 +334,4 @@ public class AviationReportingController extends LtiLaunchController {
         }
     }
 
-    
 }
