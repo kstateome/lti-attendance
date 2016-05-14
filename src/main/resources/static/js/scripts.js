@@ -1,9 +1,10 @@
-function toggleSection(val) {
+function toggleSection(val, contextPath) {
     $(".sectionTable").each(function() {
         $(this).hide();
     });
 
     $("#"+val).show();
-
-    $("#attendanceSummary").attr("href","attendanceSummary/"+$('#sectionId option:selected').val());
+    $("#attendanceSummaryLink").attr("href", contextPath + "/attendanceSummary/" + val);
+    $("#rosterLink").attr("href", contextPath + "/showRoster/" + val);
+    $("#classSetupLink").attr("href", contextPath + "/classSetup/" + val);
 }

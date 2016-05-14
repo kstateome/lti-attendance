@@ -27,49 +27,60 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
+    <script type="text/javascript">
+        $(function() {
+            $(".attendanceStatus").change(function () {
+                selectedIdSplit = $(this).find(':selected').attr('id').split("-");
+                status = selectedIdSplit[0];
+                studentId = selectedIdSplit[1];
+                if (status == 'tardy') {
+                    $('#minutesMissed' + studentId).removeAttr('disabled');
+                } else {
+                    $('#minutesMissed' + studentId).attr('disabled', 'true');
+                }
+            });
+        });
+    </script>
     <title>Aviation Reporting Class Roster</title>
 </head>
-<body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
+<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Aviation Attendance</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
+            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
+        </ul>
+    </div>
+</nav>
 <td class="container-fluid">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
-    <label>
-        <form:select class="form-control" path="sectionId" items="${sectionList}" itemValue="id" itemLabel="name"
-                     onchange="toggleSection(value)"/>
-    </label>
+
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>
     </div>
     </c:if>
-    <br/>
-
-    <div class="form-group">
-        <div class="col-md-3">
-            <label for="courseWorth">Total Class Minutes</label>
-            <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
-                        placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes">
-                Invalid/empty input
-            </form:errors>
-        </div>
-        <div class="col-md-3">
-            <label for="defaultMinutesPerSession">Normal Class Length</label>
-            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
-                        cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession">
-                Invalid/empty input
-            </form:errors>
-        </div>
-        <div class="col-md-2">
-            <input value="Save Class Minutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit">
-        </div>
-    </div>
-    <br><br><br>
 
     <div class="container">
         <div class="row">
+          <div class='col-sm-4'>
+            <div class="form-group">
+               <label for="sectionId">Section</label>
+               <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}" itemValue="canvasSectionId" itemLabel="name" onchange="toggleSection(value, '${context}');"/>
+            </div>
+          </div>
+        </div>
+        
+        <br/>
+        
+        <div class="row">
             <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
+                    <label for="currentDate">Day of Attendance</label>
                     <div class="input-group date" id="datePicker">
                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
                         <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>
@@ -77,12 +88,6 @@
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="dayWorth">Class Day Minutes</label>
-                    <input type="text" id="dayWorth" class="form-control" />
                 </div>
             </div>
             <script type="text/javascript">
@@ -93,17 +98,24 @@
                     });
                     $('#currentDate').on("change", function(){
                         var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                        $(".sectionTable").hide();
+                        $("#waitLoading").show();
                         $("#sectionSelect").append($(dateChange));
                         $("#sectionSelect").submit();
                     });
                 });
             </script>
+            <div class="col-md-3 saveAttendanceButton">
+                <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
+                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+            </div>
         </div>
     </div>
-<a id="attendanceSummary" href="attendanceSummary/">AttendanceSummary</a>
 
 <div class="container">
-
+    <div id="waitLoading" class="text-center" style="display: none">
+        <img id="loading-image" src="${context}/img/ajax-loader.gif" alt="Please wait for content to finish loading"/>
+    </div>
     <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="sectionLoop">
         <c:if test="${not empty sectionInfo.students}">
             <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">
@@ -131,17 +143,25 @@
                                     <td>
                                         <label>
                                             <form:select path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].status"
-                                                         cssClass="form-control no-padding no-width">
-                                                <form:option value="<%=Status.PRESENT%>">Present</form:option>
-                                                <form:option value="<%=Status.TARDY%>">Tardy</form:option>
-                                                <form:option value="<%=Status.ABSENT%>">Absent</form:option>
+                                                         cssClass="attendanceStatus form-control no-padding no-width">
+                                                <form:option id="present-${aviationStudent.studentId}" value="<%=Status.PRESENT%>">Present</form:option>
+                                                <form:option id="tardy-${aviationStudent.studentId}" value="<%=Status.TARDY%>">Tardy</form:option>
+                                                <form:option id="absent-${aviationStudent.studentId}" value="<%=Status.ABSENT%>">Absent</form:option>
                                             </form:select>
                                         </label>
                                     </td>
 
                                     <td>
-                                        <form:input path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
-                                                    cssClass="form-control" size="5"/>
+                                        <c:choose>
+                                            <c:when test="${attendance.status == 'TARDY'}">
+                                                <form:input id="minutesMissed${aviationStudent.studentId}" path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form:input id="minutesMissed${aviationStudent.studentId}" path="sectionInfoList[${sectionLoop.index}].students[${studentLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5" disabled="true"/>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                 </c:if>
                             </c:forEach>

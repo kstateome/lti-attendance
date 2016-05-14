@@ -27,38 +27,56 @@
 
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
-<body onload="val = $('#sectionId option:first').val() ; toggleSection(val);">
-<form class="sectionDropdown" method="post" action="DoNotActuallyPost">
-  <label>
-    <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="id"  itemLabel="name" onchange="toggleSection(value); false;"/>
-  </label>
-</form>
-<a id="showRoster" href="${context}/showRoster/">Back to Roster</a>
-  <br/>
-
+<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; console.log('value in body - ' + val); toggleSection(val, contextPath);">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Aviation Attendance</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+      <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
+      <li><a id="rosterLink" href="${context}/showRoster/${selectedSectionId}}">Class Roster</a></li>
+    </ul>
+  </div>
+</nav>
   <div class="container">
 
-    <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
+    <form class="sectionDropdown" method="post" action="DoNotActuallyPost">
+        <div class="row">
+          <div class='col-sm-4'>
+            <div class="form-group">
+               <label for="sectionId">Section</label>
+               <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="canvasSectionId"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
+            </div>
+          </div>
+        </div>
+    </form>
+    <br/>
+
+    <div class="container">
+      <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
         <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
           <tr>
             <th>Name</th>
-            <th>Minutes Made Up</th>
-            <th>Remaining Minutes Made up</th>
             <th>Total Minutes Missed</th>
+            <th>Minutes Made Up</th>
+            <th>Minutes To Be Made up</th>
             <th>% of Course Missed</th>
           </tr>
 
           <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
             <tr >
               <td><a href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></td>
+              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
               <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
-              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
         </table>
-    </c:forEach>
+      </c:forEach>
+    </div>
 
   </div>
 

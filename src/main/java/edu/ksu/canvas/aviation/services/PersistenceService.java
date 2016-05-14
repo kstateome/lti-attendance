@@ -2,6 +2,7 @@ package edu.ksu.canvas.aviation.services;
 
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
@@ -10,28 +11,37 @@ import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
+import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.exception.InvalidOauthTokenException;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * @author jesusorr
- * 5/6/16
- */
+
 @Component
 public class PersistenceService {
-    private static final Logger LOG = Logger.getLogger(PersistenceService.class);
+    
+    private static final Logger LOG = Logger.getLogger(PersistenceService.class);    
     private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
     private static final int DEFAULT_MINUTES_PER_CLASS = 45;
 
+    
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
 
@@ -43,6 +53,12 @@ public class PersistenceService {
     
     @Autowired
     private MakeupTrackerRepository makeupTrackerRepository;
+    
+    @Autowired
+    private AviationStudentRepository studentRepository;
+    
+    @Autowired
+    private AviationSectionRepository sectionRepository;
     
 
     public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
@@ -72,6 +88,7 @@ public class PersistenceService {
                 tracker.setDateMadeUp(makeup.getDateMadeUp());
                 tracker.setDateOfClass(makeup.getDateOfClass());
                 tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
+                tracker.setProjectDescription(makeup.getProjectDescription());
                 makeupTrackerRepository.save(tracker);
             }
 
@@ -84,7 +101,7 @@ public class PersistenceService {
 
     public void saveClassAttendance(RosterForm rosterForm) {
         for (SectionInfo sectionInfo : rosterForm.getSectionInfoList()){
-            LOG.info("Saving section: " + sectionInfo);
+            LOG.debug("Saving section id: " + sectionInfo.getSectionId());
             List<Attendance> attendancesToSave = new ArrayList<>();
             for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
                 //Save students
@@ -107,25 +124,81 @@ public class PersistenceService {
         }
     }
     
-    public RosterForm loadOrCreateCourseMinutes(RosterForm rosterForm, String courseId) {
-        Long canvasCourseId = Long.parseLong(courseId);
+    public AviationCourse loadOrCreateCourse(long canvasCourseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if (aviationCourse != null && aviationCourse.getTotalMinutes() != null && aviationCourse.getDefaultMinutesPerSession() != null){
-            rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-            rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
-        } else {
-            rosterForm.setTotalClassMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
-            rosterForm.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
+        
+        if(aviationCourse == null) {
+            aviationCourse = new AviationCourse();
+            aviationCourse.setTotalMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
+            aviationCourse.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
+            aviationCourse.setCanvasCourseId(canvasCourseId);
         }
-        return rosterForm;
+        
+        return aviationCourseRepository.save(aviationCourse);
     }
+    
+    public List<AviationSection> loadOrCreateSections(List<Section> sections) {
+        List<AviationSection> ret = new ArrayList<>();
+        
+        for(Section section: sections) {
+            AviationSection aviationSection = sectionRepository.findByCanvasSectionId(Long.valueOf(section.getId()));
+            
+            if(aviationSection == null) {
+                aviationSection = new AviationSection();
+            }
+            
+            aviationSection.setName(section.getName());
+            aviationSection.setCanvasSectionId(Long.valueOf(section.getId()));
+            aviationSection.setCanvasCourseId(Long.valueOf(section.getCourseId()));
+            
+            sectionRepository.save(aviationSection);
+        }
+        
+        return ret;
+    }
+    
+    
+    public List<AviationStudent> loadOrCreateStudents(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+        List<AviationStudent> ret = new ArrayList<>();
+        
+        for(Section section: sections) {
+            Set<AviationStudent> existingStudents = studentRepository.findBySectionId(section.getId());
+            
+            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {    
+                List<AviationStudent> foundUsers = existingStudents.stream().filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()) ).collect(Collectors.toList());
+                
+                if(foundUsers.isEmpty()) {
+                    AviationStudent student = new AviationStudent();
+                    student.setSisUserId(enrollment.getUser().getSisUserId());
+                    student.setName(enrollment.getUser().getSortableName());
+                    student.setSectionId(section.getId());
+                    student.setCanvasCourseId(section.getCourseId());
+                    
+                    studentRepository.save(student);
+                    ret.add(student);
+                } else {
+                    ret.addAll(foundUsers);
+                }
+            }
+        }
+        
+        return ret;
+    }
+    
+    public void loadCourseConfigurationIntoRoster(RosterForm rosterForm, Long courseId) {
+        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
+        
+        rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+    }
+    
 
     /**
      * DO NOT USE ON POST BACK You will get a lazy load exception
      * @param date some date we want to populate
      * @return the same roster form you gave me but populated with attendance for this date
      */
-    public RosterForm populateAttendanceForDay(RosterForm rosterForm, Date date) {
+    public void populateAttendanceForDayIntoRoster(RosterForm rosterForm, Date date) {
         rosterForm.getSectionInfoList().forEach(section -> {
             section.getStudents().forEach(student -> {
                 if (student.getAttendances() == null) {
@@ -141,6 +214,5 @@ public class PersistenceService {
                 }
             });
         });
-        return rosterForm;
     }
 }

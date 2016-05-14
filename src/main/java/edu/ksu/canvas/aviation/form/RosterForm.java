@@ -54,4 +54,5 @@ public class RosterForm {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
+    
 }
