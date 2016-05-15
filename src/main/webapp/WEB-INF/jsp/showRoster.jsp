@@ -33,6 +33,7 @@
                 selectedIdSplit = $(this).find(':selected').attr('id').split("-");
                 status = selectedIdSplit[0];
                 studentId = selectedIdSplit[1];
+                $('#minutesMissed' + studentId).val('');
                 if (status == 'tardy') {
                     $('#minutesMissed' + studentId).removeAttr('disabled');
                 } else {

@@ -105,6 +105,7 @@ public class PersistenceService {
         long begin = System.currentTimeMillis();
        
         List<Attendance> saveToDb = new ArrayList<>();
+        int defaultMinutesMissedPerSession = rosterForm.getDefaultMinutesPerSession();
         
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
@@ -125,6 +126,7 @@ public class PersistenceService {
                     attendance.setDateOfClass(attendanceInfo.getDateOfClass());
                     attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
                     attendance.setStatus(attendanceInfo.getStatus());
+                    adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
 
                     saveToDb.add(attendance);
                 } else {
@@ -138,6 +140,7 @@ public class PersistenceService {
                     Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceInfo.getAttendanceId())).findFirst().get();
                     attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
                     attendance.setStatus(attendanceInfo.getStatus());
+                    adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
                     
                     saveToDb.add(attendance);
                 }
@@ -151,6 +154,14 @@ public class PersistenceService {
         long end = System.currentTimeMillis();
         LOG.debug("saving in batches took "+(endSave-beginSave)+" millis");
         LOG.info("Saving attendances took "+(end-begin)+" millis");
+    }
+
+    private void adjustMinutesMissedBasedOnAttendnaceStatus(Attendance attendance, int defaultMinutesMissedPerSession) {
+        if(attendance.getStatus() == Status.PRESENT) {
+            attendance.setMinutesMissed(null);
+        } else if(attendance.getStatus() == Status.ABSENT) {
+            attendance.setMinutesMissed(defaultMinutesMissedPerSession);
+        }
     }
     
     public AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
