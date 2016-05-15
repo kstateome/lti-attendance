@@ -17,7 +17,7 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 @Repository
 public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
-    private static final int BATCH_SIZE = 50;
+    private static final int BATCH_SIZE = 30;
     
     @PersistenceContext
     private EntityManager entityManager;
