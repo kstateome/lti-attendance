@@ -7,7 +7,7 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.enums.Status;
 
 
-public class AttendanceInfo {
+public class AttendanceModel {
 
     private Long attendanceId;
     private Long aviationStudentId;
@@ -18,9 +18,9 @@ public class AttendanceInfo {
     private Date dateOfClass;
     
     
-    public AttendanceInfo() { }
+    public AttendanceModel() { }
     
-    public AttendanceInfo(AviationStudent student, Status status, Date dateOfClass) { 
+    public AttendanceModel(AviationStudent student, Status status, Date dateOfClass) { 
         this.aviationStudentId = student == null ? null : student.getStudentId();
         this.aviationStudentName = student == null ? null : student.getName();
         this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
@@ -28,7 +28,7 @@ public class AttendanceInfo {
         this.dateOfClass = dateOfClass;
     }
     
-    public AttendanceInfo(Attendance attendance) {
+    public AttendanceModel(Attendance attendance) {
         if(attendance == null) { return; }
         
         this.attendanceId = attendance.getAttendanceId();
@@ -100,7 +100,7 @@ public class AttendanceInfo {
     
     @Override
     public String toString() {
-        return "AttendanceInfo [attendanceId=" + attendanceId + ", aviationStudentId=" + aviationStudentId
+        return "AttendanceModel [attendanceId=" + attendanceId + ", aviationStudentId=" + aviationStudentId
                 + ", aviationStudentName=" + aviationStudentName + ", aviationStudentSisUserId="
                 + aviationStudentSisUserId + ", status=" + status + ", minutesMissed=" + minutesMissed
                 + ", dateOfClass=" + dateOfClass + "]";

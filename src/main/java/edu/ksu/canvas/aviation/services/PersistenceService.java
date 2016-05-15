@@ -9,7 +9,7 @@ import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
-import edu.ksu.canvas.aviation.model.AttendanceInfo;
+import edu.ksu.canvas.aviation.model.AttendanceModel;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
@@ -112,8 +112,8 @@ public class PersistenceService {
         for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
             List<AviationStudent> aviationStudents = null;
            
-            for(AttendanceInfo attendanceInfo : sectionInfo.getAttendances()) {
-                if(attendanceInfo.getAttendanceId() == null) {
+            for(AttendanceModel attendanceModel : sectionInfo.getAttendances()) {
+                if(attendanceModel.getAttendanceId() == null) {
                     if(aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
                         aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
@@ -122,11 +122,11 @@ public class PersistenceService {
                     }
                     
                     Attendance attendance = new Attendance();
-                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceInfo.getAviationStudentId())).findFirst().get();
+                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAviationStudentId())).findFirst().get();
                     attendance.setAviationStudent(aviationStudent);
-                    attendance.setDateOfClass(attendanceInfo.getDateOfClass());
-                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
-                    attendance.setStatus(attendanceInfo.getStatus());
+                    attendance.setDateOfClass(attendanceModel.getDateOfClass());
+                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                    attendance.setStatus(attendanceModel.getStatus());
                     adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
 
                     saveToDb.add(attendance);
@@ -138,9 +138,9 @@ public class PersistenceService {
                         LOG.debug("loaded "+attendancesInDBForCourse.size()+" attendance entries for course in "+(endLoad-beginLoad)+" millis..");
                     }
                     
-                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceInfo.getAttendanceId())).findFirst().get();
-                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
-                    attendance.setStatus(attendanceInfo.getStatus());
+                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
+                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                    attendance.setStatus(attendanceModel.getStatus());
                     adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
                     
                     saveToDb.add(attendance);
@@ -242,15 +242,15 @@ public class PersistenceService {
         
         
         for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
-            List<AttendanceInfo> sectionAttendances = new ArrayList<>();
+            List<AttendanceModel> sectionAttendances = new ArrayList<>();
             List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
             
             for(AviationStudent student: aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if(foundAttendance == null) {
-                    sectionAttendances.add(new AttendanceInfo(student, Status.PRESENT, date));
+                    sectionAttendances.add(new AttendanceModel(student, Status.PRESENT, date));
                 } else {
-                    sectionAttendances.add(new AttendanceInfo(foundAttendance));
+                    sectionAttendances.add(new AttendanceModel(foundAttendance));
                 }
             }
             

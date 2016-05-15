@@ -10,7 +10,7 @@ public class SectionInfo {
     private long sectionId; //canvas section ID
     private String sectionName;
     private Long canvasCourseId;
-    private List<AttendanceInfo> attendances;
+    private List<AttendanceModel> attendances;
 
     public SectionInfo(Section section){
         sectionId = section.getId();
@@ -46,11 +46,11 @@ public class SectionInfo {
         this.canvasCourseId = canvasCourseId;
     }
 
-    public List<AttendanceInfo> getAttendances() {
+    public List<AttendanceModel> getAttendances() {
         return attendances;
     }
 
-    public void setAttendances(List<AttendanceInfo> attendances) {
+    public void setAttendances(List<AttendanceModel> attendances) {
         this.attendances = attendances;
     }
 
