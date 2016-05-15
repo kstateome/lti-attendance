@@ -216,7 +216,10 @@ public class PersistenceService {
         for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
             List<AttendanceInfo> sectionAttendances = new ArrayList<>();
             
-            for(AviationStudent student: sectionInfo.getStudents()) {
+            List<AviationStudent> aviationStudents = new ArrayList<>();
+            aviationStudents.addAll(studentRepository.findBySectionId(sectionInfo.getSectionId()));
+            
+            for(AviationStudent student: aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if(foundAttendance == null) {
                     sectionAttendances.add(new AttendanceInfo(student, Status.PRESENT, date));

@@ -117,7 +117,7 @@
         <img id="loading-image" src="${context}/img/ajax-loader.gif" alt="Please wait for content to finish loading"/>
     </div>
     <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="sectionLoop">
-        <c:if test="${not empty sectionInfo.students}">
+        <c:if test="${not empty sectionInfo.attendances}">
             <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">
                 <thead>
                     <tr>
