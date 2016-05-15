@@ -31,7 +31,7 @@
 
 <body>
 
-  <a id="showRoster" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
+  <a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
 
   <br/><br/>
   <style>

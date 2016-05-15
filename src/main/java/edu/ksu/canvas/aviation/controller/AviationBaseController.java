@@ -89,7 +89,7 @@ public class AviationBaseController extends LtiLaunchController {
         persistenceService.synchronizeSectionsFromCanvasToDb(sections);
         persistenceService.synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
         
-        return new ModelAndView("forward:showRoster");
+        return new ModelAndView("forward:roster");
     }
     
     

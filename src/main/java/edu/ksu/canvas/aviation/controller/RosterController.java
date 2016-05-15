@@ -31,7 +31,7 @@ import edu.ksu.lti.model.LtiSession;
 @Controller
 @Scope("session")
 @SessionAttributes("rosterForm")
-@RequestMapping("/showRoster")
+@RequestMapping("/roster")
 public class RosterController extends AviationBaseController {
     
     private static final Logger LOG = Logger.getLogger(RosterController.class);
@@ -47,12 +47,12 @@ public class RosterController extends AviationBaseController {
     }
     
     @RequestMapping()
-    public ModelAndView showRoster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        return showRoster(date, null);
+    public ModelAndView roster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        return roster(date, null);
     }
   
     @RequestMapping("/{sectionId}")
-    public ModelAndView showRoster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
         SectionState sectionState = getSectionState(sectionId);
         sectionId = sectionState.selectedSection.getCanvasSectionId().toString();
@@ -67,7 +67,7 @@ public class RosterController extends AviationBaseController {
         persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
         persistenceService.loadAttendanceIntoRoster(rosterForm, date);
         
-        ModelAndView page = new ModelAndView("showRoster");
+        ModelAndView page = new ModelAndView("roster");
         page.addObject("rosterForm", rosterForm);
         page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
         page.addObject("selectedSectionId", sectionId);
@@ -77,7 +77,7 @@ public class RosterController extends AviationBaseController {
     
     @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
     public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
-        return showRoster(rosterForm.getCurrentDate(), sectionId);
+        return roster(rosterForm.getCurrentDate(), sectionId);
     }
     
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
@@ -86,7 +86,7 @@ public class RosterController extends AviationBaseController {
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
 
         persistenceService.saveClassAttendance(rosterForm);
-        return showRoster(rosterForm.getCurrentDate(), sectionId);
+        return roster(rosterForm.getCurrentDate(), sectionId);
     }
     
 }
