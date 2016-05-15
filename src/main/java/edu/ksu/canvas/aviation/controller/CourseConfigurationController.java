@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.aviation.form.ClassSetupForm;
+import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.model.LtiSession;
@@ -22,10 +22,10 @@ import edu.ksu.lti.model.LtiSession;
 
 @Controller
 @Scope("session")
-@RequestMapping("/classSetup")
-public class ClassSetupController extends AviationBaseController {
+@RequestMapping("/courseConfiguration")
+public class CourseConfigurationController extends AviationBaseController {
     
-    private static final Logger LOG = Logger.getLogger(ClassSetupController.class);
+    private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
 
     
     @RequestMapping()
@@ -35,20 +35,20 @@ public class ClassSetupController extends AviationBaseController {
 
     @RequestMapping("/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
-        ModelAndView page = new ModelAndView("setupClass");
+        ModelAndView page = new ModelAndView("courseConfiguration");
 
-        ClassSetupForm classSetupForm = new ClassSetupForm();
+        CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         SectionState sectionState = getSectionState(sectionId);
-        persistenceService.loadCourseInfoIntoForm(classSetupForm, sectionState.selectedSection.getCanvasCourseId());
-        page.addObject("classSetupForm", classSetupForm);
+        persistenceService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
+        page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
         
         return page;
     }
 
-    @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
-    public ModelAndView saveTotalClassMinutes(@ModelAttribute("classSetupForm") @Valid ClassSetupForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
-        ModelAndView page = new ModelAndView("forward:/classSetup");
+    @RequestMapping(value = "/save", params ="saveCourseConfiguration", method = RequestMethod.POST)
+    public ModelAndView saveTotalClassMinutes(@ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+        ModelAndView page = new ModelAndView("forward:/courseConfiguration");
         if (bindingResult.hasErrors()){
             LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
             page.addObject("error", "Invalid input for minutes, please enter valid minutes");

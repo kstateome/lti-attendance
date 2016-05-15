@@ -1,7 +1,7 @@
 package edu.ksu.canvas.aviation.form;
 
 
-public class ClassSetupForm {
+public class CourseConfigurationForm {
 
     private int totalClassMinutes;
     private int defaultMinutesPerSession;

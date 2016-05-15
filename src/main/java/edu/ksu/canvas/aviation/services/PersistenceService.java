@@ -8,7 +8,7 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.form.ClassSetupForm;
+import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.model.AttendanceInfo;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
@@ -65,7 +65,7 @@ public class PersistenceService {
         makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
     }
 
-    public void saveCourseMinutes(ClassSetupForm classSetupForm, String courseId) {
+    public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
 
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
@@ -226,11 +226,11 @@ public class PersistenceService {
         return ret;
     }
     
-    public void loadCourseInfoIntoForm(ClassSetupForm setupClassForm, Long courseId) {
+    public void loadCourseInfoIntoForm(CourseConfigurationForm courseConfigurationForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
-        setupClassForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        setupClassForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        courseConfigurationForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        courseConfigurationForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
 
     public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {

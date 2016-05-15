@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class RosterForm extends ClassSetupForm {
+public class RosterForm extends CourseConfigurationForm {
 
     private List<SectionInfo> sectionInfoList;
     private long sectionId;

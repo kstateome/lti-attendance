@@ -36,13 +36,13 @@
             <a class="navbar-brand" href="#">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li><a id="rosterLink" href="${context}/showRoster/${selectedSectionId}">Class Roster</a></li>
         </ul>
     </div>
 </nav>
-    <form:form id="sectionSelect" modelAttribute="classSetupForm" class="sectionDropdown" method="POST" action="${context}/classSetup/save">
+    <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST" action="${context}/courseConfiguration/save">
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>
@@ -67,8 +67,8 @@
             </form:errors>
         </div>
         <div class="col-md-2">
-            <label style="color:white;" for="saveClassMinutes">Save Class Minutes</label>
-            <input value="Save Class Minutes" id="saveClassMinutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit"/>
+            <label style="color:white;" for="saveCourseConfiguration">Save Class Minutes</label>
+            <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-right" type="submit"/>
         </div>
     </div>
     </form:form>
