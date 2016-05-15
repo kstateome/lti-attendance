@@ -4,9 +4,9 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.entity.MakeupTracker;
+import edu.ksu.canvas.aviation.entity.Makeup;
 import edu.ksu.canvas.aviation.enums.Status;
-import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
+import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.model.AttendanceModel;
@@ -15,7 +15,7 @@ import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -52,7 +52,7 @@ public class PersistenceService {
     private AttendanceRepository attendanceRepository;
     
     @Autowired
-    private MakeupTrackerRepository makeupTrackerRepository;
+    private MakeupRepository makeupRepository;
     
     @Autowired
     private AviationStudentRepository studentRepository;
@@ -61,8 +61,8 @@ public class PersistenceService {
     private AviationSectionRepository sectionRepository;
     
     
-    public void deleteMakeup(String makeupTrackerId) {
-        makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
+    public void deleteMakeup(String makeupId) {
+        makeupRepository.delete(Long.valueOf(makeupId));
     }
 
     public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
@@ -80,20 +80,20 @@ public class PersistenceService {
         aviationCourseRepository.save(aviationCourse);
     }
     
-    public void saveMakeups(MakeupTrackerForm form) {
+    public void saveMakeups(MakeupForm form) {
         
-        for(MakeupTracker makeup: form.getEntries()) {
-            if(makeup.getMakeupTrackerId() == null) {
+        for(Makeup makeup: form.getEntries()) {
+            if(makeup.getMakeupId() == null) {
                 AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
                 makeup.setAviationStudent(student);
-                makeupTrackerRepository.save(makeup);
+                makeupRepository.save(makeup);
             } else {
-                MakeupTracker tracker = makeupTrackerRepository.findByMakeupTrackerId(makeup.getMakeupTrackerId());
+                Makeup tracker = makeupRepository.findByMakeupId(makeup.getMakeupId());
                 tracker.setDateMadeUp(makeup.getDateMadeUp());
                 tracker.setDateOfClass(makeup.getDateOfClass());
                 tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
                 tracker.setProjectDescription(makeup.getProjectDescription());
-                makeupTrackerRepository.save(tracker);
+                makeupRepository.save(tracker);
             }
 
         }

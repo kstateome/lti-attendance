@@ -45,7 +45,7 @@
   </table>
   
   <br/>
-  <form:form id="makeupTrackerForm" modelAttribute="makeupTrackerForm" method="POST" action="${context}/studentMakeup/save">
+  <form:form id="makeupForm" modelAttribute="makeupForm" method="POST" action="${context}/studentMakeup/save">
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>
@@ -67,29 +67,29 @@
 			</thead>
 
 			<tbody>
-				<c:forEach items="${makeupTrackerForm.entries}" var="makeupTracker" varStatus="makeupTrackerLoop">
+				<c:forEach items="${makeupForm.entries}" var="makeup" varStatus="makeupLoop">
 					<tr>
 						<td>
-						    <form:input type="hidden" id="id${makeupTrackerLoop.index}" path="entries[${makeupTrackerLoop.index}].makeupTrackerId" />
+						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
-                                <div class="input-group date" id="datePickerDateOfClass${makeupTrackerLoop.index}">
-                                    <form:input id="classDate${makeupTrackerLoop.index}" path="entries[${makeupTrackerLoop.index}].dateOfClass" cssClass="form-control" />
+                                <div class="input-group date" id="datePickerDateOfClass${makeupLoop.index}">
+                                    <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control" />
                                     <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
 						</td>
 						<td>
 							<div class="form-group">
-								<div class="input-group date" id="datePickerMadeup${makeupTrackerLoop.index}">
-									<form:input id="dateMadeup${makeupTrackerLoop.index}" path="entries[${makeupTrackerLoop.index}].dateMadeUp" cssClass="form-control" />
+								<div class="input-group date" id="datePickerMadeup${makeupLoop.index}">
+									<form:input id="dateMadeup${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
 									<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>
 									</span>
 								</div>
 							</div>
 						</td>
-						<td><form:input path="entries[${makeupTrackerLoop.index}].minutesMadeUp" cssClass="form-control" size="5" /></td>
-                        <td><form:input path="entries[${makeupTrackerLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
-						<td><a href="${context}/deleteMakeup/${makeupTrackerForm.sectionId}/${makeupTrackerForm.studentId}/${makeupTrackerForm.entries[makeupTrackerLoop.index].makeupTrackerId}">Delete</a></td>
+						<td><form:input path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control" size="5" /></td>
+                        <td><form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
+						<td><a href="${context}/deleteMakeup/${makeupForm.sectionId}/${makeupForm.studentId}/${makeupForm.entries[makeupLoop.index].makeupId}">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

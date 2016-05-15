@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.entity.MakeupTracker;
-import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
+import edu.ksu.canvas.aviation.entity.Makeup;
+import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.lti.model.LtiSession;
 
@@ -38,7 +38,7 @@ public class MakeupController extends AviationBaseController {
     private AviationStudentRepository studentRepository;
     
     @Autowired
-    private MakeupTrackerRepository makeupTrackerRepository;
+    private MakeupRepository makeupRepository;
     
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -54,36 +54,36 @@ public class MakeupController extends AviationBaseController {
 
     private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
         AviationStudent student = studentRepository.findByStudentId(new Long(studentId));
-        List<MakeupTracker> makeupTrackers = makeupTrackerRepository.findByAviationStudent(student);
+        List<Makeup> makeups = makeupRepository.findByAviationStudent(student);
         if(addEmptyEntry) {
-            makeupTrackers.add(new MakeupTracker());
+            makeups.add(new Makeup());
         }
         
-        MakeupTrackerForm makeupTrackerForm = new MakeupTrackerForm();
-        makeupTrackerForm.setEntries(makeupTrackers);
-        makeupTrackerForm.setSectionId(Long.valueOf(sectionId));
-        makeupTrackerForm.setStudentId(Long.valueOf(studentId));
+        MakeupForm makeupForm = new MakeupForm();
+        makeupForm.setEntries(makeups);
+        makeupForm.setSectionId(Long.valueOf(sectionId));
+        makeupForm.setStudentId(Long.valueOf(studentId));
         
         ModelAndView page = new ModelAndView("studentMakeup");
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
-        page.addObject("makeupTrackerForm", makeupTrackerForm);
+        page.addObject("makeupForm", makeupForm);
         
         return page;
     }
     
-    @RequestMapping(value = "/deleteMakeup/{sectionId}/{studentId}/{makeupTrackerId}")
-    public ModelAndView deleteMakeup(@PathVariable String sectionId, @PathVariable String studentId, @PathVariable String makeupTrackerId) throws NoLtiSessionException {
+    @RequestMapping(value = "/deleteMakeup/{sectionId}/{studentId}/{makeupId}")
+    public ModelAndView deleteMakeup(@PathVariable String sectionId, @PathVariable String studentId, @PathVariable String makeupId) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to delete makeup data... User: " + ltiSession.getEid());
         
-        persistenceService.deleteMakeup(makeupTrackerId);
+        persistenceService.deleteMakeup(makeupId);
         return studentMakeup(sectionId, studentId);
     }
     
     
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
-    public ModelAndView saveMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm, BindingResult bindingResult) throws NoLtiSessionException {
+    public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save makeup data... User: " + ltiSession.getEid());
         
@@ -93,22 +93,22 @@ public class MakeupController extends AviationBaseController {
             String errorMessage = "Invalid user input...";
             
             ModelAndView page = new ModelAndView("studentMakeup");
-            AviationStudent student = studentRepository.findByStudentId(makeupTrackerForm.getStudentId());
-            page.addObject("sectionId", String.valueOf(makeupTrackerForm.getSectionId()));
+            AviationStudent student = studentRepository.findByStudentId(makeupForm.getStudentId());
+            page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
-            page.addObject("makeupTrackerForm", makeupTrackerForm);
+            page.addObject("makeupForm", makeupForm);
             page.addObject("error", errorMessage);
             
             return page;
         } else {
-            persistenceService.saveMakeups(makeupTrackerForm);    
+            persistenceService.saveMakeups(makeupForm);    
         }
         
-        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), false);
+        return studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
     }
     
     @RequestMapping(value = "/save", params = "addMakeup", method = RequestMethod.POST)
-    public ModelAndView addMakeup(@ModelAttribute MakeupTrackerForm makeupTrackerForm, BindingResult bindingResult) throws NoLtiSessionException {
+    public ModelAndView addMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save makeup data and add new entry... User: " + ltiSession.getEid());
         
@@ -118,19 +118,19 @@ public class MakeupController extends AviationBaseController {
             String errorMessage = "Invalid user input...";
             
             ModelAndView page = new ModelAndView("studentMakeup");
-            AviationStudent student = studentRepository.findByStudentId(makeupTrackerForm.getStudentId());
-            page.addObject("sectionId", String.valueOf(makeupTrackerForm.getSectionId()));
+            AviationStudent student = studentRepository.findByStudentId(makeupForm.getStudentId());
+            page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
-            page.addObject("makeupTrackerForm", makeupTrackerForm);
+            page.addObject("makeupForm", makeupForm);
             page.addObject("error", errorMessage);
             
             return page;
         } else {
-            persistenceService.saveMakeups(makeupTrackerForm);
-            makeupTrackerForm.getEntries().add(new MakeupTracker());
+            persistenceService.saveMakeups(makeupForm);
+            makeupForm.getEntries().add(new Makeup());
         }
         
-        return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), true);
+        return studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), true);
     }
     
 }

@@ -136,7 +136,7 @@ public class ReportRepository {
                 "  ) missed, " +
                 "  ( " +
                 "    select student_id, sum(nvl(minutes_madeup,0)) as sum_minutes_madeup " +
-                "    from aviation_makeup_tracker " +
+                "    from aviation_makeup " +
                 "    group by student_id " +
                 "  ) madeup " +
                 "  where course.canvas_course_id = student.canvas_course_id(+) and " +
