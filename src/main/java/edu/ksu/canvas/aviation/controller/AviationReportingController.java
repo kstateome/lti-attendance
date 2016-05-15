@@ -201,21 +201,20 @@ public class AviationReportingController extends LtiLaunchController {
 
     
     @RequestMapping("/attendanceSummary")
-    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-            LtiSession ltiSession = ltiLaunch.getLtiSession();
-            List<AviationSection> aviationSections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
-            String sectionId = aviationSections.get(0).getCanvasSectionId().toString();
-            
-            return attendanceSummary(sectionId);
+    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {            
+            return attendanceSummary(null);
     }
 
     @RequestMapping("/attendanceSummary/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        ModelAndView page = setupPage(new Date(), sectionId, "attendanceSummary");
-        
+        ModelAndView page = new ModelAndView("attendanceSummary");
+
+        SectionState sectionState = getSectionState(sectionId);
+        page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
         List<AttendanceSummaryForSection> summaryForSections = reportRepository.getAttendanceSummary(new Long(sectionId));
         page.addObject("attendanceSummaryForSections", summaryForSections);
-        
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
+
         return page;
     }
     
