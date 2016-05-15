@@ -8,6 +8,7 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.form.ClassSetupForm;
 import edu.ksu.canvas.aviation.model.AttendanceInfo;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
@@ -64,16 +65,16 @@ public class PersistenceService {
         makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
     }
 
-    public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
+    public void saveCourseMinutes(ClassSetupForm classSetupForm, String courseId) {
 
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
         if(aviationCourse == null){
-            aviationCourse = new AviationCourse(canvasCourseId, rosterForm.getTotalClassMinutes(), rosterForm.getDefaultMinutesPerSession());
+            aviationCourse = new AviationCourse(canvasCourseId, classSetupForm.getTotalClassMinutes(), classSetupForm.getDefaultMinutesPerSession());
         }
         else{
-            aviationCourse.setDefaultMinutesPerSession(rosterForm.getDefaultMinutesPerSession());
-            aviationCourse.setTotalMinutes(rosterForm.getTotalClassMinutes());
+            aviationCourse.setDefaultMinutesPerSession(classSetupForm.getDefaultMinutesPerSession());
+            aviationCourse.setTotalMinutes(classSetupForm.getTotalClassMinutes());
         }
 
         aviationCourseRepository.save(aviationCourse);
@@ -225,11 +226,11 @@ public class PersistenceService {
         return ret;
     }
     
-    public void loadCourseInfoIntoRoster(RosterForm rosterForm, Long courseId) {
+    public void loadCourseInfoIntoForm(ClassSetupForm setupClassForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
-        rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        setupClassForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        setupClassForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
 
     public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {

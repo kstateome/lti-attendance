@@ -42,7 +42,7 @@
         </ul>
     </div>
 </nav>
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
+    <form:form id="sectionSelect" modelAttribute="classSetupForm" class="sectionDropdown" method="POST" action="${context}/save">
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>

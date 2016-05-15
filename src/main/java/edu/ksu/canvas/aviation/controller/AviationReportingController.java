@@ -8,6 +8,7 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.form.ClassSetupForm;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
@@ -129,18 +130,7 @@ public class AviationReportingController extends LtiLaunchController {
     
     private ModelAndView setupPage(Date date, String sectionId, String viewName) throws NoLtiSessionException {
         ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
-        
-        AviationSection aviationSection;
-        List<AviationSection> aviationSections;
-        if(sectionId == null) {
-            LtiSession ltiSession = ltiLaunch.getLtiSession();
-            aviationSections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
-            aviationSection = aviationSections.get(0);
-            sectionId = String.valueOf(aviationSection.getCanvasSectionId());
-        } else {
-            aviationSection = sectionRepository.findByCanvasSectionId(Long.valueOf(sectionId));
-            aviationSections = sectionRepository.findByCanvasCourseId(aviationSection.getCanvasCourseId());
-        }
+        SectionState sectionState = getSectionState(sectionId);
         
         //Sets the date to today if not already set
         if (date == null){
@@ -148,16 +138,37 @@ public class AviationReportingController extends LtiLaunchController {
         }
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
-        rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(aviationSections));
-        persistenceService.loadCourseInfoIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
+        rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(sectionState.sections));
+        persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
         persistenceService.loadAttendanceIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView(viewName);
         page.addObject("rosterForm", rosterForm);
-        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(aviationSections, sectionId));
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
         page.addObject("selectedSectionId", sectionId);
         
         return page;
+    }
+    
+    private static class SectionState {
+        AviationSection selectedSection;
+        List<AviationSection> sections;
+    }
+    
+    private SectionState getSectionState(String sectionId) throws NoLtiSessionException {
+        SectionState ret = new SectionState();
+        
+        if(sectionId == null) {
+            LtiSession ltiSession = ltiLaunch.getLtiSession();
+            ret.sections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
+            ret.selectedSection = ret.sections.get(0);
+            sectionId = String.valueOf(ret.selectedSection.getCanvasSectionId());
+        } else {
+            ret.selectedSection = sectionRepository.findByCanvasSectionId(Long.valueOf(sectionId));
+            ret.sections = sectionRepository.findByCanvasCourseId(ret.selectedSection.getCanvasCourseId());
+        }
+        
+        return ret;
     }
     
     @RequestMapping("/showRoster")
@@ -177,7 +188,15 @@ public class AviationReportingController extends LtiLaunchController {
 
     @RequestMapping("/classSetup/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
-        return setupPage(new Date(), sectionId, "setupClass");
+        ModelAndView page = new ModelAndView("setupClass");
+        
+        ClassSetupForm classSetupForm = new ClassSetupForm();
+        SectionState sectionState = getSectionState(sectionId);
+        persistenceService.loadCourseInfoIntoForm(classSetupForm, sectionState.selectedSection.getCanvasCourseId());
+        page.addObject("classSetupForm", classSetupForm);
+        page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
+        
+        return page;
     }
 
     
@@ -242,7 +261,7 @@ public class AviationReportingController extends LtiLaunchController {
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
-    public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+    public ModelAndView saveTotalClassMinutes(@ModelAttribute("classSetupForm") @Valid ClassSetupForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         ModelAndView page = new ModelAndView("forward:classSetup");
         if (bindingResult.hasErrors()){
             LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
@@ -250,9 +269,9 @@ public class AviationReportingController extends LtiLaunchController {
         }
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
-                 + rosterForm.getTotalClassMinutes() + ", per session: " + rosterForm.getDefaultMinutesPerSession());
+                 + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-        persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
+        persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
         return page;
     }
 
