@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -109,13 +108,13 @@ public class PersistenceService {
         
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
-            Set<AviationStudent> aviationStudents = null;
+            List<AviationStudent> aviationStudents = null;
            
             for(AttendanceInfo attendanceInfo : sectionInfo.getAttendances()) {
                 if(attendanceInfo.getAttendanceId() == null) {
                     if(aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findBySectionId(sectionInfo.getSectionId());
+                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded "+aviationStudents.size()+" students by section in "+(endLoad-beginLoad)+" millis..");
                     }
@@ -192,7 +191,7 @@ public class PersistenceService {
         List<AviationStudent> ret = new ArrayList<>();
         
         for(Section section: sections) {
-            Set<AviationStudent> existingStudents = studentRepository.findBySectionId(section.getId());
+            List<AviationStudent> existingStudents = studentRepository.findBySectionIdOrderByNameAsc(section.getId());
             
             for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {    
                 List<AviationStudent> foundUsers = existingStudents.stream().filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()) ).collect(Collectors.toList());
@@ -232,9 +231,7 @@ public class PersistenceService {
         
         for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
             List<AttendanceInfo> sectionAttendances = new ArrayList<>();
-            
-            List<AviationStudent> aviationStudents = new ArrayList<>();
-            aviationStudents.addAll(studentRepository.findBySectionId(sectionInfo.getSectionId()));
+            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
             
             for(AviationStudent student: aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
