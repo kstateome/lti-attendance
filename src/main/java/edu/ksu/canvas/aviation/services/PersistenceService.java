@@ -154,7 +154,7 @@ public class PersistenceService {
         LOG.info("Saving attendances took "+(end-begin)+" millis");
     }
     
-    public AviationCourse loadOrCreateCourse(long canvasCourseId) {
+    public AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
         
         if(aviationCourse == null) {
@@ -167,7 +167,7 @@ public class PersistenceService {
         return aviationCourseRepository.save(aviationCourse);
     }
     
-    public List<AviationSection> loadOrCreateSections(List<Section> sections) {
+    public List<AviationSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {
         List<AviationSection> ret = new ArrayList<>();
         
         for(Section section: sections) {
@@ -188,7 +188,7 @@ public class PersistenceService {
     }
     
     
-    public List<AviationStudent> loadOrCreateStudents(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+    public List<AviationStudent> synchronizeStudentsFromCanvasToDb(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
         List<AviationStudent> ret = new ArrayList<>();
         
         for(Section section: sections) {
@@ -215,14 +215,14 @@ public class PersistenceService {
         return ret;
     }
     
-    public void loadCourseConfigurationIntoRoster(RosterForm rosterForm, Long courseId) {
+    public void loadCourseInfoIntoRoster(RosterForm rosterForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
         rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
         rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
 
-    public void loadAttendanceForDateIntoRoster(RosterForm rosterForm, Date date) {
+    public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
         
         Long canvaseCourseId = rosterForm.getSectionInfoList().get(0).getCanvasCourseId();

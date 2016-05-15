@@ -104,9 +104,9 @@ public class AviationReportingController extends LtiLaunchController {
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
 
-        persistenceService.loadOrCreateCourse(Long.valueOf(ltiSession.getCanvasCourseId()));
-        persistenceService.loadOrCreateSections(sections);
-        persistenceService.loadOrCreateStudents(sections, enrollmentsReader);
+        persistenceService.synchronizeCourseFromCanvasToDb(Long.valueOf(ltiSession.getCanvasCourseId()));
+        persistenceService.synchronizeSectionsFromCanvasToDb(sections);
+        persistenceService.synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
         
         return showRoster(new Date(), String.valueOf(sections.get(0).getId()));
     }
@@ -133,8 +133,8 @@ public class AviationReportingController extends LtiLaunchController {
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(aviationSections));
-        persistenceService.loadCourseConfigurationIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
-        persistenceService.loadAttendanceForDateIntoRoster(rosterForm, date);
+        persistenceService.loadCourseInfoIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
+        persistenceService.loadAttendanceIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView(viewName);
         page.addObject("rosterForm", rosterForm);
