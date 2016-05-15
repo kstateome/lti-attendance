@@ -42,11 +42,12 @@
         </ul>
     </div>
 </nav>
-    <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST" action="${context}/courseConfiguration/save">
+    <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST" action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:if test="${not empty error}">
-    <div class="alert alert-info">
-        <p>${error}</p>
-    </div>
+      <div class="alert alert-info">
+          <p>${error}</p>
+      </div>
+      <br/><br/>
     </c:if>
 
     <div class="form-group">
@@ -54,17 +55,13 @@
             <label for="courseWorth">Total Class Minutes</label>
             <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                         placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes">
-                Invalid/empty input
-            </form:errors>
+            <form:errors cssClass="error" path="totalClassMinutes"/>
         </div>
         <div class="col-md-3">
             <label for="defaultMinutesPerSession">Normal Class Length</label>
             <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
                         cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession">
-                Invalid/empty input
-            </form:errors>
+            <form:errors cssClass="error" path="defaultMinutesPerSession"/>
         </div>
         <div class="col-md-2">
             <label style="color:white;" for="saveCourseConfiguration">Save Class Minutes</label>

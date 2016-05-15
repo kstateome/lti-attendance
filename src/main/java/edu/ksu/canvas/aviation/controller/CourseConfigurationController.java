@@ -46,19 +46,22 @@ public class CourseConfigurationController extends AviationBaseController {
         return page;
     }
 
-    @RequestMapping(value = "/save", params ="saveCourseConfiguration", method = RequestMethod.POST)
-    public ModelAndView saveTotalClassMinutes(@ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
-        ModelAndView page = new ModelAndView("forward:/courseConfiguration");
+    @RequestMapping(value = "/{sectionId}/save", params ="saveCourseConfiguration", method = RequestMethod.POST)
+    public ModelAndView saveTotalClassMinutes(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         if (bindingResult.hasErrors()){
-            LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
-            page.addObject("error", "Invalid input for minutes, please enter valid minutes");
-        }
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
+            ModelAndView page = new ModelAndView("/courseConfiguration");
+            page.addObject("error", "Please correct user input and try saving again.");
+            page.addObject("selectedSectionId", sectionId);
+            return page;
+        } else {
+            LtiSession ltiSession = ltiLaunch.getLtiSession();
+            LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-        persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
-        return page;
+            persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
+            return new ModelAndView("forward:/courseConfiguration");
+        }
+
     }
     
 }
