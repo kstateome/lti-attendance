@@ -80,6 +80,23 @@ public class AviationReportingController extends LtiLaunchController {
     
     @Autowired
     private AviationSectionRepository sectionRepository;
+
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+    
+    @Override
+    protected String getInitialViewPath() {
+        return "/initialize";
+    }
+
+    @Override
+    protected String getApplicationName() {
+        return "AviationReporting";
+    }
     
 
     @RequestMapping("/")
@@ -240,12 +257,6 @@ public class AviationReportingController extends LtiLaunchController {
         persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         return page;
     }
-    
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-    }
 
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
@@ -314,17 +325,6 @@ public class AviationReportingController extends LtiLaunchController {
         page.addObject("selectedSection", sectionInfo);
         page.addObject("rosterForm", rosterForm);
         return page;
-    }
-
-
-    @Override
-    protected String getInitialViewPath() {
-        return "/initialize";
-    }
-
-    @Override
-    protected String getApplicationName() {
-        return "AviationReporting";
     }
 
     private void assertPrivilegedUser(LtiSession ltiSession) throws NoLtiSessionException, AccessDeniedException {

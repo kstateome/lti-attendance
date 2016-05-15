@@ -60,6 +60,10 @@ public class PersistenceService {
     @Autowired
     private AviationSectionRepository sectionRepository;
     
+    
+    public void deleteMakeup(String makeupTrackerId) {
+        makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
+    }
 
     public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
 
@@ -93,10 +97,6 @@ public class PersistenceService {
             }
 
         }
-    }
-    
-    public void deleteMakeup(String makeupTrackerId) {
-        makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
     }
 
     /**
