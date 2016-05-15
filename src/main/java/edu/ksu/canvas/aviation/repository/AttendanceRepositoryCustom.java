@@ -11,4 +11,6 @@ public interface AttendanceRepositoryCustom {
  
     List<Attendance> getAttendanceByCourseByDayOfClass(Long courseId, Date dateOfClass);
     
+    void saveInBatches(List<Attendance> attendances);
+    
 }

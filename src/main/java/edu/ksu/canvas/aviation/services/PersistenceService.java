@@ -99,9 +99,14 @@ public class PersistenceService {
         makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
     }
 
+    /**
+     * This method is tuned to save as fast as possible. Data is loaded and saved in batches.
+     */
     public void saveClassAttendance(RosterForm rosterForm) {
         long begin = System.currentTimeMillis();
        
+        List<Attendance> saveToDb = new ArrayList<>();
+        
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
             Set<AviationStudent> aviationStudents = null;
@@ -109,7 +114,10 @@ public class PersistenceService {
             for(AttendanceInfo attendanceInfo : sectionInfo.getAttendances()) {
                 if(attendanceInfo.getAttendanceId() == null) {
                     if(aviationStudents == null) {
+                        long beginLoad = System.currentTimeMillis();
                         aviationStudents = studentRepository.findBySectionId(sectionInfo.getSectionId());
+                        long endLoad = System.currentTimeMillis();
+                        LOG.debug("loaded "+aviationStudents.size()+" students by section in "+(endLoad-beginLoad)+" millis..");
                     }
                     
                     Attendance attendance = new Attendance();
@@ -118,23 +126,32 @@ public class PersistenceService {
                     attendance.setDateOfClass(attendanceInfo.getDateOfClass());
                     attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
                     attendance.setStatus(attendanceInfo.getStatus());
-                    
-                    attendanceRepository.save(attendance);
+
+                    saveToDb.add(attendance);
                 } else {
                     if(attendancesInDBForCourse == null) {
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionInfo.getCanvasCourseId(), rosterForm.getCurrentDate());         
+                        long beginLoad = System.currentTimeMillis();
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionInfo.getCanvasCourseId(), rosterForm.getCurrentDate());
+                        long endLoad = System.currentTimeMillis();
+                        LOG.debug("loaded "+attendancesInDBForCourse.size()+" attendance entries for course in "+(endLoad-beginLoad)+" millis..");
                     }
                     
                     Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceInfo.getAttendanceId())).findFirst().get();
                     attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
                     attendance.setStatus(attendanceInfo.getStatus());
                     
-                    attendanceRepository.save(attendance);
+                    saveToDb.add(attendance);
                 }
             }
         }
+        
+        long beginSave = System.currentTimeMillis();
+        attendanceRepository.saveInBatches(saveToDb);
+        long endSave = System.currentTimeMillis();
+        
         long end = System.currentTimeMillis();
-        LOG.info("Saving attendance took "+(end-begin)+" millis");
+        LOG.debug("saving in batches took "+(endSave-beginSave)+" millis");
+        LOG.info("Saving attendances took "+(end-begin)+" millis");
     }
     
     public AviationCourse loadOrCreateCourse(long canvasCourseId) {

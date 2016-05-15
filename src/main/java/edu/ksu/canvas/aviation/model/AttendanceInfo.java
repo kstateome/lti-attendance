@@ -96,5 +96,14 @@ public class AttendanceInfo {
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
     }
+
+    
+    @Override
+    public String toString() {
+        return "AttendanceInfo [attendanceId=" + attendanceId + ", aviationStudentId=" + aviationStudentId
+                + ", aviationStudentName=" + aviationStudentName + ", aviationStudentSisUserId="
+                + aviationStudentSisUserId + ", status=" + status + ", minutesMissed=" + minutesMissed
+                + ", dateOfClass=" + dateOfClass + "]";
+    }
       
 }
