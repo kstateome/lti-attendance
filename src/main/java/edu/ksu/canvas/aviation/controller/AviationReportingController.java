@@ -8,7 +8,6 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
@@ -238,13 +237,12 @@ public class AviationReportingController extends LtiLaunchController {
 
     
     @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
-    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-        return showRoster(rosterForm.getCurrentDate());
+    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+        return showRoster(rosterForm.getCurrentDate(), sectionId);
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
-        //TODO: Figure out way to show roster form appropriately (maybe just call ShowRoster()..)
         ModelAndView page = new ModelAndView("forward:classSetup");
         if (bindingResult.hasErrors()){
             LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
@@ -319,13 +317,6 @@ public class AviationReportingController extends LtiLaunchController {
         return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), true);
     }
 
-    @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
-    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
-        ModelAndView page = new ModelAndView("showRoster");
-        page.addObject("selectedSection", sectionInfo);
-        page.addObject("rosterForm", rosterForm);
-        return page;
-    }
 
     private void assertPrivilegedUser(LtiSession ltiSession) throws NoLtiSessionException, AccessDeniedException {
         if (ltiSession.getEid() == null || ltiSession.getEid().isEmpty()) {
