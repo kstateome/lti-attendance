@@ -45,7 +45,7 @@
   </table>
   
   <br/>
-  <form:form id="makeupTrackerForm" modelAttribute="makeupTrackerForm" method="POST" action="${context}/save">
+  <form:form id="makeupTrackerForm" modelAttribute="makeupTrackerForm" method="POST" action="${context}/studentMakeup/save">
     <c:if test="${not empty error}">
     <div class="alert alert-info">
         <p>${error}</p>

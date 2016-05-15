@@ -58,7 +58,7 @@
     </div>
 </nav>
 <td class="container-fluid">
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
+    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/showRoster/save">
 
     <c:if test="${not empty error}">
     <div class="alert alert-info">
