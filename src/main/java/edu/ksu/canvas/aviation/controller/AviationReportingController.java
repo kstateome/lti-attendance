@@ -134,7 +134,7 @@ public class AviationReportingController extends LtiLaunchController {
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(aviationSections));
         persistenceService.loadCourseConfigurationIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
-        persistenceService.populateAttendanceForDayIntoRoster(rosterForm, date);
+        persistenceService.loadAttendanceForDateIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView(viewName);
         page.addObject("rosterForm", rosterForm);
@@ -251,9 +251,6 @@ public class AviationReportingController extends LtiLaunchController {
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
-        rosterForm.getSectionInfoList().stream().forEachOrdered(section -> {
-            LOG.debug("Max attendances in section: " + section.getStudents().stream().map(student -> student.getAttendances().size()).max(Integer::max).get());
-        });
 
         persistenceService.saveClassAttendance(rosterForm);
         return showRoster(rosterForm.getCurrentDate(), sectionId);

@@ -12,6 +12,7 @@ public class SectionInfo {
     private String sectionName;
     private Long canvasCourseId;
     private List<AviationStudent> students;
+    private List<AttendanceInfo> attendances;
 
     public SectionInfo(Section section){
         sectionId = section.getId();
@@ -54,6 +55,15 @@ public class SectionInfo {
     public void setStudents(List<AviationStudent> students) {
         this.students = students;
     }
+
+    public List<AttendanceInfo> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<AttendanceInfo> attendances) {
+        this.attendances = attendances;
+    }
+
 
     @Override
     public String toString() {

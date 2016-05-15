@@ -8,6 +8,7 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.model.AttendanceInfo;
 import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
@@ -20,7 +21,6 @@ import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -100,28 +100,41 @@ public class PersistenceService {
     }
 
     public void saveClassAttendance(RosterForm rosterForm) {
-        for (SectionInfo sectionInfo : rosterForm.getSectionInfoList()){
-            LOG.debug("Saving section id: " + sectionInfo.getSectionId());
-            List<Attendance> attendancesToSave = new ArrayList<>();
-            for(AviationStudent aviationStudent : sectionInfo.getStudents()) {
-                //Save students
-                AviationStudent persistedStudent = aviationStudentRepository.findBySisUserIdAndSectionId(aviationStudent.getSisUserId(), sectionInfo.getSectionId());
-                if(persistedStudent == null) {
-                    LOG.debug("Saving student: " + aviationStudent);
-                    persistedStudent = aviationStudentRepository.save(aviationStudent);
-                } else {
-                    //Update the attendances
-                    persistedStudent.setAttendances(aviationStudent.getAttendances());
-                }
-                for (Attendance attendance : persistedStudent.getAttendances()) {
-                    attendance.setAviationStudent(persistedStudent);
-                    if (DateUtils.isSameDay(attendance.getDateOfClass(), rosterForm.getCurrentDate())){
-                        attendancesToSave.add(attendance);
+        long begin = System.currentTimeMillis();
+       
+        List<Attendance> attendancesInDBForCourse = null;
+        for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
+            Set<AviationStudent> aviationStudents = null;
+           
+            for(AttendanceInfo attendanceInfo : sectionInfo.getAttendances()) {
+                if(attendanceInfo.getAttendanceId() == null) {
+                    if(aviationStudents == null) {
+                        aviationStudents = studentRepository.findBySectionId(sectionInfo.getSectionId());
                     }
+                    
+                    Attendance attendance = new Attendance();
+                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceInfo.getAviationStudentId())).findFirst().get();
+                    attendance.setAviationStudent(aviationStudent);
+                    attendance.setDateOfClass(attendanceInfo.getDateOfClass());
+                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
+                    attendance.setStatus(attendanceInfo.getStatus());
+                    
+                    attendanceRepository.save(attendance);
+                } else {
+                    if(attendancesInDBForCourse == null) {
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionInfo.getCanvasCourseId(), rosterForm.getCurrentDate());         
+                    }
+                    
+                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceInfo.getAttendanceId())).findFirst().get();
+                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
+                    attendance.setStatus(attendanceInfo.getStatus());
+                    
+                    attendanceRepository.save(attendance);
                 }
             }
-            attendanceRepository.save(attendancesToSave);
         }
+        long end = System.currentTimeMillis();
+        LOG.info("Saving attendance took "+(end-begin)+" millis");
     }
     
     public AviationCourse loadOrCreateCourse(long canvasCourseId) {
@@ -191,28 +204,43 @@ public class PersistenceService {
         rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
         rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
-    
 
-    /**
-     * DO NOT USE ON POST BACK You will get a lazy load exception
-     * @param date some date we want to populate
-     * @return the same roster form you gave me but populated with attendance for this date
-     */
-    public void populateAttendanceForDayIntoRoster(RosterForm rosterForm, Date date) {
-        rosterForm.getSectionInfoList().forEach(section -> {
-            section.getStudents().forEach(student -> {
-                if (student.getAttendances() == null) {
-                    LOG.debug("Initializing new attendance list for student: " + student);
-                    student.setAttendances(new ArrayList<>());
+    public void loadAttendanceForDateIntoRoster(RosterForm rosterForm, Date date) {
+        long begin = System.currentTimeMillis();
+        
+        Long canvaseCourseId = rosterForm.getSectionInfoList().get(0).getCanvasCourseId();
+        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseByDayOfClass(canvaseCourseId, date);
+        LOG.debug("attendances found for a given couse and a given day of class: "+attendancesInDb.size());
+        
+        
+        for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
+            List<AttendanceInfo> sectionAttendances = new ArrayList<>();
+            
+            for(AviationStudent student: sectionInfo.getStudents()) {
+                Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
+                if(foundAttendance == null) {
+                    sectionAttendances.add(new AttendanceInfo(student, Status.PRESENT, date));
+                } else {
+                    sectionAttendances.add(new AttendanceInfo(foundAttendance));
                 }
-                if (student.getAttendances().stream()
-                        .noneMatch(attendance -> DateUtils.isSameDay(attendance.getDateOfClass(), date))) {
-                    //create a new default attendance since we don't have one for this day
-                    LOG.debug("Creating default attendance for student "+ student);
-                    Attendance attendance = new Attendance(student,Status.PRESENT, date);
-                    student.getAttendances().add(attendance);
-                }
-            });
-        });
+            }
+            
+            sectionInfo.setAttendances(sectionAttendances);
+        }
+        
+        long end = System.currentTimeMillis();
+        LOG.info("loadAttendanceForDateIntoRoster took: "+(end - begin)+" millis");
     }
+
+    private Attendance findAttendanceFrom(List<Attendance> attendances, AviationStudent student) {
+        List<Attendance> matchingAttendances = 
+                attendances.stream()
+                           .filter(attendance -> attendance.getAviationStudent().getStudentId().equals(student.getStudentId()))
+                           .collect(Collectors.toList());
+        
+        // by definition of the data there should only be one...
+        return matchingAttendances.isEmpty() ? null : matchingAttendances.get(0);
+        
+    }
+    
 }
