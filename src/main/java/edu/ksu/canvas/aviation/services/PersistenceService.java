@@ -10,7 +10,7 @@ import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.model.AttendanceModel;
-import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.model.SectionModel;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
@@ -109,14 +109,14 @@ public class PersistenceService {
         int defaultMinutesMissedPerSession = rosterForm.getDefaultMinutesPerSession();
         
         List<Attendance> attendancesInDBForCourse = null;
-        for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
+        for (SectionModel sectionModel: rosterForm.getSectionModels()) {
             List<AviationStudent> aviationStudents = null;
            
-            for(AttendanceModel attendanceModel : sectionInfo.getAttendances()) {
+            for(AttendanceModel attendanceModel : sectionModel.getAttendances()) {
                 if(attendanceModel.getAttendanceId() == null) {
                     if(aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
+                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded "+aviationStudents.size()+" students by section in "+(endLoad-beginLoad)+" millis..");
                     }
@@ -133,7 +133,7 @@ public class PersistenceService {
                 } else {
                     if(attendancesInDBForCourse == null) {
                         long beginLoad = System.currentTimeMillis();
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionInfo.getCanvasCourseId(), rosterForm.getCurrentDate());
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded "+attendancesInDBForCourse.size()+" attendance entries for course in "+(endLoad-beginLoad)+" millis..");
                     }
@@ -236,14 +236,14 @@ public class PersistenceService {
     public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
         
-        Long canvaseCourseId = rosterForm.getSectionInfoList().get(0).getCanvasCourseId();
+        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
         List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseByDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: "+attendancesInDb.size());
         
         
-        for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
+        for(SectionModel sectionModel: rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
-            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
+            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
             
             for(AviationStudent student: aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
@@ -254,7 +254,7 @@ public class PersistenceService {
                 }
             }
             
-            sectionInfo.setAttendances(sectionAttendances);
+            sectionModel.setAttendances(sectionAttendances);
         }
         
         long end = System.currentTimeMillis();

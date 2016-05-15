@@ -1,7 +1,7 @@
 package edu.ksu.canvas.aviation.factory;
 
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.model.SectionModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,22 +9,22 @@ import java.util.List;
 
 
 @Component
-public class SectionInfoFactory {
+public class SectionModelFactory {
     
     
-    public List<SectionInfo> getSectionInfos(List<AviationSection> sections) {
-        List<SectionInfo> ret = new ArrayList<>();
+    public List<SectionModel> createSectionModels(List<AviationSection> sections) {
+        List<SectionModel> ret = new ArrayList<>();
         
         for(AviationSection section : sections) {
-            ret.add(getSectionInfo(section));
+            ret.add(createSectionModel(section));
         }
         
         return ret;
     }
 
     
-    public SectionInfo getSectionInfo(AviationSection aviationSection) {
-        SectionInfo ret = new SectionInfo();
+    private SectionModel createSectionModel(AviationSection aviationSection) {
+        SectionModel ret = new SectionModel();
         ret.setSectionId(aviationSection.getCanvasSectionId());
         ret.setCanvasCourseId(aviationSection.getCanvasCourseId());
         ret.setSectionName(aviationSection.getName());

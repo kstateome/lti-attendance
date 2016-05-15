@@ -1,6 +1,6 @@
 package edu.ksu.canvas.aviation.form;
 
-import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.model.SectionModel;
 
 import java.util.Date;
 import java.util.List;
@@ -8,17 +8,17 @@ import java.util.List;
 
 public class RosterForm extends CourseConfigurationForm {
 
-    private List<SectionInfo> sectionInfoList;
+    private List<SectionModel> sectionModels;
     private long sectionId;
     private Date currentDate;
 
     
-    public List<SectionInfo> getSectionInfoList() {
-        return sectionInfoList;
+    public List<SectionModel> getSectionModels() {
+        return sectionModels;
     }
 
-    public void setSectionInfoList(List<SectionInfo> sectionInfoList) {
-        this.sectionInfoList = sectionInfoList;
+    public void setSectionModels(List<SectionModel> sectionModels) {
+        this.sectionModels = sectionModels;
     }
 
     public long getSectionId() {

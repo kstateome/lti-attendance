@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
+import edu.ksu.canvas.aviation.factory.SectionModelFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
@@ -37,7 +37,7 @@ public class RosterController extends AviationBaseController {
     private static final Logger LOG = Logger.getLogger(RosterController.class);
     
     @Autowired
-    private SectionInfoFactory sectionInfoFactory;
+    private SectionModelFactory sectionModelFactory;
 
     
     @InitBinder
@@ -63,7 +63,7 @@ public class RosterController extends AviationBaseController {
         }
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
-        rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(sectionState.sections));
+        rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sectionState.sections));
         persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
         persistenceService.loadAttendanceIntoRoster(rosterForm, date);
         
