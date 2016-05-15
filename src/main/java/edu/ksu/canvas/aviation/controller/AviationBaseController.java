@@ -50,9 +50,9 @@ import java.util.*;
 @Controller
 @Scope("session")
 @SessionAttributes("rosterForm")
-public class AviationReportingController extends LtiLaunchController {
+public class AviationBaseController extends LtiLaunchController {
     
-    private static final Logger LOG = Logger.getLogger(AviationReportingController.class);
+    private static final Logger LOG = Logger.getLogger(AviationBaseController.class);
 
     @Autowired
     protected LtiLaunch ltiLaunch;
