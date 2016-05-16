@@ -85,7 +85,7 @@
       const DANGER = 10;
       $(".sectionTable > tbody > tr").each(function () {
         const percentMissedCell = $(this).find(".percentMissed");
-        const percentMissed = percentMissedCell.html();
+        const percentMissed = percentMissedCell.text();
         if(percentMissed >= DANGER){
           percentMissedCell.addClass('bg-danger');
           return;
