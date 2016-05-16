@@ -59,8 +59,8 @@
 			<thead>
 				<tr>
 					<th>Class Date</th>
-					<th>Date Made-up</th>
-					<th>Minutes Made-up</th>
+					<th>Date Made Up</th>
+					<th>Minutes Made Up</th>
 					<th>Project Description</th>
 					<th><input class="hovering-purple-button" type="submit" name="addMakeup" value="Add Makeup" /></th>
 				</tr>
