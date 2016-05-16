@@ -73,9 +73,6 @@
             </fieldset>
         </div>
         <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="submit"/>
-        <div class="row">
-
-        </div>
     </div>
     </form:form>
 </body>
