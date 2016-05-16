@@ -354,9 +354,6 @@ public class AviationReportingController extends LtiLaunchController {
         return page;
     }
 
-
-
-
     @Override
     protected String getInitialViewPath() {
         return "/showRoster";
