@@ -10,7 +10,7 @@ public class CourseConfigurationValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return RosterForm.class.isAssignableFrom(clazz);
+        return CourseConfigurationForm.class.isAssignableFrom(clazz);
     }
 
     @Override
