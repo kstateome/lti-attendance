@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-
+//FIXME: This is cut and paste from the canvas-lti project
 public class RoleChecker {
     
     private static final Logger LOG = Logger.getLogger(RoleChecker.class);
