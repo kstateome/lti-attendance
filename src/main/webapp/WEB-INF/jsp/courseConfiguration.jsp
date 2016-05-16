@@ -49,6 +49,14 @@
       </div>
       <br/><br/>
     </c:if>
+
+    <c:if test="${updateSuccessful}">
+      <div class="alert alert-success">
+          <p>Course Configuration Successfully Updated.</p>
+      </div>
+      <br/><br/>
+    </c:if>
+
     <h3>Configuration</h3>
     <br/>
     <div class="container">
@@ -58,13 +66,13 @@
                     <label for="courseWorth" class="center-block">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                                 placeholder="Total Class Minutes" size="6"/>
-                    <form:errors cssClass="error" path="totalClassMinutes"/>
+                    <form:errors cssClass="error center-block" path="totalClassMinutes"/>
                 </div>
                 <div class="col-md-3">
                     <label for="defaultMinutesPerSession" class="center-block">Normal Class Length</label>
                     <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
                                 cssClass="form-control" placeholder="Normal Class Length" size="5"/>
-                    <form:errors cssClass="error" path="defaultMinutesPerSession"/>
+                    <form:errors cssClass="error center-block" path="defaultMinutesPerSession"/>
                 </div>
             </fieldset>
         </div>
