@@ -12,7 +12,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.factory.SectionModelFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
+import edu.ksu.canvas.aviation.form.RosterFormValidator;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -42,6 +42,9 @@ public class RosterController extends AviationBaseController {
     
     @Autowired
     private SectionModelFactory sectionModelFactory;
+    
+    @Autowired
+    private RosterFormValidator validator;
 
     
     @InitBinder
@@ -86,9 +89,13 @@ public class RosterController extends AviationBaseController {
     
     @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+        validator.validate(rosterForm, bindingResult);
+        
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/roster");
-            page.addObject("error", "Please correct user input and try saving again.");
+            page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
+            SectionState sectionState = getSectionState(sectionId);
+            page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {

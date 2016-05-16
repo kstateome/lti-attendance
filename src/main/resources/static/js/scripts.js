@@ -7,4 +7,5 @@ function toggleSection(val, contextPath) {
     $("#attendanceSummaryLink").attr("href", contextPath + "/attendanceSummary/" + val);
     $("#rosterLink").attr("href", contextPath + "/roster/" + val);
     $("#classSetupLink").attr("href", contextPath + "/courseConfiguration/" + val);
+    $("#sectionSelect").attr("action", contextPath + "/roster/" + val + "/save");
 }
