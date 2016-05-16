@@ -36,17 +36,18 @@
             <a class="navbar-brand" href="#">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
-            <li><a id="rosterLink" href="${context}/showRoster/${selectedSectionId}">Class Roster</a></li>
+            <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
         </ul>
     </div>
 </nav>
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
+    <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST" action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:if test="${not empty error}">
-    <div class="alert alert-info">
-        <p>${error}</p>
-    </div>
+      <div class="alert alert-info">
+          <p>${error}</p>
+      </div>
+      <br/><br/>
     </c:if>
 
     <div class="form-group">
@@ -54,21 +55,17 @@
             <label for="courseWorth">Total Class Minutes</label>
             <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                         placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes">
-                Invalid/empty input
-            </form:errors>
+            <form:errors cssClass="error" path="totalClassMinutes"/>
         </div>
         <div class="col-md-3">
             <label for="defaultMinutesPerSession">Normal Class Length</label>
             <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
                         cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession">
-                Invalid/empty input
-            </form:errors>
+            <form:errors cssClass="error" path="defaultMinutesPerSession"/>
         </div>
         <div class="col-md-2">
-            <label style="color:white;" for="saveClassMinutes">Save Attendance</label>
-            <input value="Save Class Minutes" id="saveClassMinutes" name="saveClassMinutes" class="hovering-purple-button pull-right" type="submit"/>
+            <label style="color:white;" for="saveCourseConfiguration">Save Class Minutes</label>
+            <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-right" type="submit"/>
         </div>
     </div>
     </form:form>

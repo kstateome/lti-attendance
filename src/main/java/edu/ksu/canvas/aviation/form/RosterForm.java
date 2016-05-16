@@ -1,26 +1,24 @@
 package edu.ksu.canvas.aviation.form;
 
-import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.model.SectionModel;
 
 import java.util.Date;
 import java.util.List;
 
 
-public class RosterForm {
+public class RosterForm extends CourseConfigurationForm {
 
-    private List<SectionInfo> sectionInfoList;
+    private List<SectionModel> sectionModels;
     private long sectionId;
-    private int totalClassMinutes;
-    private int defaultMinutesPerSession;
     private Date currentDate;
 
-    
-    public List<SectionInfo> getSectionInfoList() {
-        return sectionInfoList;
+
+    public List<SectionModel> getSectionModels() {
+        return sectionModels;
     }
 
-    public void setSectionInfoList(List<SectionInfo> sectionInfoList) {
-        this.sectionInfoList = sectionInfoList;
+    public void setSectionModels(List<SectionModel> sectionModels) {
+        this.sectionModels = sectionModels;
     }
 
     public long getSectionId() {
@@ -31,22 +29,6 @@ public class RosterForm {
         this.sectionId = sectionId;
     }
 
-    public int getTotalClassMinutes() {
-        return totalClassMinutes;
-    }
-
-    public void setTotalClassMinutes(int totalClassMinutes) {
-        this.totalClassMinutes = totalClassMinutes;
-    }
-
-    public int getDefaultMinutesPerSession() {
-        return defaultMinutesPerSession;
-    }
-
-    public void setDefaultMinutesPerSession(int defaultMinutesPerSession) {
-        this.defaultMinutesPerSession = defaultMinutesPerSession;
-    }
-
     public Date getCurrentDate() {
         return currentDate;
     }
@@ -54,4 +36,5 @@ public class RosterForm {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
+    
 }
