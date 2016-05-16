@@ -51,7 +51,7 @@
             <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
+            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
