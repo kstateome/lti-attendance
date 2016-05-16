@@ -77,7 +77,9 @@
         </div>
         
         <br/>
-        
+
+        <div class="alert alert-warning collapse" id="futureDateWarning" role="alert">You have selected a date in the future.</div>
+
         <div class="row">
             <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
@@ -183,6 +185,16 @@
 <script src="${context}/bootstrap/js/bootstrap-datepicker.min.js"></script>
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Used to show a warning if the selected date is in the future -->
+<script type="text/javascript">
+    $(function() {
+        if (moment($("#currentDate").val()).isAfter(moment())) {
+            $("#futureDateWarning").show();
+        }
+    });
+
+</script>
 
 </body>
 </html>
