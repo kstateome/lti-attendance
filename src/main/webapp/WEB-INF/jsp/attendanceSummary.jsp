@@ -79,6 +79,23 @@
     </div>
 
   </div>
-
+  <script type="text/javascript">
+    $(function () {
+      const WARNING = 8;
+      const DANGER = 10;
+      $(".sectionTable > tbody > tr").each(function () {
+        const percentMissedCell = $(this).find(".percentMissed");
+        const percentMissed = percentMissedCell.text();
+        if(percentMissed >= DANGER){
+          percentMissedCell.addClass('bg-danger');
+          return;
+        }
+        if(percentMissed >= WARNING){
+          percentMissedCell.addClass('bg-warning');
+          return;
+        }
+      });
+    })
+  </script>
 </body>
 </html>
