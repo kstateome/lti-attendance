@@ -71,7 +71,7 @@
               <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
               <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
-              <td>${attendancesummaryEntry.percentCourseMissed}</td>
+              <td class="percentMissed">${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
         </table>
