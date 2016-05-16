@@ -64,7 +64,7 @@ public class CourseConfigurationController extends AviationBaseController {
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
             persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
-            return new ModelAndView("forward:/courseConfiguration");
+            return new ModelAndView("forward:/courseConfiguration/" + sectionId);
         }
 
     }

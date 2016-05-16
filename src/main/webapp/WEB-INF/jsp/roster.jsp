@@ -77,7 +77,9 @@
         </div>
         
         <br/>
-        
+
+        <div class="alert alert-warning collapse" id="futureDateWarning" role="alert">You have selected a date in the future.</div>
+
         <div class="row">
             <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
@@ -184,14 +186,20 @@
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 
+
 <script type="text/javascript">
     $(function() {
         $(".attendanceStatus").on("change", function(){
-             if ($(this).val() == "<%=Status.TARDY%>") {
-                 console.log($(this).attr("id").split("attendanceStatus-")[1]);
-                 $("#minutesMissed" + $(this).attr("id").split("attendanceStatus-")[1]).focus();
-             }
+            if ($(this).val() == "<%=Status.TARDY%>") {
+                console.log($(this).attr("id").split("attendanceStatus-")[1]);
+                $("#minutesMissed" + $(this).attr("id").split("attendanceStatus-")[1]).focus();
+            }
         });
+
+        <!-- Used to show a warning if the selected date is in the future -->
+        if (moment($("#currentDate").val()).isAfter(moment())) {
+            $("#futureDateWarning").show();
+        }
     });
 </script>
 
