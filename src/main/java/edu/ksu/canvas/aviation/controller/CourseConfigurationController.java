@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -53,6 +54,12 @@ public class CourseConfigurationController extends AviationBaseController {
     public ModelAndView saveTotalClassMinutes(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         if (bindingResult.hasErrors()){
             ModelAndView page = new ModelAndView("/courseConfiguration");
+            if(bindingResult.hasFieldErrors("valid")){
+                bindingResult.addError(
+                        new FieldError("courseConfigurationForm", "defaultMinutesPerSession", classSetupForm.getDefaultMinutesPerSession(),
+                                true, null, null, "Must not exceed total class minutes.")
+                );
+            }
             page.addObject("error", "Please correct user input and try saving again.");
             page.addObject("selectedSectionId", sectionId);
             return page;

@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.form;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -29,6 +30,11 @@ public class CourseConfigurationForm {
     
     public void setDefaultMinutesPerSession(int defaultMinutesPerSession) {
         this.defaultMinutesPerSession = defaultMinutesPerSession;
+    }
+
+    @AssertTrue
+    private boolean isValid(){
+        return this.totalClassMinutes >= defaultMinutesPerSession;
     }
     
 }
