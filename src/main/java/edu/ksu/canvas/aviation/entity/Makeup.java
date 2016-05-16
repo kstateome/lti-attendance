@@ -10,17 +10,17 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "aviation_makeup_tracker")
+@Table(name = "aviation_makeup")
 @Check(constraints="minutes_madeup >= 0")
-public class MakeupTracker implements Serializable {
+public class Makeup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "makeup_tracker_id")
-    private Long makeupTrackerId;
+    @Column(name = "makeup_id")
+    private Long makeupId;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_class")
@@ -42,12 +42,12 @@ public class MakeupTracker implements Serializable {
 
     
     
-    public Long getMakeupTrackerId() {
-        return makeupTrackerId;
+    public Long getMakeupId() {
+        return makeupId;
     }
 
-    public void setMakeupTrackerId(Long makeupTrackerId) {
-        this.makeupTrackerId = makeupTrackerId;
+    public void setId(Long makeupId) {
+        this.makeupId = makeupId;
     }
 
     public Date getDateOfClass() {
@@ -95,7 +95,7 @@ public class MakeupTracker implements Serializable {
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
-        return "MakeupTracker [makeupTrackerId=" + makeupTrackerId + ", dateOfClass=" 
+        return "Makeup [makeupId=" + makeupId + ", dateOfClass=" 
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
                 + (dateMadeUp == null ? null : sdf.format(dateMadeUp)) 
                 + ", minutesMadeUp=" + minutesMadeUp + ", aviationStudent="

@@ -4,17 +4,18 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.entity.MakeupTracker;
+import edu.ksu.canvas.aviation.entity.Makeup;
 import edu.ksu.canvas.aviation.enums.Status;
-import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
+import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.model.AttendanceInfo;
-import edu.ksu.canvas.aviation.model.SectionInfo;
+import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
+import edu.ksu.canvas.aviation.model.AttendanceModel;
+import edu.ksu.canvas.aviation.model.SectionModel;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
+import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -51,7 +52,7 @@ public class PersistenceService {
     private AttendanceRepository attendanceRepository;
     
     @Autowired
-    private MakeupTrackerRepository makeupTrackerRepository;
+    private MakeupRepository makeupRepository;
     
     @Autowired
     private AviationStudentRepository studentRepository;
@@ -60,39 +61,39 @@ public class PersistenceService {
     private AviationSectionRepository sectionRepository;
     
     
-    public void deleteMakeup(String makeupTrackerId) {
-        makeupTrackerRepository.delete(Long.valueOf(makeupTrackerId));
+    public void deleteMakeup(String makeupId) {
+        makeupRepository.delete(Long.valueOf(makeupId));
     }
 
-    public void saveCourseMinutes(RosterForm rosterForm, String courseId) {
+    public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
 
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
         if(aviationCourse == null){
-            aviationCourse = new AviationCourse(canvasCourseId, rosterForm.getTotalClassMinutes(), rosterForm.getDefaultMinutesPerSession());
+            aviationCourse = new AviationCourse(canvasCourseId, classSetupForm.getTotalClassMinutes(), classSetupForm.getDefaultMinutesPerSession());
         }
         else{
-            aviationCourse.setDefaultMinutesPerSession(rosterForm.getDefaultMinutesPerSession());
-            aviationCourse.setTotalMinutes(rosterForm.getTotalClassMinutes());
+            aviationCourse.setDefaultMinutesPerSession(classSetupForm.getDefaultMinutesPerSession());
+            aviationCourse.setTotalMinutes(classSetupForm.getTotalClassMinutes());
         }
 
         aviationCourseRepository.save(aviationCourse);
     }
     
-    public void saveMakeups(MakeupTrackerForm form) {
+    public void saveMakeups(MakeupForm form) {
         
-        for(MakeupTracker makeup: form.getEntries()) {
-            if(makeup.getMakeupTrackerId() == null) {
+        for(Makeup makeup: form.getEntries()) {
+            if(makeup.getMakeupId() == null) {
                 AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
                 makeup.setAviationStudent(student);
-                makeupTrackerRepository.save(makeup);
+                makeupRepository.save(makeup);
             } else {
-                MakeupTracker tracker = makeupTrackerRepository.findByMakeupTrackerId(makeup.getMakeupTrackerId());
+                Makeup tracker = makeupRepository.findByMakeupId(makeup.getMakeupId());
                 tracker.setDateMadeUp(makeup.getDateMadeUp());
                 tracker.setDateOfClass(makeup.getDateOfClass());
                 tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
                 tracker.setProjectDescription(makeup.getProjectDescription());
-                makeupTrackerRepository.save(tracker);
+                makeupRepository.save(tracker);
             }
 
         }
@@ -108,38 +109,38 @@ public class PersistenceService {
         int defaultMinutesMissedPerSession = rosterForm.getDefaultMinutesPerSession();
         
         List<Attendance> attendancesInDBForCourse = null;
-        for (SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
+        for (SectionModel sectionModel: rosterForm.getSectionModels()) {
             List<AviationStudent> aviationStudents = null;
            
-            for(AttendanceInfo attendanceInfo : sectionInfo.getAttendances()) {
-                if(attendanceInfo.getAttendanceId() == null) {
+            for(AttendanceModel attendanceModel : sectionModel.getAttendances()) {
+                if(attendanceModel.getAttendanceId() == null) {
                     if(aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
+                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded "+aviationStudents.size()+" students by section in "+(endLoad-beginLoad)+" millis..");
                     }
                     
                     Attendance attendance = new Attendance();
-                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceInfo.getAviationStudentId())).findFirst().get();
+                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAviationStudentId())).findFirst().get();
                     attendance.setAviationStudent(aviationStudent);
-                    attendance.setDateOfClass(attendanceInfo.getDateOfClass());
-                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
-                    attendance.setStatus(attendanceInfo.getStatus());
+                    attendance.setDateOfClass(attendanceModel.getDateOfClass());
+                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                    attendance.setStatus(attendanceModel.getStatus());
                     adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
 
                     saveToDb.add(attendance);
                 } else {
                     if(attendancesInDBForCourse == null) {
                         long beginLoad = System.currentTimeMillis();
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionInfo.getCanvasCourseId(), rosterForm.getCurrentDate());
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded "+attendancesInDBForCourse.size()+" attendance entries for course in "+(endLoad-beginLoad)+" millis..");
                     }
                     
-                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceInfo.getAttendanceId())).findFirst().get();
-                    attendance.setMinutesMissed(attendanceInfo.getMinutesMissed());
-                    attendance.setStatus(attendanceInfo.getStatus());
+                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
+                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                    attendance.setStatus(attendanceModel.getStatus());
                     adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
                     
                     saveToDb.add(attendance);
@@ -225,35 +226,35 @@ public class PersistenceService {
         return ret;
     }
     
-    public void loadCourseInfoIntoRoster(RosterForm rosterForm, Long courseId) {
+    public void loadCourseInfoIntoForm(CourseConfigurationForm courseConfigurationForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
-        rosterForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        rosterForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        courseConfigurationForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        courseConfigurationForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
 
     public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
         
-        Long canvaseCourseId = rosterForm.getSectionInfoList().get(0).getCanvasCourseId();
+        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
         List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseByDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: "+attendancesInDb.size());
         
         
-        for(SectionInfo sectionInfo: rosterForm.getSectionInfoList()) {
-            List<AttendanceInfo> sectionAttendances = new ArrayList<>();
-            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionInfo.getSectionId());
+        for(SectionModel sectionModel: rosterForm.getSectionModels()) {
+            List<AttendanceModel> sectionAttendances = new ArrayList<>();
+            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
             
             for(AviationStudent student: aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if(foundAttendance == null) {
-                    sectionAttendances.add(new AttendanceInfo(student, Status.PRESENT, date));
+                    sectionAttendances.add(new AttendanceModel(student, Status.PRESENT, date));
                 } else {
-                    sectionAttendances.add(new AttendanceInfo(foundAttendance));
+                    sectionAttendances.add(new AttendanceModel(foundAttendance));
                 }
             }
             
-            sectionInfo.setAttendances(sectionAttendances);
+            sectionModel.setAttendances(sectionAttendances);
         }
         
         long end = System.currentTimeMillis();

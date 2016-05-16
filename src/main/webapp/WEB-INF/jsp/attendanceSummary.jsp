@@ -36,7 +36,7 @@
     <ul class="nav navbar-nav">
       <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
       <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
-      <li><a id="rosterLink" href="${context}/showRoster/${selectedSectionId}}">Class Roster</a></li>
+      <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
     </ul>
   </div>
 </nav>

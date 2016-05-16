@@ -51,14 +51,14 @@
             <a class="navbar-brand" href="#">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
     </div>
 </nav>
 <td class="container-fluid">
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/save">
+    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/roster/${selectedSectionId}/save">
 
     <c:if test="${not empty error}">
     <div class="alert alert-info">
@@ -117,9 +117,9 @@
     <div id="waitLoading" class="text-center" style="display: none">
         <img id="loading-image" src="${context}/img/ajax-loader.gif" alt="Please wait for content to finish loading"/>
     </div>
-    <c:forEach items="${rosterForm.sectionInfoList}" var="sectionInfo" varStatus="sectionLoop">
-        <c:if test="${not empty sectionInfo.attendances}">
-            <table class="table table-bordered sectionTable" style="display:none" id="${sectionInfo.sectionId}">
+    <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
+        <c:if test="${not empty sectionModel.attendances}">
+            <table class="table table-bordered sectionTable" style="display:none" id="${sectionModel.sectionId}">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -130,11 +130,11 @@
                 </thead>
                 
                 <tbody>
-                    <c:forEach items="${sectionInfo.attendances}" var="attendance" varStatus="attendanceLoop">
+                    <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                         <tr>
                             <td>
-                                <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}" path="sectionInfoList[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId" />
-                                <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}" path="sectionInfoList[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId" />
+                                <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId" />
+                                <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId" />
                                 ${attendance.aviationStudentName}
                             </td>
                             <td>
@@ -143,25 +143,27 @@
                             <td>
                                 <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy" var="attendanceDate"/>
                                 <label>
-                                    <form:select id="attendanceStatus-${attendance.aviationStudentId}" path="sectionInfoList[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
+                                    <form:select id="attendanceStatus-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                  cssClass="attendanceStatus form-control no-padding no-width">
                                         <form:option id="present-${attendance.aviationStudentId}" value="<%=Status.PRESENT%>">Present</form:option>
                                         <form:option id="tardy-${attendance.aviationStudentId}" value="<%=Status.TARDY%>">Tardy</form:option>
                                         <form:option id="absent-${attendance.aviationStudentId}" value="<%=Status.ABSENT%>">Absent</form:option>
                                     </form:select>
                                 </label>
+                                <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
                            </td>
                            <td>
                                 <c:choose>
                                     <c:when test="${attendance.status == 'TARDY'}">
-                                        <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionInfoList[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                        <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                     cssClass="form-control" size="5"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionInfoList[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                        <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                     cssClass="form-control" size="5" disabled="true"/>
                                     </c:otherwise>
                                 </c:choose>
+                                 <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
                            </td>
                         </tr>
                     </c:forEach>

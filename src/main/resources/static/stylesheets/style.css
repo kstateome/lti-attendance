@@ -17,3 +17,7 @@
 .sectionDropdown{
     padding-left: 15px;
 }
+
+.error {
+    color: red; font-weight: bold;
+}
