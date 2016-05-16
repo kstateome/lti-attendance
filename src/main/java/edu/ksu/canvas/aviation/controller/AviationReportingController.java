@@ -8,7 +8,6 @@ import edu.ksu.canvas.aviation.entity.MakeupTracker;
 import edu.ksu.canvas.aviation.factory.SectionInfoFactory;
 import edu.ksu.canvas.aviation.form.MakeupTrackerForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
-import edu.ksu.canvas.aviation.model.SectionInfo;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupTrackerRepository;
@@ -80,6 +79,23 @@ public class AviationReportingController extends LtiLaunchController {
     
     @Autowired
     private AviationSectionRepository sectionRepository;
+
+    
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+    }
+    
+    @Override
+    protected String getInitialViewPath() {
+        return "/initialize";
+    }
+
+    @Override
+    protected String getApplicationName() {
+        return "AviationReporting";
+    }
     
 
     @RequestMapping("/")
@@ -104,9 +120,9 @@ public class AviationReportingController extends LtiLaunchController {
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
         List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
 
-        persistenceService.loadOrCreateCourse(Long.valueOf(ltiSession.getCanvasCourseId()));
-        persistenceService.loadOrCreateSections(sections);
-        persistenceService.loadOrCreateStudents(sections, enrollmentsReader);
+        persistenceService.synchronizeCourseFromCanvasToDb(Long.valueOf(ltiSession.getCanvasCourseId()));
+        persistenceService.synchronizeSectionsFromCanvasToDb(sections);
+        persistenceService.synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
         
         return showRoster(new Date(), String.valueOf(sections.get(0).getId()));
     }
@@ -133,8 +149,8 @@ public class AviationReportingController extends LtiLaunchController {
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionInfoList(sectionInfoFactory.getSectionInfos(aviationSections));
-        persistenceService.loadCourseConfigurationIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
-        persistenceService.populateAttendanceForDayIntoRoster(rosterForm, date);
+        persistenceService.loadCourseInfoIntoRoster(rosterForm, aviationSection.getCanvasCourseId());
+        persistenceService.loadAttendanceIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView(viewName);
         page.addObject("rosterForm", rosterForm);
@@ -221,13 +237,12 @@ public class AviationReportingController extends LtiLaunchController {
 
     
     @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
-    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
-        return showRoster(rosterForm.getCurrentDate());
+    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+        return showRoster(rosterForm.getCurrentDate(), sectionId);
     }
 
     @RequestMapping(value = "/save", params ="saveClassMinutes", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
-        //TODO: Figure out way to show roster form appropriately (maybe just call ShowRoster()..)
         ModelAndView page = new ModelAndView("forward:classSetup");
         if (bindingResult.hasErrors()){
             LOG.info("There were errors submitting the minutes form"+ bindingResult.getAllErrors());
@@ -240,20 +255,11 @@ public class AviationReportingController extends LtiLaunchController {
         persistenceService.saveCourseMinutes(rosterForm, ltiSession.getCanvasCourseId());
         return page;
     }
-    
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
-    }
 
     @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
-        rosterForm.getSectionInfoList().stream().forEachOrdered(section -> {
-            LOG.debug("Max attendances in section: " + section.getStudents().stream().map(student -> student.getAttendances().size()).max(Integer::max).get());
-        });
 
         persistenceService.saveClassAttendance(rosterForm);
         return showRoster(rosterForm.getCurrentDate(), sectionId);
@@ -311,24 +317,6 @@ public class AviationReportingController extends LtiLaunchController {
         return studentMakeup(String.valueOf(makeupTrackerForm.getSectionId()), String.valueOf(makeupTrackerForm.getStudentId()), true);
     }
 
-    @RequestMapping(value = "/selectSectionDropdown", method = RequestMethod.POST)
-    public ModelAndView selectSection(@ModelAttribute("selectedSection") SectionInfo sectionInfo, @ModelAttribute RosterForm rosterForm) {
-        ModelAndView page = new ModelAndView("showRoster");
-        page.addObject("selectedSection", sectionInfo);
-        page.addObject("rosterForm", rosterForm);
-        return page;
-    }
-
-
-    @Override
-    protected String getInitialViewPath() {
-        return "/initialize";
-    }
-
-    @Override
-    protected String getApplicationName() {
-        return "AviationReporting";
-    }
 
     private void assertPrivilegedUser(LtiSession ltiSession) throws NoLtiSessionException, AccessDeniedException {
         if (ltiSession.getEid() == null || ltiSession.getEid().isEmpty()) {

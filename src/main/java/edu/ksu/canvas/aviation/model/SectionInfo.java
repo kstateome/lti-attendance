@@ -1,6 +1,5 @@
 package edu.ksu.canvas.aviation.model;
 
-import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.model.Section;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public class SectionInfo {
     private long sectionId; //canvas section ID
     private String sectionName;
     private Long canvasCourseId;
-    private List<AviationStudent> students;
+    private List<AttendanceInfo> attendances;
 
     public SectionInfo(Section section){
         sectionId = section.getId();
@@ -47,13 +46,14 @@ public class SectionInfo {
         this.canvasCourseId = canvasCourseId;
     }
 
-    public List<AviationStudent> getStudents() {
-        return students;
+    public List<AttendanceInfo> getAttendances() {
+        return attendances;
     }
 
-    public void setStudents(List<AviationStudent> students) {
-        this.students = students;
+    public void setAttendances(List<AttendanceInfo> attendances) {
+        this.attendances = attendances;
     }
+
 
     @Override
     public String toString() {
@@ -61,7 +61,6 @@ public class SectionInfo {
                 "sectionId=" + sectionId +
                 ", sectionName='" + sectionName + '\'' +
                 ", canvasCourseId=" + canvasCourseId +
-                ", students=" + students +
                 '}';
     }
 }

@@ -18,7 +18,8 @@ public class Attendance implements Serializable {
 
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "ATTENDANCE_SEQ", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "ATTENDANCE_SEQ", sequenceName = "ATTENDANCE_SEQ",allocationSize=50)
     @Column(name = "attendance_id")
     private Long attendanceId;
 

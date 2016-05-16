@@ -4,7 +4,7 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Repository
@@ -17,5 +17,5 @@ public interface AviationStudentRepository extends CrudRepository<AviationStuden
     
     AviationStudent findBySisUserIdAndSectionId(String sisUserId, Long sectionId);
 
-    Set<AviationStudent> findBySectionId(long sectionId);
+    List<AviationStudent> findBySectionIdOrderByNameAsc(long sectionId);
 }

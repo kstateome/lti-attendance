@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Repository
-public interface AttendanceRepository extends CrudRepository<Attendance, Long> {
+public interface AttendanceRepository extends CrudRepository<Attendance, Long>, AttendanceRepositoryCustom {
     
     
     List<Attendance> findByAviationStudent(AviationStudent aviationStudent);
