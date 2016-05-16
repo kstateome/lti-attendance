@@ -26,6 +26,67 @@
   <script src="${context}/js/jquery-ui.min.js"></script>
   <script src="${context}/js/scripts.js"></script>
 
+    <script type="text/javascript">
+        function generateRow(currentRow) {
+            return '<tr id="row-' + currentRow +'">' +
+                    '<td>' +
+                    '<input type="hidden" id="id' + currentRow + '" path="entries[' + currentRow + '].makeupId" />' +
+                    '<div class="form-group">' +
+                    '<div class="input-group date" id="datePickerDateOfClass-' + currentRow + '">' +
+                    '<input required="true" id="classDate' + currentRow + '" path="entries[' + currentRow + '].dateOfClass" cssClass="form-control" />' +
+                    '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
+                    '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '<td>' +
+                    '<div class="form-group">' +
+                    '<div class="input-group date" id="datePickerMadeup' + currentRow + '">' +
+                    '<input required="true" id="dateMadeup' + currentRow + '" path="entries[' + currentRow + '].dateMadeUp" cssClass="form-control" />' +
+                    '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
+                    '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '<td><input required="true" path="entries[' + currentRow + '].minutesMadeUp" cssClass="form-control" size="5" /></td>' +
+                    '<td><input required="true" path="entries[' + currentRow + '].projectDescription" cssClass="form-control" size="5" /></td>' +
+                    '<td><a id="delete-' + currentRow + '">Delete</a></td>' +
+                    '</tr>';
+        }
+        function hideRow(index) {
+            console.log("test" + index);
+            $('#row-' + index).hide();
+        }
+        $(function() {
+            $('#addMakeupBtn').click(function() {
+                $('#makeupTableBody')
+                        .append(generateRow(largestMakeUpIndex));
+                $('#delete-' + largestMakeUpIndex).click(function() {
+                    rowId = $(this).attr('id').split('-')[1];
+                    $('#row-' + rowId).hide();
+                });
+                $('#delete-' + largestMakeUpIndex)
+                setLatestIndex(largestMakeUpIndex+1);
+                var datePicker = $('.date');
+                datePicker.datepicker({
+                    autoclose: true
+                });
+            });
+
+            $('#currentDate').on("change", function(){
+                var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                $(".sectionTable").hide();
+                $("#waitLoading").show();
+                $("#sectionSelect").append($(dateChange));
+                $("#sectionSelect").submit();
+            });
+        });
+
+        var largestMakeUpIndex = 0;
+        function setLatestIndex(latestIndex) {
+            largestMakeUpIndex = latestIndex;
+        }
+    </script>
   <title>Student Makeup</title>
 </head>
 
@@ -62,11 +123,11 @@
 					<th>Date Made-up</th>
 					<th>Minutes Made-up</th>
 					<th>Project Description</th>
-					<th><input class="hovering-purple-button" type="submit" name="addMakeup" value="Add Makeup" /></th>
+					<th><input id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup" /></th>
 				</tr>
 			</thead>
 
-			<tbody>
+			<tbody id="makeupTableBody">
 				<c:forEach items="${makeupForm.entries}" var="makeup" varStatus="makeupLoop">
 					<tr>
 						<td>
@@ -74,15 +135,16 @@
                             <div class="form-group">
                                 <div class="input-group date" id="datePickerDateOfClass${makeupLoop.index}">
                                     <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control" />
-                                    <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>
+                                    <span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
+                            </div>
 						</td>
 						<td>
 							<div class="form-group">
-								<div class="input-group date" id="datePickerMadeup${makeupLoop.index}">
+								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
 									<form:input id="dateMadeup${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
-									<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>
+									<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>
 									</span>
 								</div>
 							</div>
@@ -91,6 +153,11 @@
                         <td><form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
 						<td><a href="${context}/deleteMakeup/${makeupForm.sectionId}/${makeupForm.studentId}/${makeupForm.entries[makeupLoop.index].makeupId}">Delete</a></td>
 					</tr>
+                    <c:if test="${makeupLoop.last}">
+                        <script type="text/javascript">
+                            setLatestIndex(${makeupLoop.index});
+                        </script>
+                    </c:if>
 				</c:forEach>
 			</tbody>
 
@@ -101,5 +168,9 @@
 		</div>
 
 	</form:form>
+  <script src="${context}/js/moment.js"></script>
+  <script src="${context}/bootstrap/js/bootstrap-datepicker.min.js"></script>
+  <!-- Load Bootstrap JS -->
+  <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
