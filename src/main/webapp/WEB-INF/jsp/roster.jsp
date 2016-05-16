@@ -184,5 +184,16 @@
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
 
+<script type="text/javascript">
+    $(function() {
+        $(".attendanceStatus").on("change", function(){
+             if ($(this).val() == "<%=Status.TARDY%>") {
+                 console.log($(this).attr("id").split("attendanceStatus-")[1]);
+                 $("#minutesMissed" + $(this).attr("id").split("attendanceStatus-")[1]).focus();
+             }
+        });
+    });
+</script>
+
 </body>
 </html>
