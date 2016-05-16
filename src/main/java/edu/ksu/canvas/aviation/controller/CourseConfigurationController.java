@@ -8,10 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
@@ -30,11 +27,12 @@ public class CourseConfigurationController extends AviationBaseController {
     
     @RequestMapping()
     public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
-        return classSetup(null);
+        return classSetup(null, false);
     }
 
     @RequestMapping("/{sectionId}")
-    public ModelAndView classSetup(@PathVariable String sectionId) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+    public ModelAndView classSetup(@PathVariable String sectionId,
+                                   @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
@@ -42,7 +40,7 @@ public class CourseConfigurationController extends AviationBaseController {
         persistenceService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
-        
+        page.addObject("updateSuccessful", successful);
         return page;
     }
 
@@ -59,7 +57,7 @@ public class CourseConfigurationController extends AviationBaseController {
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
             persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
-            return new ModelAndView("forward:/courseConfiguration/" + sectionId);
+            return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
     }
