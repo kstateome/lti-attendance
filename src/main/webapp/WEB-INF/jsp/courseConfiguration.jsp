@@ -49,26 +49,25 @@
       </div>
       <br/><br/>
     </c:if>
-
-    <div class="form-group">
-        <div class="col-md-3">
-            <label for="courseWorth">Total Class Minutes</label>
-            <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
-                        placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes"/>
+    <div class="container">
+        <div class="row">
+            <fieldset class="form-inline">
+                <div class="col-md-2">
+                    <label for="courseWorth" class="center-block">Total Class Minutes</label>
+                    <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
+                                placeholder="Total Class Minutes" size="6"/>
+                    <form:errors cssClass="error" path="totalClassMinutes"/>
+                </div>
+                <div class="col-md-3">
+                    <label for="defaultMinutesPerSession" class="center-block">Normal Class Length</label>
+                    <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
+                                cssClass="form-control" placeholder="Normal Class Length" size="5"/>
+                    <form:errors cssClass="error" path="defaultMinutesPerSession"/>
+                </div>
+            </fieldset>
         </div>
-        <div class="col-md-3">
-            <label for="defaultMinutesPerSession">Normal Class Length</label>
-            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
-                        cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession"/>
-        </div>
-        <div class="col-md-2">
-            <label style="color:white;" for="saveCourseConfiguration">Save Class Minutes</label>
-            <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-right" type="submit"/>
-        </div>
+        <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="submit"/>
     </div>
     </form:form>
-
 </body>
 </html>
