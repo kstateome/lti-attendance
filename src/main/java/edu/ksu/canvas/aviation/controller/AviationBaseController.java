@@ -6,14 +6,9 @@ import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.interfaces.SectionReader;
-import edu.ksu.canvas.model.Section;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
@@ -77,21 +72,15 @@ public class AviationBaseController extends LtiLaunchController {
         ltiLaunch.validateOAuthToken();
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
 
-        String courseID = ltiSession.getCanvasCourseId();
-        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
-
-        persistenceService.synchronizeCourseFromCanvasToDb(Long.valueOf(ltiSession.getCanvasCourseId()));
-        persistenceService.synchronizeSectionsFromCanvasToDb(sections);
-        persistenceService.synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
+        long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
+        if(persistenceService.shouldAutomaticallySynchornizeWithCanvas(canvasCourseId)) {
+            persistenceService.synchronizeWithCanvas(ltiSession, canvasCourseId);
+        }
         
         return new ModelAndView("forward:roster");
     }
-    
     
     protected static class SectionState {
         AviationSection selectedSection;

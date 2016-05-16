@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.services;
 
+import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
@@ -16,11 +17,15 @@ import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupRepository;
+import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.lti.model.LtiSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +64,9 @@ public class PersistenceService {
     
     @Autowired
     private AviationSectionRepository sectionRepository;
+    
+    @Autowired
+    protected CanvasApiFactory canvasApiFactory;
     
     
     public void deleteMakeup(String makeupId) {
@@ -165,7 +173,25 @@ public class PersistenceService {
         }
     }
     
-    public AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
+    public boolean shouldAutomaticallySynchornizeWithCanvas(long canvasCourseId) {
+        return aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null;
+    }
+    
+    public void synchronizeWithCanvas(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+
+        String courseID = ltiSession.getCanvasCourseId();
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
+        
+        synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
+        synchronizeSectionsFromCanvasToDb(sections);
+        synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
+    }
+    
+    private AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
         
         if(aviationCourse == null) {
@@ -178,7 +204,7 @@ public class PersistenceService {
         return aviationCourseRepository.save(aviationCourse);
     }
     
-    public List<AviationSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {
+    private List<AviationSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {
         List<AviationSection> ret = new ArrayList<>();
         
         for(Section section: sections) {
@@ -199,7 +225,7 @@ public class PersistenceService {
     }
     
     
-    public List<AviationStudent> synchronizeStudentsFromCanvasToDb(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+    private List<AviationStudent> synchronizeStudentsFromCanvasToDb(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
         List<AviationStudent> ret = new ArrayList<>();
         
         for(Section section: sections) {

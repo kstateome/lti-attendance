@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
+import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.model.LtiSession;
@@ -26,6 +28,9 @@ import edu.ksu.lti.model.LtiSession;
 public class CourseConfigurationController extends AviationBaseController {
     
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
+    
+    @Autowired
+    private PersistenceService persistence;
 
     
     @RequestMapping()
@@ -62,6 +67,14 @@ public class CourseConfigurationController extends AviationBaseController {
             return new ModelAndView("forward:/courseConfiguration");
         }
 
+    }
+    
+    @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
+    public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException, IOException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        persistence.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
+        
+        return new ModelAndView("forward:/courseConfiguration/"+sectionId);
     }
     
 }

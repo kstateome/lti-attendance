@@ -36,7 +36,7 @@
             <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
+            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
         </ul>
@@ -50,6 +50,8 @@
       <br/><br/>
     </c:if>
 
+    <h3>Configuration</h3>
+    <br/>
     <div class="form-group">
         <div class="col-md-3">
             <label for="courseWorth">Total Class Minutes</label>
@@ -68,7 +70,24 @@
             <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-right" type="submit"/>
         </div>
     </div>
+    
+    <br/><br/>
+    
+    <hr/>
+    <br/><br/>
+    
+    <h3>Synchronization</h3>
+    <p>
+       For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing students, sections, 
+       or other problems, please click the button below to rectify the problem. It may take several seconds for this operation to complete.
+    </p>
+    <br/><br/>
+    
+    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas" class="hovering-purple-button" type="submit"/>
+    
     </form:form>
+
+    
 
 </body>
 </html>
