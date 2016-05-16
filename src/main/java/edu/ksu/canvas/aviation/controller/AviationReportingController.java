@@ -67,13 +67,16 @@ public class AviationReportingController extends LtiLaunchController {
 
     @Autowired
     private SectionInfoFactory sectionInfoFactory;
-    
+
+    //TODO: Do not use repository's directly in controller!
     @Autowired
     private ReportRepository reportRepository;
-    
+
+    //TODO: Do not use repository's directly in controller!
     @Autowired
     private AviationStudentRepository studentRepository;
     
+    //TODO: Do not use repository's directly in controller!
     @Autowired
     private MakeupTrackerRepository makeupTrackerRepository;
     
