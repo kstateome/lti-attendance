@@ -24,8 +24,6 @@ public class SectionInfoFactory {
     @Autowired
     private AviationStudentRepository studentRepository;
 
-    private static final Logger LOG = Logger.getLogger(SectionInfoFactory.class);
-
     public SectionInfo getSectionInfo(Section section, EnrollmentsReader enrollmentsReader) throws IOException {
         //Initialize a new section info with the basic information
         SectionInfo info = new SectionInfo(section);
