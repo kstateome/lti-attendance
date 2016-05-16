@@ -31,7 +31,7 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Aviation Attendance</a>
+      <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
     </div>
     <ul class="nav navbar-nav">
       <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
