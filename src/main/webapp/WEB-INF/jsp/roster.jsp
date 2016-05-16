@@ -126,7 +126,7 @@
                     <tr>
                         <th>Name</th>
                         <th>WID</th>
-                        <th>Current Date</th>
+                        <th>Status</th>
                         <th>Minutes Missed</th>
                     </tr>
                 </thead>
