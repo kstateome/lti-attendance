@@ -12,7 +12,7 @@ public class RosterForm extends CourseConfigurationForm {
     private long sectionId;
     private Date currentDate;
 
-    
+
     public List<SectionModel> getSectionModels() {
         return sectionModels;
     }

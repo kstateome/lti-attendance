@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.validation.Valid;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -75,18 +79,25 @@ public class RosterController extends AviationBaseController {
         return page;
     }
     
-    @RequestMapping(value= "/save", params = "changeDate", method = RequestMethod.POST)
-    public ModelAndView changeDate(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
+    @RequestMapping(value= "/{sectionId}/save", params = "changeDate", method = RequestMethod.POST)
+    public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
         return roster(rosterForm.getCurrentDate(), sectionId);
     }
     
-    @RequestMapping(value = "/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@ModelAttribute("rosterForm") RosterForm rosterForm, @ModelAttribute("sectionId") String sectionId) throws IOException, NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
+    @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
+    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/roster");
+            page.addObject("error", "Please correct user input and try saving again.");
+            page.addObject("selectedSectionId", sectionId);
+            return page;
+        } else {
+            LtiSession ltiSession = ltiLaunch.getLtiSession();
+            LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
 
-        persistenceService.saveClassAttendance(rosterForm);
-        return roster(rosterForm.getCurrentDate(), sectionId);
+            persistenceService.saveClassAttendance(rosterForm);
+            return roster(rosterForm.getCurrentDate(), sectionId);
+        }
     }
     
 }

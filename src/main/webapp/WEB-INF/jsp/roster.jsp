@@ -58,7 +58,7 @@
     </div>
 </nav>
 <td class="container-fluid">
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/roster/save">
+    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/roster/${selectedSectionId}/save">
 
     <c:if test="${not empty error}">
     <div class="alert alert-info">
@@ -150,6 +150,7 @@
                                         <form:option id="absent-${attendance.aviationStudentId}" value="<%=Status.ABSENT%>">Absent</form:option>
                                     </form:select>
                                 </label>
+                                <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
                            </td>
                            <td>
                                 <c:choose>
@@ -162,6 +163,7 @@
                                                     cssClass="form-control" size="5" disabled="true"/>
                                     </c:otherwise>
                                 </c:choose>
+                                 <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
                            </td>
                         </tr>
                     </c:forEach>
