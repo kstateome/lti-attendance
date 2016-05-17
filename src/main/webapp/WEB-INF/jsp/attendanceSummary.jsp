@@ -61,7 +61,7 @@
             <th>Name</th>
             <th>Total Minutes Missed</th>
             <th>Minutes Made Up</th>
-            <th>Minutes To Be Made up</th>
+            <th>Minutes To Be Made Up</th>
             <th>% of Course Missed</th>
           </tr>
 
