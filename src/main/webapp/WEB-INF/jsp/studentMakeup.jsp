@@ -30,10 +30,10 @@
         function generateRow(currentRow) {
             return '<tr id="row-' + currentRow +'">' +
                     '<td>' +
-                    '<input type="hidden" id="id' + currentRow + '" path="entries[' + currentRow + '].makeupId" />' +
+                    '<input type="hidden" id="id' + currentRow + '" name="entries[' + currentRow + '].makeupId" />' +
                     '<div class="form-group">' +
                     '<div class="input-group date" id="datePickerDateOfClass-' + currentRow + '">' +
-                    '<input required="true" id="classDate' + currentRow + '" path="entries[' + currentRow + '].dateOfClass" cssClass="form-control" />' +
+                    '<input required="true" id="classDate' + currentRow + '" name="entries[' + currentRow + '].dateOfClass" cssClass="form-control dateOfClass" />' +
                     '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
                     '</span>' +
                     '</div>' +
@@ -42,20 +42,29 @@
                     '<td>' +
                     '<div class="form-group">' +
                     '<div class="input-group date" id="datePickerMadeup' + currentRow + '">' +
-                    '<input required="true" id="dateMadeup' + currentRow + '" path="entries[' + currentRow + '].dateMadeUp" cssClass="form-control" />' +
+                    '<input required="true" id="dateMadeup' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" cssClass="form-control" />' +
                     '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
                     '</span>' +
                     '</div>' +
                     '</div>' +
                     '</td>' +
-                    '<td><input required="true" path="entries[' + currentRow + '].minutesMadeUp" cssClass="form-control" size="5" /></td>' +
-                    '<td><input required="true" path="entries[' + currentRow + '].projectDescription" cssClass="form-control" size="5" /></td>' +
-                    '<td><a id="delete-' + currentRow + '">Delete</a></td>' +
-                    '</tr>';
+                    '<td><input required="true" id="miutesMadeup' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" cssClass="form-control" size="5" /></td>' +
+                    '<td><input required="true" id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" cssClass="form-control" size="5" /></td>' +
+                    '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
+                    '</tr>' +
+                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">';
         }
         function hideRow(index) {
-            console.log("test" + index);
             $('#row-' + index).hide();
+            console.log($('#classDate' + index).attr("required"));
+            console.log($('#dateMadeup' + index).attr("required"));
+            console.log($('#miutesMadeup' + index).attr("required"));
+            console.log($('#projectDescription' + index).attr("required"));
+            $('#classDate' + index).removeAttr("required");
+            $('#dateMadeup' + index).removeAttr("required");
+            $('#miutesMadeup' + index).removeAttr("required");
+            $('#projectDescription' + index).removeAttr("required");
+            $('#entries' + index +'\\.toBeDeletedFlag').val(true);
         }
         $(function() {
             $('#addMakeupBtn').click(function() {
@@ -104,7 +113,7 @@
     <tr><td align="right">Name:</td><td>${student.name}</td></tr>
     <tr><td align="right">WID:</td><td>${student.sisUserId}</td></tr>
   </table>
-  
+
   <br/>
   <form:form id="makeupForm" modelAttribute="makeupForm" method="POST" action="${context}/studentMakeup/save">
     <c:if test="${not empty error}">
@@ -129,12 +138,12 @@
 
 			<tbody id="makeupTableBody">
 				<c:forEach items="${makeupForm.entries}" var="makeup" varStatus="makeupLoop">
-					<tr>
+					<tr id="row-${makeupLoop.index}">
 						<td>
 						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
                                 <div class="input-group date" id="datePickerDateOfClass${makeupLoop.index}">
-                                    <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control" />
+                                    <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control"/>
                                     <span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
@@ -151,11 +160,12 @@
 						</td>
 						<td><form:input path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control" size="5" /></td>
                         <td><form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
-						<td><a href="${context}/deleteMakeup/${makeupForm.sectionId}/${makeupForm.studentId}/${makeupForm.entries[makeupLoop.index].makeupId}">Delete</a></td>
-					</tr>
+                        <td><a id="delete-${makeupLoop.index}" href="#" onclick="hideRow(${makeupLoop.index})">Delete</a></td>
+                        <form:hidden cssClass="toBeDeleted" path="entries[${makeupLoop.index}].toBeDeletedFlag"/>
+                    </tr>
                     <c:if test="${makeupLoop.last}">
                         <script type="text/javascript">
-                            setLatestIndex(${makeupLoop.index});
+                            setLatestIndex(${makeupLoop.index + 1});
                         </script>
                     </c:if>
 				</c:forEach>

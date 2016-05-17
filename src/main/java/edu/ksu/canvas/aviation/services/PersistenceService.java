@@ -88,10 +88,31 @@ public class PersistenceService {
 
         aviationCourseRepository.save(aviationCourse);
     }
-    
-    public void saveMakeups(MakeupForm form) {
-        
+    public void updateMakeups(MakeupForm form){
+        deleteMakeup(form);
+        saveMakeups(form);
+    }
+
+    private void deleteMakeup(MakeupForm form) {
+        if(form.getEntries() == null){
+            return;
+        }
+        for(MakeupModel model : form.getEntries()){
+            if(model.getMakeupId() != null && model.isToBeDeletedFlag()) {
+                makeupRepository.delete(model.getMakeupId());
+            }
+        }
+
+    }
+
+    private void saveMakeups(MakeupForm form) {
+        if(form.getEntries() == null){
+            return;
+        }
         for(MakeupModel makeupModel: form.getEntries()) {
+            if(makeupModel.isToBeDeletedFlag()){
+                continue;
+            }
             if(makeupModel.getMakeupId() == null) {
                 AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
                 

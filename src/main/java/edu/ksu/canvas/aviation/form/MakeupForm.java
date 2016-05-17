@@ -52,5 +52,13 @@ public class MakeupForm {
         }
        
     }
-    
+
+    @Override
+    public String toString() {
+        return "MakeupForm{" +
+                "sectionId=" + sectionId +
+                ", studentId=" + studentId +
+                ", entries=" + entries +
+                '}';
+    }
 }
