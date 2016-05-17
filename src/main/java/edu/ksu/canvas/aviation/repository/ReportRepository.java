@@ -11,7 +11,6 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 
-//TODO: Why is this class using an entity manager for a native query. Lookup the DS via jndi
 @Repository
 public class ReportRepository {
 
