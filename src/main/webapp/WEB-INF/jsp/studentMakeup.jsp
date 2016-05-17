@@ -56,7 +56,7 @@
         }
         function hideRow(index) {
             $('#row-' + index).hide();
-            $('#entries' + index +'\\.toBeDeletedFlag').val(true);
+            $('#entries' + index +'\\.toBeDeletedFlag').val("true");
 
             const date = moment().format('MM/DD/YYYY');
             const classDate = $('#classDate' + index);
@@ -67,7 +67,7 @@
             dateMadeUp.val(date);
             const minutesMadeup = $('#minutesMadeUp' + index);
             minutesMadeup.removeAttr("required");
-            minutesMadeup.val(0);
+            minutesMadeup.val(1);
         }
         $(function() {
             $('#addMakeupBtn').click(function() {
@@ -92,6 +92,12 @@
                 $("#sectionSelect").append($(dateChange));
                 $("#sectionSelect").submit();
             });
+
+            $('#makeupTableBody > tr').each(function(){
+                if($(this).find(".toBeDeleted").val() === "true"){
+                    $(this).hide();
+                }
+            })
         });
 
         var largestMakeUpIndex = 0;
