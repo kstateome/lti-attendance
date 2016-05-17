@@ -48,10 +48,10 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
+            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
@@ -77,7 +77,9 @@
         </div>
         
         <br/>
-        
+
+        <div class="alert alert-warning collapse" id="futureDateWarning" role="alert">You have selected a date in the future.</div>
+
         <div class="row">
             <div class='col-sm-4 keep-element-above'>
                 <div class="form-group">
@@ -124,7 +126,7 @@
                     <tr>
                         <th>Name</th>
                         <th>WID</th>
-                        <th>Current Date</th>
+                        <th>Status</th>
                         <th>Minutes Missed</th>
                     </tr>
                 </thead>
@@ -183,6 +185,23 @@
 <script src="${context}/bootstrap/js/bootstrap-datepicker.min.js"></script>
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+        $(".attendanceStatus").on("change", function(){
+            if ($(this).val() == "<%=Status.TARDY%>") {
+                console.log($(this).attr("id").split("attendanceStatus-")[1]);
+                $("#minutesMissed" + $(this).attr("id").split("attendanceStatus-")[1]).focus();
+            }
+        });
+
+        <!-- Used to show a warning if the selected date is in the future -->
+        if (moment($("#currentDate").val()).isAfter(moment())) {
+            $("#futureDateWarning").show();
+        }
+    });
+</script>
 
 </body>
 </html>

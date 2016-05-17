@@ -33,10 +33,10 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Configuration</a></li>
+            <li class="active"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
         </ul>
@@ -50,24 +50,49 @@
       <br/><br/>
     </c:if>
 
-    <div class="form-group">
-        <div class="col-md-3">
-            <label for="courseWorth">Total Class Minutes</label>
-            <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
-                        placeholder="Total Class Minutes"/>
-            <form:errors cssClass="error" path="totalClassMinutes"/>
+    <c:if test="${updateSuccessful}">
+      <div class="alert alert-success">
+          <p>Course Configuration Successfully Updated.</p>
+      </div>
+      <br/><br/>
+    </c:if>
+
+    <h3>Configuration</h3>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <fieldset class="form-inline">
+                <div class="col-md-2">
+                    <label for="courseWorth" class="center-block">Total Class Minutes</label>
+                    <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
+                                placeholder="Total Class Minutes" size="6"/>
+                    <form:errors cssClass="error center-block" path="totalClassMinutes"/>
+                </div>
+                <div class="col-md-3">
+                    <label for="defaultMinutesPerSession" class="center-block">Normal Class Length</label>
+                    <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
+                                cssClass="form-control" placeholder="Normal Class Length" size="5"/>
+                    <form:errors cssClass="error center-block" path="defaultMinutesPerSession"/>
+                </div>
+            </fieldset>
         </div>
-        <div class="col-md-3">
-            <label for="defaultMinutesPerSession">Normal Class Length</label>
-            <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
-                        cssClass="form-control" placeholder="Normal Class Length"/>
-            <form:errors cssClass="error" path="defaultMinutesPerSession"/>
-        </div>
-        <div class="col-md-2">
-            <label style="color:white;" for="saveCourseConfiguration">Save Class Minutes</label>
-            <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-right" type="submit"/>
-        </div>
+        <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="submit"/>
     </div>
+    
+    <br/><br/>
+    
+    <hr/>
+    <br/><br/>
+    
+    <h3>Synchronization</h3>
+    <p>
+       For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing students, sections, 
+       or other problems, please click the button below to rectify the problem. It may take several seconds for this operation to complete.
+    </p>
+    <br/><br/>
+    
+    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas" class="hovering-purple-button" type="submit"/>
+    
     </form:form>
 
 </body>

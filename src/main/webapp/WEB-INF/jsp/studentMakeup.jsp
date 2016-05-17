@@ -120,8 +120,8 @@
 			<thead>
 				<tr>
 					<th>Class Date</th>
-					<th>Date Made-up</th>
-					<th>Minutes Made-up</th>
+					<th>Date Made Up</th>
+					<th>Minutes Made Up</th>
 					<th>Project Description</th>
 					<th><input id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup" /></th>
 				</tr>

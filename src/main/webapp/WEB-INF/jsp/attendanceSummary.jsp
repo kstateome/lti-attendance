@@ -31,10 +31,10 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Aviation Attendance</a>
+      <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
     </div>
     <ul class="nav navbar-nav">
-      <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Configuration</a></li>
+      <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
       <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
       <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
     </ul>
@@ -61,7 +61,7 @@
             <th>Name</th>
             <th>Total Minutes Missed</th>
             <th>Minutes Made Up</th>
-            <th>Minutes To Be Made up</th>
+            <th>Minutes To Be Made Up</th>
             <th>% of Course Missed</th>
           </tr>
 
@@ -71,7 +71,7 @@
               <td>${attendancesummaryEntry.sumMinutesMissed}</td>
               <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
               <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
-              <td>${attendancesummaryEntry.percentCourseMissed}</td>
+              <td class="percentMissed">${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
         </table>
@@ -79,6 +79,23 @@
     </div>
 
   </div>
-
+  <script type="text/javascript">
+    $(function () {
+      const WARNING = 8;
+      const DANGER = 10;
+      $(".sectionTable > tbody > tr").each(function () {
+        const percentMissedCell = $(this).find(".percentMissed");
+        const percentMissed = percentMissedCell.text();
+        if(percentMissed >= DANGER){
+          percentMissedCell.addClass('bg-danger');
+          return;
+        }
+        if(percentMissed >= WARNING){
+          percentMissedCell.addClass('bg-warning');
+          return;
+        }
+      });
+    })
+  </script>
 </body>
 </html>
