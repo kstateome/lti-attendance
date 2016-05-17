@@ -11,6 +11,7 @@ import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.model.AttendanceModel;
+import edu.ksu.canvas.aviation.model.MakeupModel;
 import edu.ksu.canvas.aviation.model.SectionModel;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
@@ -87,20 +88,49 @@ public class PersistenceService {
 
         aviationCourseRepository.save(aviationCourse);
     }
-    
-    public void saveMakeups(MakeupForm form) {
-        
-        for(Makeup makeup: form.getEntries()) {
-            if(makeup.getMakeupId() == null) {
+    public void updateMakeups(MakeupForm form){
+        deleteMakeup(form);
+        saveMakeups(form);
+    }
+
+    private void deleteMakeup(MakeupForm form) {
+        if(form.getEntries() == null){
+            return;
+        }
+        for(MakeupModel model : form.getEntries()){
+            if(model.getMakeupId() != null && model.isToBeDeletedFlag()) {
+                makeupRepository.delete(model.getMakeupId());
+            }
+        }
+
+    }
+
+    private void saveMakeups(MakeupForm form) {
+        if(form.getEntries() == null){
+            return;
+        }
+        for(MakeupModel makeupModel: form.getEntries()) {
+            if(makeupModel.isToBeDeletedFlag()){
+                continue;
+            }
+            if(makeupModel.getMakeupId() == null) {
                 AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
+                
+                Makeup makeup = new Makeup();
+                makeup.setDateOfClass(makeupModel.getDateOfClass());
+                makeup.setDateMadeUp(makeupModel.getDateMadeUp());
+                makeup.setProjectDescription(makeupModel.getProjectDescription());
+                makeup.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
                 makeup.setAviationStudent(student);
+                
                 makeupRepository.save(makeup);
             } else {
-                Makeup tracker = makeupRepository.findByMakeupId(makeup.getMakeupId());
-                tracker.setDateMadeUp(makeup.getDateMadeUp());
-                tracker.setDateOfClass(makeup.getDateOfClass());
-                tracker.setMinutesMadeUp(makeup.getMinutesMadeUp());
-                tracker.setProjectDescription(makeup.getProjectDescription());
+                Makeup tracker = makeupRepository.findByMakeupId(makeupModel.getMakeupId());
+                tracker.setDateMadeUp(makeupModel.getDateMadeUp());
+                tracker.setDateOfClass(makeupModel.getDateOfClass());
+                tracker.setProjectDescription(makeupModel.getProjectDescription());
+                tracker.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
+                
                 makeupRepository.save(tracker);
             }
 
