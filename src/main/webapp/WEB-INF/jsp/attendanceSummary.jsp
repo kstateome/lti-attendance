@@ -58,20 +58,20 @@
       <c:forEach items="${attendanceSummaryForSections}" var="summaryForSection" varStatus="loop">
         <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
           <tr>
-            <th>Name</th>
-            <th>Total Minutes Missed</th>
-            <th>Minutes Made Up</th>
-            <th>Minutes To Be Made Up</th>
-            <th>% of Course Missed</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Total Minutes Missed</th>
+            <th class="text-center">Minutes Made Up</th>
+            <th class="text-center">Minutes To Be Made Up</th>
+            <th class="text-center">% of Course Missed</th>
           </tr>
 
           <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
             <tr >
               <td><a href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></td>
-              <td>${attendancesummaryEntry.sumMinutesMissed}</td>
-              <td>${attendancesummaryEntry.sumMinutesMadeup}</td>
-              <td>${attendancesummaryEntry.remainingMinutesMadeup}</td>
-              <td class="percentMissed">${attendancesummaryEntry.percentCourseMissed}</td>
+              <td class="text-center">${attendancesummaryEntry.sumMinutesMissed}</td>
+              <td class="text-center">${attendancesummaryEntry.sumMinutesMadeup}</td>
+              <td class="text-center">${attendancesummaryEntry.remainingMinutesMadeup}</td>
+              <td class="percentMissed text-center">${attendancesummaryEntry.percentCourseMissed}</td>
             </tr>
           </c:forEach>
         </table>
