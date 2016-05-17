@@ -66,6 +66,10 @@
     </div>
     </c:if>
 
+    <c:if test="${not empty saveSuccess}">
+        <div class="alert alert-success" id="saveSuccessMessage" role="alert">Attendance successfully saved.</div>
+    </c:if>
+
     <div class="container">
         <div class="row">
           <div class='col-sm-4'>
