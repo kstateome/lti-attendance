@@ -120,6 +120,7 @@
     <div class="alert alert-info">
         <p>${error}</p>
     </div>
+    <br/>
     </c:if>
   
         <form:input type="hidden" id="sectionId" path="sectionId" />
@@ -144,8 +145,8 @@
                             <div class="form-group">
                                 <div class="input-group date" id="datePickerDateOfClass${makeupLoop.index}">
                                     <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control"/>
-                                    <span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                    <span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span></span>
+                                    <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
                                 </div>
                             </div>
 						</td>
@@ -153,13 +154,19 @@
 							<div class="form-group">
 								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
 									<form:input id="dateMadeup${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
-									<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>
-									</span>
+									<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span></span>
+									<form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateMadeUp" />
 								</div>
 							</div>
 						</td>
-						<td><form:input path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control" size="5" /></td>
-                        <td><form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" /></td>
+						<td>
+						    <form:input path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control" size="5" />
+						    <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].minutesMadeUp" />
+						</td>
+                        <td>
+                            <form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" />
+                            <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].projectDescription" />
+                        </td>
                         <td><a id="delete-${makeupLoop.index}" href="#" onclick="hideRow(${makeupLoop.index})">Delete</a></td>
                         <form:hidden cssClass="toBeDeleted" path="entries[${makeupLoop.index}].toBeDeletedFlag"/>
                     </tr>
