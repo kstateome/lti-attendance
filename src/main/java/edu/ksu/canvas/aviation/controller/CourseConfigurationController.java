@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import javax.validation.Valid;
 
+import edu.ksu.canvas.aviation.form.CourseConfigurationValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +30,9 @@ public class CourseConfigurationController extends AviationBaseController {
     
     @Autowired
     private PersistenceService persistence;
+
+    @Autowired
+    private CourseConfigurationValidator validator;
 
     
     @RequestMapping()
@@ -51,6 +56,7 @@ public class CourseConfigurationController extends AviationBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params ="saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+        validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()){
             ModelAndView page = new ModelAndView("/courseConfiguration");
             page.addObject("error", "Please correct user input and try saving again.");
