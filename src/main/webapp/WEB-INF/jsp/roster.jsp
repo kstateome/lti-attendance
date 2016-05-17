@@ -204,6 +204,8 @@
                 minutesMissed.attr('disabled', 'disabled');
                 if ($(this).val() === '<%=Status.PRESENT%>') {
                     minutesMissed.val('');
+                } else if ($(this).val() === '<%=Status.ABSENT%>') {
+                    minutesMissed.val(${rosterForm.defaultMinutesPerSession});
                 }
             }
         });
