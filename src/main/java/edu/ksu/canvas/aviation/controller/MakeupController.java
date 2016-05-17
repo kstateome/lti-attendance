@@ -21,13 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.entity.Makeup;
 import edu.ksu.canvas.aviation.form.MakeupForm;
-import edu.ksu.canvas.aviation.model.MakeupModel;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.lti.model.LtiSession;
-
-import javax.validation.Valid;
 
 
 @Controller
@@ -46,9 +43,9 @@ public class MakeupController extends AviationBaseController {
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
-    
+
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) {

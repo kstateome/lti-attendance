@@ -6,16 +6,17 @@ import java.util.Date;
 public class MakeupModel {
 
     private Long makeupId;
+    
     private Date dateOfClass;
     private Date dateMadeUp;
     private String projectDescription;
-    private int minutesMadeUp;
+    private Integer minutesMadeUp;
     private boolean toBeDeletedFlag;
     
     
     public MakeupModel() { }
     
-    public MakeupModel(Long makeupId, Date dateOfClass, Date dateMadeUp, String projectDescription, int minutesMadeUp) {
+    public MakeupModel(Long makeupId, Date dateOfClass, Date dateMadeUp, String projectDescription, Integer minutesMadeUp) {
         this.makeupId = makeupId;
         this.dateOfClass = dateOfClass;
         this.dateMadeUp = dateMadeUp;
@@ -56,11 +57,11 @@ public class MakeupModel {
         this.projectDescription = projectDescription;
     }
     
-    public int getMinutesMadeUp() {
+    public Integer getMinutesMadeUp() {
         return minutesMadeUp;
     }
     
-    public void setMinutesMadeUp(int minutesMadeUp) {
+    public void setMinutesMadeUp(Integer minutesMadeUp) {
         this.minutesMadeUp = minutesMadeUp;
     }
     
