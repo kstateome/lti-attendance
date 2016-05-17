@@ -106,19 +106,6 @@
                         $("#sectionSelect").append($(dateChange));
                         $("#sectionSelect").submit();
                     });
-                    $('.attendanceStatus').change(function() {
-                        var attendanceId = $(this).attr('id').split('-')[1];
-                        var minutesMissed = $('#minutesMissed' + attendanceId);
-                        if ($(this).val() === '<%=Status.TARDY%>') {
-                            minutesMissed.removeAttr('disabled');
-                            minutesMissed.focus();
-                        } else {
-                            minutesMissed.attr('disabled', 'disabled');
-                            if ($(this).val() === '<%=Status.PRESENT%>') {
-                                minutesMissed.val('');
-                            }
-                        }
-                    });
                 });
             </script>
             <div class="col-md-3 saveAttendanceButton">
@@ -202,10 +189,17 @@
 
 <script type="text/javascript">
     $(function() {
-        $(".attendanceStatus").on("change", function(){
-            if ($(this).val() == "<%=Status.TARDY%>") {
-                console.log($(this).attr("id").split("attendanceStatus-")[1]);
-                $("#minutesMissed" + $(this).attr("id").split("attendanceStatus-")[1]).focus();
+        $('.attendanceStatus').change(function() {
+            var attendanceId = $(this).attr('id').split('-')[1];
+            var minutesMissed = $('#minutesMissed' + attendanceId);
+            if ($(this).val() === '<%=Status.TARDY%>') {
+                minutesMissed.removeAttr('disabled');
+                minutesMissed.focus();
+            } else {
+                minutesMissed.attr('disabled', 'disabled');
+                if ($(this).val() === '<%=Status.PRESENT%>') {
+                    minutesMissed.val('');
+                }
             }
         });
 
