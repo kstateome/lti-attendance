@@ -32,24 +32,24 @@
                     '<td>' +
                     '<input type="hidden" id="id' + currentRow + '" name="entries[' + currentRow + '].makeupId" />' +
                     '<div class="form-group">' +
-                    '<div class="input-group date" id="datePickerDateOfClass-' + currentRow + '">' +
-                    '<input required="true" id="classDate' + currentRow + '" name="entries[' + currentRow + '].dateOfClass" cssClass="form-control dateOfClass" />' +
-                    '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
+                    '<div class="input-group date">' +
+                    '<input required="true" id="classDate' + currentRow + '" name="entries[' + currentRow + '].dateOfClass" class="form-control dateOfClass" />' +
+                    '<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>' +
                     '</span>' +
                     '</div>' +
                     '</div>' +
                     '</td>' +
                     '<td>' +
                     '<div class="form-group">' +
-                    '<div class="input-group date" id="datePickerMadeup' + currentRow + '">' +
-                    '<input required="true" id="dateMadeup' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" cssClass="form-control" />' +
-                    '<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span>' +
+                    '<div class="input-group date">' +
+                    '<input required="true" id="dateMadeup' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" class="form-control" />' +
+                    '<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>' +
                     '</span>' +
                     '</div>' +
                     '</div>' +
                     '</td>' +
-                    '<td><input required="true" id="miutesMadeup' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" cssClass="form-control" size="5" /></td>' +
-                    '<td><input required="true" id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" cssClass="form-control" size="5" /></td>' +
+                    '<td><input required="true" id="miutesMadeup' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
+                    '<td><input id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" class="form-control" size="5" /></td>' +
                     '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
                     '</tr>' +
                     '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">';
@@ -57,7 +57,6 @@
         function hideRow(index) {
             $('#row-' + index).hide();
             $('#entries' + index +'\\.toBeDeletedFlag').val(true);
-            $('#projectDescription' + index).removeAttr("required");
 
             const date = moment().format('MM/DD/YYYY');
             const classDate = $('#classDate' + index);
@@ -137,7 +136,7 @@
 					<th>Date Made Up</th>
 					<th>Minutes Made Up</th>
 					<th>Project Description</th>
-					<th><input id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup" /></th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 
@@ -147,20 +146,20 @@
 						<td>
 						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
-                                <div class="input-group date" id="datePickerDateOfClass${makeupLoop.index}">
+                                <div class="input-group date">
                                     <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control"/>
-                                    <span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span></span>
-                                    <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
+                                <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
                             </div>
 						</td>
 						<td>
 							<div class="form-group">
 								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
 									<form:input id="dateMadeup${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
-									<span class="input-group-addon" style="display: inline;"> <span class="glyphicon glyphicon-calendar"></span></span>
-									<form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateMadeUp" />
+									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 								</div>
+                                <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateMadeUp" />
 							</div>
 						</td>
 						<td>
@@ -186,6 +185,7 @@
 
 		<div>
 			<input class="hovering-purple-button" type="submit" name="saveMakeup" value="Save Makeups" />
+			<input id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup" />
 		</div>
 
 	</form:form>
