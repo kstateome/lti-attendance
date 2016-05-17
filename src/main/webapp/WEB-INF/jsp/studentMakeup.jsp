@@ -56,15 +56,19 @@
         }
         function hideRow(index) {
             $('#row-' + index).hide();
-            console.log($('#classDate' + index).attr("required"));
-            console.log($('#dateMadeup' + index).attr("required"));
-            console.log($('#miutesMadeup' + index).attr("required"));
-            console.log($('#projectDescription' + index).attr("required"));
-            $('#classDate' + index).removeAttr("required");
-            $('#dateMadeup' + index).removeAttr("required");
-            $('#miutesMadeup' + index).removeAttr("required");
-            $('#projectDescription' + index).removeAttr("required");
             $('#entries' + index +'\\.toBeDeletedFlag').val(true);
+            $('#projectDescription' + index).removeAttr("required");
+
+            const date = moment().format('MM/DD/YYYY');
+            const classDate = $('#classDate' + index);
+            classDate.removeAttr("required");
+            classDate.val(date);
+            const dateMadeUp = $('#dateMadeup' + index);
+            dateMadeUp.removeAttr("required");
+            dateMadeUp.val(date);
+            const minutesMadeup = $('#miutesMadeup' + index);
+            minutesMadeup.removeAttr("required");
+            minutesMadeup.val(0);
         }
         $(function() {
             $('#addMakeupBtn').click(function() {
