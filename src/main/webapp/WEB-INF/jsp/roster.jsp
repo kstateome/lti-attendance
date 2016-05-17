@@ -106,6 +106,19 @@
                         $("#sectionSelect").append($(dateChange));
                         $("#sectionSelect").submit();
                     });
+                    $('.attendanceStatus').change(function() {
+                        var attendanceId = $(this).attr('id').split('-')[1];
+                        var minutesMissed = $('#minutesMissed' + attendanceId);
+                        if ($(this).val() === '<%=Status.TARDY%>') {
+                            minutesMissed.removeAttr('disabled');
+                            minutesMissed.focus();
+                        } else {
+                            minutesMissed.attr('disabled', 'disabled');
+                            if ($(this).val() === '<%=Status.PRESENT%>') {
+                                minutesMissed.val('');
+                            }
+                        }
+                    });
                 });
             </script>
             <div class="col-md-3 saveAttendanceButton">
