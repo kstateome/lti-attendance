@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.entity.Makeup;
 import edu.ksu.canvas.aviation.form.MakeupForm;
+import edu.ksu.canvas.aviation.model.MakeupModel;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -60,7 +61,7 @@ public class MakeupController extends AviationBaseController {
         }
         
         MakeupForm makeupForm = new MakeupForm();
-        makeupForm.setEntries(makeups);
+        makeupForm.setEntriesFromMakeEntities(makeups);
         makeupForm.setSectionId(Long.valueOf(sectionId));
         makeupForm.setStudentId(Long.valueOf(studentId));
         
@@ -127,7 +128,7 @@ public class MakeupController extends AviationBaseController {
             return page;
         } else {
             persistenceService.saveMakeups(makeupForm);
-            makeupForm.getEntries().add(new Makeup());
+            makeupForm.getEntries().add(new MakeupModel());
         }
         
         return studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), true);
