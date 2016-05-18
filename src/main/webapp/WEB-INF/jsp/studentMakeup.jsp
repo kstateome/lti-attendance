@@ -186,7 +186,6 @@
                     <c:if test="${makeupLoop.last}">
                         <script type="text/javascript">
                             setLatestIndex(${makeupLoop.index + 1});
-                            addDateTag();
                         </script>
                     </c:if>
 				</c:forEach>
