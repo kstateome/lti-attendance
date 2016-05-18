@@ -79,10 +79,7 @@
                 });
                 $('#delete-' + largestMakeUpIndex)
                 setLatestIndex(largestMakeUpIndex+1);
-                var datePicker = $('.date');
-                datePicker.datepicker({
-                    autoclose: true
-                });
+                setupDatePickers();
             });
 
             $('#currentDate').on("change", function(){
@@ -97,7 +94,14 @@
                 if($(this).find(".toBeDeleted").val() === "true"){
                     $(this).hide();
                 }
+                setupDatePickers();
             })
+
+            function setupDatePickers(){
+                $('.date').datepicker({
+                    autoclose: true
+                });
+            }
         });
 
         var largestMakeUpIndex = 0;
