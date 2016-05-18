@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aviation-reporting</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <parent>
@@ -16,7 +16,7 @@
         <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
         <url>https://github.com/kstateome/aviation-reporting</url>
-      <tag>1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
