@@ -208,7 +208,7 @@
 						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
                                 <div class="input-group date">
-                                    <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control"/>
+                                    <form:input id="classDate${makeupLoop.index}" path="entries[${makeupLoop.index}].dateOfClass" cssClass="form-control dateOfClass"/>
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                                 <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
@@ -217,18 +217,18 @@
 						<td>
 							<div class="form-group">
 								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
-									<form:input id="dateMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
+									<form:input id="dateMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control dateMadeUp" />
 									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 								</div>
                                 <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateMadeUp" />
 							</div>
 						</td>
 						<td>
-						    <form:input id="minutesMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control" size="5" />
+						    <form:input id="minutesMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].minutesMadeUp" cssClass="form-control minutesMadeUp" size="5" />
 						    <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].minutesMadeUp" />
 						</td>
                         <td>
-                            <form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" />
+                            <form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control projectDescription" size="5" />
                             <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].projectDescription" />
                         </td>
                         <td><a id="delete-${makeupLoop.index}" href="#" onclick="hideRow(${makeupLoop.index})">Delete</a></td>
