@@ -28,6 +28,7 @@
 
     <script type="text/javascript">
         function generateRow(currentRow) {
+
             return '<tr id="row-' + currentRow +'">' +
                     '<td>' +
                     '<input type="hidden" id="id' + currentRow + '" name="entries[' + currentRow + '].makeupId" />' +
@@ -51,8 +52,8 @@
                     '<td><input required="true" id="minutesMadeUp' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
                     '<td><input id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" class="form-control" size="5" /></td>' +
                     '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
-                    '</tr>' +
-                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">';
+                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">' +
+                    '</tr>';
         }
         function hideRow(index) {
             $('#row-' + index).hide();
@@ -71,8 +72,39 @@
         }
         $(function() {
             $('#addMakeupBtn').click(function() {
-                $('#makeupTableBody')
-                        .append(generateRow(largestMakeUpIndex));
+                const index = largestMakeUpIndex;
+
+                const namePrefix = "entries[" + index + "].";
+                const $newRow = $("<tr>", {id: "row-" + index});
+
+                const $makeUpId = $("<input>", {type: "hidden", name: namePrefix + "makeupId"});
+                const $classDate = $("<input>", {type: "text", name: namePrefix + "dateOfClass",
+                    class:"form-control dateOfClass", required: "true"});
+                const $makeUp = $("<input>", {type: "text", name: namePrefix + "minutesMadeUp",
+                    class:"form-control", required: "true"});
+                const $minutesMadeUp = $("<input>", {type: "text", name: namePrefix + "classDate",
+                    class:"form-control", size: "5", required: "true"});
+                const $projectDesc = $("<input>", {type: "text", name: namePrefix + "projectDescription",
+                    class:"form-control", size: "5", required: "true"});
+
+                const $classDateTD = $("<td>");
+                $classDateTD.append($makeUpId).append(getDatePicker($classDate));
+                const $makeUpTD = $("<td>");
+                $makeUpTD.append(getDatePicker($makeUp));
+                const $minutesMadeUpTD = $("<td>");
+                $minutesMadeUpTD.append($minutesMadeUp);
+                const $projectDescTD = $("<td>");
+                $projectDescTD.append($projectDesc);
+
+                $newRow.append($classDateTD);
+                $newRow.append($makeUpTD);
+                $newRow.append($minutesMadeUpTD);
+                $newRow.append($projectDescTD);
+
+                $('#makeupTableBody:last-child').append($newRow);
+
+//                $('#makeupTableBody tr:last')
+//                        .append(generateRow(largestMakeUpIndex));
                 $('#delete-' + largestMakeUpIndex).click(function() {
                     rowId = $(this).attr('id').split('-')[1];
                     $('#row-' + rowId).hide();
@@ -84,6 +116,15 @@
                     autoclose: true
                 });
             });
+            function getDatePicker(element){
+                const $formGroupDiv = $("<div>", {class: "form-group"});
+                const $inputGroupDiv = $("<div>", {class: "input-group date"});
+                $formGroupDiv.append(
+                        $inputGroupDiv.append(element)
+                                .append("<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>")
+                    )
+                return $formGroupDiv;
+            }
 
             $('#currentDate').on("change", function(){
                 var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
