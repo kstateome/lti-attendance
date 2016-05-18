@@ -23,6 +23,7 @@ public class MakeupValidator implements Validator {
         for (MakeupModel makeupModel : makeupForm.getEntries()) {
             
             if(makeupModel.isToBeDeletedFlag()) {
+                makeupIndex++;
                 continue;
             }
             
@@ -42,6 +43,11 @@ public class MakeupValidator implements Validator {
                 errors.rejectValue("entries["+makeupIndex+"].dateOfClass", "Required.makeupForm.entries.dateOfClass");
             }
             
+            if(makeupModel.getProjectDescription() != null && makeupModel.getProjectDescription().length() >= 255) {
+                errors.rejectValue("entries["+makeupIndex+"].projectDescription", "Max.makeupForm.entries.projectDescription");
+            }
+            
+            makeupIndex++;
         }
     }
 
