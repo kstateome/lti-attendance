@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +42,10 @@ public class CourseConfigurationController extends AviationBaseController {
     @RequestMapping("/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId,
                                    @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+        
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("eid: "+ltiSession.getEid()+" is viewing course configuration...");
+        
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
@@ -64,7 +67,7 @@ public class CourseConfigurationController extends AviationBaseController {
             return page;
         } else {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
-            LOG.info(ltiSession.getEid() + " saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
+            LOG.info("eid: "+ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
             persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
@@ -76,6 +79,8 @@ public class CourseConfigurationController extends AviationBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException, IOException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("eid: "+ltiSession.getEid()+" is forcing a syncrhonization with Canvas for Canvas Course ID: "+ltiSession.getCanvasCourseId());
+        
         persistence.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
         
         return new ModelAndView("forward:/courseConfiguration/"+sectionId);

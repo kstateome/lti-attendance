@@ -53,7 +53,10 @@ public class MakeupController extends AviationBaseController {
 
 
     @RequestMapping("/{sectionId}/{studentId}")
-    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) {
+    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("eid: "+ltiSession.getEid()+" is viewing makeup data");
+        
         return studentMakeup(sectionId, studentId, false);
     }
 
@@ -80,7 +83,7 @@ public class MakeupController extends AviationBaseController {
     @RequestMapping(value = "/deleteMakeup/{sectionId}/{studentId}/{makeupId}")
     public ModelAndView deleteMakeup(@PathVariable String sectionId, @PathVariable String studentId, @PathVariable String makeupId) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("Attempting to delete makeup data... User: " + ltiSession.getEid());
+        LOG.info("eid: "+ltiSession.getEid()+" is deleting a makeup entry.");
         
         persistenceService.deleteMakeup(makeupId);
         return studentMakeup(sectionId, studentId);
@@ -90,7 +93,7 @@ public class MakeupController extends AviationBaseController {
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("Attempting to save makeup data... User: " + ltiSession.getEid());
+        LOG.info("eid: "+ltiSession.getEid()+" is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
