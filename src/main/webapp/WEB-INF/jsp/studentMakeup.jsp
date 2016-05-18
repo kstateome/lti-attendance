@@ -111,8 +111,18 @@
 <body>
 
   <a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
+  <c:if test="${updateSuccessful}">
+    <br/><br/>
+    <div class="alert alert-success">
+        <p>Makeups Successfully Saved.</p>
+    </div>
 
-  <br/><br/>
+    </c:if>
+    <c:if test="${empty updateSuccessful}">
+      <br/><br/>
+    </c:if>
+
+
   <style>
     th, td {
       padding: 10px;

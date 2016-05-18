@@ -112,7 +112,11 @@ public class MakeupController extends AviationBaseController {
             persistenceService.updateMakeups(makeupForm);
         }
         
-        return studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
+        ModelAndView page = studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
+        page.addObject("updateSuccessful", true);
+        
+        return page; 
+                
     }
 
 }
