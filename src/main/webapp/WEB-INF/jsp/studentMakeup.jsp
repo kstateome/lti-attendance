@@ -27,34 +27,6 @@
   <script src="${context}/js/scripts.js"></script>
 
     <script type="text/javascript">
-        function generateRow(currentRow) {
-
-            return '<tr id="row-' + currentRow +'">' +
-                    '<td>' +
-                    '<input type="hidden" id="id' + currentRow + '" name="entries[' + currentRow + '].makeupId" />' +
-                    '<div class="form-group">' +
-                    '<div class="input-group date">' +
-                    '<input required="true" id="classDate' + currentRow + '" name="entries[' + currentRow + '].dateOfClass" class="form-control dateOfClass" />' +
-                    '<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>' +
-                    '</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</td>' +
-                    '<td>' +
-                    '<div class="form-group">' +
-                    '<div class="input-group date">' +
-                    '<input required="true" id="dateMadeUp' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" class="form-control" />' +
-                    '<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>' +
-                    '</span>' +
-                    '</div>' +
-                    '</div>' +
-                    '</td>' +
-                    '<td><input required="true" id="minutesMadeUp' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
-                    '<td><input id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" class="form-control" size="5" /></td>' +
-                    '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
-                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">' +
-                    '</tr>';
-        }
         function hideRow(index) {
             $('#row-' + index).hide();
             $('#entries' + index +'\\.toBeDeletedFlag').val("true");
@@ -86,25 +58,35 @@
                     class:"form-control", size: "5", required: "true"});
                 const $projectDesc = $("<input>", {type: "text", name: namePrefix + "projectDescription",
                     class:"form-control", size: "5", required: "true"});
+                const $delete = $("<a>", {onclick: "hideRow(" + index + ")"}).text("Delete");
+                const $toBeDeletedFlag = $("<input>", {type: "hidden", name: namePrefix + "toBeDeletedFlag",
+                    class:"toBeDeletedFlag", required: "false"});
 
                 const $classDateTD = $("<td>");
-                $classDateTD.append($makeUpId).append(getDatePicker($classDate));
                 const $makeUpTD = $("<td>");
-                $makeUpTD.append(getDatePicker($makeUp));
                 const $minutesMadeUpTD = $("<td>");
-                $minutesMadeUpTD.append($minutesMadeUp);
                 const $projectDescTD = $("<td>");
-                $projectDescTD.append($projectDesc);
+                const $deleteTD = $("<td>");
 
-                $newRow.append($classDateTD);
-                $newRow.append($makeUpTD);
-                $newRow.append($minutesMadeUpTD);
-                $newRow.append($projectDescTD);
+                $classDateTD
+                        .append($makeUpId)
+                        .append(getDatePicker($classDate));
+                $makeUpTD.append(getDatePicker($makeUp));
+                $minutesMadeUpTD.append($minutesMadeUp);
+                $projectDescTD.append($projectDesc);
+                $deleteTD
+                        .append($delete)
+                        .append($toBeDeletedFlag);
+
+                $newRow
+                        .append($classDateTD)
+                        .append($makeUpTD)
+                        .append($minutesMadeUpTD)
+                        .append($projectDescTD)
+                        .append($deleteTD);
 
                 $('#makeupTableBody:last-child').append($newRow);
 
-//                $('#makeupTableBody tr:last')
-//                        .append(generateRow(largestMakeUpIndex));
                 $('#delete-' + largestMakeUpIndex).click(function() {
                     rowId = $(this).attr('id').split('-')[1];
                     $('#row-' + rowId).hide();
@@ -172,6 +154,9 @@
     th, td {
       padding: 10px;
     }
+    table {
+      table-layout:fixed;
+    }
   </style>
   <table>
     <tr><td align="right">Name:</td><td>${student.name}</td></tr>
@@ -193,11 +178,11 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th>Class Date</th>
-					<th>Date Made Up</th>
-					<th>Minutes Made Up</th>
-					<th>Project Description</th>
-					<th>&nbsp;</th>
+					<th class="col-md-4">Class Date</th>
+					<th class="col-md-4">Date Made Up</th>
+					<th class="col-md-2">Minutes Made Up</th>
+					<th class="col-md-3">Project Description</th>
+					<th class="col-md-1"> &nbsp;</th>
 				</tr>
 			</thead>
 
