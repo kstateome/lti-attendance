@@ -97,6 +97,10 @@
                 if($(this).find(".toBeDeleted").val() === "true"){
                     $(this).hide();
                 }
+                var datePicker = $('.date');
+                datePicker.datepicker({
+                    autoclose: true
+                });
             })
         });
 
@@ -149,7 +153,7 @@
 			<tbody id="makeupTableBody">
 				<c:forEach items="${makeupForm.entries}" var="makeup" varStatus="makeupLoop">
 					<tr id="row-${makeupLoop.index}">
-						<td>
+						<td class="dateOfClass">
 						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
                                 <div class="input-group date">
@@ -159,7 +163,7 @@
                                 <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
                             </div>
 						</td>
-						<td>
+						<td class="dateMadeUp">
 							<div class="form-group">
 								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
 									<form:input id="dateMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
@@ -182,6 +186,7 @@
                     <c:if test="${makeupLoop.last}">
                         <script type="text/javascript">
                             setLatestIndex(${makeupLoop.index + 1});
+                            addDateTag();
                         </script>
                     </c:if>
 				</c:forEach>
