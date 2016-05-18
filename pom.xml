@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aviation-reporting</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <parent>
@@ -107,7 +107,7 @@
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-common</artifactId>
-            <version>1.3.0-SNAPSHOT</version>
+            <version>1.2.16</version>
         </dependency>
         <dependency>
             <groupId>com.oracle</groupId>
