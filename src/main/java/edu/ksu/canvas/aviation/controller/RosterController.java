@@ -56,6 +56,9 @@ public class RosterController extends AviationBaseController {
         SectionState sectionState = getSectionState(sectionId);
         sectionId = sectionState.selectedSection.getCanvasSectionId().toString();
         
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LOG.info("eid: "+ltiSession.getEid()+" is viewing the roster.");
+        
         //Sets the date to today if not already set
         if (date == null){
             date = new Date();
@@ -92,7 +95,7 @@ public class RosterController extends AviationBaseController {
             return page;
         } else {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
-            LOG.info("Attempting to save section attendance for section : " + sectionId + " User: " + ltiSession.getEid());
+            LOG.info("eid: "+ltiSession.getEid()+" is attempting to save section attendance for section : " + sectionId);
 
             persistenceService.saveClassAttendance(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
