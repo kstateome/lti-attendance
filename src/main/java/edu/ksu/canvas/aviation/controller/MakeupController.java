@@ -93,8 +93,16 @@ public class MakeupController extends AviationBaseController {
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: "+ltiSession.getEid()+" is saving makeup data.");
+        LOG.info("eid: " + ltiSession.getEid() + " is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
+
+        boolean allUnsavedAndToBeDeleted = false;
+        if(makeupForm.getEntries()!= null){
+            long count = makeupForm.getEntries().stream()
+                    .filter(entry -> (entry.getMakeupId() == null && entry.isToBeDeletedFlag()))
+                    .count();
+            allUnsavedAndToBeDeleted = makeupForm.getEntries().size() == count;
+        }
 
         if (bindingResult.hasErrors()) {
             LOG.info("There were errors saving the Makeup form"+ bindingResult.getAllErrors());
@@ -113,7 +121,7 @@ public class MakeupController extends AviationBaseController {
         }
         
         ModelAndView page = studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
-        if(makeupForm.getEntries() == null){
+        if(makeupForm.getEntries() == null || allUnsavedAndToBeDeleted){
             page.addObject("nullEntry", true);
         } else {
             page.addObject("updateSuccessful", true);

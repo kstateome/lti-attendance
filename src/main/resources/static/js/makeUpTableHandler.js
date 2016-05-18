@@ -1,3 +1,4 @@
+"use strict";
 $(function() {
     const $date = moment().format('MM/DD/YYYY');
 
@@ -6,21 +7,16 @@ $(function() {
         const $rowEntry = $(this).closest('tr');
         const rowIndex =  $rowEntry.index();
         console.log($rowEntry.find('.makeupId').val());
-        if($rowEntry.find('.makeupId').val() !== undefined) {
-            console.log("Hidding row " + rowIndex);
-            $rowEntry.hide();
-            $rowEntry.find('.toBeDeletedFlag').val(true);
-            const $classDate = $rowEntry.find('.dateOfClass');
-            $classDate.removeAttr("required");
-            $classDate.val($date);
-            const $dateMadeUp = $rowEntry.find('.dateMadeUp');
-            $dateMadeUp.val($date);
-            const $minutesMadeup = $rowEntry.find('.minutesMadeUp');
-            $minutesMadeup.val(1);
-        } else {
-            console.log("Removing Row " + rowIndex);
-            $rowEntry.remove();
-        }
+        console.log("Hiding row " + rowIndex);
+        $rowEntry.hide();
+        $rowEntry.find('.toBeDeletedFlag').val(true);
+        const $classDate = $rowEntry.find('.dateOfClass');
+        $classDate.removeAttr("required");
+        $classDate.val($date);
+        const $dateMadeUp = $rowEntry.find('.dateMadeUp');
+        $dateMadeUp.val($date);
+        const $minutesMadeup = $rowEntry.find('.minutesMadeUp');
+        $minutesMadeup.val(1);
     });
 
     //creating new row
@@ -36,7 +32,7 @@ $(function() {
         const $dateMadeUp = $("<input>", {type: "text", name: namePrefix + "dateMadeUp",
             class:"form-control"});
         const $minutesMadeUp = $("<input>", {type: "text", name: namePrefix + "minutesMadeUp",
-            class:"form-control", size: "5"});
+            class:"form-control minutesMadeUp", size: "5"});
         const $projectDesc = $("<input>", {type: "text", name: namePrefix + "projectDescription",
             class:"form-control", size: "5"});
         const $toBeDeletedFlag = $("<input>", {type: "hidden", name: namePrefix + "toBeDeletedFlag",
