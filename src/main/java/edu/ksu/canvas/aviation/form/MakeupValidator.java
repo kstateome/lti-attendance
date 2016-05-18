@@ -27,16 +27,8 @@ public class MakeupValidator implements Validator {
                 continue;
             }
             
-            if(!errors.hasFieldErrors("entries["+makeupIndex+"].minutesMadeUp")) {
-                if(makeupModel.getMinutesMadeUp() == null) {
-                    errors.rejectValue("entries["+makeupIndex+"].minutesMadeUp", "Required.makeupForm.entries.minutesMadeUp");
-                } else if(makeupModel.getMinutesMadeUp() < 1) {
-                    errors.rejectValue("entries["+makeupIndex+"].minutesMadeUp", "Min.makeupForm.entries.minutesMadeUp");
-                }
-            }
-            
-            if(makeupModel.getDateMadeUp() == null) {
-                errors.rejectValue("entries["+makeupIndex+"].dateMadeUp", "Required.makeupForm.entries.dateMadeUp");
+            if(!errors.hasFieldErrors("entries["+makeupIndex+"].minutesMadeUp") && makeupModel.getMinutesMadeUp() != null && makeupModel.getMinutesMadeUp() < 1) {
+                errors.rejectValue("entries["+makeupIndex+"].minutesMadeUp", "Min.makeupForm.entries.minutesMadeUp");
             }
             
             if(makeupModel.getDateOfClass() == null) {

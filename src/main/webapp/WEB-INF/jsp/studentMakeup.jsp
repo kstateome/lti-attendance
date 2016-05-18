@@ -42,13 +42,13 @@
                     '<td>' +
                     '<div class="form-group">' +
                     '<div class="input-group date">' +
-                    '<input required="true" id="dateMadeUp' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" class="form-control" />' +
+                    '<input id="dateMadeUp' + currentRow + '" name="entries[' + currentRow + '].dateMadeUp" class="form-control" />' +
                     '<span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span>' +
                     '</span>' +
                     '</div>' +
                     '</div>' +
                     '</td>' +
-                    '<td><input required="true" id="minutesMadeUp' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
+                    '<td><input id="minutesMadeUp' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
                     '<td><input id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" class="form-control" size="5" /></td>' +
                     '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
                     '</tr>' +
@@ -63,10 +63,8 @@
             classDate.removeAttr("required");
             classDate.val(date);
             const dateMadeUp = $('#dateMadeUp' + index);
-            dateMadeUp.removeAttr("required");
             dateMadeUp.val(date);
             const minutesMadeup = $('#minutesMadeUp' + index);
-            minutesMadeup.removeAttr("required");
             minutesMadeup.val(1);
         }
         $(function() {
