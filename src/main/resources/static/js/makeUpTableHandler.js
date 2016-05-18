@@ -2,6 +2,15 @@
 $(function() {
     const $date = moment().format('MM/DD/YYYY');
 
+    //hide persisted makeup to be deleted on failed validation
+    $('#makeupTableBody > tr').each(function(){
+        if($(this).find(".toBeDeletedFlag").val() === "true"){
+            $(this).hide();
+        }
+        //setup datepickers for already persisted rows
+        setupDatePickers();
+    });
+
     //for hiding already saved makeup or removing unsaved makeup entry
     $('#makeupTableBody').on('click','.delete-button',function(){
         const $rowEntry = $(this).closest('tr');
@@ -87,16 +96,6 @@ $(function() {
         )
         return $formGroupDiv;
     }
-
-    //hide persisted makeup to be deleted on failed validation
-    $('#makeupTableBody > tr').each(function(){
-        if($(this).find(".toBeDeleted").val() === "true"){
-            $(this).hide();
-        }
-        //setup datepickers for already persisted rows
-        setupDatePickers();
-    });
-
     function setupDatePickers(){
         $('.date').datepicker({
             autoclose: true
