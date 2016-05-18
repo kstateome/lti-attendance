@@ -51,23 +51,29 @@
                     '<td><input required="true" id="minutesMadeUp' + currentRow + '" name="entries[' + currentRow + '].minutesMadeUp" class="form-control" size="5" /></td>' +
                     '<td><input id="projectDescription' + currentRow + '" name="entries[' + currentRow + '].projectDescription" class="form-control" size="5" /></td>' +
                     '<td><a id="delete-' + currentRow + '" onclick=hideRow(' + currentRow + '); >Delete</a></td>' +
-                    '</tr>' +
-                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">';
+                    '<input id="entries' + currentRow + '.toBeDeletedFlag" name="entries[' + currentRow + '].toBeDeletedFlag" type="hidden" value="false">' +
+                    '</tr>';
         }
         function hideRow(index) {
-            $('#row-' + index).hide();
-            $('#entries' + index +'\\.toBeDeletedFlag').val("true");
-
-            const date = moment().format('MM/DD/YYYY');
-            const classDate = $('#classDate' + index);
-            classDate.removeAttr("required");
-            classDate.val(date);
-            const dateMadeUp = $('#dateMadeUp' + index);
-            dateMadeUp.removeAttr("required");
-            dateMadeUp.val(date);
-            const minutesMadeup = $('#minutesMadeUp' + index);
-            minutesMadeup.removeAttr("required");
-            minutesMadeup.val(1);
+            const $rowEntry = $('#row-' + index);
+            if($('#id' + index).val() !== "") {
+                console.log("Hidding Row " + index);
+                $rowEntry.hide();
+                $('#entries' + index + '\\.toBeDeletedFlag').val("true");
+                const date = moment().format('MM/DD/YYYY');
+                const classDate = $('#classDate' + index);
+                classDate.removeAttr("required");
+                classDate.val(date);
+                const dateMadeUp = $('#dateMadeUp' + index);
+                dateMadeUp.removeAttr("required");
+                dateMadeUp.val(date);
+                const minutesMadeup = $('#minutesMadeUp' + index);
+                minutesMadeup.removeAttr("required");
+                minutesMadeup.val(1);
+            } else {
+                console.log("Removing Row " + index);
+                $rowEntry.remove();
+            }
         }
         $(function() {
             $('#addMakeupBtn').click(function() {
@@ -122,6 +128,13 @@
     </div>
 
     </c:if>
+  <c:if test="${nullEntry}">
+      <br/><br/>
+      <div class="alert alert-warning">
+          <p>There was no makeup time entry to be saved.</p>
+      </div>
+
+  </c:if>
     <c:if test="${empty updateSuccessful}">
       <br/><br/>
     </c:if>
@@ -190,8 +203,10 @@
                             <form:input path="entries[${makeupLoop.index}].projectDescription" cssClass="form-control" size="5" />
                             <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].projectDescription" />
                         </td>
-                        <td><a id="delete-${makeupLoop.index}" href="#" onclick="hideRow(${makeupLoop.index})">Delete</a></td>
-                        <form:hidden cssClass="toBeDeleted" path="entries[${makeupLoop.index}].toBeDeletedFlag"/>
+                        <td>
+                            <a id="delete-${makeupLoop.index}" href="#" onclick="hideRow(${makeupLoop.index})">Delete</a>
+                            <form:hidden cssClass="toBeDeleted" path="entries[${makeupLoop.index}].toBeDeletedFlag"/>
+                        </td>
                     </tr>
                     <c:if test="${makeupLoop.last}">
                         <script type="text/javascript">
