@@ -153,7 +153,7 @@
 			<tbody id="makeupTableBody">
 				<c:forEach items="${makeupForm.entries}" var="makeup" varStatus="makeupLoop">
 					<tr id="row-${makeupLoop.index}">
-						<td class="dateOfClass">
+						<td>
 						    <form:input type="hidden" id="id${makeupLoop.index}" path="entries[${makeupLoop.index}].makeupId" />
                             <div class="form-group">
                                 <div class="input-group date">
@@ -163,7 +163,7 @@
                                 <form:errors cssClass="error center-block" path="entries[${makeupLoop.index}].dateOfClass" />
                             </div>
 						</td>
-						<td class="dateMadeUp">
+						<td>
 							<div class="form-group">
 								<div class="input-group date" id="datePickerMadeup-${makeupLoop.index}">
 									<form:input id="dateMadeUp${makeupLoop.index}" path="entries[${makeupLoop.index}].dateMadeUp" cssClass="form-control" />
