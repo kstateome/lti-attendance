@@ -18,7 +18,9 @@ public class MakeupValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         MakeupForm makeupForm = (MakeupForm) target;
-        
+        if(makeupForm.getEntries() == null){
+            return;
+        }
         int makeupIndex = 0;
         for (MakeupModel makeupModel : makeupForm.getEntries()) {
             
