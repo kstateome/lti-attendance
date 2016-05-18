@@ -59,7 +59,7 @@ public class MakeupController extends AviationBaseController {
 
     private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
         AviationStudent student = studentRepository.findByStudentId(new Long(studentId));
-        List<Makeup> makeups = makeupRepository.findByAviationStudent(student);
+        List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
         if(addEmptyEntry) {
             makeups.add(new Makeup());
         }
