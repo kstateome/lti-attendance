@@ -59,7 +59,7 @@ public class MakeupController extends AviationBaseController {
 
     private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
         AviationStudent student = studentRepository.findByStudentId(new Long(studentId));
-        List<Makeup> makeups = makeupRepository.findByAviationStudent(student);
+        List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
         if(addEmptyEntry) {
             makeups.add(new Makeup());
         }
@@ -92,11 +92,8 @@ public class MakeupController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("Attempting to save makeup data... User: " + ltiSession.getEid());
         validator.validate(makeupForm, bindingResult);
-        
+
         if (bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().stream().forEach(fieldError -> {
-                LOG.info(fieldError.toString());
-            });
             LOG.info("There were errors saving the Makeup form"+ bindingResult.getAllErrors());
             String errorMessage = "Please correct user input and try saving again.";
             
@@ -113,8 +110,11 @@ public class MakeupController extends AviationBaseController {
         }
         
         ModelAndView page = studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
-        page.addObject("updateSuccessful", true);
-        
+        if(makeupForm.getEntries() == null){
+            page.addObject("nullEntry", true);
+        } else {
+            page.addObject("updateSuccessful", true);
+        }
         return page; 
                 
     }

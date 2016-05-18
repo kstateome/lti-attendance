@@ -34,7 +34,7 @@ public class Makeup implements Serializable {
     private String projectDescription;
 
     @Column(name = "minutes_madeup")
-    private int minutesMadeUp;
+    private Integer minutesMadeUp;
 
     @ManyToOne
     @JoinColumn(name="student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable=false)
