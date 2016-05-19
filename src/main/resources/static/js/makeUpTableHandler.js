@@ -25,6 +25,7 @@ $(function() {
         const $dateMadeUp = $rowEntry.find('.dateMadeUp');
         $dateMadeUp.val($date);
         const $minutesMadeup = $rowEntry.find('.minutesMadeUp');
+        //to prevent invalid input of hidden rows to be deleted
         $minutesMadeup.val(1);
     });
 
@@ -61,26 +62,17 @@ $(function() {
         const $newRow = $("<tr>", {id: "row-" + index});
 
         //appending inputs to tds
-        $classDateTD
-            .append($makeUpId)
-            .append(createDatePicker($classDate));
+        $classDateTD.append($makeUpId, createDatePicker($classDate));
         $makeUpTD.append(createDatePicker($dateMadeUp));
         $minutesMadeUpTD.append($minutesMadeUp);
         $projectDescTD.append($projectDesc);
-        $deleteTD
-            .append($delete)
-            .append($toBeDeletedFlag);
+        $deleteTD.append($delete, $toBeDeletedFlag);
 
         //appending tds to new row
-        $newRow
-            .append($classDateTD)
-            .append($makeUpTD)
-            .append($minutesMadeUpTD)
-            .append($projectDescTD)
-            .append($deleteTD);
+        $newRow.append($classDateTD, $makeUpTD, $minutesMadeUpTD, $projectDescTD, $deleteTD);
 
         //appending row to table
-        $('#makeupTableBody:last-child').append($newRow);
+        $('#makeupTableBody').append($newRow);
 
         //setup datepickers for date picker of the new column
         setupDatePickers();
@@ -90,10 +82,11 @@ $(function() {
     function createDatePicker(element){
         const $formGroupDiv = $("<div>", {class: "form-group"});
         const $inputGroupDiv = $("<div>", {class: "input-group date"});
-        $formGroupDiv.append(
-            $inputGroupDiv.append(element)
-                .append("<span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span></span>")
-        )
+        const $inputSpan = $("<span>", {class: "input-group-addon"});
+        const $glyphSpan = $("<span>", {class: "glyphicon glyphicon-calendar"});
+        $inputSpan.append($glyphSpan);
+        $inputGroupDiv.append(element,$inputSpan);
+        $formGroupDiv.append($inputGroupDiv);
         return $formGroupDiv;
     }
     function setupDatePickers(){
