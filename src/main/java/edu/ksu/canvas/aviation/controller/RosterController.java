@@ -4,6 +4,7 @@ import edu.ksu.canvas.aviation.factory.SectionModelFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.RosterFormValidator;
 import edu.ksu.canvas.aviation.services.AttendanceService;
+import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -40,6 +41,9 @@ public class RosterController extends AviationBaseController {
     private AttendanceService attendanceService;
     
     @Autowired
+    private AviationCourseService courseService;
+    
+    @Autowired
     private RosterFormValidator validator;
 
     
@@ -70,7 +74,7 @@ public class RosterController extends AviationBaseController {
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sectionState.sections));
-        persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
+        courseService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
         attendanceService.loadAttendanceIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView("roster");

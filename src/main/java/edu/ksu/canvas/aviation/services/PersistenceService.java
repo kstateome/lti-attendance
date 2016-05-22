@@ -4,7 +4,6 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
@@ -49,24 +48,6 @@ public class PersistenceService {
     protected CanvasApiFactory canvasApiFactory;
     
     
-
-    public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
-
-        Long canvasCourseId = Long.parseLong(courseId);
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if(aviationCourse == null){
-            aviationCourse = new AviationCourse(canvasCourseId, classSetupForm.getTotalClassMinutes(), classSetupForm.getDefaultMinutesPerSession());
-        }
-        else{
-            aviationCourse.setDefaultMinutesPerSession(classSetupForm.getDefaultMinutesPerSession());
-            aviationCourse.setTotalMinutes(classSetupForm.getTotalClassMinutes());
-        }
-
-        aviationCourseRepository.save(aviationCourse);
-    }
-
-
-
     
     public boolean shouldAutomaticallySynchornizeWithCanvas(long canvasCourseId) {
         return aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null;
@@ -147,13 +128,5 @@ public class PersistenceService {
         return ret;
     }
     
-    public void loadCourseInfoIntoForm(CourseConfigurationForm courseConfigurationForm, Long courseId) {
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
-        
-        courseConfigurationForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        courseConfigurationForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
-    }
-
-
     
 }

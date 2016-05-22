@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
+import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.PersistenceService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
@@ -29,6 +30,9 @@ public class CourseConfigurationController extends AviationBaseController {
     
     @Autowired
     private PersistenceService persistence;
+    
+    @Autowired
+    private AviationCourseService courseService;
 
     @Autowired
     private CourseConfigurationValidator validator;
@@ -50,7 +54,7 @@ public class CourseConfigurationController extends AviationBaseController {
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         SectionState sectionState = getSectionState(sectionId);
-        persistenceService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
+        courseService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
@@ -70,7 +74,7 @@ public class CourseConfigurationController extends AviationBaseController {
             LOG.info("eid: "+ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
+            courseService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
