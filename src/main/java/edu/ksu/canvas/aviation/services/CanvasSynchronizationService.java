@@ -46,9 +46,10 @@ public class CanvasSynchronizationService {
     protected CanvasApiFactory canvasApiFactory;
     
     
-    
-    public boolean courseExistsInDb(long canvasCourseId) {
-        return aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null;
+    public void synchronizeWhenCourseNotExistsInDB(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        if(aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
+            synchronize(ltiSession, canvasCourseId);
+        }
     }
     
     public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {

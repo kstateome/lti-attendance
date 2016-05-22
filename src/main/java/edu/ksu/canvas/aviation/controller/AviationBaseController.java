@@ -73,11 +73,8 @@ public class AviationBaseController extends LtiLaunchController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
 
-
         long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
-        if(canvasSynchronizationService.courseExistsInDb(canvasCourseId)) {
-            canvasSynchronizationService.synchronize(ltiSession, canvasCourseId);
-        }
+        canvasSynchronizationService.synchronizeWhenCourseNotExistsInDB(ltiSession, canvasCourseId);
         
         return new ModelAndView("forward:roster");
     }
