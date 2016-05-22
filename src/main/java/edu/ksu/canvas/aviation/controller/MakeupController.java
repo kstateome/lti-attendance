@@ -24,6 +24,7 @@ import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.MakeupValidator;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.repository.MakeupRepository;
+import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.lti.model.LtiSession;
 
@@ -34,6 +35,9 @@ import edu.ksu.lti.model.LtiSession;
 public class MakeupController extends AviationBaseController {
     
     private static final Logger LOG = Logger.getLogger(MakeupController.class);
+    
+    @Autowired
+    private MakeupService makeupService;
     
     @Autowired
     private AviationStudentRepository studentRepository;
@@ -85,7 +89,7 @@ public class MakeupController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is deleting a makeup entry.");
         
-        persistenceService.deleteMakeup(makeupId);
+        makeupService.deleteMakeup(makeupId);
         return studentMakeup(sectionId, studentId);
     }
     
@@ -117,7 +121,7 @@ public class MakeupController extends AviationBaseController {
             
             return page;
         } else {
-            persistenceService.updateMakeups(makeupForm);
+            makeupService.updateMakeups(makeupForm);
         }
         
         ModelAndView page = studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);

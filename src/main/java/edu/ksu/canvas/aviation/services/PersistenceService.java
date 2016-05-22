@@ -5,19 +5,15 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.entity.Makeup;
 import edu.ksu.canvas.aviation.enums.Status;
-import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.model.AttendanceModel;
-import edu.ksu.canvas.aviation.model.MakeupModel;
 import edu.ksu.canvas.aviation.model.SectionModel;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.repository.MakeupRepository;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
@@ -51,14 +47,10 @@ public class PersistenceService {
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
 
-    @Autowired
-    private AviationStudentRepository aviationStudentRepository;
 
     @Autowired
     private AttendanceRepository attendanceRepository;
-    
-    @Autowired
-    private MakeupRepository makeupRepository;
+
     
     @Autowired
     private AviationStudentRepository studentRepository;
@@ -70,9 +62,6 @@ public class PersistenceService {
     protected CanvasApiFactory canvasApiFactory;
     
     
-    public void deleteMakeup(String makeupId) {
-        makeupRepository.delete(Long.valueOf(makeupId));
-    }
 
     public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
 
@@ -88,54 +77,7 @@ public class PersistenceService {
 
         aviationCourseRepository.save(aviationCourse);
     }
-    public void updateMakeups(MakeupForm form){
-        deleteMakeup(form);
-        saveMakeups(form);
-    }
 
-    private void deleteMakeup(MakeupForm form) {
-        if(form.getEntries() == null){
-            return;
-        }
-        for(MakeupModel model : form.getEntries()){
-            if(model.getMakeupId() != null && model.isToBeDeletedFlag()) {
-                makeupRepository.delete(model.getMakeupId());
-            }
-        }
-
-    }
-
-    private void saveMakeups(MakeupForm form) {
-        if(form.getEntries() == null){
-            return;
-        }
-        for(MakeupModel makeupModel: form.getEntries()) {
-            if(makeupModel.isToBeDeletedFlag()){
-                continue;
-            }
-            if(makeupModel.getMakeupId() == null) {
-                AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
-                
-                Makeup makeup = new Makeup();
-                makeup.setDateOfClass(makeupModel.getDateOfClass());
-                makeup.setDateMadeUp(makeupModel.getDateMadeUp());
-                makeup.setProjectDescription(makeupModel.getProjectDescription());
-                makeup.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
-                makeup.setAviationStudent(student);
-                
-                makeupRepository.save(makeup);
-            } else {
-                Makeup tracker = makeupRepository.findByMakeupId(makeupModel.getMakeupId());
-                tracker.setDateMadeUp(makeupModel.getDateMadeUp());
-                tracker.setDateOfClass(makeupModel.getDateOfClass());
-                tracker.setProjectDescription(makeupModel.getProjectDescription());
-                tracker.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
-                
-                makeupRepository.save(tracker);
-            }
-
-        }
-    }
 
     /**
      * This method is tuned to save as fast as possible. Data is loaded and saved in batches.
