@@ -1,5 +1,14 @@
 package edu.ksu.canvas.aviation.services;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
@@ -17,23 +26,12 @@ import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.lti.model.LtiSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Component
-public class PersistenceService {
-    
+public class CanvasSynchronizationService {
 
     private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
     private static final int DEFAULT_MINUTES_PER_CLASS = 45;
-
     
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
@@ -127,6 +125,5 @@ public class PersistenceService {
         
         return ret;
     }
-    
-    
+     
 }

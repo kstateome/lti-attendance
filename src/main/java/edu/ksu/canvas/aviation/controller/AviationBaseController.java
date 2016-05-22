@@ -4,7 +4,7 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
-import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.services.CanvasSynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -36,7 +36,7 @@ public class AviationBaseController extends LtiLaunchController {
     protected LtiLaunch ltiLaunch;
 
     @Autowired
-    protected PersistenceService persistenceService;
+    protected CanvasSynchronizationService canvasSynchronizationService;
     
     @Autowired
     protected CanvasApiFactory canvasApiFactory;
@@ -75,8 +75,8 @@ public class AviationBaseController extends LtiLaunchController {
 
 
         long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
-        if(persistenceService.shouldAutomaticallySynchornizeWithCanvas(canvasCourseId)) {
-            persistenceService.synchronizeWithCanvas(ltiSession, canvasCourseId);
+        if(canvasSynchronizationService.shouldAutomaticallySynchornizeWithCanvas(canvasCourseId)) {
+            canvasSynchronizationService.synchronizeWithCanvas(ltiSession, canvasCourseId);
         }
         
         return new ModelAndView("forward:roster");

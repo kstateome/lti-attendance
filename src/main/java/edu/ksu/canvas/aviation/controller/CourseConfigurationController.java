@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
-import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.services.CanvasSynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.model.LtiSession;
@@ -29,7 +29,7 @@ public class CourseConfigurationController extends AviationBaseController {
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
     
     @Autowired
-    private PersistenceService persistence;
+    private CanvasSynchronizationService synchronizationService;
     
     @Autowired
     private AviationCourseService courseService;
@@ -85,7 +85,7 @@ public class CourseConfigurationController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is forcing a syncrhonization with Canvas for Canvas Course ID: "+ltiSession.getCanvasCourseId());
         
-        persistence.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
+        synchronizationService.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
         
         return new ModelAndView("forward:/courseConfiguration/"+sectionId);
     }
