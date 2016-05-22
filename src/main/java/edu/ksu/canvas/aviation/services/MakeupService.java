@@ -23,17 +23,18 @@ public class MakeupService {
     
     
     
-    public void save(MakeupForm form){
+    public void save(MakeupForm form) {
         deleteFlaggedMakeups(form);
         createOrUpdate(form);
     }
     
     private void createOrUpdate(MakeupForm form) {
-        if(form.getEntries() == null){
+        if(form.getEntries() == null) {
             return;
         }
+        
         for(MakeupModel makeupModel: form.getEntries()) {
-            if(makeupModel.isToBeDeletedFlag()){
+            if(makeupModel.isToBeDeletedFlag()) {
                 continue;
             }
             if(makeupModel.getMakeupId() == null) {
