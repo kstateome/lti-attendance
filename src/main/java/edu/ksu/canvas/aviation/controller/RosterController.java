@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.controller;
 import edu.ksu.canvas.aviation.factory.SectionModelFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.RosterFormValidator;
+import edu.ksu.canvas.aviation.services.AttendanceService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -36,6 +37,9 @@ public class RosterController extends AviationBaseController {
     private SectionModelFactory sectionModelFactory;
     
     @Autowired
+    private AttendanceService attendanceService;
+    
+    @Autowired
     private RosterFormValidator validator;
 
     
@@ -67,7 +71,7 @@ public class RosterController extends AviationBaseController {
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sectionState.sections));
         persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
-        persistenceService.loadAttendanceIntoRoster(rosterForm, date);
+        attendanceService.loadAttendanceIntoRoster(rosterForm, date);
         
         ModelAndView page = new ModelAndView("roster");
         page.addObject("rosterForm", rosterForm);
@@ -97,7 +101,7 @@ public class RosterController extends AviationBaseController {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
             LOG.info("eid: "+ltiSession.getEid()+" is attempting to save section attendance for section : " + sectionId);
 
-            persistenceService.saveClassAttendance(rosterForm);
+            attendanceService.saveClassAttendance(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
             page.addObject("saveSuccess", true);
             return page;
