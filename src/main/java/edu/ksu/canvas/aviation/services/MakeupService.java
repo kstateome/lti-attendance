@@ -23,12 +23,12 @@ public class MakeupService {
     
     
     
-    public void updateMakeups(MakeupForm form){
-        deleteMakeup(form);
-        saveMakeups(form);
+    public void save(MakeupForm form){
+        deleteFlaggedMakeups(form);
+        createOrUpdate(form);
     }
     
-    private void saveMakeups(MakeupForm form) {
+    private void createOrUpdate(MakeupForm form) {
         if(form.getEntries() == null){
             return;
         }
@@ -61,12 +61,12 @@ public class MakeupService {
     }
     
     
-    public void deleteMakeup(String makeupId) {
+    public void delete(String makeupId) {
         makeupRepository.delete(Long.valueOf(makeupId));
     }
 
 
-    private void deleteMakeup(MakeupForm form) {
+    private void deleteFlaggedMakeups(MakeupForm form) {
         if(form.getEntries() == null){
             return;
         }

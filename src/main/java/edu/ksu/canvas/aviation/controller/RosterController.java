@@ -74,8 +74,8 @@ public class RosterController extends AviationBaseController {
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
         rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sectionState.sections));
-        courseService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
-        attendanceService.loadAttendanceIntoRoster(rosterForm, date);
+        courseService.loadIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
+        attendanceService.loadIntoForm(rosterForm, date);
         
         ModelAndView page = new ModelAndView("roster");
         page.addObject("rosterForm", rosterForm);
@@ -105,7 +105,7 @@ public class RosterController extends AviationBaseController {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
             LOG.info("eid: "+ltiSession.getEid()+" is attempting to save section attendance for section : " + sectionId);
 
-            attendanceService.saveClassAttendance(rosterForm);
+            attendanceService.save(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
             page.addObject("saveSuccess", true);
             return page;

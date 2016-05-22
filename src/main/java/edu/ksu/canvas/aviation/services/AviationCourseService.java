@@ -15,27 +15,26 @@ public class AviationCourseService {
     private AviationCourseRepository aviationCourseRepository;
     
     
-    public void saveCourseMinutes(CourseConfigurationForm classSetupForm, String courseId) {
+    public void save(CourseConfigurationForm couseForm, String courseId) {
 
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if(aviationCourse == null){
-            aviationCourse = new AviationCourse(canvasCourseId, classSetupForm.getTotalClassMinutes(), classSetupForm.getDefaultMinutesPerSession());
-        }
-        else{
-            aviationCourse.setDefaultMinutesPerSession(classSetupForm.getDefaultMinutesPerSession());
-            aviationCourse.setTotalMinutes(classSetupForm.getTotalClassMinutes());
+        if(aviationCourse == null) {
+            aviationCourse = new AviationCourse(canvasCourseId, couseForm.getTotalClassMinutes(), couseForm.getDefaultMinutesPerSession());
+        } else {
+            aviationCourse.setDefaultMinutesPerSession(couseForm.getDefaultMinutesPerSession());
+            aviationCourse.setTotalMinutes(couseForm.getTotalClassMinutes());
         }
 
         aviationCourseRepository.save(aviationCourse);
     }
     
     
-    public void loadCourseInfoIntoForm(CourseConfigurationForm courseConfigurationForm, Long courseId) {
+    public void loadIntoForm(CourseConfigurationForm courseForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
-        courseConfigurationForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        courseConfigurationForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        courseForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
+        courseForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
     
 }

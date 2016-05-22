@@ -54,7 +54,7 @@ public class CourseConfigurationController extends AviationBaseController {
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         SectionState sectionState = getSectionState(sectionId);
-        courseService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
+        courseService.loadIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
@@ -74,7 +74,7 @@ public class CourseConfigurationController extends AviationBaseController {
             LOG.info("eid: "+ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            courseService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
+            courseService.save(classSetupForm, ltiSession.getCanvasCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
@@ -85,7 +85,7 @@ public class CourseConfigurationController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is forcing a syncrhonization with Canvas for Canvas Course ID: "+ltiSession.getCanvasCourseId());
         
-        synchronizationService.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
+        synchronizationService.synchronize(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
         
         return new ModelAndView("forward:/courseConfiguration/"+sectionId);
     }

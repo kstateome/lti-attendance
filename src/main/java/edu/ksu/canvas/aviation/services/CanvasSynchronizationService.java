@@ -47,11 +47,11 @@ public class CanvasSynchronizationService {
     
     
     
-    public boolean shouldAutomaticallySynchornizeWithCanvas(long canvasCourseId) {
+    public boolean courseExistsInDb(long canvasCourseId) {
         return aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null;
     }
     
-    public void synchronizeWithCanvas(LtiSession ltiSession, long canvasCourseId) throws IOException {
+    public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());

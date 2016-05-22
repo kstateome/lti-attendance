@@ -34,7 +34,7 @@ public class AttendanceService {
     /**
      * This method is tuned to save as fast as possible. Data is loaded and saved in batches.
      */
-    public void saveClassAttendance(RosterForm rosterForm) {
+    public void save(RosterForm rosterForm) {
         long begin = System.currentTimeMillis();
        
         List<Attendance> saveToDb = new ArrayList<>();
@@ -98,7 +98,7 @@ public class AttendanceService {
     }
     
     
-    public void loadAttendanceIntoRoster(RosterForm rosterForm, Date date) {
+    public void loadIntoForm(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
         
         Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();

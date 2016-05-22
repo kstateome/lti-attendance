@@ -89,7 +89,7 @@ public class MakeupController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is deleting a makeup entry.");
         
-        makeupService.deleteMakeup(makeupId);
+        makeupService.delete(makeupId);
         return studentMakeup(sectionId, studentId);
     }
     
@@ -121,7 +121,7 @@ public class MakeupController extends AviationBaseController {
             
             return page;
         } else {
-            makeupService.updateMakeups(makeupForm);
+            makeupService.save(makeupForm);
         }
         
         ModelAndView page = studentMakeup(String.valueOf(makeupForm.getSectionId()), String.valueOf(makeupForm.getStudentId()), false);
