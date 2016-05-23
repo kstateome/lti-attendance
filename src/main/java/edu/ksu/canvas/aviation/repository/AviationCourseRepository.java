@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AviationCourseRepository extends CrudRepository<AviationCourse, Long> {
-    
-    
+
+
     AviationCourse findByCourseId(Long courseId);
-    
+
     AviationCourse findByCanvasCourseId(Long canvasCourseId);
-    
+
 }

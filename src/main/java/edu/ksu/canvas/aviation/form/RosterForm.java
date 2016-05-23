@@ -36,5 +36,5 @@ public class RosterForm extends CourseConfigurationForm {
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
-    
+
 }

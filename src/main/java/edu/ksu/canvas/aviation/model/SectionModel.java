@@ -12,15 +12,15 @@ public class SectionModel {
     private Long canvasCourseId;
     private List<AttendanceModel> attendances;
 
-    public SectionModel(Section section){
+
+    public SectionModel() { }
+
+    public SectionModel(Section section) {
         sectionId = section.getId();
         sectionName = section.getName();
         canvasCourseId = section.getCourseId() == null ? null : Long.valueOf(section.getCourseId());
     }
-    
 
-    public SectionModel() { }
-    
 
     public long getSectionId() {
         return sectionId;
@@ -63,4 +63,5 @@ public class SectionModel {
                 ", canvasCourseId=" + canvasCourseId +
                 '}';
     }
+
 }
