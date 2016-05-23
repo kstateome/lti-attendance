@@ -1,8 +1,12 @@
 package edu.ksu.canvas.aviation.controller;
 
-import edu.ksu.canvas.aviation.factory.SectionModelFactory;
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.RosterFormValidator;
+import edu.ksu.canvas.aviation.model.SectionModelFactory;
+import edu.ksu.canvas.aviation.services.AttendanceService;
+import edu.ksu.canvas.aviation.services.AviationCourseService;
+import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -22,6 +26,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -34,6 +39,15 @@ public class RosterController extends AviationBaseController {
     
     @Autowired
     private SectionModelFactory sectionModelFactory;
+    
+    @Autowired
+    private AttendanceService attendanceService;
+    
+    @Autowired
+    private AviationCourseService courseService;
+    
+    @Autowired
+    private AviationSectionService sectionService;
     
     @Autowired
     private RosterFormValidator validator;
@@ -53,8 +67,9 @@ public class RosterController extends AviationBaseController {
     @RequestMapping("/{sectionId}")
     public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
-        SectionState sectionState = getSectionState(sectionId);
-        sectionId = sectionState.selectedSection.getCanvasSectionId().toString();
+        AviationSection selectedSection = getSelectedSection(sectionId);
+        List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
+        sectionId = selectedSection.getCanvasSectionId().toString();
         
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is viewing the roster.");
@@ -65,13 +80,13 @@ public class RosterController extends AviationBaseController {
         }
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
-        rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sectionState.sections));
-        persistenceService.loadCourseInfoIntoForm(rosterForm, sectionState.selectedSection.getCanvasCourseId());
-        persistenceService.loadAttendanceIntoRoster(rosterForm, date);
+        rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sections));
+        courseService.loadIntoForm(rosterForm, selectedSection.getCanvasCourseId());
+        attendanceService.loadIntoForm(rosterForm, date);
         
         ModelAndView page = new ModelAndView("roster");
         page.addObject("rosterForm", rosterForm);
-        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
+        page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         page.addObject("selectedSectionId", sectionId);
         
         return page;
@@ -89,15 +104,18 @@ public class RosterController extends AviationBaseController {
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/roster");
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
-            SectionState sectionState = getSectionState(sectionId);
-            page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionState.sections, sectionId));
+            
+            AviationSection selectedSection = getSelectedSection(sectionId);
+            List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
+            page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
+            
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
             LOG.info("eid: "+ltiSession.getEid()+" is attempting to save section attendance for section : " + sectionId);
 
-            persistenceService.saveClassAttendance(rosterForm);
+            attendanceService.save(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
             page.addObject("saveSuccess", true);
             return page;

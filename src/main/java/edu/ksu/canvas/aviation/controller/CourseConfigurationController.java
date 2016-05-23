@@ -13,8 +13,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
-import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.services.AviationCourseService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.model.LtiSession;
@@ -28,7 +30,10 @@ public class CourseConfigurationController extends AviationBaseController {
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
     
     @Autowired
-    private PersistenceService persistence;
+    private SynchronizationService synchronizationService;
+    
+    @Autowired
+    private AviationCourseService courseService;
 
     @Autowired
     private CourseConfigurationValidator validator;
@@ -49,10 +54,10 @@ public class CourseConfigurationController extends AviationBaseController {
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        SectionState sectionState = getSectionState(sectionId);
-        persistenceService.loadCourseInfoIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
+        AviationSection selectedSection = getSelectedSection(sectionId);
+        courseService.loadIntoForm(courseConfigurationForm,selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
-        page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
+        page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
         return page;
     }
@@ -70,7 +75,7 @@ public class CourseConfigurationController extends AviationBaseController {
             LOG.info("eid: "+ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                  + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            persistenceService.saveCourseMinutes(classSetupForm, ltiSession.getCanvasCourseId());
+            courseService.save(classSetupForm, ltiSession.getCanvasCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
@@ -81,7 +86,7 @@ public class CourseConfigurationController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: "+ltiSession.getEid()+" is forcing a syncrhonization with Canvas for Canvas Course ID: "+ltiSession.getCanvasCourseId());
         
-        persistence.synchronizeWithCanvas(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
+        synchronizationService.synchronize(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
         
         return new ModelAndView("forward:/courseConfiguration/"+sectionId);
     }

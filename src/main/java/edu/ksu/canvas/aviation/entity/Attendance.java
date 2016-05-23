@@ -1,7 +1,8 @@
 package edu.ksu.canvas.aviation.entity;
 
-import edu.ksu.canvas.aviation.enums.Status;
 import org.hibernate.annotations.Check;
+
+import edu.ksu.canvas.aviation.enums.Status;
 
 import javax.persistence.*;
 import java.io.Serializable;
