@@ -28,7 +28,7 @@ import edu.ksu.lti.model.LtiSession;
 
 
 @Component
-public class CanvasSynchronizationService {
+public class SynchronizationService {
 
     private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
     private static final int DEFAULT_MINUTES_PER_CLASS = 45;
@@ -52,6 +52,9 @@ public class CanvasSynchronizationService {
         }
     }
     
+    /**
+     * Synchronizes Canvas related information to the database
+     */
     public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 

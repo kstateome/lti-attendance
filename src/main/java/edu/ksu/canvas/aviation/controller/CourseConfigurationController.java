@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
-import edu.ksu.canvas.aviation.services.CanvasSynchronizationService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.model.LtiSession;
@@ -30,7 +30,7 @@ public class CourseConfigurationController extends AviationBaseController {
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
     
     @Autowired
-    private CanvasSynchronizationService synchronizationService;
+    private SynchronizationService synchronizationService;
     
     @Autowired
     private AviationCourseService courseService;
