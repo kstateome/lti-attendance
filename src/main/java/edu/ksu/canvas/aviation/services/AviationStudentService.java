@@ -17,4 +17,5 @@ public class AviationStudentService {
     public AviationStudent getStudent(long studentId) {
         return studentRepository.findByStudentId(studentId);
     }
+
 }

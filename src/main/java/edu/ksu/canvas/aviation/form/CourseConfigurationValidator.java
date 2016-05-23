@@ -16,7 +16,7 @@ public class CourseConfigurationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         CourseConfigurationForm courseConfigurationForm = (CourseConfigurationForm) target;
-        if(courseConfigurationForm.getTotalClassMinutes() < courseConfigurationForm.getDefaultMinutesPerSession()){
+        if (courseConfigurationForm.getTotalClassMinutes() < courseConfigurationForm.getDefaultMinutesPerSession()) {
             errors.rejectValue("defaultMinutesPerSession", "ExceedTotal.courseConfigurationForm.defaultMinutesPerSession");
         }
     }

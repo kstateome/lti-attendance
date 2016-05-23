@@ -16,21 +16,23 @@ public class AttendanceModel {
     private Status status;
     private Integer minutesMissed;
     private Date dateOfClass;
-    
-    
+
+
     public AttendanceModel() { }
-    
-    public AttendanceModel(AviationStudent student, Status status, Date dateOfClass) { 
+
+    public AttendanceModel(AviationStudent student, Status status, Date dateOfClass) {
         this.aviationStudentId = student == null ? null : student.getStudentId();
         this.aviationStudentName = student == null ? null : student.getName();
         this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
         this.status = status;
         this.dateOfClass = dateOfClass;
     }
-    
+
     public AttendanceModel(Attendance attendance) {
-        if(attendance == null) { return; }
-        
+        if (attendance == null) {
+            return;
+        }
+
         this.attendanceId = attendance.getAttendanceId();
         this.aviationStudentId = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getStudentId();
         this.aviationStudentName = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getName();
@@ -39,8 +41,8 @@ public class AttendanceModel {
         this.minutesMissed = attendance.getMinutesMissed();
         this.dateOfClass = attendance.getDateOfClass();
     }
-    
-    
+
+
     public Long getAttendanceId() {
         return attendanceId;
     }
@@ -52,7 +54,7 @@ public class AttendanceModel {
     public Long getAviationStudentId() {
         return aviationStudentId;
     }
-    
+
     public String getAviationStudentName() {
         return aviationStudentName;
     }
@@ -72,32 +74,32 @@ public class AttendanceModel {
     public void setAviationStudentId(Long aviationStudentId) {
         this.aviationStudentId = aviationStudentId;
     }
-    
+
     public Status getStatus() {
         return status;
     }
-    
+
     public void setStatus(Status status) {
         this.status = status;
     }
-    
+
     public Integer getMinutesMissed() {
         return minutesMissed;
     }
-    
+
     public void setMinutesMissed(Integer minutesMissed) {
         this.minutesMissed = minutesMissed;
     }
-    
+
     public Date getDateOfClass() {
         return dateOfClass;
     }
-    
+
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
     }
 
-    
+
     @Override
     public String toString() {
         return "AttendanceModel [attendanceId=" + attendanceId + ", aviationStudentId=" + aviationStudentId
@@ -105,5 +107,5 @@ public class AttendanceModel {
                 + aviationStudentSisUserId + ", status=" + status + ", minutesMissed=" + minutesMissed
                 + ", dateOfClass=" + dateOfClass + "]";
     }
-      
+
 }

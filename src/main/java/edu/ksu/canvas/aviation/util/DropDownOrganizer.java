@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 public class DropDownOrganizer {
 
-    /*
+
+    /**
      * Puts the selected section first in the list and sorts the rest alphabetically.
      */
     public static List<AviationSection> sortWithSelectedSectionFirst(List<AviationSection> sections, String selectedSectionId) {

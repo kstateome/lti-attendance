@@ -26,19 +26,19 @@ import edu.ksu.lti.model.LtiSession;
 @Scope("session")
 @RequestMapping("/courseConfiguration")
 public class CourseConfigurationController extends AviationBaseController {
-    
+
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
-    
+
     @Autowired
     private SynchronizationService synchronizationService;
-    
+
     @Autowired
     private AviationCourseService courseService;
 
     @Autowired
     private CourseConfigurationValidator validator;
 
-    
+
     @RequestMapping()
     public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
         return classSetup(null, false);
@@ -47,48 +47,48 @@ public class CourseConfigurationController extends AviationBaseController {
     @RequestMapping("/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId,
                                    @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
-        
+
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: "+ltiSession.getEid()+" is viewing course configuration...");
-        
+        LOG.info("eid: " + ltiSession.getEid() + " is viewing course configuration...");
+
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         AviationSection selectedSection = getSelectedSection(sectionId);
-        courseService.loadIntoForm(courseConfigurationForm,selectedSection.getCanvasCourseId());
+        courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
         return page;
     }
 
-    @RequestMapping(value = "/{sectionId}/save", params ="saveCourseConfiguration", method = RequestMethod.POST)
+    @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveTotalClassMinutes(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         validator.validate(classSetupForm, bindingResult);
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
             page.addObject("error", "Please correct user input and try saving again.");
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
-            LOG.info("eid: "+ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
-                 + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
+            LOG.info("eid: " + ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
+                    + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
             courseService.save(classSetupForm, ltiSession.getCanvasCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
     }
-    
+
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException, IOException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: "+ltiSession.getEid()+" is forcing a syncrhonization with Canvas for Canvas Course ID: "+ltiSession.getCanvasCourseId());
-        
+        LOG.info("eid: " + ltiSession.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + ltiSession.getCanvasCourseId());
+
         synchronizationService.synchronize(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
-        
-        return new ModelAndView("forward:/courseConfiguration/"+sectionId);
+
+        return new ModelAndView("forward:/courseConfiguration/" + sectionId);
     }
-    
+
 }

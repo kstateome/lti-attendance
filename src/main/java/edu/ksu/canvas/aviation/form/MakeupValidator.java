@@ -18,29 +18,29 @@ public class MakeupValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         MakeupForm makeupForm = (MakeupForm) target;
-        if(makeupForm.getEntries() == null){
+        if (makeupForm.getEntries() == null) {
             return;
         }
         int makeupIndex = 0;
         for (MakeupModel makeupModel : makeupForm.getEntries()) {
-            
-            if(makeupModel.isToBeDeletedFlag()) {
+
+            if (makeupModel.isToBeDeletedFlag()) {
                 makeupIndex++;
                 continue;
             }
-            
-            if(!errors.hasFieldErrors("entries["+makeupIndex+"].minutesMadeUp") && makeupModel.getMinutesMadeUp() != null && makeupModel.getMinutesMadeUp() < 1) {
-                errors.rejectValue("entries["+makeupIndex+"].minutesMadeUp", "Min.makeupForm.entries.minutesMadeUp");
+
+            if (!errors.hasFieldErrors("entries[" + makeupIndex + "].minutesMadeUp") && makeupModel.getMinutesMadeUp() != null && makeupModel.getMinutesMadeUp() < 1) {
+                errors.rejectValue("entries[" + makeupIndex + "].minutesMadeUp", "Min.makeupForm.entries.minutesMadeUp");
             }
-            
-            if(makeupModel.getDateOfClass() == null) {
-                errors.rejectValue("entries["+makeupIndex+"].dateOfClass", "Required.makeupForm.entries.dateOfClass");
+
+            if (makeupModel.getDateOfClass() == null) {
+                errors.rejectValue("entries[" + makeupIndex + "].dateOfClass", "Required.makeupForm.entries.dateOfClass");
             }
-            
-            if(makeupModel.getProjectDescription() != null && makeupModel.getProjectDescription().length() >= 255) {
-                errors.rejectValue("entries["+makeupIndex+"].projectDescription", "Max.makeupForm.entries.projectDescription");
+
+            if (makeupModel.getProjectDescription() != null && makeupModel.getProjectDescription().length() >= 255) {
+                errors.rejectValue("entries[" + makeupIndex + "].projectDescription", "Max.makeupForm.entries.projectDescription");
             }
-            
+
             makeupIndex++;
         }
     }

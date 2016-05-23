@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DropDownOrganizerUTest {
+
     private static long sectionId1 = 1;
     private static long sectionId2 = 2;
     private static long sectionId3 = 3;
@@ -18,6 +19,7 @@ public class DropDownOrganizerUTest {
     private AviationSection section1 = new AviationSection();
     private AviationSection section2 = new AviationSection();
     private AviationSection section3 = new AviationSection();
+
 
     public DropDownOrganizerUTest() {
         section1.setCanvasSectionId(sectionId1);
@@ -61,4 +63,5 @@ public class DropDownOrganizerUTest {
         Assert.assertEquals("Expected section 1 to be at 2nd position of list", sectionId1, index1AviationSectionId);
         Assert.assertEquals("Expected section 2 to be at 3rd position of list", sectionId2, index2AviationSectionId);
     }
+
 }
