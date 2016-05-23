@@ -45,12 +45,10 @@ public class MakeupForm {
             return;
         }
 
-
         for (Makeup entry : entries) {
             MakeupModel modelEntry = new MakeupModel(entry.getMakeupId(), entry.getDateOfClass(), entry.getDateMadeUp(), entry.getProjectDescription(), entry.getMinutesMadeUp());
             this.entries.add(modelEntry);
         }
-
     }
 
     @Override
@@ -61,4 +59,5 @@ public class MakeupForm {
                 ", entries=" + entries +
                 '}';
     }
+
 }

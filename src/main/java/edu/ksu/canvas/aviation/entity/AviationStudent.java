@@ -11,7 +11,6 @@ public class AviationStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")
@@ -35,9 +34,9 @@ public class AviationStudent implements Serializable {
     @OneToMany(mappedBy = "aviationStudent")
     private List<Attendance> attendances;
 
+
     @Transient
     private Double percentageOfCourseMissed;
-
 
     public Double getPercentageOfCourseMissed() {
         return percentageOfCourseMissed;
@@ -127,4 +126,5 @@ public class AviationStudent implements Serializable {
         result = 31 * result + (sectionId != null ? sectionId.hashCode() : 0);
         return result;
     }
+
 }

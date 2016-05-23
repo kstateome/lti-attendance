@@ -13,7 +13,6 @@ public class AviationCourse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "course_id")
@@ -29,15 +28,14 @@ public class AviationCourse implements Serializable {
     private Long canvasCourseId;
 
 
-    public AviationCourse() {
-
-    }
+    public AviationCourse() { }
 
     public AviationCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
         this.canvasCourseId = canvasCourseId;
         this.totalMinutes = totalClassMinutes;
         this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
+
 
     public Long getCourseId() {
         return courseId;

@@ -16,7 +16,6 @@ public class AviationSection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "section_id")
@@ -34,8 +33,7 @@ public class AviationSection implements Serializable {
     private String name;
 
 
-    public AviationSection() {
-    }
+    public AviationSection() { }
 
 
     public Long getSectionId() {
@@ -76,6 +74,5 @@ public class AviationSection implements Serializable {
         return "AviationSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
                 + canvasSectionId + ", name=" + name + "]";
     }
-
 
 }

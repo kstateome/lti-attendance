@@ -30,4 +30,5 @@ public class CourseConfigurationForm {
     public void setDefaultMinutesPerSession(int defaultMinutesPerSession) {
         this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
+
 }

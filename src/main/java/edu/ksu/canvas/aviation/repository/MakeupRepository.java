@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface MakeupRepository extends CrudRepository<Makeup, Long> {
     
+
     List<Makeup> findByAviationStudentOrderByDateOfClassAsc(AviationStudent aviationStudent);
     
     Makeup findByMakeupId(Long makeUpId);

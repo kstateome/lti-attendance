@@ -17,7 +17,6 @@ public class Attendance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     @Id
     @GeneratedValue(generator = "ATTENDANCE_SEQ", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "ATTENDANCE_SEQ", sequenceName = "ATTENDANCE_SEQ", allocationSize = 50)
@@ -39,8 +38,8 @@ public class Attendance implements Serializable {
     @Column(name = "date_of_class")
     private Date dateOfClass;
 
-    public Attendance() {
-    }
+
+    public Attendance() { }
 
     public Attendance(AviationStudent aviationStudent, Status status, Date dateOfClass) {
         this.aviationStudent = aviationStudent;

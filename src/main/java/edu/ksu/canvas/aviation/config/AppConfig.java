@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 
 import java.util.List;
 
+
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
@@ -30,6 +31,7 @@ public class AppConfig extends CommonAppConfig {
 
     @Autowired
     private ConfigRepository configRepo;
+
 
     @Bean
     public RoleChecker roleChecker() {
@@ -46,4 +48,5 @@ public class AppConfig extends CommonAppConfig {
         String canvasBaseUrl = configItem.getValue();
         return new CanvasApiFactory(canvasBaseUrl);
     }
+
 }
