@@ -82,17 +82,7 @@ public class MakeupController extends AviationBaseController {
         page.addObject("makeupForm", makeupForm);
         
         return page;
-    }
-    
-    @RequestMapping(value = "/deleteMakeup/{sectionId}/{studentId}/{makeupId}")
-    public ModelAndView deleteMakeup(@PathVariable String sectionId, @PathVariable String studentId, @PathVariable String makeupId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: "+ltiSession.getEid()+" is deleting a makeup entry.");
-        
-        makeupService.delete(makeupId);
-        return studentMakeup(sectionId, studentId);
-    }
-    
+    }    
     
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {

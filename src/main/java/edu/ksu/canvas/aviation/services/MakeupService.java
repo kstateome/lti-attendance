@@ -60,12 +60,6 @@ public class MakeupService {
 
         }
     }
-    
-    
-    public void delete(String makeupId) {
-        makeupRepository.delete(Long.valueOf(makeupId));
-    }
-
 
     private void deleteFlaggedMakeups(MakeupForm form) {
         if(form.getEntries() == null){
