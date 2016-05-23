@@ -3,8 +3,8 @@ package edu.ksu.canvas.aviation.controller;
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
-import edu.ksu.canvas.aviation.services.PersistenceService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
+import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -36,7 +36,7 @@ public class AviationBaseController extends LtiLaunchController {
     protected LtiLaunch ltiLaunch;
 
     @Autowired
-    protected PersistenceService persistenceService;
+    protected SynchronizationService canvasSynchronizationService;
     
     @Autowired
     protected CanvasApiFactory canvasApiFactory;
@@ -45,7 +45,7 @@ public class AviationBaseController extends LtiLaunchController {
     protected RoleChecker roleChecker;
     
     @Autowired
-    private AviationSectionRepository sectionRepository;
+    protected AviationSectionService sectionService;
 
     
     @Override
@@ -73,34 +73,23 @@ public class AviationBaseController extends LtiLaunchController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         assertPrivilegedUser(ltiSession);
 
-
         long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
-        if(persistenceService.shouldAutomaticallySynchornizeWithCanvas(canvasCourseId)) {
-            persistenceService.synchronizeWithCanvas(ltiSession, canvasCourseId);
-        }
+        canvasSynchronizationService.synchronizeWhenCourseNotExistsInDB(ltiSession, canvasCourseId);
         
         return new ModelAndView("forward:roster");
     }
     
-    protected static class SectionState {
-        AviationSection selectedSection;
-        List<AviationSection> sections;
-    }
-    
-    protected SectionState getSectionState(String sectionId) throws NoLtiSessionException {
-        SectionState ret = new SectionState();
-        
-        if(sectionId == null) {
+    protected AviationSection getSelectedSection(String previousSelectedSectionId) throws NoLtiSessionException {
+
+        if(previousSelectedSectionId == null) {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
-            ret.sections = sectionRepository.findByCanvasCourseId(Long.valueOf(ltiSession.getCanvasCourseId()));
-            ret.selectedSection = ret.sections.get(0);
-            sectionId = String.valueOf(ret.selectedSection.getCanvasSectionId());
+            long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
+            return sectionService.getFirstSectionOfCourse(canvasCourseId);
+            
         } else {
-            ret.selectedSection = sectionRepository.findByCanvasSectionId(Long.valueOf(sectionId));
-            ret.sections = sectionRepository.findByCanvasCourseId(ret.selectedSection.getCanvasCourseId());
+            long sectionId = Long.valueOf(previousSelectedSectionId);
+            return sectionService.getSection(sectionId);
         }
-        
-        return ret;
     }
     
 

@@ -1,7 +1,7 @@
-package edu.ksu.canvas.aviation.factory;
+package edu.ksu.canvas.aviation.model;
 
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.model.SectionModel;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
