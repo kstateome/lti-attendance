@@ -1,5 +1,7 @@
 package edu.ksu.canvas.aviation.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,20 @@ public class MakeupService {
     private AviationStudentRepository aviationStudentRepository;
     
     
+    public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
+        AviationStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
+        List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
+        if(addEmptyEntry) {
+            makeups.add(new Makeup());
+        }
+        
+        MakeupForm makeupForm = new MakeupForm();
+        makeupForm.setEntriesFromMakeEntities(makeups);
+        makeupForm.setSectionId(Long.valueOf(sectionId));
+        makeupForm.setStudentId(Long.valueOf(studentId));
+        
+        return makeupForm;
+    }
     
     public void save(MakeupForm form) {
         deleteFlaggedMakeups(form);
