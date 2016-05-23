@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.model.AttendanceSummaryForSectionModel;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.services.ReportService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
@@ -52,7 +52,7 @@ public class AttendanceSummaryController extends AviationBaseController {
         
         ModelAndView page = new ModelAndView("attendanceSummary");        
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
-        List<AttendanceSummaryForSectionModel> summaryForSections = reportService.getAttendanceSummaryReport(new Long(sectionId));
+        List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(new Long(sectionId));
         page.addObject("attendanceSummaryForSections", summaryForSections);
         page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
 

@@ -10,8 +10,8 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import edu.ksu.canvas.aviation.model.AttendanceSummaryForSectionModel;
-import edu.ksu.canvas.aviation.model.AttendanceSummaryForSectionModel.Entry;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel.Entry;
 
 
 @Repository
@@ -23,7 +23,7 @@ public class ReportRepository {
     
     
     
-    public List<AttendanceSummaryForSectionModel> getAttendanceSummary(long sectionId) {
+    public List<AttendanceSummaryModel> getAttendanceSummary(long sectionId) {
         String sql = 
                 "select course_id, section_id, student_id, student_name, " + 
                 "sum_minutes_madeup, " +
@@ -63,17 +63,17 @@ public class ReportRepository {
         
         @SuppressWarnings("unchecked")
         List<Object[]> results = query.getResultList();
-        List<AttendanceSummaryForSectionModel> ret = new ArrayList<AttendanceSummaryForSectionModel>();
+        List<AttendanceSummaryModel> ret = new ArrayList<AttendanceSummaryModel>();
         
         
-        AttendanceSummaryForSectionModel currentSection = null;
+        AttendanceSummaryModel currentSection = null;
         long currentSectionId = -1;
         
         for(Object[] result : results) {
             sectionId = ((BigDecimal) result[1]).longValue();
             if(currentSection == null || currentSectionId != sectionId) {
                 currentSectionId = sectionId;
-                currentSection = new AttendanceSummaryForSectionModel(sectionId);
+                currentSection = new AttendanceSummaryModel(sectionId);
                 ret.add(currentSection);
             }
             

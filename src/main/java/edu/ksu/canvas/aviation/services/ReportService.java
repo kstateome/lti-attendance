@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.aviation.model.AttendanceSummaryForSectionModel;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
 import edu.ksu.canvas.aviation.repository.ReportRepository;
 
 
@@ -17,7 +17,7 @@ public class ReportService {
     private ReportRepository reportRepository;
     
     
-    public List<AttendanceSummaryForSectionModel> getAttendanceSummaryReport(Long sectionId) {
+    public List<AttendanceSummaryModel> getAttendanceSummaryReport(Long sectionId) {
         return reportRepository.getAttendanceSummary(new Long(sectionId));
     }
 }

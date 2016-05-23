@@ -1,9 +1,9 @@
 package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.factory.SectionModelFactory;
 import edu.ksu.canvas.aviation.form.RosterForm;
 import edu.ksu.canvas.aviation.form.RosterFormValidator;
+import edu.ksu.canvas.aviation.model.SectionModelFactory;
 import edu.ksu.canvas.aviation.services.AttendanceService;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.AviationSectionService;

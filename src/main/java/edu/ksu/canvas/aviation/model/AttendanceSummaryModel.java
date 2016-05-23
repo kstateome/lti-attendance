@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents all of the attendance summary data for a given section
  */
-public class AttendanceSummaryForSectionModel {
+public class AttendanceSummaryModel {
 
     private final long sectionId;
     private final List<Entry> entries;
@@ -82,7 +82,7 @@ public class AttendanceSummaryForSectionModel {
     }
 
     
-    public AttendanceSummaryForSectionModel(long sectionId) {
+    public AttendanceSummaryModel(long sectionId) {
         entries = new ArrayList<Entry>();
         
         this.sectionId = sectionId;
