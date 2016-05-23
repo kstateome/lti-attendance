@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.CanvasSynchronizationService;
@@ -53,10 +54,10 @@ public class CourseConfigurationController extends AviationBaseController {
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        SectionState sectionState = getSectionState(sectionId);
-        courseService.loadIntoForm(courseConfigurationForm, sectionState.selectedSection.getCanvasCourseId());
+        AviationSection selectedSection = getSelectedSection(sectionId);
+        courseService.loadIntoForm(courseConfigurationForm,selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
-        page.addObject("selectedSectionId", sectionState.selectedSection.getCanvasSectionId());
+        page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
         return page;
     }
