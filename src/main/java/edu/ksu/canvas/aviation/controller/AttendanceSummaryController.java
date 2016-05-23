@@ -26,31 +26,31 @@ import edu.ksu.lti.model.LtiSession;
 @Scope("session")
 @RequestMapping("/attendanceSummary")
 public class AttendanceSummaryController extends AviationBaseController {
-    
+
     private static final Logger LOG = Logger.getLogger(AttendanceSummaryController.class);
-    
+
 
     @Autowired
     private ReportService reportService;
-    
-    @Autowired 
+
+    @Autowired
     private AviationSectionService sectionService;
-    
-    
+
+
     @RequestMapping()
-    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {            
-            return attendanceSummary(null);
+    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+        return attendanceSummary(null);
     }
 
     @RequestMapping("/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: "+ltiSession.getEid()+" is viewing the attendance summary report.");
-        
+        LOG.info("eid: " + ltiSession.getEid() + " is viewing the attendance summary report.");
+
         AviationSection selectedSection = getSelectedSection(sectionId);
         List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
-        
-        ModelAndView page = new ModelAndView("attendanceSummary");        
+
+        ModelAndView page = new ModelAndView("attendanceSummary");
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(new Long(sectionId));
         page.addObject("attendanceSummaryForSections", summaryForSections);
@@ -58,5 +58,5 @@ public class AttendanceSummaryController extends AviationBaseController {
 
         return page;
     }
-    
+
 }

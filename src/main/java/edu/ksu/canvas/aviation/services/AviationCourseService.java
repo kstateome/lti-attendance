@@ -13,13 +13,13 @@ public class AviationCourseService {
 
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
-    
-    
+
+
     public void save(CourseConfigurationForm couseForm, String courseId) {
 
         Long canvasCourseId = Long.parseLong(courseId);
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if(aviationCourse == null) {
+        if (aviationCourse == null) {
             aviationCourse = new AviationCourse(canvasCourseId, couseForm.getTotalClassMinutes(), couseForm.getDefaultMinutesPerSession());
         } else {
             aviationCourse.setDefaultMinutesPerSession(couseForm.getDefaultMinutesPerSession());
@@ -28,13 +28,13 @@ public class AviationCourseService {
 
         aviationCourseRepository.save(aviationCourse);
     }
-    
-    
+
+
     public void loadIntoForm(CourseConfigurationForm courseForm, Long courseId) {
         AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
-        
+
         courseForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
         courseForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
     }
-    
+
 }

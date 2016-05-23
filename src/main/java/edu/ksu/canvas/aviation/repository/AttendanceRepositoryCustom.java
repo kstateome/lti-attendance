@@ -8,9 +8,9 @@ import edu.ksu.canvas.aviation.entity.Attendance;
 
 public interface AttendanceRepositoryCustom {
 
- 
+
     List<Attendance> getAttendanceByCourseByDayOfClass(Long courseId, Date dateOfClass);
-    
+
     void saveInBatches(List<Attendance> attendances);
-    
+
 }

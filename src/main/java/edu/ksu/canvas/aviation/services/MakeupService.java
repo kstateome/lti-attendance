@@ -16,53 +16,53 @@ import edu.ksu.canvas.aviation.repository.MakeupRepository;
 @Component
 public class MakeupService {
 
-    
+
     @Autowired
     private MakeupRepository makeupRepository;
-    
+
     @Autowired
     private AviationStudentRepository aviationStudentRepository;
-    
-    
+
+
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
         AviationStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
         List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
-        if(addEmptyEntry) {
+        if (addEmptyEntry) {
             makeups.add(new Makeup());
         }
-        
+
         MakeupForm makeupForm = new MakeupForm();
         makeupForm.setEntriesFromMakeEntities(makeups);
         makeupForm.setSectionId(Long.valueOf(sectionId));
         makeupForm.setStudentId(Long.valueOf(studentId));
-        
+
         return makeupForm;
     }
-    
+
     public void save(MakeupForm form) {
         deleteFlaggedMakeups(form);
         createOrUpdate(form);
     }
-    
+
     private void createOrUpdate(MakeupForm form) {
-        if(form.getEntries() == null) {
+        if (form.getEntries() == null) {
             return;
         }
-        
-        for(MakeupModel makeupModel: form.getEntries()) {
-            if(makeupModel.isToBeDeletedFlag()) {
+
+        for (MakeupModel makeupModel : form.getEntries()) {
+            if (makeupModel.isToBeDeletedFlag()) {
                 continue;
             }
-            if(makeupModel.getMakeupId() == null) {
+            if (makeupModel.getMakeupId() == null) {
                 AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
-                
+
                 Makeup makeup = new Makeup();
                 makeup.setDateOfClass(makeupModel.getDateOfClass());
                 makeup.setDateMadeUp(makeupModel.getDateMadeUp());
                 makeup.setProjectDescription(makeupModel.getProjectDescription());
                 makeup.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
                 makeup.setAviationStudent(student);
-                
+
                 makeupRepository.save(makeup);
             } else {
                 Makeup tracker = makeupRepository.findByMakeupId(makeupModel.getMakeupId());
@@ -70,7 +70,7 @@ public class MakeupService {
                 tracker.setDateOfClass(makeupModel.getDateOfClass());
                 tracker.setProjectDescription(makeupModel.getProjectDescription());
                 tracker.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
-                
+
                 makeupRepository.save(tracker);
             }
 
@@ -78,15 +78,15 @@ public class MakeupService {
     }
 
     private void deleteFlaggedMakeups(MakeupForm form) {
-        if(form.getEntries() == null){
+        if (form.getEntries() == null) {
             return;
         }
-        for(MakeupModel model : form.getEntries()){
-            if(model.getMakeupId() != null && model.isToBeDeletedFlag()) {
+        for (MakeupModel model : form.getEntries()) {
+            if (model.getMakeupId() != null && model.isToBeDeletedFlag()) {
                 makeupRepository.delete(model.getMakeupId());
             }
         }
 
     }
-    
+
 }

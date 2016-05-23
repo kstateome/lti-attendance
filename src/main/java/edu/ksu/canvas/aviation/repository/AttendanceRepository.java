@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface AttendanceRepository extends CrudRepository<Attendance, Long>, AttendanceRepositoryCustom {
-    
-    
+
+
     List<Attendance> findByAviationStudent(AviationStudent aviationStudent);
-    
+
     Attendance findByAttendanceId(Long attendanceId);
-    
+
 }

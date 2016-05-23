@@ -29,7 +29,7 @@ import java.util.*;
 @Controller
 @Scope("session")
 public class AviationBaseController extends LtiLaunchController {
-    
+
     private static final Logger LOG = Logger.getLogger(AviationBaseController.class);
 
     @Autowired
@@ -37,17 +37,17 @@ public class AviationBaseController extends LtiLaunchController {
 
     @Autowired
     protected SynchronizationService canvasSynchronizationService;
-    
+
     @Autowired
     protected CanvasApiFactory canvasApiFactory;
 
     @Autowired
     protected RoleChecker roleChecker;
-    
+
     @Autowired
     protected AviationSectionService sectionService;
 
-    
+
     @Override
     protected String getInitialViewPath() {
         return "/initialize";
@@ -65,7 +65,7 @@ public class AviationBaseController extends LtiLaunchController {
         LOG.debug("LTI launch URL: " + ltiLaunchUrl);
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
-    
+
     @RequestMapping("/initialize")
     public ModelAndView initialize() throws OauthTokenRequiredException, InvalidInstanceException, NoLtiSessionException, IOException {
         ltiLaunch.ensureApiTokenPresent(getApplicationName());
@@ -75,23 +75,23 @@ public class AviationBaseController extends LtiLaunchController {
 
         long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
         canvasSynchronizationService.synchronizeWhenCourseNotExistsInDB(ltiSession, canvasCourseId);
-        
+
         return new ModelAndView("forward:roster");
     }
-    
+
     protected AviationSection getSelectedSection(String previousSelectedSectionId) throws NoLtiSessionException {
 
-        if(previousSelectedSectionId == null) {
+        if (previousSelectedSectionId == null) {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
             long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
             return sectionService.getFirstSectionOfCourse(canvasCourseId);
-            
+
         } else {
             long sectionId = Long.valueOf(previousSelectedSectionId);
             return sectionService.getSection(sectionId);
         }
     }
-    
+
 
     private void assertPrivilegedUser(LtiSession ltiSession) throws NoLtiSessionException, AccessDeniedException {
         if (ltiSession.getEid() == null || ltiSession.getEid().isEmpty()) {

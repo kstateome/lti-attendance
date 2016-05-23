@@ -11,7 +11,7 @@ public class AviationStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "student_id")
@@ -25,11 +25,11 @@ public class AviationStudent implements Serializable {
     @Column(name = "student_name")
     private String name;
 
-    @Column(name = "canvas_course_id", nullable=false)
+    @Column(name = "canvas_course_id", nullable = false)
     private Integer canvasCourseId;
-    
+
     // Canvas has the authoritative data.
-    @Column(name = "section_id", nullable=false)
+    @Column(name = "section_id", nullable = false)
     private Long sectionId;
 
     @OneToMany(mappedBy = "aviationStudent")
@@ -37,7 +37,6 @@ public class AviationStudent implements Serializable {
 
     @Transient
     private Double percentageOfCourseMissed;
-
 
 
     public Double getPercentageOfCourseMissed() {
@@ -96,7 +95,7 @@ public class AviationStudent implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
-    
+
     @Override
     public String toString() {
         return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="

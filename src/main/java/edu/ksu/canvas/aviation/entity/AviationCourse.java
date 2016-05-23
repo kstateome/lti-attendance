@@ -8,24 +8,24 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "aviation_course")
-@Check(constraints="default_minutes_per_session >= 0 and total_minutes >= 0")
+@Check(constraints = "default_minutes_per_session >= 0 and total_minutes >= 0")
 public class AviationCourse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "course_id")
     private Long courseId;
-    
-    @Column(name="total_minutes")
+
+    @Column(name = "total_minutes")
     private Integer totalMinutes;
-    
-    @Column(name="default_minutes_per_session")
+
+    @Column(name = "default_minutes_per_session")
     private Integer defaultMinutesPerSession;
-    
-    @Column(name="canvas_course_id", nullable=false, unique=true)
+
+    @Column(name = "canvas_course_id", nullable = false, unique = true)
     private Long canvasCourseId;
 
 
@@ -72,11 +72,10 @@ public class AviationCourse implements Serializable {
     }
 
 
-    
     @Override
     public String toString() {
         return "AviationCourse [courseId=" + courseId + ", totalMinutes=" + totalMinutes + ", defaultMinutesPerSession="
                 + defaultMinutesPerSession + ", canvasCourseId=" + canvasCourseId + "]";
     }
-    
+
 }

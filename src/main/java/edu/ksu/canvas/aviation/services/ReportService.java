@@ -12,11 +12,9 @@ import edu.ksu.canvas.aviation.repository.ReportRepository;
 @Component
 public class ReportService {
 
-    
     @Autowired
     private ReportRepository reportRepository;
-    
-    
+
     public List<AttendanceSummaryModel> getAttendanceSummaryReport(Long sectionId) {
         return reportRepository.getAttendanceSummary(new Long(sectionId));
     }

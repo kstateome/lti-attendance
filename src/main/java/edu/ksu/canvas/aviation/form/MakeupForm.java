@@ -13,7 +13,7 @@ public class MakeupForm {
     private long studentId;
     private List<MakeupModel> entries;
 
-    
+
     public long getSectionId() {
         return sectionId;
     }
@@ -37,20 +37,20 @@ public class MakeupForm {
     public void setEntries(List<MakeupModel> entries) {
         this.entries = entries;
     }
-    
+
     public void setEntriesFromMakeEntities(List<Makeup> entries) {
         this.entries = new ArrayList<>();
-        
-        if(entries == null || entries.isEmpty()) {
+
+        if (entries == null || entries.isEmpty()) {
             return;
         }
-        
 
-        for(Makeup entry : entries) {
+
+        for (Makeup entry : entries) {
             MakeupModel modelEntry = new MakeupModel(entry.getMakeupId(), entry.getDateOfClass(), entry.getDateMadeUp(), entry.getProjectDescription(), entry.getMinutesMadeUp());
             this.entries.add(modelEntry);
         }
-       
+
     }
 
     @Override

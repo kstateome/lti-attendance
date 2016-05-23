@@ -11,8 +11,8 @@ public class AttendanceSummaryModel {
 
     private final long sectionId;
     private final List<Entry> entries;
-    
-    
+
+
     public static class Entry {
 
         private final long courseId;
@@ -25,9 +25,9 @@ public class AttendanceSummaryModel {
         private final double percentCourseMissed;
 
 
-        public Entry(long courseId, long sectionId, long studentId, 
-                String studentName, int sumMinutesMadeup, int remainingMinutesMadeup,
-                int sumMinutesMissed, double percentCourseMissed) {
+        public Entry(long courseId, long sectionId, long studentId,
+                     String studentName, int sumMinutesMadeup, int remainingMinutesMadeup,
+                     int sumMinutesMissed, double percentCourseMissed) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
@@ -81,23 +81,23 @@ public class AttendanceSummaryModel {
 
     }
 
-    
+
     public AttendanceSummaryModel(long sectionId) {
         entries = new ArrayList<Entry>();
-        
+
         this.sectionId = sectionId;
     }
-    
+
     public void add(Entry entry) {
         entries.add(entry);
     }
-    
+
     public long getSectionId() {
         return sectionId;
     }
-    
+
     public List<Entry> getEntries() {
         return entries;
     }
-    
+
 }
