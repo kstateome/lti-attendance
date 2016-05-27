@@ -75,7 +75,7 @@ public class CourseConfigurationController extends AviationBaseController {
             LOG.info("eid: " + ltiSession.getEid() + " is saving course settings for " + ltiSession.getCanvasCourseId() + ", minutes: "
                     + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            courseService.save(classSetupForm, ltiSession.getCanvasCourseId());
+            courseService.save(classSetupForm, Long.valueOf(ltiSession.getCanvasCourseId()));
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
