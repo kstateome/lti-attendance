@@ -68,7 +68,7 @@ public class AviationCourseServiceUTest {
     }
     
     @Test
-    public void save_NewCourseHasFormData() {
+    public void save_NewCourse() {
         long nonExistantCanvasCourseId = -1;
         Integer expectedTotalClassMinutes = 500;
         Integer expectedDefaultMinutesPerSession = 45;
@@ -86,7 +86,7 @@ public class AviationCourseServiceUTest {
     }
     
     @Test
-    public void save_ExistingCourseHasFormData() {
+    public void save_ExistingCourse() {
         long nonExistantCanvasCourseId = -1;
         Integer expectedTotalClassMinutes = 500;
         Integer expectedDefaultMinutesPerSession = 45;

@@ -26,6 +26,9 @@ public class MakeupService {
     private AviationStudentRepository aviationStudentRepository;
 
 
+    /**
+     * @throws IllegalArgumentException when a student cannot be found in the database for the given studentId
+     */
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
         AviationStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
         if(student == null) {
@@ -46,8 +49,11 @@ public class MakeupService {
         return makeupForm;
     }
 
+    /**
+     * @throws NullPointerException when form is null
+     */
     public void save(MakeupForm form) {
-        Validate.notNull(form, "The form must not be null");
+        Validate.notNull(form, "The form parameter must not be null");
         
         deleteFlaggedMakeups(form);
         createOrUpdate(form);
@@ -87,6 +93,8 @@ public class MakeupService {
     }
 
     private void deleteFlaggedMakeups(MakeupForm form) {
+        Validate.notNull(form, "The form parameter must not be null");
+
         if (form.getEntries() == null) {
             return;
         }

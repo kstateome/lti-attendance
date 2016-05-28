@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +31,8 @@ import edu.ksu.lti.model.LtiSession;
 @Component
 public class SynchronizationService {
 
-    private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
-    private static final int DEFAULT_MINUTES_PER_CLASS = 45;
+    public static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
+    public static final int DEFAULT_MINUTES_PER_CLASS = 45;
 
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
@@ -46,7 +47,12 @@ public class SynchronizationService {
     protected CanvasApiFactory canvasApiFactory;
 
 
+    /**
+     * @throws NullPointerException when ltiSession parameter is null
+     */
     public void synchronizeWhenCourseNotExistsInDB(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
+        
         if (aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
             synchronize(ltiSession, canvasCourseId);
         }
@@ -54,8 +60,11 @@ public class SynchronizationService {
 
     /**
      * Synchronizes Canvas related information to the database
+     * 
+     * @throws NullPointerException when ltiSession parameter is null
      */
     public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
 
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
