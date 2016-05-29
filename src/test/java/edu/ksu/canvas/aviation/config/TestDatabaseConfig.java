@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
@@ -21,6 +22,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @Configuration
 @Profile("test")
 @EnableJpaRepositories({"edu.ksu.canvas.aviation.repository"})
+@ComponentScan({"edu.ksu.canvas.aviation.repository"})
 @EntityScan({"edu.ksu.canvas.aviation.entity"})
 public class TestDatabaseConfig {
         

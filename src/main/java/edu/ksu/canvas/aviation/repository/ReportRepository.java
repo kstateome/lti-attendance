@@ -34,21 +34,22 @@ public class ReportRepository {
                 "  student.section_id, student.student_id, student.student_name, " +
                 "  nvl(missed.sum_minutes_missed,0) as sum_minutes_missed, " +
                 "  nvl(madeup.sum_minutes_madeup,0) as sum_minutes_madeup " +
-                "  from aviation_course course, aviation_student student, " +
-                " ( " +
-                "    select student_id, sum(nvl(minutes_missed,0)) as sum_minutes_missed " +
-                "    from aviation_attendance " +
-                "    group by student_id " +
-                "  ) missed, " +
-                "  ( " +
-                "    select student_id, sum(nvl(minutes_madeup,0)) as sum_minutes_madeup " +
-                "    from aviation_makeup " +
-                "    group by student_id " +
-                "  ) madeup " +
-                "  where course.canvas_course_id = student.canvas_course_id(+) and " +
-                "  student.student_id = missed.student_id(+) and " +
-                "  student.student_id = madeup.student_id(+) and " +
-                "  course.course_id IN " +
+                "  from aviation_course course " +
+                "       left outer join " +
+                "       aviation_student student on course.canvas_course_id = student.canvas_course_id " +
+                "       left outer join " +
+                "       ( " +
+                "         select student_id, sum(nvl(minutes_missed,0)) as sum_minutes_missed " +
+                "         from aviation_attendance " +
+                "         group by student_id " +
+                "       ) missed on student.student_id = missed.student_id " +
+                "       left outer join " +
+                "       ( " +
+                "         select student_id, sum(nvl(minutes_madeup,0)) as sum_minutes_madeup " +
+                "         from aviation_makeup " +
+                "         group by student_id " +
+                "       ) madeup on student.student_id = madeup.student_id " +
+                "  where course.course_id IN " +
                 "  ( " +
                 "    select distinct course.course_id " +
                 "    from aviation_student student, aviation_course course " +
@@ -69,7 +70,7 @@ public class ReportRepository {
         long currentSectionId = -1;
 
         for (Object[] result : results) {
-            sectionId = ((BigDecimal) result[1]).longValue();
+            sectionId = ((Number) result[1]).longValue();
             if (currentSection == null || currentSectionId != sectionId) {
                 currentSectionId = sectionId;
                 currentSection = new AttendanceSummaryModel(sectionId);
@@ -77,14 +78,14 @@ public class ReportRepository {
             }
 
             currentSection.add(new Entry(
-                    ((BigDecimal) result[0]).longValue(),
+                    ((Number) result[0]).longValue(),
                     sectionId,
-                    ((BigDecimal) result[2]).longValue(),
+                    ((Number) result[2]).longValue(),
                     (String) result[3],
-                    ((BigDecimal) result[4]).intValue(),
-                    ((BigDecimal) result[5]).intValue(),
-                    ((BigDecimal) result[6]).intValue(),
-                    ((BigDecimal) result[7]).doubleValue()
+                    ((Number) result[4]).intValue(),
+                    ((Number) result[5]).intValue(),
+                    ((Number) result[6]).intValue(),
+                    ((Number) result[7]).doubleValue()
             ));
         }
 
