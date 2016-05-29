@@ -9,7 +9,7 @@ public class SectionModel {
 
     private long sectionId; //canvas section ID
     private String sectionName;
-    private Long canvasCourseId;
+    private Integer canvasCourseId;
     private List<AttendanceModel> attendances;
 
 
@@ -18,7 +18,7 @@ public class SectionModel {
     public SectionModel(Section section) {
         sectionId = section.getId();
         sectionName = section.getName();
-        canvasCourseId = section.getCourseId() == null ? null : Long.valueOf(section.getCourseId());
+        canvasCourseId = section.getCourseId();
     }
 
 
@@ -38,11 +38,11 @@ public class SectionModel {
         this.sectionName = sectionName;
     }
 
-    public Long getCanvasCourseId() {
+    public Integer getCanvasCourseId() {
         return canvasCourseId;
     }
 
-    public void setCanvasCourseId(Long canvasCourseId) {
+    public void setCanvasCourseId(Integer canvasCourseId) {
         this.canvasCourseId = canvasCourseId;
     }
 

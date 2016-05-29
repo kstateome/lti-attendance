@@ -65,7 +65,7 @@ public class AttendanceService {
                 } else {
                     if (attendancesInDBForCourse == null) {
                         long beginLoad = System.currentTimeMillis();
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded " + attendancesInDBForCourse.size() + " attendance entries for course in " + (endLoad - beginLoad) + " millis..");
                     }
@@ -101,8 +101,8 @@ public class AttendanceService {
     public void loadIntoForm(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
 
-        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
-        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseByDayOfClass(canvaseCourseId, date);
+        Integer canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
+        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
 
 
