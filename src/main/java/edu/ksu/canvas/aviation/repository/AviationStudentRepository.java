@@ -19,4 +19,6 @@ public interface AviationStudentRepository extends CrudRepository<AviationStuden
 
     List<AviationStudent> findBySectionIdOrderByNameAsc(long sectionId);
 
+    List<AviationStudent> findByCanvasCourseId(long courseId);
+
 }
