@@ -9,6 +9,11 @@ import edu.ksu.canvas.aviation.model.MakeupModel;
 
 @Component
 public class MakeupValidator implements Validator {
+    
+    public static final String MINIMUM_MINUTES_MADEUP_ERROR_CODE = "Min.makeupForm.entries.minutesMadeUp";
+    public static final String REQUIRED_DATE_OF_CLASS_ERROR_CODE = "Required.makeupForm.entries.dateOfClass";
+    public static final String MAXIMUM_PROJECT_DESC_ERROR_CODE = "Max.makeupForm.entries.projectDescription";
+    
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -30,15 +35,15 @@ public class MakeupValidator implements Validator {
             }
 
             if (!errors.hasFieldErrors("entries[" + makeupIndex + "].minutesMadeUp") && makeupModel.getMinutesMadeUp() != null && makeupModel.getMinutesMadeUp() < 1) {
-                errors.rejectValue("entries[" + makeupIndex + "].minutesMadeUp", "Min.makeupForm.entries.minutesMadeUp");
+                errors.rejectValue("entries[" + makeupIndex + "].minutesMadeUp", MINIMUM_MINUTES_MADEUP_ERROR_CODE);
             }
 
             if (makeupModel.getDateOfClass() == null) {
-                errors.rejectValue("entries[" + makeupIndex + "].dateOfClass", "Required.makeupForm.entries.dateOfClass");
+                errors.rejectValue("entries[" + makeupIndex + "].dateOfClass", REQUIRED_DATE_OF_CLASS_ERROR_CODE);
             }
 
             if (makeupModel.getProjectDescription() != null && makeupModel.getProjectDescription().length() >= 255) {
-                errors.rejectValue("entries[" + makeupIndex + "].projectDescription", "Max.makeupForm.entries.projectDescription");
+                errors.rejectValue("entries[" + makeupIndex + "].projectDescription", MAXIMUM_PROJECT_DESC_ERROR_CODE);
             }
 
             makeupIndex++;
