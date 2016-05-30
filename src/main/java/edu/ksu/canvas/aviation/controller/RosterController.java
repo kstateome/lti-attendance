@@ -71,13 +71,15 @@ public class RosterController extends AviationBaseController {
         ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-        if(validatedSectionId == null) {
-            return new ModelAndView("forward:roster");
+        AviationSection selectedSection = getSelectedSection(validatedSectionId);
+        if(validatedSectionId == null || selectedSection == null) {
+            long canvasCourseId = Long.valueOf(ltiLaunch.getLtiSession().getCanvasCourseId()).longValue();
+            selectedSection = sectionService.getFirstSectionOfCourse(canvasCourseId);
+            validatedSectionId = selectedSection.getSectionId();
         }
 
-        AviationSection selectedSection = getSelectedSection(validatedSectionId);
         List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
-        sectionId = selectedSection.getCanvasSectionId().toString();
+        sectionId = selectedSection.getSectionId().toString();
 
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: " + ltiSession.getEid() + " is viewing the roster.");
@@ -88,11 +90,12 @@ public class RosterController extends AviationBaseController {
         }
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(date);
+        rosterForm.setSectionId(selectedSection.getSectionId());
         rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sections));
         courseService.loadIntoForm(rosterForm, selectedSection.getCanvasCourseId());
         attendanceService.loadIntoForm(rosterForm, date);
 
-        ModelAndView page = new ModelAndView("roster");
+        ModelAndView page = new ModelAndView("roster/"+validatedSectionId);
         page.addObject("rosterForm", rosterForm);
         page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         page.addObject("selectedSectionId", sectionId);
@@ -115,7 +118,7 @@ public class RosterController extends AviationBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            ModelAndView page = new ModelAndView("/roster");
+            ModelAndView page = new ModelAndView("roster/"+validatedSectionId);
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
 
             AviationSection selectedSection = getSelectedSection(validatedSectionId);

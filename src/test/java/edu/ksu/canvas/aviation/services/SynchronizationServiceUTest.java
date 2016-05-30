@@ -253,7 +253,7 @@ public class SynchronizationServiceUTest {
     @Test
     public void synchronizeStudentsFromCanvasToDb_NewStudent() throws Exception {
         Long expectedCanvasSectionId = 200L;
-        Integer expectedCanvasCourseId = 500;
+        Long expectedCanvasCourseId = 500L;
         String expectedSisUserId = "uniqueSisId";
         String expectedName = "Zoglmann, Kurt";
         Integer expectedStudentsSavedToDb = 1;
@@ -267,7 +267,7 @@ public class SynchronizationServiceUTest {
         enrollments.add(enrollment);
         Section section = new Section();
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId);
+        section.setCourseId(expectedCanvasCourseId.intValue());
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
         ArgumentCaptor<AviationStudent> capturedStudent = ArgumentCaptor.forClass(AviationStudent.class);
@@ -286,9 +286,9 @@ public class SynchronizationServiceUTest {
     }
 
     @Test
-    public void synchronizeStudentsFromCanvasToDb_UpdateExistingStudentInCouse() throws Exception {
+    public void synchronizeStudentsFromCanvasToDb_UpdateExistingStudentInCourse() throws Exception {
         Long previousCanvasSectionId = 350L;
-        Integer previousCanvasCourseId = 350;
+        Long previousCanvasCourseId = 350L;
         String previousSisUserId = "uniqueSisId";
         String previousName = "Zoglmann, Chris";
         AviationStudent expectedStudentInDb = new AviationStudent();
@@ -300,7 +300,7 @@ public class SynchronizationServiceUTest {
         studentsInDbForCourse.add(expectedStudentInDb);
 
         Long expectedCanvasSectionId = 250L;
-        Integer expectedCanvasCourseId = 550;
+        Long expectedCanvasCourseId = 550L;
         String expectedSisUserId = "uniqueSisId";
         String expectedName = "Zoglmann, Kurt";
         Integer expectedStudentsSavedToDb = 1;
@@ -314,7 +314,7 @@ public class SynchronizationServiceUTest {
         enrollments.add(enrollment);
         Section section = new Section();
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId);
+        section.setCourseId(expectedCanvasCourseId.intValue());
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
 

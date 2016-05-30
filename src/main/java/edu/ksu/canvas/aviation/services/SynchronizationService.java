@@ -155,7 +155,7 @@ public class SynchronizationService {
                 student.setSisUserId(enrollment.getUser().getSisUserId());
                 student.setName(enrollment.getUser().getSortableName());
                 student.setSectionId(section.getId());
-                student.setCanvasCourseId(section.getCourseId());
+                student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
 
                 ret.add(studentRepository.save(student));
             }

@@ -101,7 +101,7 @@ public class AttendanceService {
     public void loadIntoForm(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
 
-        Integer canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
+        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
         List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
 

@@ -46,7 +46,7 @@ public class AttendanceRepositoryImplITest {
         
         AviationStudent student = new AviationStudent();
         student.setSisUserId("1001");
-        student.setCanvasCourseId(1000);
+        student.setCanvasCourseId(1000L);
         student.setSectionId(500L);
         student.setName("Zoglmann, Kurt");
         studentRepository.save(student);
@@ -61,7 +61,7 @@ public class AttendanceRepositoryImplITest {
     
     @Test
     public void getAttendanceByCourseByDayOfClass_findExistingOneAttendance() {
-        int existingCanvasCourseId = existingAttendance.getAviationStudent().getCanvasCourseId();
+        long existingCanvasCourseId = existingAttendance.getAviationStudent().getCanvasCourseId();
         Date existingDateOfClass = existingAttendance.getDateOfClass();
         int expectedNumberOfAttendances = 1;
         

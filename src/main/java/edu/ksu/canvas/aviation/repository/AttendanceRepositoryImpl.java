@@ -27,7 +27,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     /**
      * @throws NullPointerException when the dateOfClass parameter is null
      */
-    public List<Attendance> getAttendanceByCourseAndDayOfClass(int courseId, Date dateOfClass) {
+    public List<Attendance> getAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass) {
         Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
 
         String jpql = "SELECT a " +

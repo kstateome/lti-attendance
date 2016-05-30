@@ -49,8 +49,8 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         
         when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
     }
-    
-    
+
+
     @Test
     public void classSetup_nonExistantSectionId() throws Exception {
         Long nonExistantSectionId = 2000L;
@@ -59,8 +59,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
             .andExpect(status().isOk())
             .andExpect(view().name("forward:roster"));
     }
-    
-    
+
     @Test
     public void classSetup_badNumberForSectionId() throws Exception {
         String badSectionId = "hackerDelight";
@@ -69,8 +68,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
             .andExpect(status().isOk())
             .andExpect(view().name("forward:roster"));
     }
-    
-    
+
     @Test
     public void classSetup_existingSectionId_HappyPath() throws Exception {
         mockMvc.perform(get("/courseConfiguration/"+existingSection.getCanvasSectionId()))
@@ -94,7 +92,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
         
-        AviationCourse course = courseRepository.findByCanvasCourseId(existingCourse.getCanvasCourseId());
+        AviationCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
         assertEquals(expectedTotalClassMinutes, course.getTotalMinutes());
     }

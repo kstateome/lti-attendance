@@ -75,7 +75,7 @@ public class ReportRepositoryITest {
         
         AviationStudent student = new AviationStudent();
         student.setSisUserId("1001");
-        student.setCanvasCourseId(existingCourse.getCanvasCourseId().intValue());
+        student.setCanvasCourseId(existingCourse.getCanvasCourseId());
         student.setSectionId(expectedSectionId);
         student.setName("Zoglmann, Kurt");
         existingStudent = studentRepository.save(student);

@@ -25,8 +25,8 @@ public class SectionModelFactory {
 
     private SectionModel createSectionModel(AviationSection aviationSection) {
         SectionModel ret = new SectionModel();
-        ret.setSectionId(aviationSection.getCanvasSectionId());
-        ret.setCanvasCourseId(aviationSection.getCanvasCourseId() == null ? null : aviationSection.getCanvasCourseId().intValue());
+        ret.setSectionId(aviationSection.getSectionId());
+        ret.setCanvasCourseId(aviationSection.getCanvasCourseId());
         ret.setSectionName(aviationSection.getName());
 
         return ret;

@@ -80,7 +80,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         
         AviationStudent existingStudent = new AviationStudent();
         existingStudent.setSisUserId("1001");
-        existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId().intValue());
+        existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setSectionId(existingSectionId);
         existingStudent.setName("Zoglmann, Kurt");
         existingStudent = studentRepository.save(existingStudent);
