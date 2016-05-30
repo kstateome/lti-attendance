@@ -1,19 +1,10 @@
 package edu.ksu.canvas.aviation.controller;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import edu.ksu.canvas.aviation.config.TestDatabaseConfig;
-import edu.ksu.canvas.aviation.config.TestSpringMVCConfig;
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
@@ -24,9 +15,6 @@ import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.model.LtiSession;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,28 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 
-import javax.transaction.Transactional;
 
-import static org.mockito.Mockito.*;
-
-
-@Transactional
-@ActiveProfiles("test")
-@WebAppConfiguration
-@ContextConfiguration(classes = {TestDatabaseConfig.class, TestSpringMVCConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AttendanceSummaryControllerITest {
+public class AttendanceSummaryControllerITest extends BaseControllerITest {
 
-    
-    private MockMvc mockMvc;
-    
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-    
-    @Autowired
-    private LtiLaunch mockLtiLaunch;
-    
-    private LtiSession mockLtiSession;
     
     @Autowired
     private AttendanceRepository attendanceRepository;
@@ -70,15 +40,6 @@ public class AttendanceSummaryControllerITest {
     private AviationSectionRepository sectionRepository;
     
     
-    @Before
-    public void setUp() throws NoLtiSessionException {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        mockLtiSession = mock(LtiSession.class);
-        
-        reset(mockLtiLaunch);
-        when(mockLtiLaunch.getLtiSession()).thenReturn(mockLtiSession);
-        when(mockLtiSession.getEid()).thenReturn("someEid");
-    }
     
     @Test
     public void attendanceSummary_nonExistantSectionId() throws Exception {

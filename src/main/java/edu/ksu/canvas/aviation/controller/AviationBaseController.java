@@ -79,7 +79,7 @@ public class AviationBaseController extends LtiLaunchController {
         return new ModelAndView("forward:roster");
     }
 
-    protected AviationSection getSelectedSection(String previousSelectedSectionId) throws NoLtiSessionException {
+    protected AviationSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {
 
         if (previousSelectedSectionId == null) {
             LtiSession ltiSession = ltiLaunch.getLtiSession();
@@ -87,8 +87,7 @@ public class AviationBaseController extends LtiLaunchController {
             return sectionService.getFirstSectionOfCourse(canvasCourseId);
 
         } else {
-            long sectionId = Long.valueOf(previousSelectedSectionId);
-            return sectionService.getSection(sectionId);
+            return sectionService.getSection(previousSelectedSectionId);
         }
     }
 

@@ -54,7 +54,7 @@ public class AttendanceSummaryController extends AviationBaseController {
             return new ModelAndView("forward:roster");
         }
 
-        AviationSection selectedSection = getSelectedSection(sectionId);
+        AviationSection selectedSection = getSelectedSection(validatedSectionId);
         List<AviationSection> sections = selectedSection == null ? new ArrayList<>() : sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
 
         ModelAndView page = new ModelAndView("attendanceSummary");

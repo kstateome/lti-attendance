@@ -216,6 +216,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.sun.el</groupId>
+            <artifactId>el-ri</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>OME</groupId>
             <artifactId>ome-ldap-config</artifactId>
             <version>1.14.1</version>

@@ -5,6 +5,8 @@ import java.io.IOException;
 import javax.validation.Valid;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationValidator;
+
+import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -51,10 +53,15 @@ public class CourseConfigurationController extends AviationBaseController {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: " + ltiSession.getEid() + " is viewing course configuration...");
 
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
+        if(validatedSectionId == null || selectedSection == null) {
+            return new ModelAndView("forward:roster");
+        }
+
         ModelAndView page = new ModelAndView("courseConfiguration");
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        AviationSection selectedSection = getSelectedSection(sectionId);
         courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
@@ -63,7 +70,7 @@ public class CourseConfigurationController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
-    public ModelAndView saveTotalClassMinutes(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+    public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
