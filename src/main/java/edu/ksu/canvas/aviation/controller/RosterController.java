@@ -79,7 +79,7 @@ public class RosterController extends AviationBaseController {
         }
 
         List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
-        sectionId = selectedSection.getSectionId().toString();
+        sectionId = selectedSection.getCanvasSectionId().toString();
 
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         LOG.info("eid: " + ltiSession.getEid() + " is viewing the roster.");
@@ -95,7 +95,7 @@ public class RosterController extends AviationBaseController {
         courseService.loadIntoForm(rosterForm, selectedSection.getCanvasCourseId());
         attendanceService.loadIntoForm(rosterForm, date);
 
-        ModelAndView page = new ModelAndView("roster/"+validatedSectionId);
+        ModelAndView page = new ModelAndView("roster");
         page.addObject("rosterForm", rosterForm);
         page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
         page.addObject("selectedSectionId", sectionId);
@@ -118,7 +118,7 @@ public class RosterController extends AviationBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            ModelAndView page = new ModelAndView("roster/"+validatedSectionId);
+            ModelAndView page = new ModelAndView("roster");
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
 
             AviationSection selectedSection = getSelectedSection(validatedSectionId);

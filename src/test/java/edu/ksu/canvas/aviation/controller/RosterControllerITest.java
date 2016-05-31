@@ -72,7 +72,7 @@ public class RosterControllerITest extends BaseControllerITest {
         existingStudent = new AviationStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
-        existingStudent.setSectionId(existingSection.getSectionId());
+        existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent = studentRepository.save(existingStudent);
         
@@ -82,57 +82,52 @@ public class RosterControllerITest extends BaseControllerITest {
 
     @Test
     public void roster_noParametersPresent() throws Exception {
-        Long sectionIdOfExistingCourse = existingSection.getSectionId();
-        
         mockMvc.perform(get("/roster"))
             .andExpect(status().isOk())
-            .andExpect(view().name("roster/"+sectionIdOfExistingCourse));
+            .andExpect(view().name("roster"));
     }
     
     @Test
     public void roster_NonExistantSectionId() throws Exception {
         Long nonExistantSectionId = -1L;
-        Long sectionIdOfExistingCourse = existingSection.getSectionId();
         
         mockMvc.perform(get("/roster/"+nonExistantSectionId))
             .andExpect(status().isOk())
-            .andExpect(view().name("roster/"+sectionIdOfExistingCourse));
+            .andExpect(view().name("roster"));
     }
     
     @Test
     public void roster_NonNumberSectionId() throws Exception {
         String nonNumberSectionId = "Hacker's Delight";
-        Long sectionIdOfExistingCourse = existingSection.getSectionId();
         
         mockMvc.perform(get("/roster/"+nonNumberSectionId))
             .andExpect(status().isOk())
-            .andExpect(view().name("roster/"+sectionIdOfExistingCourse));
+            .andExpect(view().name("roster"));
     }
     
     @Test
     @SuppressWarnings("unchecked")
     public void roster_HappyPath() throws Exception {
-        Long sectionOfExistingCourse = existingSection.getSectionId();
-        
-        mockMvc.perform(get("/roster/"+sectionOfExistingCourse))
+
+        mockMvc.perform(get("/roster/"+existingSection.getCanvasSectionId()))
             .andExpect(status().isOk())
-            .andExpect(view().name("roster/"+sectionOfExistingCourse))
-            .andExpect(model().attribute("selectedSectionId", is(String.valueOf(sectionOfExistingCourse))))
+            .andExpect(view().name("roster"))
+            .andExpect(model().attribute("selectedSectionId", is(String.valueOf(existingSection.getCanvasSectionId()))))
             .andExpect(model().attribute("sectionList", hasSize(1)))
             .andExpect(model().attribute("sectionList", 
                     containsInAnyOrder(
                             allOf(
-                                    hasProperty("sectionId", is(sectionOfExistingCourse))
+                                    hasProperty("sectionId", is(existingSection.getSectionId()))
                                  )
                             )))
             .andExpect(model().attribute("rosterForm",
                     allOf(
-                            hasProperty("sectionId", is(sectionOfExistingCourse)),
+                            hasProperty("sectionId", is(existingSection.getSectionId())),
                             hasProperty("sectionModels", hasSize(1)),
                             hasProperty("sectionModels",
                                 containsInAnyOrder(
                                     allOf(
-                                            hasProperty("sectionId", is(existingSection.getSectionId())),
+                                            hasProperty("canvasSectionId", is(existingSection.getCanvasSectionId())),
                                             hasProperty("canvasCourseId", is(existingCourse.getCanvasCourseId())),
                                             hasProperty("attendances", hasSize(1)),
                                             hasProperty("attendances",
@@ -173,19 +168,18 @@ public class RosterControllerITest extends BaseControllerITest {
                 .sessionAttr("rosterForm", rosterForm)
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("roster/"+existingSection.getCanvasSectionId()))
+                .andExpect(view().name("roster"))
                 .andExpect(model().attribute("rosterForm", hasProperty("currentDate", is(expectedDateOfAttendance))));
     }
     
     @Test
     public void saveAttendance_NonNumberSectionId() throws Exception {
         String nonNumberSectionId = "Hacker's Delight";
-        Long sectionIdOfExistingCourse = existingSection.getSectionId();
         
         mockMvc.perform(post("/roster/"+nonNumberSectionId)
             .param("saveAttendance", "Save Attendance"))
             .andExpect(status().isOk())
-            .andExpect(view().name("roster/"+sectionIdOfExistingCourse));
+            .andExpect(view().name("roster"));
     }
     
     @Test
@@ -218,7 +212,7 @@ public class RosterControllerITest extends BaseControllerITest {
                 .sessionAttr("rosterForm", rosterForm)
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("roster/"+existingSection.getCanvasSectionId()))
+                .andExpect(view().name("roster"))
                 .andExpect(model().attribute("error", notNullValue()));
     }
     
@@ -228,7 +222,6 @@ public class RosterControllerITest extends BaseControllerITest {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         String dateOfAttendanceAsString = "05/18/2016";
         Date dateOfAttendance = sdf.parse(dateOfAttendanceAsString);
-        Long sectionOfExistingCourse = existingSection.getSectionId();
         
         Status expectedStatus = Status.TARDY;
         Integer expectedMinutesMissed = 10;
@@ -237,7 +230,7 @@ public class RosterControllerITest extends BaseControllerITest {
         sections.add(existingSection);
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(dateOfAttendance);
-        rosterForm.setSectionId(sectionOfExistingCourse);
+        rosterForm.setSectionId(existingSection.getSectionId());
         rosterForm.setSectionModels(new SectionModelFactory().createSectionModels(sections));
         courseService.loadIntoForm(rosterForm, existingSection.getCanvasCourseId());
         attendanceService.loadIntoForm(rosterForm, dateOfAttendance);
@@ -245,7 +238,7 @@ public class RosterControllerITest extends BaseControllerITest {
         mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/save")
                 .param("saveAttendance", "Save Attendance")
                 .param("currentDate", dateOfAttendanceAsString)
-                .param("sectionId", sectionOfExistingCourse.toString())
+                .param("sectionId", existingSection.getSectionId().toString())
                 .param("sectionModels[0].attendances[0].attendanceId", "")
                 .param("sectionModels[0].attendances[0].aviationStudentId", existingStudent.getStudentId().toString())
                 .param("sectionModels[0].attendances[0].status", expectedStatus.toString())
@@ -253,22 +246,22 @@ public class RosterControllerITest extends BaseControllerITest {
                 .sessionAttr("rosterForm", rosterForm)
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("roster/"+existingSection.getCanvasSectionId()))
+                .andExpect(view().name("roster"))
                 .andExpect(model().attribute("saveSuccess", is(true)))
                 .andExpect(model().attribute("sectionList", 
                         containsInAnyOrder(
                                 allOf(
-                                        hasProperty("sectionId", is(sectionOfExistingCourse))
+                                        hasProperty("sectionId", is(existingSection.getSectionId()))
                                      )
                                 )))
                 .andExpect(model().attribute("rosterForm",
                         allOf(
-                                hasProperty("sectionId", is(sectionOfExistingCourse)),
+                                hasProperty("sectionId", is(existingSection.getSectionId())),
                                 hasProperty("sectionModels", hasSize(1)),
                                 hasProperty("sectionModels",
                                     containsInAnyOrder(
                                         allOf(
-                                                hasProperty("sectionId", is(existingSection.getSectionId())),
+                                                hasProperty("canvasSectionId", is(existingSection.getCanvasSectionId())),
                                                 hasProperty("canvasCourseId", is(existingCourse.getCanvasCourseId())),
                                                 hasProperty("attendances", hasSize(1)),
                                                 hasProperty("attendances",

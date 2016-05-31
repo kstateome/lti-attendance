@@ -73,7 +73,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         existingStudent = new AviationStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
-        existingStudent.setSectionId(existingSection.getSectionId());
+        existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent = studentRepository.save(existingStudent);
         
@@ -146,7 +146,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/studentMakeup/"+sectionId+"/"+studentId))
             .andExpect(status().isOk())
-            .andExpect(view().name("/studentMakeup/"+sectionId+"/"+studentId))
+            .andExpect(view().name("studentMakeup"))
             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
             .andExpect(model().attribute("student", hasProperty("studentId", is(studentId))))
             .andExpect(model().attribute("makeupForm",
@@ -192,7 +192,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                 .param("entries[0].toBeDeletedFlag", "false")
                 .sessionAttr("makeupForm", makeupForm))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/studentMakeup/"+existingSection.getCanvasSectionId()+"/"+existingStudent.getStudentId()))
+                .andExpect(view().name("studentMakeup"))
                 .andExpect(model().attribute("sectionId", is(existingSection.getCanvasSectionId().toString())))
                 .andExpect(model().attribute("student", hasProperty("studentId", is(existingStudent.getStudentId()))))
                 .andExpect(model().attribute("makeupForm",
@@ -250,7 +250,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                 .param("entries[0].toBeDeletedFlag", "false")
                 .sessionAttr("makeupForm", makeupForm))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/studentMakeup/"+existingSection.getCanvasSectionId()+"/"+existingStudent.getStudentId()))
+                .andExpect(view().name("studentMakeup"))
                 .andExpect(model().attribute("sectionId", is(existingSection.getCanvasSectionId().toString())))
                 .andExpect(model().attribute("student", hasProperty("studentId", is(existingStudent.getStudentId()))))
                 .andExpect(model().attribute("makeupForm",
@@ -303,7 +303,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                 .param("entries[0].toBeDeletedFlag", "true")
                 .sessionAttr("makeupForm", makeupForm))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/studentMakeup/"+existingSection.getCanvasSectionId()+"/"+existingStudent.getStudentId()))
+                .andExpect(view().name("studentMakeup"))
                 .andExpect(model().attribute("sectionId", is(existingSection.getCanvasSectionId().toString())))
                 .andExpect(model().attribute("student", hasProperty("studentId", is(existingStudent.getStudentId()))))
                 .andExpect(model().attribute("makeupForm",
@@ -340,7 +340,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                 .param("entries[0].toBeDeletedFlag", "true")
                 .sessionAttr("makeupForm", makeupForm))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/studentMakeup/"+existingSection.getCanvasSectionId()+"/"+existingStudent.getStudentId()))
+                .andExpect(view().name("studentMakeup"))
                 .andExpect(model().attribute("sectionId", is(existingSection.getCanvasSectionId().toString())))
                 .andExpect(model().attribute("student", hasProperty("studentId", is(existingStudent.getStudentId()))))
                 .andExpect(model().attribute("makeupForm",
@@ -380,7 +380,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                 .param("entries[0].toBeDeletedFlag", "false")
                 .sessionAttr("makeupForm", makeupForm))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/studentMakeup/"+existingSection.getCanvasSectionId()+"/"+existingStudent.getStudentId()))
+                .andExpect(view().name("studentMakeup"))
                 .andExpect(model().attribute("sectionId", is(existingSection.getCanvasSectionId().toString())))
                 .andExpect(model().attribute("student", hasProperty("studentId", is(existingStudent.getStudentId()))))
                 .andExpect(model().attribute("makeupForm",

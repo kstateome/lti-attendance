@@ -76,7 +76,7 @@ public class ReportRepositoryITest {
         AviationStudent student = new AviationStudent();
         student.setSisUserId("1001");
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
-        student.setSectionId(expectedSectionId);
+        student.setCanvasSectionId(expectedSectionId);
         student.setName("Zoglmann, Kurt");
         existingStudent = studentRepository.save(student);
         
@@ -118,7 +118,7 @@ public class ReportRepositoryITest {
     
     @Test
     public void getAttendanceSummary_HappyPath() {
-        long existingSectionId = existingStudent.getSectionId();
+        long existingSectionId = existingStudent.getCanvasSectionId();
         
         List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getAttendanceSummary(existingSectionId);
         

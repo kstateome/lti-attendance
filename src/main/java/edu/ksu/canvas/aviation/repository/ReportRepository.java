@@ -21,16 +21,16 @@ public class ReportRepository {
     private EntityManager entityManager;
 
 
-    public List<AttendanceSummaryModel> getAttendanceSummary(long sectionId) {
+    public List<AttendanceSummaryModel> getAttendanceSummary(long canvasSectionId) {
         String sql =
-                "select course_id, section_id, student_id, student_name, " +
+                "select course_id, canvas_section_id, student_id, student_name, " +
                 "sum_minutes_madeup, " +
                 "sum_minutes_missed - sum_minutes_madeup as remaining_minutes_madeup, " +
                 "sum_minutes_missed, " +
                 "round(sum_minutes_missed / course_total_minutes * 100,2) as percent_course_missed " +
                 "from ( " +
                 "  select course.course_id, course.total_minutes as course_total_minutes, " +
-                "  student.section_id, student.student_id, student.student_name, " +
+                "  student.canvas_section_id, student.student_id, student.student_name, " +
                 "  nvl(missed.sum_minutes_missed,0) as sum_minutes_missed, " +
                 "  nvl(madeup.sum_minutes_madeup,0) as sum_minutes_madeup " +
                 "  from aviation_course course " +
@@ -52,13 +52,13 @@ public class ReportRepository {
                 "  ( " +
                 "    select distinct course.course_id " +
                 "    from aviation_student student, aviation_course course " +
-                "    where student.canvas_course_id = course.canvas_course_id and section_id = :section_id " +
+                "    where student.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
                 "  ) " +
                 ") " +
-                "order by course_id, section_id, student_name";
+                "order by course_id, canvas_section_id, student_name";
 
         Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("section_id", sectionId);
+        query.setParameter("canvas_section_id", canvasSectionId);
 
         @SuppressWarnings("unchecked")
         List<Object[]> results = query.getResultList();
@@ -66,19 +66,19 @@ public class ReportRepository {
 
 
         AttendanceSummaryModel currentSection = null;
-        long currentSectionId = -1;
+        long currentCanvasSectionId = -1;
 
         for (Object[] result : results) {
-            sectionId = ((Number) result[1]).longValue();
-            if (currentSection == null || currentSectionId != sectionId) {
-                currentSectionId = sectionId;
-                currentSection = new AttendanceSummaryModel(sectionId);
+            canvasSectionId = ((Number) result[1]).longValue();
+            if (currentSection == null || currentCanvasSectionId != canvasSectionId) {
+                currentCanvasSectionId = canvasSectionId;
+                currentSection = new AttendanceSummaryModel(canvasSectionId);
                 ret.add(currentSection);
             }
 
             currentSection.add(new Entry(
                     ((Number) result[0]).longValue(),
-                    sectionId,
+                    canvasSectionId,
                     ((Number) result[2]).longValue(),
                     (String) result[3],
                     ((Number) result[4]).intValue(),

@@ -28,8 +28,8 @@ public class AviationStudent implements Serializable {
     private Long canvasCourseId;
 
     // Canvas has the authoritative data.
-    @Column(name = "section_id", nullable = false)
-    private Long sectionId;
+    @Column(name = "canvas_section_id", nullable = false)
+    private Long canvasSectionId;
 
     @OneToMany(mappedBy = "aviationStudent")
     private List<Attendance> attendances;
@@ -62,12 +62,12 @@ public class AviationStudent implements Serializable {
         this.name = name;
     }
 
-    public void setSectionId(Long sectionId) {
-        this.sectionId = sectionId;
+    public void setCanvasSectionId(Long canvasSectionId) {
+        this.canvasSectionId = canvasSectionId;
     }
 
-    public Long getSectionId() {
-        return sectionId;
+    public Long getCanvasSectionId() {
+        return canvasSectionId;
     }
 
     public List<Attendance> getAttendances() {
@@ -98,7 +98,7 @@ public class AviationStudent implements Serializable {
     @Override
     public String toString() {
         return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="
-                + canvasCourseId + ", sectionId=" + sectionId + ", percentageOfCourseMissed="
+                + canvasCourseId + ", canvasSectionId=" + canvasSectionId + ", percentageOfCourseMissed="
                 + percentageOfCourseMissed + "]";
     }
 
@@ -112,7 +112,7 @@ public class AviationStudent implements Serializable {
         if (canvasCourseId != null ? !canvasCourseId.equals(that.canvasCourseId) : that.canvasCourseId != null)
             return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (sectionId != null ? !sectionId.equals(that.sectionId) : that.sectionId != null) return false;
+        if (canvasSectionId != null ? !canvasSectionId.equals(that.canvasSectionId) : that.canvasSectionId != null) return false;
         if (sisUserId != null ? !sisUserId.equals(that.sisUserId) : that.sisUserId != null) return false;
 
         return true;
@@ -123,7 +123,7 @@ public class AviationStudent implements Serializable {
         int result = sisUserId != null ? sisUserId.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (canvasCourseId != null ? canvasCourseId.hashCode() : 0);
-        result = 31 * result + (sectionId != null ? sectionId.hashCode() : 0);
+        result = 31 * result + (canvasSectionId != null ? canvasSectionId.hashCode() : 0);
         return result;
     }
 

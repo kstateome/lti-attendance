@@ -47,7 +47,7 @@ public class AttendanceRepositoryImplITest {
         AviationStudent student = new AviationStudent();
         student.setSisUserId("1001");
         student.setCanvasCourseId(1000L);
-        student.setSectionId(500L);
+        student.setCanvasSectionId(500L);
         student.setName("Zoglmann, Kurt");
         studentRepository.save(student);
         

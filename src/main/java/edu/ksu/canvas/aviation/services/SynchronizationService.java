@@ -154,7 +154,7 @@ public class SynchronizationService {
                 AviationStudent student = foundUser.isPresent() ? foundUser.get() : new AviationStudent();
                 student.setSisUserId(enrollment.getUser().getSisUserId());
                 student.setName(enrollment.getUser().getSortableName());
-                student.setSectionId(section.getId());
+                student.setCanvasSectionId(section.getId());
                 student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
 
                 ret.add(studentRepository.save(student));

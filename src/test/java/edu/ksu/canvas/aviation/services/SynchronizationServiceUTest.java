@@ -279,7 +279,7 @@ public class SynchronizationServiceUTest {
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
         assertSame(expectedStudentSavedToDb, actualStudents.get(0));
-        assertEquals(expectedCanvasSectionId, capturedStudent.getValue().getSectionId());
+        assertEquals(expectedCanvasSectionId, capturedStudent.getValue().getCanvasSectionId());
         assertEquals(expectedCanvasCourseId, capturedStudent.getValue().getCanvasCourseId());
         assertEquals(expectedSisUserId, capturedStudent.getValue().getSisUserId());
         assertEquals(expectedName, capturedStudent.getValue().getName());
@@ -293,7 +293,7 @@ public class SynchronizationServiceUTest {
         String previousName = "Zoglmann, Chris";
         AviationStudent expectedStudentInDb = new AviationStudent();
         expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
-        expectedStudentInDb.setSectionId(previousCanvasSectionId);
+        expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
         expectedStudentInDb.setSisUserId(previousSisUserId);
         expectedStudentInDb.setName(previousName);
         List<AviationStudent> studentsInDbForCourse = new ArrayList<>();
@@ -325,7 +325,7 @@ public class SynchronizationServiceUTest {
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
         assertSame(expectedStudentInDb, actualStudents.get(0));
-        assertEquals(expectedCanvasSectionId, expectedStudentInDb.getSectionId());
+        assertEquals(expectedCanvasSectionId, expectedStudentInDb.getCanvasSectionId());
         assertEquals(expectedCanvasCourseId, expectedStudentInDb.getCanvasCourseId());
         assertEquals(expectedSisUserId, expectedStudentInDb.getSisUserId());
         assertEquals(expectedName, expectedStudentInDb.getName());

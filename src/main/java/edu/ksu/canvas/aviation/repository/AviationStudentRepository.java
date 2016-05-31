@@ -15,9 +15,9 @@ public interface AviationStudentRepository extends CrudRepository<AviationStuden
 
     AviationStudent findBySisUserId(String sisUserId);
 
-    AviationStudent findBySisUserIdAndSectionId(String sisUserId, Long sectionId);
+    AviationStudent findBySisUserIdAndCanvasSectionId(String sisUserId, Long canvasSectionId);
 
-    List<AviationStudent> findBySectionIdOrderByNameAsc(long sectionId);
+    List<AviationStudent> findByCanvasSectionIdOrderByNameAsc(long sectionId);
 
     List<AviationStudent> findByCanvasCourseId(long courseId);
 

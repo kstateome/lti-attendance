@@ -48,7 +48,7 @@ public class AttendanceService {
                 if (attendanceModel.getAttendanceId() == null) {
                     if (aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
+                        aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded " + aviationStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
                     }
@@ -105,10 +105,9 @@ public class AttendanceService {
         List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
 
-
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
-            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
+            List<AviationStudent> aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
             for (AviationStudent student : aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);

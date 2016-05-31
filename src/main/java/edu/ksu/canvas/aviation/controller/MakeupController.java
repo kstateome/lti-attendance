@@ -76,7 +76,7 @@ public class MakeupController extends AviationBaseController {
         AviationStudent student = studentService.getStudent(new Long(studentId));
         MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
 
-        ModelAndView page = new ModelAndView("/studentMakeup/"+validatedSectionId+"/"+validatedStudentId);
+        ModelAndView page = new ModelAndView("studentMakeup");
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("makeupForm", makeupForm);
@@ -99,10 +99,10 @@ public class MakeupController extends AviationBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            LOG.info("There were errors saving the Makeup form" + bindingResult.getAllErrors());
+            LOG.debug("There were user input errors saving the Makeup form" + bindingResult.getAllErrors());
             String errorMessage = "Please correct user input and try saving again.";
 
-            ModelAndView page = new ModelAndView("/studentMakeup/"+makeupForm.getSectionId()+"/"+makeupForm.getStudentId());
+            ModelAndView page = new ModelAndView("studentMakeup");
             AviationStudent student = studentService.getStudent(makeupForm.getStudentId());
             page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
