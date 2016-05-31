@@ -68,7 +68,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
         AviationCourse existingCourse = new AviationCourse();
-        existingCourse.setCanvasCourseId(2000L);
+        existingCourse.setCanvasCourseId(4000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
