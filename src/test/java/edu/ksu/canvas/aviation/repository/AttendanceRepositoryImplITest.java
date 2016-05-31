@@ -60,7 +60,7 @@ public class AttendanceRepositoryImplITest {
     }
     
     @Test
-    public void getAttendanceByCourseByDayOfClass_findExistingOneAttendance() {
+    public void getAttendanceByCourseAndDayOfClass_findExistingOneAttendance() {
         long existingCanvasCourseId = existingAttendance.getAviationStudent().getCanvasCourseId();
         Date existingDateOfClass = existingAttendance.getDateOfClass();
         int expectedNumberOfAttendances = 1;

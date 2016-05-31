@@ -24,7 +24,7 @@ public class AttendanceRepositoryImplUTest {
     
     
     @Test(expected=NullPointerException.class)
-    public void getAttendanceByCourseByDayOfClass_NullDateOfClass() {
+    public void getAttendanceByCourseAndDayOfClass_NullDateOfClass() {
         int irrelevantCourseId = 2;
         Date nullDateOfClass = null;
         
