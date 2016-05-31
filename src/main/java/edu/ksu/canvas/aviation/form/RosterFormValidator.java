@@ -12,7 +12,10 @@ import edu.ksu.canvas.aviation.model.SectionModel;
 @Component
 public class RosterFormValidator implements Validator {
 
+    public static final String MINIMUM_MINUTES_MISSED_ERROR_CODE = "Min.rosterForm.sectionModels.attendances.minutesMissed";
+    public static final String SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE = "SelectivelyRequired.rosterForm.sectionModels.attendances.minutesMissed";
 
+    
     @Override
     public boolean supports(Class<?> clazz) {
         return RosterForm.class.isAssignableFrom(clazz);
@@ -29,11 +32,11 @@ public class RosterFormValidator implements Validator {
             for (AttendanceModel attendance : sectionModel.getAttendances()) {
                 String minutesMissedField = "sectionModels[" + sectionIndex + "].attendances[" + attendanceIndex + "].minutesMissed";
                 if (attendance.getMinutesMissed() != null && attendance.getMinutesMissed() <= 0) {
-                    errors.rejectValue(minutesMissedField, "Min.rosterForm.sectionModels.attendances.minutesMissed");
+                    errors.rejectValue(minutesMissedField, MINIMUM_MINUTES_MISSED_ERROR_CODE);
                 }
 
                 if (attendance.getStatus() == Status.TARDY && attendance.getMinutesMissed() == null) {
-                    errors.rejectValue(minutesMissedField, "SelectivelyRequired.rosterForm.sectionModels.attendances.minutesMissed");
+                    errors.rejectValue(minutesMissedField, SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE);
                 }
                 attendanceIndex++;
             }

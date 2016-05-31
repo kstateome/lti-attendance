@@ -98,12 +98,47 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                   <groupId>org.apache.maven.plugins</groupId>
+                   <artifactId>maven-surefire-plugin</artifactId>
+                   <version>2.19.1</version>
+                   <configuration>
+                       <classpathDependencyExcludes>
+                           <!-- avoid sl4j warning-->
+                           <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
+                       </classpathDependencyExcludes>
+                  </configuration>
+               </plugin>
             </plugins>
         </pluginManagement>
     </build>
     
-    
+
     <dependencies>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.5.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-digester</groupId>
+                    <artifactId>commons-digester</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-common</artifactId>
@@ -145,9 +180,46 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito-common</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-junit</artifactId>
+            <version>2.0.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.el</groupId>
+            <artifactId>el-ri</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>OME</groupId>
@@ -163,7 +235,12 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -125,7 +125,7 @@
         </div>
         <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
             <c:if test="${not empty sectionModel.attendances}">
-                <table class="table table-bordered sectionTable" style="display:none" id="${sectionModel.sectionId}">
+                <table class="table table-bordered sectionTable" style="display:none" id="${sectionModel.canvasSectionId}">
                     <thead>
                         <tr>
                             <th>Name</th>

@@ -3,9 +3,12 @@ package edu.ksu.canvas.aviation.services;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +33,8 @@ import edu.ksu.lti.model.LtiSession;
 @Component
 public class SynchronizationService {
 
-    private static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
-    private static final int DEFAULT_MINUTES_PER_CLASS = 45;
+    public static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
+    public static final int DEFAULT_MINUTES_PER_CLASS = 45;
 
     @Autowired
     private AviationCourseRepository aviationCourseRepository;
@@ -46,7 +49,12 @@ public class SynchronizationService {
     protected CanvasApiFactory canvasApiFactory;
 
 
+    /**
+     * @throws NullPointerException when ltiSession parameter is null
+     */
     public void synchronizeWhenCourseNotExistsInDB(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
+        
         if (aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
             synchronize(ltiSession, canvasCourseId);
         }
@@ -54,19 +62,42 @@ public class SynchronizationService {
 
     /**
      * Synchronizes Canvas related information to the database
+     * 
+     * @throws NullPointerException when ltiSession parameter is null
      */
     public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
+        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
+
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
-
-        String courseID = ltiSession.getCanvasCourseId();
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        List<Section> sections = sectionReader.listCourseSections(Integer.parseInt(courseID), Collections.singletonList(SectionIncludes.students));
+        List<Section> sections = sectionReader.listCourseSections(Long.valueOf(canvasCourseId).intValue(), Collections.singletonList(SectionIncludes.students));
 
         synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
         synchronizeSectionsFromCanvasToDb(sections);
-        synchronizeStudentsFromCanvasToDb(sections, enrollmentsReader);
+
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+        Map<Section,List<Enrollment>> canvasSectionMap = getEnrollmentsFromCanvas(sections, enrollmentsReader);
+        synchronizeStudentsFromCanvasToDb(canvasSectionMap);
+    }
+
+    private Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+        Map<Section, List<Enrollment>> ret = new HashMap<>();
+
+        if(sections == null) return null;
+        for (Section section : sections) {
+            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
+                List<Enrollment> enrollments = ret.get(section);
+
+                if(enrollments == null) {
+                    enrollments = new ArrayList<>();
+                    ret.put(section, enrollments);
+                }
+
+                enrollments.add(enrollment);
+            }
+        }
+
+        return ret;
     }
 
     private AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
@@ -96,34 +127,37 @@ public class SynchronizationService {
             aviationSection.setCanvasSectionId(Long.valueOf(section.getId()));
             aviationSection.setCanvasCourseId(Long.valueOf(section.getCourseId()));
 
-            sectionRepository.save(aviationSection);
+            ret.add(sectionRepository.save(aviationSection));
         }
 
         return ret;
     }
 
-
-    private List<AviationStudent> synchronizeStudentsFromCanvasToDb(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
+    // ToDo: Determine what to do with drops...
+    private List<AviationStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) {
         List<AviationStudent> ret = new ArrayList<>();
+        List<AviationStudent> existingStudentsInDb = null;
 
-        for (Section section : sections) {
-            List<AviationStudent> existingStudents = studentRepository.findBySectionIdOrderByNameAsc(section.getId());
+        for(Section section: canvasSectionMap.keySet()) {
 
-            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
-                List<AviationStudent> foundUsers = existingStudents.stream().filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId())).collect(Collectors.toList());
+            if(existingStudentsInDb == null) {
+                existingStudentsInDb = studentRepository.findByCanvasCourseId(section.getCourseId());
+            }
 
-                if (foundUsers.isEmpty()) {
-                    AviationStudent student = new AviationStudent();
-                    student.setSisUserId(enrollment.getUser().getSisUserId());
-                    student.setName(enrollment.getUser().getSortableName());
-                    student.setSectionId(section.getId());
-                    student.setCanvasCourseId(section.getCourseId());
+            for(Enrollment enrollment: canvasSectionMap.get(section)) {
 
-                    studentRepository.save(student);
-                    ret.add(student);
-                } else {
-                    ret.addAll(foundUsers);
-                }
+                Optional<AviationStudent> foundUser = 
+                        existingStudentsInDb.stream()
+                                        .filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()))
+                                        .findFirst();
+
+                AviationStudent student = foundUser.isPresent() ? foundUser.get() : new AviationStudent();
+                student.setSisUserId(enrollment.getUser().getSisUserId());
+                student.setName(enrollment.getUser().getSortableName());
+                student.setCanvasSectionId(section.getId());
+                student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+
+                ret.add(studentRepository.save(student));
             }
         }
 
