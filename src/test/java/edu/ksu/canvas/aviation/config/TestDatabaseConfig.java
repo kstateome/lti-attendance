@@ -30,7 +30,7 @@ public class TestDatabaseConfig {
     @Bean
     public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder()
-            .setType(EmbeddedDatabaseType.HSQL)
+            .setType(EmbeddedDatabaseType.H2)
             .build();
     }
     
