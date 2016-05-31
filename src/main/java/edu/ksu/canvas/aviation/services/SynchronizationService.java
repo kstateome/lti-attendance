@@ -70,7 +70,7 @@ public class SynchronizationService {
 
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        List<Section> sections = sectionReader.listCourseSections(Long.valueOf(canvasCourseId).intValue(), Collections.singletonList(SectionIncludes.students));
+        List<Section> sections = sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
 
         synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
         synchronizeSectionsFromCanvasToDb(sections);
