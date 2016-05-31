@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.MakeupValidator;
@@ -58,11 +60,23 @@ public class MakeupController extends AviationBaseController {
         return studentMakeup(sectionId, studentId, false);
     }
 
-    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
+    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
+        if(validatedSectionId == null || selectedSection == null) {
+            return new ModelAndView("forward:roster");
+        }
+
+        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+        AviationStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
+        if(validatedStudentId == null || selectedStudent == null) {
+            return new ModelAndView("forward:roster/"+validatedSectionId);
+        }
+
         AviationStudent student = studentService.getStudent(new Long(studentId));
         MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
 
-        ModelAndView page = new ModelAndView("studentMakeup");
+        ModelAndView page = new ModelAndView("/studentMakeup/"+validatedSectionId+"/"+validatedStudentId);
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("makeupForm", makeupForm);
@@ -88,7 +102,7 @@ public class MakeupController extends AviationBaseController {
             LOG.info("There were errors saving the Makeup form" + bindingResult.getAllErrors());
             String errorMessage = "Please correct user input and try saving again.";
 
-            ModelAndView page = new ModelAndView("studentMakeup");
+            ModelAndView page = new ModelAndView("/studentMakeup/"+makeupForm.getSectionId()+"/"+makeupForm.getStudentId());
             AviationStudent student = studentService.getStudent(makeupForm.getStudentId());
             page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
