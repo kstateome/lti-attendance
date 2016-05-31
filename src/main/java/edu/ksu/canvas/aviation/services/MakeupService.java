@@ -2,6 +2,8 @@ package edu.ksu.canvas.aviation.services;
 
 import java.util.List;
 
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +26,16 @@ public class MakeupService {
     private AviationStudentRepository aviationStudentRepository;
 
 
+    /**
+     * @throws IllegalArgumentException when a student cannot be found in the database for the given studentId
+     */
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
         AviationStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
+        if(student == null) {
+            RuntimeException e = new IllegalArgumentException("student does not exist in the database");
+            throw new ContextedRuntimeException(e).addContextValue("studentId", studentId);
+        }
+        
         List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
         if (addEmptyEntry) {
             makeups.add(new Makeup());
@@ -33,13 +43,18 @@ public class MakeupService {
 
         MakeupForm makeupForm = new MakeupForm();
         makeupForm.setEntriesFromMakeEntities(makeups);
-        makeupForm.setSectionId(Long.valueOf(sectionId));
-        makeupForm.setStudentId(Long.valueOf(studentId));
+        makeupForm.setSectionId(sectionId);
+        makeupForm.setStudentId(studentId);
 
         return makeupForm;
     }
 
+    /**
+     * @throws NullPointerException when form is null
+     */
     public void save(MakeupForm form) {
+        Validate.notNull(form, "The form parameter must not be null");
+        
         deleteFlaggedMakeups(form);
         createOrUpdate(form);
     }
@@ -65,19 +80,21 @@ public class MakeupService {
 
                 makeupRepository.save(makeup);
             } else {
-                Makeup tracker = makeupRepository.findByMakeupId(makeupModel.getMakeupId());
-                tracker.setDateMadeUp(makeupModel.getDateMadeUp());
-                tracker.setDateOfClass(makeupModel.getDateOfClass());
-                tracker.setProjectDescription(makeupModel.getProjectDescription());
-                tracker.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
+                Makeup makeup = makeupRepository.findByMakeupId(makeupModel.getMakeupId());
+                makeup.setDateMadeUp(makeupModel.getDateMadeUp());
+                makeup.setDateOfClass(makeupModel.getDateOfClass());
+                makeup.setProjectDescription(makeupModel.getProjectDescription());
+                makeup.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
 
-                makeupRepository.save(tracker);
+                makeupRepository.save(makeup);
             }
 
         }
     }
 
     private void deleteFlaggedMakeups(MakeupForm form) {
+        Validate.notNull(form, "The form parameter must not be null");
+
         if (form.getEntries() == null) {
             return;
         }

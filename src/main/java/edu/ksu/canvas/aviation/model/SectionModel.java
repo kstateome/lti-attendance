@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SectionModel {
 
-    private long sectionId; //canvas section ID
+    private long canvasSectionId;
     private String sectionName;
     private Long canvasCourseId;
     private List<AttendanceModel> attendances;
@@ -16,18 +16,18 @@ public class SectionModel {
     public SectionModel() { }
 
     public SectionModel(Section section) {
-        sectionId = section.getId();
+        canvasSectionId = section.getId();
         sectionName = section.getName();
         canvasCourseId = section.getCourseId() == null ? null : Long.valueOf(section.getCourseId());
     }
 
 
-    public long getSectionId() {
-        return sectionId;
+    public long getCanvasSectionId() {
+        return canvasSectionId;
     }
 
-    public void setSectionId(long sectionId) {
-        this.sectionId = sectionId;
+    public void setCanvasSectionId(long canvasSectionId) {
+        this.canvasSectionId = canvasSectionId;
     }
 
     public String getSectionName() {
@@ -58,7 +58,7 @@ public class SectionModel {
     @Override
     public String toString() {
         return "SectionModel{" +
-                "sectionId=" + sectionId +
+                "canvasSectionId=" + canvasSectionId +
                 ", sectionName='" + sectionName + '\'' +
                 ", canvasCourseId=" + canvasCourseId +
                 '}';

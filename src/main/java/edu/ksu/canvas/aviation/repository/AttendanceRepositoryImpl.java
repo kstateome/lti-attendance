@@ -9,6 +9,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Repository;
 
 import edu.ksu.canvas.aviation.entity.Attendance;
@@ -23,13 +24,18 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     private EntityManager entityManager;
 
 
-    public List<Attendance> getAttendanceByCourseByDayOfClass(Long courseId, Date dateOfClass) {
+    /**
+     * @throws NullPointerException when the dateOfClass parameter is null
+     */
+    public List<Attendance> getAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass) {
+        Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
+
         String jpql = "SELECT a " +
                       "FROM Attendance a join fetch a.aviationStudent " +
                       "WHERE a.aviationStudent.canvasCourseId = :courseId and trunc(a.dateOfClass) = trunc(:dateOfClass)";
 
         TypedQuery<Attendance> query = entityManager.createQuery(jpql, Attendance.class);
-        query.setParameter("courseId", courseId.intValue());
+        query.setParameter("courseId", courseId);
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
 
         return query.getResultList();
