@@ -121,7 +121,8 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         mockMvc.perform(post("/courseConfiguration/"+irrlevantSectionId+"/save")
                 .param("synchronizeWithCanvas", "Synchronize With Canvas"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId));
+                .andExpect(model().attribute("synchronizationSuccessful", is(true)))
+                .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId));
     }
     
 }
