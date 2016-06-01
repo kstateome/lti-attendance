@@ -1,11 +1,13 @@
 package edu.ksu.canvas.aviation.controller;
 
-import java.io.IOException;
-
-import javax.validation.Valid;
-
+import edu.ksu.canvas.aviation.entity.AviationSection;
+import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.form.CourseConfigurationValidator;
-
+import edu.ksu.canvas.aviation.services.AviationCourseService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
+import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.canvas.error.OauthTokenRequiredException;
+import edu.ksu.lti.model.LtiSession;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
-import edu.ksu.canvas.aviation.services.AviationCourseService;
-import edu.ksu.canvas.aviation.services.SynchronizationService;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.lti.model.LtiSession;
+import javax.validation.Valid;
+import java.io.IOException;
 
 
 @Controller
@@ -94,8 +91,10 @@ public class CourseConfigurationController extends AviationBaseController {
         LOG.info("eid: " + ltiSession.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + ltiSession.getCanvasCourseId());
 
         synchronizationService.synchronize(ltiSession, Long.valueOf(ltiSession.getCanvasCourseId()));
-
-        return new ModelAndView("forward:/courseConfiguration/" + sectionId);
+        ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+        page.addObject("synchronizationSuccessful", true);
+        
+        return page;
     }
 
 }

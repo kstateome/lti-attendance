@@ -57,6 +57,13 @@
       <br/><br/>
     </c:if>
 
+    <c:if test="${synchronizationSuccessful}">
+        <div class="alert alert-success">
+            <p>Synchronization with canvas was successful.</p>
+        </div>
+        <br/><br/>
+    </c:if>
+
     <h3>Configuration</h3>
     <br/>
     <div class="container">
