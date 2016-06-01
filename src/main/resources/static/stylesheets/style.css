@@ -21,3 +21,11 @@
 .error {
     color: red; font-weight: bold;
 }
+
+/* Used to prevent link hrefs from showing when printing */
+@media print {
+    a:link:after, a:visited:after {
+        display: none;
+        content: "";
+    }
+}

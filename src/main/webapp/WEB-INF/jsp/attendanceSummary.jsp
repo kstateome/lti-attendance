@@ -28,7 +28,7 @@
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
 <body onload="val = ${selectedSectionId} ; contextPath = '${context}'; console.log('value in body - ' + val); toggleSection(val, contextPath);">
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default hidden-print">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
@@ -42,16 +42,19 @@
 </nav>
   <div class="container">
 
-    <form class="sectionDropdown" method="post" action="DoNotActuallyPost">
+    <div class="sectionDropdown">
         <div class="row">
           <div class='col-sm-4'>
             <div class="form-group">
-               <label for="sectionId">Section</label>
-               <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="canvasSectionId"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
+              <label for="sectionId">Section</label>
+              <form:select class="form-control" id="sectionId" path="sectionId" items="${sectionList}" itemValue="canvasSectionId"  itemLabel="name" onchange="toggleSection(value, '${context}'); false;"/>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print</button>
             </div>
           </div>
         </div>
-    </form>
+    </div>
     <br/>
 
     <div class="container">
@@ -95,7 +98,7 @@
           return;
         }
       });
-    })
+    });
   </script>
 </body>
 </html>
