@@ -27,7 +27,7 @@
 
   <title>Aviation Reporting Attendance Summary Page</title>
 </head>
-<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; console.log('value in body - ' + val); toggleSection(val, contextPath);">
+<body>
 <nav class="navbar navbar-default hidden-print">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -84,6 +84,14 @@
   </div>
   <script type="text/javascript">
     $(function () {
+
+      // Update the selected section information
+      val = ${selectedSectionId};
+      contextPath = '${context}';
+      console.log('value in body - ' + val);
+      toggleSection(val, contextPath);
+
+      // Deal with highlighting the danger zones
       const WARNING = 8;
       const DANGER = 10;
       $(".sectionTable > tbody > tr").each(function () {

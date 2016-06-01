@@ -27,24 +27,10 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
-    <script type="text/javascript">
-        $(function() {
-            $(".attendanceStatus").change(function () {
-                selectedIdSplit = $(this).find(':selected').attr('id').split("-");
-                status = selectedIdSplit[0];
-                studentId = selectedIdSplit[1];
-                $('#minutesMissed' + studentId).val('');
-                if (status == 'tardy') {
-                    $('#minutesMissed' + studentId).removeAttr('disabled');
-                } else {
-                    $('#minutesMissed' + studentId).attr('disabled', 'true');
-                }
-            });
-        });
-    </script>
+
     <title>Aviation Reporting Class Roster</title>
 </head>
-<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
+<body onload="">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -194,6 +180,13 @@
 
 <script type="text/javascript">
     $(function() {
+
+        // Deal with selected section information
+        val = ${selectedSectionId};
+        contextPath = '${context}';
+        toggleSection(val, contextPath);
+
+        // Handle changing things with attendance statuses
         $('.attendanceStatus').change(function() {
             var attendanceId = $(this).attr('id').split('-')[1];
             var minutesMissed = $('#minutesMissed' + attendanceId);
@@ -210,12 +203,23 @@
             }
         });
 
+        $(".attendanceStatus").change(function () {
+            selectedIdSplit = $(this).find(':selected').attr('id').split("-");
+            status = selectedIdSplit[0];
+            studentId = selectedIdSplit[1];
+            $('#minutesMissed' + studentId).val('');
+            if (status == 'tardy') {
+                $('#minutesMissed' + studentId).removeAttr('disabled');
+            } else {
+                $('#minutesMissed' + studentId).attr('disabled', 'true');
+            }
+        });
+
         <!-- Used to show a warning if the selected date is in the future -->
         if (moment($("#currentDate").val()).isAfter(moment())) {
             $("#futureDateWarning").show();
         }
     });
 </script>
-
 </body>
 </html>
