@@ -1,10 +1,10 @@
 package edu.ksu.canvas.aviation.controller;
 
-import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -18,12 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 
 @Controller
@@ -39,13 +39,13 @@ public class AviationBaseController extends LtiLaunchController {
     protected SynchronizationService canvasSynchronizationService;
 
     @Autowired
-    protected CanvasApiFactory canvasApiFactory;
-
-    @Autowired
     protected RoleChecker roleChecker;
 
     @Autowired
     protected AviationSectionService sectionService;
+
+    @Autowired
+    protected CanvasApiWrapperService apiWrapperService;
 
 
     @Override

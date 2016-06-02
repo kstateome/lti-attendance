@@ -8,8 +8,6 @@ import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.canvas.interfaces.CourseReader;
-import edu.ksu.canvas.model.Course;
 import edu.ksu.lti.model.LtiSession;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
@@ -22,9 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -63,13 +59,7 @@ public class AttendanceSummaryController extends AviationBaseController {
         ModelAndView page = new ModelAndView("attendanceSummary");
 
         //Add the course name to the page for report printing purposes
-        CourseReader reader = canvasApiFactory.getReader(CourseReader.class, ltiSession.getCanvasOauthToken().getToken());
-        Optional<Course> course = reader.getSingleCourse(ltiSession.getCanvasCourseId(), Collections.emptyList());
-        if (course.isPresent()){
-            page.addObject("courseName", course.get().getName());
-        } else {
-            page.addObject("courseName", "");
-        }
+        page.addObject("courseName", apiWrapperService.getCourseName(ltiSession.getCanvasCourseId(), ltiSession.getCanvasOauthToken().getToken()));
 
         page.addObject("selectedSectionId", validatedSectionId);
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
@@ -78,5 +68,7 @@ public class AttendanceSummaryController extends AviationBaseController {
 
         return page;
     }
+
+
 
 }
