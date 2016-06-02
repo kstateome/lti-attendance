@@ -1,15 +1,6 @@
 package edu.ksu.canvas.aviation.form;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import edu.ksu.canvas.aviation.model.MakeupModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +9,16 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 
-import edu.ksu.canvas.aviation.model.MakeupModel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -54,7 +52,7 @@ public class MakeupValidatorUTest {
     }
     
     @Test
-    public void valiate_rejectZeroMinutesMadeup() {
+    public void validate_rejectZeroMinutesMadeup() {
         String expectedMinutesMadeupField = "entries[0].minutesMadeUp";
         makeupModel.setMinutesMadeUp(0);
         ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
