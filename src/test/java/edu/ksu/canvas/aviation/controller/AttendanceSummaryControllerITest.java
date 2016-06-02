@@ -78,11 +78,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     @Test
     public void attendanceSummary_existingSectionId_HappyPath() throws Exception {
         Long existingSectionId = 2000L;
-
-//        CourseReader mockCourseReader = mock(CourseReader.class);
-//        when(canvasApiFactory.getReader(any(), anyString())).thenReturn(mockCourseReader);
-//        when(mockCourseReader.getSingleCourse(anyString(), anyList())).thenReturn(Optional.<Course>empty());
-
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
         AviationCourse existingCourse = new AviationCourse();
