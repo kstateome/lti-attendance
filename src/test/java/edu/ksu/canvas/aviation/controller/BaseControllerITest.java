@@ -1,11 +1,11 @@
 package edu.ksu.canvas.aviation.controller;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
-
-import javax.transaction.Transactional;
-
+import edu.ksu.canvas.aviation.config.TestDatabaseConfig;
+import edu.ksu.canvas.aviation.config.TestSpringMVCConfig;
+import edu.ksu.canvas.entity.lti.OauthToken;
+import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.lti.LtiLaunch;
+import edu.ksu.lti.model.LtiSession;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,11 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import edu.ksu.canvas.aviation.config.TestDatabaseConfig;
-import edu.ksu.canvas.aviation.config.TestSpringMVCConfig;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.model.LtiSession;
+import javax.transaction.Transactional;
+
+import static org.mockito.Mockito.*;
 
 
 @Transactional
@@ -48,6 +46,7 @@ public class BaseControllerITest {
         reset(mockLtiLaunch);
         when(mockLtiLaunch.getLtiSession()).thenReturn(mockLtiSession);
         when(mockLtiSession.getEid()).thenReturn("someEid");
+        when(mockLtiSession.getCanvasOauthToken()).thenReturn(mock(OauthToken.class));
     }
     
 }
