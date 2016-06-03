@@ -78,6 +78,7 @@ public class ReportRepositoryITest {
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
         student.setCanvasSectionId(expectedSectionId);
         student.setName("Zoglmann, Kurt");
+        student.setDeleted(false);
         existingStudent = studentRepository.save(student);
         
         Attendance attendance = new Attendance();

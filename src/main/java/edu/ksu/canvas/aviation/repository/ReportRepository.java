@@ -1,16 +1,15 @@
 package edu.ksu.canvas.aviation.repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
+import edu.ksu.canvas.aviation.model.AttendanceSummaryModel.Entry;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
-import edu.ksu.canvas.aviation.model.AttendanceSummaryModel.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Repository
@@ -20,17 +19,19 @@ public class ReportRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private static final Logger LOG = Logger.getLogger(ReportRepository.class);
+
 
     public List<AttendanceSummaryModel> getAttendanceSummary(long canvasSectionId) {
         String sql =
-                "select course_id, canvas_section_id, student_id, student_name, " +
+                "select course_id, canvas_section_id, student_id, student_name, deleted," +
                 "sum_minutes_madeup, " +
                 "sum_minutes_missed - sum_minutes_madeup as remaining_minutes_madeup, " +
                 "sum_minutes_missed, " +
                 "round(sum_minutes_missed / course_total_minutes * 100,2) as percent_course_missed " +
                 "from ( " +
                 "  select course.course_id, course.total_minutes as course_total_minutes, " +
-                "  student.canvas_section_id, student.student_id, student.student_name, " +
+                "  student.canvas_section_id, student.student_id, student.student_name, student.deleted," +
                 "  nvl(missed.sum_minutes_missed,0) as sum_minutes_missed, " +
                 "  nvl(madeup.sum_minutes_madeup,0) as sum_minutes_madeup " +
                 "  from aviation_course course " +
@@ -81,14 +82,19 @@ public class ReportRepository {
                     canvasSectionId,
                     ((Number) result[2]).longValue(),
                     (String) result[3],
-                    ((Number) result[4]).intValue(),
+                    getBoolean(((Number)result[4]).intValue()),
                     ((Number) result[5]).intValue(),
                     ((Number) result[6]).intValue(),
-                    ((Number) result[7]).doubleValue()
+                    ((Number) result[7]).intValue(),
+                    ((Number) result[8]).doubleValue()
             ));
         }
 
         return ret;
+    }
+
+    private boolean getBoolean(int i) {
+        return i != 0;
     }
 
 }

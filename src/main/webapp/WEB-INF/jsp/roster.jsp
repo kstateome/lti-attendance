@@ -135,7 +135,7 @@
                         <tbody>
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
-                                <td>
+                                <td class="${attendance.dropped ? 'dropped' : ''}">
                                     <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
                                     <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}"

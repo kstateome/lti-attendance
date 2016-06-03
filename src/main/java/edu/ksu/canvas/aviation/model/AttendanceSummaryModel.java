@@ -23,16 +23,18 @@ public class AttendanceSummaryModel {
         private final int remainingMinutesMadeup;
         private final int sumMinutesMissed;
         private final double percentCourseMissed;
+        private final boolean dropped;
 
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String studentName, int sumMinutesMadeup, int remainingMinutesMadeup,
+                     String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
                      int sumMinutesMissed, double percentCourseMissed) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
             this.studentName = studentName;
+            this.dropped = dropped;
             this.sumMinutesMadeup = sumMinutesMadeup;
             this.remainingMinutesMadeup = remainingMinutesMadeup;
             this.sumMinutesMissed = sumMinutesMissed;
@@ -77,6 +79,10 @@ public class AttendanceSummaryModel {
 
         public double getPercentCourseMissed() {
             return percentCourseMissed;
+        }
+
+        public boolean isDropped() {
+            return dropped;
         }
 
     }
