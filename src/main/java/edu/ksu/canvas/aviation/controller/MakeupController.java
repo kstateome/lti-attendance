@@ -23,7 +23,6 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.MakeupValidator;
 import edu.ksu.canvas.aviation.services.AviationStudentService;
-import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -43,9 +42,6 @@ public class MakeupController extends AviationBaseController {
 
     @Autowired
     private MakeupValidator validator;
-
-    @Autowired
-    protected CanvasApiWrapperService canvasService;
 
 
     @InitBinder

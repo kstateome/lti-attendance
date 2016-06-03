@@ -3,7 +3,6 @@ package edu.ksu.canvas.aviation.controller;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
-import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.ReportService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -32,9 +31,6 @@ public class AttendanceSummaryController extends AviationBaseController {
 
     @Autowired
     private AviationSectionService sectionService;
-
-    @Autowired
-    protected CanvasApiWrapperService canvasService;
 
 
     @RequestMapping()

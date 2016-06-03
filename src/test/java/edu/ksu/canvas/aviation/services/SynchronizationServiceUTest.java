@@ -22,10 +22,7 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
@@ -58,9 +55,6 @@ public class SynchronizationServiceUTest {
 
     @Mock
     private CanvasApiWrapperService mockCanvasService;
-
-    @Mock
-    private LtiSession mockLtiSession;
 
 
     @Before
@@ -106,17 +100,10 @@ public class SynchronizationServiceUTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void synchronize_HappyPatchCallsInternalSynchornizationMethods() throws Exception {
         long canvasCourseId = 300L;
-        EnrollmentsReader mockEnrollmentReader = mock(EnrollmentsReader.class);
-        OauthToken mockOauthToken = mock(OauthToken.class);
-        SectionReader mockSectionReader = mock(SectionReader.class);
         SynchronizationService spy = spy(synchronizationService);
 
-        when(mockLtiSession.getCanvasOauthToken()).thenReturn(mockOauthToken);
-        when(mockSectionReader.listCourseSections(any(Integer.class), any(List.class))).thenReturn(new ArrayList<>());
-        when(mockEnrollmentReader.getSectionEnrollments(any(Integer.class), any(List.class))).thenReturn(new ArrayList<>());
         spy.synchronize(canvasCourseId);
 
         verifyPrivate(spy, times(1)).invoke("synchronizeCourseFromCanvasToDb", canvasCourseId);

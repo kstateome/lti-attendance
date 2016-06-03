@@ -7,7 +7,6 @@ import edu.ksu.canvas.aviation.model.SectionModelFactory;
 import edu.ksu.canvas.aviation.services.AttendanceService;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
-import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -50,9 +49,6 @@ public class RosterController extends AviationBaseController {
 
     @Autowired
     private RosterFormValidator validator;
-
-    @Autowired
-    protected CanvasApiWrapperService canvasService;
 
 
     @InitBinder

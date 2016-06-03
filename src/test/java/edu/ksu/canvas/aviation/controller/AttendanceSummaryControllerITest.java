@@ -1,6 +1,5 @@
 package edu.ksu.canvas.aviation.controller;
 
-import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
@@ -22,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,9 +43,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     
     @Autowired
     private AviationSectionRepository sectionRepository;
-
-    @Autowired
-    private CanvasApiFactory canvasApiFactory;
     
     
     @Test
@@ -56,7 +51,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         Long nonExistantSectionId = 2000L;
 
         CourseReader mockCourseReader = mock(CourseReader.class);
-        when(canvasApiFactory.getReader(any(), anyString())).thenReturn(mockCourseReader);
         when(mockCourseReader.getSingleCourse(anyString(), anyList())).thenReturn(Optional.<Course>empty());
 
         mockMvc.perform(get("/attendanceSummary/"+nonExistantSectionId))

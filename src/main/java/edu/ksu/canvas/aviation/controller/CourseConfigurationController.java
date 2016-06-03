@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
-import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -36,9 +35,6 @@ public class CourseConfigurationController extends AviationBaseController {
 
     @Autowired
     private CourseConfigurationValidator validator;
-
-    @Autowired
-    protected CanvasApiWrapperService canvasService;
 
 
     @RequestMapping()
@@ -70,6 +66,7 @@ public class CourseConfigurationController extends AviationBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
+
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
