@@ -139,8 +139,8 @@
             </tbody>
         </table>
         <div>
-            <input class="hovering-purple-button" type="submit" name="saveMakeup" value="Save Makeups"/>
-            <input id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup"/>
+            <input type="submit" class="hovering-purple-button" name="saveMakeup" value="Save Makeups"/>
+            <input type="button" id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup"/>
         </div>
 
     </form:form>
