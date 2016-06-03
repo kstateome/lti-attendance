@@ -8,10 +8,7 @@ import edu.ksu.canvas.aviation.services.AttendanceService;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
-import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.lti.model.LtiSession;
 
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -62,18 +58,18 @@ public class RosterController extends AviationBaseController {
     }
 
     @RequestMapping()
-    public ModelAndView roster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView roster(@RequestParam(required = false) Date date) throws NoLtiSessionException {
         return roster(date, null);
     }
 
     @RequestMapping("/{sectionId}")
-    public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        ltiLaunch.ensureApiTokenPresent(getApplicationName()); //should be present on each call
+    public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException {
+        ensureCanvasApiTokenPresent();
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AviationSection selectedSection = getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
-            long canvasCourseId = Long.valueOf(ltiLaunch.getLtiSession().getCanvasCourseId()).longValue();
+            long canvasCourseId = canvasService.getCourseId();
             selectedSection = sectionService.getFirstSectionOfCourse(canvasCourseId);
             validatedSectionId = selectedSection.getSectionId();
         }
@@ -81,8 +77,7 @@ public class RosterController extends AviationBaseController {
         List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
         sectionId = selectedSection.getCanvasSectionId().toString();
 
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is viewing the roster.");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing the roster.");
 
         //Sets the date to today if not already set
         if (date == null) {
@@ -104,12 +99,12 @@ public class RosterController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "changeDate", method = RequestMethod.POST)
-    public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+    public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws NoLtiSessionException {
         return roster(rosterForm.getCurrentDate(), sectionId);
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws NoLtiSessionException {
         validator.validate(rosterForm, bindingResult);
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
@@ -128,8 +123,7 @@ public class RosterController extends AviationBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LtiSession ltiSession = ltiLaunch.getLtiSession();
-            LOG.info("eid: " + ltiSession.getEid() + " is attempting to save section attendance for section : " + sectionId);
+            LOG.info("eid: " + canvasService.getEid() + " is attempting to save section attendance for section : " + sectionId);
 
             attendanceService.save(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);

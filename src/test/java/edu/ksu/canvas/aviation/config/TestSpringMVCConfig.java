@@ -11,6 +11,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.repository.ConfigRepository;
@@ -28,7 +29,8 @@ import edu.ksu.lti.util.CanvasInstanceChecker;
            "edu.ksu.canvas.aviation.model",
            "edu.ksu.canvas.aviation.services"},
         excludeFilters = {
-           @ComponentScan.Filter(value = SynchronizationService.class, type = FilterType.ASSIGNABLE_TYPE)
+           @ComponentScan.Filter(value = SynchronizationService.class, type = FilterType.ASSIGNABLE_TYPE),
+           @ComponentScan.Filter(value = CanvasApiWrapperService.class, type = FilterType.ASSIGNABLE_TYPE)
         })
 public class TestSpringMVCConfig {
 
@@ -60,6 +62,11 @@ public class TestSpringMVCConfig {
     @Bean
     public SynchronizationService synchornizationService() {
         return Mockito.mock(SynchronizationService.class);
+    }
+    
+    @Bean
+    public CanvasApiWrapperService canvasApiWrapperService() {
+        return Mockito.mock(CanvasApiWrapperService.class);
     }
 
     @Bean

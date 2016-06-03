@@ -42,6 +42,7 @@
 </nav>
 <div class="container">
 
+    <div class="visible-print page-header">${courseName}</div>
     <div class="sectionDropdown">
         <div class="row">
             <div class='col-sm-4'>
@@ -52,7 +53,7 @@
                                  onchange="toggleSection(value, '${context}'); false;"/>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print</button>
+                    <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print Report</button>
                 </div>
             </div>
         </div>
@@ -73,7 +74,8 @@
                 <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
                     <tr>
                         <td class="${attendancesummaryEntry.dropped ? 'dropped' : ''}">
-                            <a href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a>
+                            <a class="hidden-print" href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a>
+                            <span class="visible-print">${attendancesummaryEntry.studentName}</span>
                         </td>
                         <td class="text-center">${attendancesummaryEntry.sumMinutesMissed}</td>
                         <td class="text-center">${attendancesummaryEntry.sumMinutesMadeup}</td>
