@@ -1,10 +1,5 @@
 package edu.ksu.canvas.aviation.controller;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
@@ -15,12 +10,22 @@ import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
-
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.model.Course;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,10 +45,14 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     private AviationSectionRepository sectionRepository;
     
     
-    
     @Test
+    @SuppressWarnings("unchecked")
     public void attendanceSummary_nonExistantSectionId() throws Exception {
         Long nonExistantSectionId = 2000L;
+
+        CourseReader mockCourseReader = mock(CourseReader.class);
+        when(mockCourseReader.getSingleCourse(anyString(), anyList())).thenReturn(Optional.<Course>empty());
+
         mockMvc.perform(get("/attendanceSummary/"+nonExistantSectionId))
             .andExpect(status().isOk())
             .andExpect(view().name("attendanceSummary"))
@@ -64,7 +73,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     @Test
     public void attendanceSummary_existingSectionId_HappyPath() throws Exception {
         Long existingSectionId = 2000L;
-        
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
         AviationCourse existingCourse = new AviationCourse();

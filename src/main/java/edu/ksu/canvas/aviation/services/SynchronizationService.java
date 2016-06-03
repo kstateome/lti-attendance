@@ -1,31 +1,31 @@
 package edu.ksu.canvas.aviation.services;
 
-import edu.ksu.canvas.CanvasApiFactory;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.enums.EnrollmentType;
-import edu.ksu.canvas.enums.SectionIncludes;
-import edu.ksu.canvas.exception.InvalidOauthTokenException;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.interfaces.SectionReader;
+import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import edu.ksu.lti.model.LtiSession;
-import org.apache.commons.lang3.Validate;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.*;
 
 
 @Component
+@Scope(value="session")
 public class SynchronizationService {
 
     public static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
@@ -43,58 +43,23 @@ public class SynchronizationService {
     private AviationSectionRepository sectionRepository;
 
     @Autowired
-    protected CanvasApiFactory canvasApiFactory;
+    private CanvasApiWrapperService canvasService;
 
 
-    /**
-     * @throws NullPointerException when ltiSession parameter is null
-     */
-    public void synchronizeWhenCourseNotExistsInDB(LtiSession ltiSession, long canvasCourseId) throws IOException {
-        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
-        
+    public void synchronizeWhenCourseNotExistsInDB(long canvasCourseId) throws NoLtiSessionException {
         if (aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
-            synchronize(ltiSession, canvasCourseId);
+            synchronize(canvasCourseId);
         }
     }
 
-    /**
-     * Synchronizes Canvas related information to the database
-     * 
-     * @throws NullPointerException when ltiSession parameter is null
-     */
-    public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
-        Validate.notNull(ltiSession, "The ltiSession parameter must not be null");
-
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        List<Section> sections = sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
+    public void synchronize(long canvasCourseId) throws NoLtiSessionException {
+        List<Section> sections = canvasService.getSections(canvasCourseId);
 
         synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
         synchronizeSectionsFromCanvasToDb(sections);
 
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
-        Map<Section,List<Enrollment>> canvasSectionMap = getEnrollmentsFromCanvas(sections, enrollmentsReader);
+        Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections);
         synchronizeStudentsFromCanvasToDb(canvasSectionMap);
-    }
-
-    private Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections, EnrollmentsReader enrollmentsReader) throws InvalidOauthTokenException, IOException {
-        Map<Section, List<Enrollment>> ret = new HashMap<>();
-
-        if(sections == null) return null;
-        for (Section section : sections) {
-            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
-                List<Enrollment> enrollments = ret.get(section);
-
-                if(enrollments == null) {
-                    enrollments = new ArrayList<>();
-                    ret.put(section, enrollments);
-                }
-
-                enrollments.add(enrollment);
-            }
-        }
-
-        return ret;
     }
 
     private AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {

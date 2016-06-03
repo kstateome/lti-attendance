@@ -17,6 +17,7 @@ import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
 import edu.ksu.canvas.aviation.services.AttendanceService;
 import edu.ksu.canvas.aviation.services.AviationCourseService;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -55,6 +56,9 @@ public class RosterControllerITest extends BaseControllerITest {
     @Autowired
     private AttendanceService attendanceService;
     
+    @Autowired
+    private CanvasApiWrapperService canvasService;
+    
     
     @Before
     public void additionalSetup() throws NoLtiSessionException {
@@ -77,6 +81,7 @@ public class RosterControllerITest extends BaseControllerITest {
         existingStudent = studentRepository.save(existingStudent);
         
         when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
+        when(canvasService.getCourseId()).thenReturn(existingCourse.getCanvasCourseId().intValue());
     }
 
 
