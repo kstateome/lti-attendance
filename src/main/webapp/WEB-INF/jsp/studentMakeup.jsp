@@ -57,7 +57,11 @@
         <br/><br/>
     </c:if>
 
-
+    <c:if test="${student.deleted}">
+        <div class="alert alert-warning">
+            <p>This student has dropped the course.</p>
+        </div>
+    </c:if>
 
     <table>
         <tr>

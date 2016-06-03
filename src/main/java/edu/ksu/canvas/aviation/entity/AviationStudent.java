@@ -97,7 +97,7 @@ public class AviationStudent implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
-    public Boolean isDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 

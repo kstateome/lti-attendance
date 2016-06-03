@@ -357,7 +357,7 @@ public class SynchronizationServiceUTest {
         List<AviationStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertEquals(droppedStudent, secondSetOfStudents.get(0));
-        assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).isDeleted());
+        assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).getDeleted());
 
     }
 
