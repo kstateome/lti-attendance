@@ -31,7 +31,7 @@ public class AviationStudent implements Serializable {
     @Column(name = "canvas_section_id", nullable = false)
     private Long canvasSectionId;
 
-    @Column(name = "deleted")
+    @Column(name = "deleted", columnDefinition = "NUMBER(1,0) default 0")
     private Boolean deleted;
 
     @OneToMany(mappedBy = "aviationStudent")

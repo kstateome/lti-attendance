@@ -22,6 +22,10 @@
     color: red; font-weight: bold;
 }
 
+.dropped {
+    text-decoration: line-through;
+}
+
 /* Used to prevent link hrefs from showing when printing */
 @media print {
     a:link:after, a:visited:after {
