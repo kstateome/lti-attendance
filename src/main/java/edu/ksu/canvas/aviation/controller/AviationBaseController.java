@@ -6,7 +6,6 @@ import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.LtiLaunchData;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -66,7 +64,7 @@ public class AviationBaseController extends LtiLaunchController {
     }
 
     @RequestMapping("/initialize")
-    public ModelAndView initialize() throws OauthTokenRequiredException, InvalidInstanceException, NoLtiSessionException, IOException {
+    public ModelAndView initialize() throws NoLtiSessionException {
         ensureCanvasApiTokenPresent();
         canvasService.validateOAuthToken();
 
@@ -77,7 +75,7 @@ public class AviationBaseController extends LtiLaunchController {
         return new ModelAndView("forward:roster");
     }
 
-    protected AviationSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException, IOException {
+    protected AviationSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {
         if (previousSelectedSectionId == null) {
             return sectionService.getFirstSectionOfCourse(canvasService.getCourseId());
         } else {

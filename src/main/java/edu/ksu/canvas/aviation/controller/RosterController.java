@@ -9,9 +9,7 @@ import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
-import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
 
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -65,12 +62,12 @@ public class RosterController extends AviationBaseController {
     }
 
     @RequestMapping()
-    public ModelAndView roster(@RequestParam(required = false) Date date) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView roster(@RequestParam(required = false) Date date) throws NoLtiSessionException {
         return roster(date, null);
     }
 
     @RequestMapping("/{sectionId}")
-    public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException {
         ensureCanvasApiTokenPresent();
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
@@ -106,12 +103,12 @@ public class RosterController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "changeDate", method = RequestMethod.POST)
-    public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws IOException, NoLtiSessionException {
+    public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws NoLtiSessionException {
         return roster(rosterForm.getCurrentDate(), sectionId);
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws NoLtiSessionException {
         validator.validate(rosterForm, bindingResult);
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);

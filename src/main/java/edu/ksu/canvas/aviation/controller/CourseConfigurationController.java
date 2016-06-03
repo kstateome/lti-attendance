@@ -1,7 +1,5 @@
 package edu.ksu.canvas.aviation.controller;
 
-import java.io.IOException;
-
 import javax.validation.Valid;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationValidator;
@@ -21,7 +19,6 @@ import edu.ksu.canvas.aviation.services.AviationCourseService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
 
 
 @Controller
@@ -45,13 +42,13 @@ public class CourseConfigurationController extends AviationBaseController {
 
 
     @RequestMapping()
-    public ModelAndView classSetup() throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+    public ModelAndView classSetup() throws NoLtiSessionException, NumberFormatException {
         return classSetup(null, false);
     }
 
     @RequestMapping("/{sectionId}")
     public ModelAndView classSetup(@PathVariable String sectionId,
-                                   @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
+                                   @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws NoLtiSessionException {
 
         LOG.info("eid: " + canvasService.getEid() + " is viewing course configuration...");
 
@@ -72,7 +69,7 @@ public class CourseConfigurationController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
-    public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws IOException, NoLtiSessionException {
+    public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
@@ -90,7 +87,7 @@ public class CourseConfigurationController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
-    public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException, IOException {
+    public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException {
         LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
 

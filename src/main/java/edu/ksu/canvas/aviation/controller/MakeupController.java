@@ -1,6 +1,5 @@
 package edu.ksu.canvas.aviation.controller;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -57,13 +56,13 @@ public class MakeupController extends AviationBaseController {
 
 
     @RequestMapping("/{sectionId}/{studentId}")
-    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException, IOException {
+    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is viewing makeup data");
 
         return studentMakeup(sectionId, studentId, false);
     }
 
-    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException, IOException {
+    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
@@ -88,7 +87,7 @@ public class MakeupController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
-    public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException, IOException {
+    public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
 

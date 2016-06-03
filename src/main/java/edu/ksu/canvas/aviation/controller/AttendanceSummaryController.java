@@ -6,9 +6,7 @@ import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.ReportService;
 import edu.ksu.canvas.aviation.util.DropDownOrganizer;
-import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,12 +38,12 @@ public class AttendanceSummaryController extends AviationBaseController {
 
 
     @RequestMapping()
-    public ModelAndView attendanceSummary() throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView attendanceSummary() throws NoLtiSessionException {
         return attendanceSummary(null);
     }
 
     @RequestMapping("/{sectionId}")
-    public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
+    public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is viewing the attendance summary report.");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);

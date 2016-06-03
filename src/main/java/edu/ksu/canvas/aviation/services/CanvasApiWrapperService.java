@@ -4,9 +4,7 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
-import edu.ksu.canvas.error.MessageUndeliverableException;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -45,20 +43,24 @@ public class CanvasApiWrapperService {
         return Integer.valueOf(ltiSession.getCanvasCourseId());
     }
 
-    public String getCourseName() throws NoLtiSessionException, IOException {
+    public String getCourseName() throws NoLtiSessionException {
         Optional<Course> course = getCourse();
 
         return course.isPresent() ? course.get().getName() : null;
     }
 
-    private Optional<Course> getCourse() throws IOException, NoLtiSessionException {
+    private Optional<Course> getCourse() throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
 
         String canvasCourseId = ltiSession.getCanvasCourseId();
         String oAuthToken = ltiSession.getCanvasOauthToken().getToken();
 
         CourseReader reader = canvasApiFactory.getReader(CourseReader.class, oAuthToken);
-        return reader.getSingleCourse(canvasCourseId, Collections.emptyList());
+        try {
+            return reader.getSingleCourse(canvasCourseId, Collections.emptyList());
+        } catch (IOException e) {
+            throw new RuntimeException("Unexpected problem getting Course from Canvas", e);
+        }
     }
 
     public String getEid() throws NoLtiSessionException {
@@ -66,14 +68,18 @@ public class CanvasApiWrapperService {
         return ltiSession.getEid();
     }
 
-    public List<Section> getSections(long canvasCourseId) throws IOException, NoLtiSessionException {
+    public List<Section> getSections(long canvasCourseId) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
-        return sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
+        try {
+            return sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
+        } catch (IOException e) {
+            throw new RuntimeException("Unexpected problem getting Sections from Canvas", e);
+        }
     }
 
-    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections) throws InvalidOauthTokenException, IOException, NoLtiSessionException {
+    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
@@ -81,15 +87,19 @@ public class CanvasApiWrapperService {
 
         if(sections == null) return null;
         for (Section section : sections) {
-            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
-                List<Enrollment> enrollments = ret.get(section);
+            try {
+                for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
+                    List<Enrollment> enrollments = ret.get(section);
 
-                if(enrollments == null) {
-                    enrollments = new ArrayList<>();
-                    ret.put(section, enrollments);
+                    if(enrollments == null) {
+                        enrollments = new ArrayList<>();
+                        ret.put(section, enrollments);
+                    }
+
+                    enrollments.add(enrollment);
                 }
-
-                enrollments.add(enrollment);
+            } catch (InvalidOauthTokenException | IOException e) {
+                throw new RuntimeException("Unexpected problem getting Enrollments from Canvas", e);
             }
         }
 
@@ -102,11 +112,11 @@ public class CanvasApiWrapperService {
         return launchData.getRolesList();
     }
 
-    public void validateOAuthToken() throws OauthTokenRequiredException, MessageUndeliverableException, NoLtiSessionException {
+    public void validateOAuthToken() throws NoLtiSessionException {
         ltiLaunch.validateOAuthToken();
     }
 
-    public void ensureApiTokenPresent(String applicationName) throws OauthTokenRequiredException, NoLtiSessionException {
+    public void ensureApiTokenPresent(String applicationName) throws NoLtiSessionException {
         ltiLaunch.ensureApiTokenPresent(applicationName);
     }
 

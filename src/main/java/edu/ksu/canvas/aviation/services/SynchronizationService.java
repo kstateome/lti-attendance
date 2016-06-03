@@ -1,6 +1,5 @@
 package edu.ksu.canvas.aviation.services;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,13 +38,13 @@ public class SynchronizationService {
     private CanvasApiWrapperService canvasService;
 
 
-    public void synchronizeWhenCourseNotExistsInDB(long canvasCourseId) throws IOException, NoLtiSessionException {
+    public void synchronizeWhenCourseNotExistsInDB(long canvasCourseId) throws NoLtiSessionException {
         if (aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
             synchronize(canvasCourseId);
         }
     }
 
-    public void synchronize(long canvasCourseId) throws IOException, NoLtiSessionException {
+    public void synchronize(long canvasCourseId) throws NoLtiSessionException {
         List<Section> sections = canvasService.getSections(canvasCourseId);
 
         synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
