@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import edu.ksu.canvas.aviation.entity.AviationCourse;
@@ -20,6 +21,7 @@ import edu.ksu.canvas.model.Section;
 
 
 @Component
+@Scope(value="session")
 public class SynchronizationService {
 
     public static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
