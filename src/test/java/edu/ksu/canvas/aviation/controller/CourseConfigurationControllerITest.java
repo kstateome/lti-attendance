@@ -10,6 +10,7 @@ import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -33,7 +34,10 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     @Autowired
     private AviationSectionRepository sectionRepository;
     
-    
+    @Autowired
+    private CanvasApiWrapperService canvasService;
+
+
     @Before
     public void additionalSetup() throws NoLtiSessionException {
         existingCourse = new AviationCourse();
@@ -46,8 +50,8 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
-        
-        when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
+
+        when(canvasService.getCourseId()).thenReturn(existingCourse.getCanvasCourseId().intValue());
     }
 
 

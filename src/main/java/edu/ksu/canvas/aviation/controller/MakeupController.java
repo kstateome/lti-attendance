@@ -25,7 +25,6 @@ import edu.ksu.canvas.aviation.form.MakeupValidator;
 import edu.ksu.canvas.aviation.services.AviationStudentService;
 import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.model.LtiSession;
 
 
 @Controller
@@ -54,8 +53,7 @@ public class MakeupController extends AviationBaseController {
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is viewing makeup data");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing makeup data");
 
         return studentMakeup(sectionId, studentId, false);
     }
@@ -86,8 +84,7 @@ public class MakeupController extends AviationBaseController {
 
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is saving makeup data.");
+        LOG.info("eid: " + canvasService.getEid() + " is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
 
         boolean allUnsavedAndToBeDeleted = false;

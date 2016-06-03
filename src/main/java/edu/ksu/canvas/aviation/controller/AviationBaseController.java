@@ -6,13 +6,10 @@ import edu.ksu.canvas.aviation.services.AviationSectionService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.error.InvalidInstanceException;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.error.OauthTokenRequiredException;
-import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
-import edu.ksu.lti.model.LtiSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -33,10 +29,7 @@ public class AviationBaseController extends LtiLaunchController {
     private static final Logger LOG = Logger.getLogger(AviationBaseController.class);
 
     @Autowired
-    protected LtiLaunch ltiLaunch;
-
-    @Autowired
-    protected SynchronizationService canvasSynchronizationService;
+    protected SynchronizationService synchronizationService;
 
     @Autowired
     protected RoleChecker roleChecker;
@@ -45,7 +38,7 @@ public class AviationBaseController extends LtiLaunchController {
     protected AviationSectionService sectionService;
 
     @Autowired
-    protected CanvasApiWrapperService apiWrapperService;
+    protected CanvasApiWrapperService canvasService;
 
 
     @Override
@@ -66,40 +59,39 @@ public class AviationBaseController extends LtiLaunchController {
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
 
-    @RequestMapping("/initialize")
-    public ModelAndView initialize() throws OauthTokenRequiredException, InvalidInstanceException, NoLtiSessionException, IOException {
-        ltiLaunch.ensureApiTokenPresent(getApplicationName());
-        ltiLaunch.validateOAuthToken();
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        assertPrivilegedUser(ltiSession);
+    protected void ensureCanvasApiTokenPresent() throws OauthTokenRequiredException, NoLtiSessionException {
+        canvasService.ensureApiTokenPresent(getApplicationName());
+    }
 
-        long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
-        canvasSynchronizationService.synchronizeWhenCourseNotExistsInDB(ltiSession, canvasCourseId);
+    @RequestMapping("/initialize")
+    public ModelAndView initialize() throws NoLtiSessionException {
+        ensureCanvasApiTokenPresent();
+        canvasService.validateOAuthToken();
+
+        assertPrivilegedUser();
+
+        synchronizationService.synchronizeWhenCourseNotExistsInDB(canvasService.getCourseId());
 
         return new ModelAndView("forward:roster");
     }
 
     protected AviationSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {
-
         if (previousSelectedSectionId == null) {
-            LtiSession ltiSession = ltiLaunch.getLtiSession();
-            long canvasCourseId = Long.valueOf(ltiSession.getCanvasCourseId());
-            return sectionService.getFirstSectionOfCourse(canvasCourseId);
-
+            return sectionService.getFirstSectionOfCourse(canvasService.getCourseId());
         } else {
             return sectionService.getSection(previousSelectedSectionId);
         }
     }
 
 
-    private void assertPrivilegedUser(LtiSession ltiSession) throws NoLtiSessionException, AccessDeniedException {
-        if (ltiSession.getEid() == null || ltiSession.getEid().isEmpty()) {
+    private void assertPrivilegedUser() throws NoLtiSessionException, AccessDeniedException {
+        if (canvasService.getEid() == null || canvasService.getEid().isEmpty()) {
             throw new AccessDeniedException("You cannot access this content without a valid session");
         }
-        LtiLaunchData launchData = ltiSession.getLtiLaunchData();
-        List<LtiLaunchData.InstitutionRole> roles = launchData.getRolesList();
+
+        List<LtiLaunchData.InstitutionRole> roles = canvasService.getRoles();
         if (!roleChecker.roleAllowed(roles)) {
-            LOG.error("User (" + ltiSession.getEid() + ") with insufficient privileges tried to launch. Roles: " + ltiSession.getLtiLaunchData().getRoles());
+            LOG.error("User (" + canvasService.getEid() + ") with insufficient privileges tried to launch. Roles: " + roles);
             throw new AccessDeniedException("You do not have sufficient privileges to use this tool");
         }
     }

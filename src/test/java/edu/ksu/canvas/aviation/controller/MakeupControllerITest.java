@@ -1,7 +1,5 @@
 package edu.ksu.canvas.aviation.controller;
 
-import static org.mockito.Mockito.when;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,8 +74,6 @@ public class MakeupControllerITest extends BaseControllerITest {
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent = studentRepository.save(existingStudent);
-        
-        when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
     }
     
     private void initalizeExistingMakeup() throws ParseException {

@@ -16,16 +16,13 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.aviation.entity.AviationCourse;
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
 import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
-import edu.ksu.canvas.interfaces.SectionReader;
+import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
@@ -36,7 +33,6 @@ import static org.mockito.Mockito.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.spy;
@@ -58,10 +54,7 @@ public class SynchronizationServiceUTest {
     private AviationSectionRepository mockSectionRepository;
 
     @Mock
-    private CanvasApiFactory mockCanvasApiFactory;
-
-    @Mock
-    private LtiSession mockLtiSession;
+    private CanvasApiWrapperService mockCanvasService;
 
 
     @Before
@@ -70,110 +63,52 @@ public class SynchronizationServiceUTest {
         Whitebox.setInternalState(synchronizationService, mockCourseRepository);
         Whitebox.setInternalState(synchronizationService, mockStudentRepository);
         Whitebox.setInternalState(synchronizationService, mockSectionRepository);
-        Whitebox.setInternalState(synchronizationService, mockCanvasApiFactory);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void synchronizeWhenCourseNotExistsInDB_NullLtiSession() throws IOException {
-        LtiSession nullLtiSession = null;
-        long canvasCourseId = 500;
-
-        synchronizationService.synchronize(nullLtiSession, canvasCourseId);
+        Whitebox.setInternalState(synchronizationService, mockCanvasService);
     }
 
     @Test
-    public void synchronizeWhenCourseNotExistsInDB_CourseExists() throws IOException {
+    public void synchronizeWhenCourseNotExistsInDB_CourseExists() throws IOException, NoLtiSessionException {
         long canvasCourseId = 500;
         AviationCourse existingCourse = new AviationCourse();
 
         SynchronizationService spy = spy(synchronizationService);
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(existingCourse);
-        doThrow(new RuntimeException("This shouldn't happen... Test failed")).when(spy).synchronize(mockLtiSession, canvasCourseId);
+        doThrow(new RuntimeException("This shouldn't happen... Test failed")).when(spy).synchronize(canvasCourseId);
 
-        spy.synchronizeWhenCourseNotExistsInDB(mockLtiSession, canvasCourseId);
+        spy.synchronizeWhenCourseNotExistsInDB(canvasCourseId);
         //exception is thrown when tests fails
     }
 
     @Test
-    public void synchronizeWhenCourseNotExistsInDB_CourseDoesntExists() throws IOException {
+    public void synchronizeWhenCourseNotExistsInDB_CourseDoesntExists() throws IOException, NoLtiSessionException {
         long canvasCourseId = 500;
         SynchronizationService neuteredSync = new SynchronizationService() {
+
+            @SuppressWarnings("unused")
             public void synchronize(LtiSession ltiSession, long canvasCourseId) throws IOException {
                 //don't actually try to sync
             }
         };
         Whitebox.setInternalState(neuteredSync, mockCourseRepository);
+        Whitebox.setInternalState(neuteredSync, mockCanvasService);
 
         SynchronizationService spy = spy(neuteredSync);
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(null);
-        spy.synchronizeWhenCourseNotExistsInDB(mockLtiSession, canvasCourseId);
+        spy.synchronizeWhenCourseNotExistsInDB(canvasCourseId);
 
-        verify(spy, times(1)).synchronize(mockLtiSession, canvasCourseId);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void synchronize_NullLtiSession() throws IOException {
-        LtiSession nullLtiSession = null;
-        long canvasCourseId = 500;
-
-        synchronizationService.synchronize(nullLtiSession, canvasCourseId);
+        verify(spy, times(1)).synchronize(canvasCourseId);
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void synchronize_HappyPatchCallsInternalSynchornizationMethods() throws Exception {
         long canvasCourseId = 300L;
-        EnrollmentsReader mockEnrollmentReader = mock(EnrollmentsReader.class);
-        OauthToken mockOauthToken = mock(OauthToken.class);
-        SectionReader mockSectionReader = mock(SectionReader.class);
         SynchronizationService spy = spy(synchronizationService);
 
-        when(mockLtiSession.getCanvasOauthToken()).thenReturn(mockOauthToken);
-        when(mockCanvasApiFactory.getReader(eq(SectionReader.class), any(String.class))).thenReturn(mockSectionReader);
-        when(mockSectionReader.listCourseSections(any(Integer.class), any(List.class))).thenReturn(new ArrayList<>());
-        when(mockCanvasApiFactory.getReader(eq(EnrollmentsReader.class), any(String.class))).thenReturn(mockEnrollmentReader);
-        when(mockEnrollmentReader.getSectionEnrollments(any(Integer.class), any(List.class))).thenReturn(new ArrayList<>());
-        spy.synchronize(mockLtiSession, canvasCourseId);
+        spy.synchronize(canvasCourseId);
 
         verifyPrivate(spy, times(1)).invoke("synchronizeCourseFromCanvasToDb", canvasCourseId);
         verifyPrivate(spy, times(1)).invoke("synchronizeSectionsFromCanvasToDb", any(List.class));
         verifyPrivate(spy, times(1)).invoke("synchronizeStudentsFromCanvasToDb", any(Map.class));
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void getEnrollmentsFromCanvas_HappyPath() throws Exception {
-        Section firstSection = new Section();
-        int firstSectiondId = 1;
-        firstSection.setId(firstSectiondId);
-        Section secondSection = new Section();
-        int secondSectionId = 2;
-        secondSection.setId(2L);
-        List<Section> sections = new ArrayList<>();
-        sections.add(firstSection);
-        sections.add(secondSection);
-        Enrollment firstEnrollmentOfFirstSection = new Enrollment();
-        firstEnrollmentOfFirstSection.setId(10L);
-        Enrollment secondEnrollmentOfFirstSection = new Enrollment();
-        secondEnrollmentOfFirstSection.setId(20L);
-        Enrollment firstEnrollmentOfSecondSection = new Enrollment();
-        firstEnrollmentOfSecondSection.setId(30L);
-        List<Enrollment> firstSectionEnrollments = new ArrayList<>();
-        firstSectionEnrollments.add(firstEnrollmentOfFirstSection);
-        firstSectionEnrollments.add(secondEnrollmentOfFirstSection);
-        List<Enrollment> secondSectionEnrollments = new ArrayList<>();
-        secondSectionEnrollments.add(firstEnrollmentOfSecondSection);
-        EnrollmentsReader mockEnrollmentReader = mock(EnrollmentsReader.class);
-        int expectedMapSize = 2;
-
-        when(mockEnrollmentReader.getSectionEnrollments(eq(firstSectiondId), any(List.class))).thenReturn(firstSectionEnrollments);
-        when(mockEnrollmentReader.getSectionEnrollments(eq(secondSectionId), any(List.class))).thenReturn(secondSectionEnrollments);
-        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(synchronizationService, "getEnrollmentsFromCanvas", sections, mockEnrollmentReader);
-
-        assertEquals(expectedMapSize, actualMap.keySet().size());
-        assertThat(actualMap.keySet(), containsInAnyOrder(firstSection, secondSection));
-        assertThat(actualMap.get(firstSection), containsInAnyOrder(firstEnrollmentOfFirstSection, secondEnrollmentOfFirstSection));
-        assertThat(actualMap.get(secondSection), containsInAnyOrder(firstEnrollmentOfSecondSection));
     }
 
     @Test
