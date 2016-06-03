@@ -1,9 +1,12 @@
 package edu.ksu.canvas.aviation.controller;
 
+
 import javax.validation.Valid;
 
 import edu.ksu.canvas.aviation.form.CourseConfigurationValidator;
-
+import edu.ksu.canvas.aviation.services.AviationCourseService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
+import edu.ksu.canvas.error.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.form.CourseConfigurationForm;
-import edu.ksu.canvas.aviation.services.AviationCourseService;
-import edu.ksu.canvas.aviation.services.SynchronizationService;
-import edu.ksu.canvas.error.NoLtiSessionException;
 
 
 @Controller
@@ -87,8 +87,11 @@ public class CourseConfigurationController extends AviationBaseController {
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException {
         LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
+        
+        ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+        page.addObject("synchronizationSuccessful", true);
 
-        return new ModelAndView("forward:/courseConfiguration/" + sectionId);
+        return page;
     }
 
 }

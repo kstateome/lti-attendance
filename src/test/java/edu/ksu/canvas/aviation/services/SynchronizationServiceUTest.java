@@ -27,15 +27,28 @@ import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
 import edu.ksu.lti.model.LtiSession;
+import org.hamcrest.Matchers;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import java.util.*;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.when;
+
 import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.anyLong;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(PowerMockRunner.class)
@@ -264,6 +277,36 @@ public class SynchronizationServiceUTest {
         assertEquals(expectedCanvasCourseId, expectedStudentInDb.getCanvasCourseId());
         assertEquals(expectedSisUserId, expectedStudentInDb.getSisUserId());
         assertEquals(expectedName, expectedStudentInDb.getName());
+    }
+
+    @Test
+    public void synchronizeStudentsFromCanvasToDb_DroppedStudent() throws Exception {
+        Long expectedCanvasSectionId = 200L;
+        Long expectedCanvasCourseId = 500L;
+
+        Section section = new Section();
+        section.setId(expectedCanvasSectionId);
+        section.setCourseId(expectedCanvasCourseId.intValue());
+        Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
+        canvasSectionMap.put(section, Collections.emptyList());
+        ArgumentCaptor<AviationStudent> capturedStudent = ArgumentCaptor.forClass(AviationStudent.class);
+        AviationStudent expectedStudentSavedToDb = new AviationStudent();
+
+        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentSavedToDb);
+        when(mockStudentRepository.findByCanvasCourseId(anyLong())).thenReturn(Collections.singletonList(expectedStudentSavedToDb));
+        AviationStudent droppedStudent = new AviationStudent();
+        droppedStudent.setDeleted(true);
+        when(mockStudentRepository.save(
+                argThat(
+                        Matchers.both(
+                                Matchers.isA(AviationStudent.class)).
+                                and(Matchers.hasProperty("deleted", Matchers.hasValue(true))))))
+                .thenReturn(droppedStudent);
+        List<AviationStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
+        assertEquals(droppedStudent, secondSetOfStudents.get(0));
+        assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).isDeleted());
+
     }
 
 }

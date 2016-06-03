@@ -31,6 +31,9 @@ public class AviationStudent implements Serializable {
     @Column(name = "canvas_section_id", nullable = false)
     private Long canvasSectionId;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
     @OneToMany(mappedBy = "aviationStudent")
     private List<Attendance> attendances;
 
@@ -94,12 +97,20 @@ public class AviationStudent implements Serializable {
         this.canvasCourseId = canvasCourseId;
     }
 
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
 
     @Override
     public String toString() {
         return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="
                 + canvasCourseId + ", canvasSectionId=" + canvasSectionId + ", percentageOfCourseMissed="
-                + percentageOfCourseMissed + "]";
+                + percentageOfCourseMissed + ", deleted=" + deleted + "]";
     }
 
     @Override
@@ -111,8 +122,10 @@ public class AviationStudent implements Serializable {
 
         if (canvasCourseId != null ? !canvasCourseId.equals(that.canvasCourseId) : that.canvasCourseId != null)
             return false;
+        if (canvasSectionId != null ? !canvasSectionId.equals(that.canvasSectionId) : that.canvasSectionId != null)
+            return false;
+        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (canvasSectionId != null ? !canvasSectionId.equals(that.canvasSectionId) : that.canvasSectionId != null) return false;
         if (sisUserId != null ? !sisUserId.equals(that.sisUserId) : that.sisUserId != null) return false;
 
         return true;
@@ -124,7 +137,7 @@ public class AviationStudent implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (canvasCourseId != null ? canvasCourseId.hashCode() : 0);
         result = 31 * result + (canvasSectionId != null ? canvasSectionId.hashCode() : 0);
+        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
         return result;
     }
-
 }
