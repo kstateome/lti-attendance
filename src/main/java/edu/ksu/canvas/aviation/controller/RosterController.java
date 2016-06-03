@@ -55,7 +55,7 @@ public class RosterController extends AviationBaseController {
     private RosterFormValidator validator;
 
     @Autowired
-    protected CanvasApiWrapperService canvasWrapperService;
+    protected CanvasApiWrapperService canvasService;
 
 
     @InitBinder
@@ -76,7 +76,7 @@ public class RosterController extends AviationBaseController {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AviationSection selectedSection = getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
-            long canvasCourseId = canvasWrapperService.getCourseId();
+            long canvasCourseId = canvasService.getCourseId();
             selectedSection = sectionService.getFirstSectionOfCourse(canvasCourseId);
             validatedSectionId = selectedSection.getSectionId();
         }
@@ -84,7 +84,7 @@ public class RosterController extends AviationBaseController {
         List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
         sectionId = selectedSection.getCanvasSectionId().toString();
 
-        LOG.info("eid: " + canvasWrapperService.getEid() + " is viewing the roster.");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing the roster.");
 
         //Sets the date to today if not already set
         if (date == null) {
@@ -130,7 +130,7 @@ public class RosterController extends AviationBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LOG.info("eid: " + canvasWrapperService.getEid() + " is attempting to save section attendance for section : " + sectionId);
+            LOG.info("eid: " + canvasService.getEid() + " is attempting to save section attendance for section : " + sectionId);
 
             attendanceService.save(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);

@@ -41,7 +41,7 @@ public class CourseConfigurationController extends AviationBaseController {
     private CourseConfigurationValidator validator;
 
     @Autowired
-    protected CanvasApiWrapperService canvasWrapperService;
+    protected CanvasApiWrapperService canvasService;
 
 
     @RequestMapping()
@@ -53,7 +53,7 @@ public class CourseConfigurationController extends AviationBaseController {
     public ModelAndView classSetup(@PathVariable String sectionId,
                                    @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws OauthTokenRequiredException, NoLtiSessionException, NumberFormatException, IOException {
 
-        LOG.info("eid: " + canvasWrapperService.getEid() + " is viewing course configuration...");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing course configuration...");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
@@ -80,10 +80,10 @@ public class CourseConfigurationController extends AviationBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LOG.info("eid: " + canvasWrapperService.getEid() + " is saving course settings for " + canvasWrapperService.getCourseId() + ", minutes: "
+            LOG.info("eid: " + canvasService.getEid() + " is saving course settings for " + canvasService.getCourseId() + ", minutes: "
                     + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            courseService.save(classSetupForm, Long.valueOf(canvasWrapperService.getCourseId()));
+            courseService.save(classSetupForm, Long.valueOf(canvasService.getCourseId()));
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
@@ -91,8 +91,8 @@ public class CourseConfigurationController extends AviationBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException, IOException {
-        LOG.info("eid: " + canvasWrapperService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasWrapperService.getCourseId());
-        synchronizationService.synchronize(canvasWrapperService.getCourseId());
+        LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
+        synchronizationService.synchronize(canvasService.getCourseId());
 
         return new ModelAndView("forward:/courseConfiguration/" + sectionId);
     }

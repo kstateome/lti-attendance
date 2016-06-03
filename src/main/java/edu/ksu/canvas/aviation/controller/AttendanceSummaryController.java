@@ -37,7 +37,7 @@ public class AttendanceSummaryController extends AviationBaseController {
     private AviationSectionService sectionService;
 
     @Autowired
-    protected CanvasApiWrapperService canvasWrapperService;
+    protected CanvasApiWrapperService canvasService;
 
 
     @RequestMapping()
@@ -47,7 +47,7 @@ public class AttendanceSummaryController extends AviationBaseController {
 
     @RequestMapping("/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException, OauthTokenRequiredException, InvalidInstanceException, IOException {
-        LOG.info("eid: " + canvasWrapperService.getEid() + " is viewing the attendance summary report.");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing the attendance summary report.");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if(validatedSectionId == null) {
@@ -60,7 +60,7 @@ public class AttendanceSummaryController extends AviationBaseController {
         ModelAndView page = new ModelAndView("attendanceSummary");
 
         //Add the course name to the page for report printing purposes
-        page.addObject("courseName", canvasWrapperService.getCourseName());
+        page.addObject("courseName", canvasService.getCourseName());
 
         page.addObject("selectedSectionId", validatedSectionId);
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
