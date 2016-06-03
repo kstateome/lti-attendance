@@ -51,6 +51,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     
     
     @Test
+    @SuppressWarnings("unchecked")
     public void attendanceSummary_nonExistantSectionId() throws Exception {
         Long nonExistantSectionId = 2000L;
 

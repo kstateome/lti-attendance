@@ -1,31 +1,113 @@
 package edu.ksu.canvas.aviation.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.entity.lti.OauthToken;
+import edu.ksu.canvas.enums.EnrollmentType;
+import edu.ksu.canvas.enums.SectionIncludes;
+import edu.ksu.canvas.error.MessageUndeliverableException;
+import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.canvas.error.OauthTokenRequiredException;
+import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.lti.LtiLaunch;
+import edu.ksu.lti.LtiLaunchData;
+import edu.ksu.lti.model.LtiSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 @Component
 public class CanvasApiWrapperService {
 
     @Autowired
+    protected LtiLaunch ltiLaunch;
+
+    @Autowired
     private CanvasApiFactory canvasApiFactory;
 
 
-
-    public String getCourseName(String canvasCourseId, String oAuthToken) throws IOException {
-        Optional<Course> courseOptional = getCourseOptional(canvasCourseId, oAuthToken);
-        return courseOptional.isPresent() ? courseOptional.get().getName() : null;
+    public Integer getCourseId() throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        return Integer.valueOf(ltiSession.getCanvasCourseId());
     }
 
+    public String getCourseName() throws NoLtiSessionException, IOException {
+        Optional<Course> course = getCourse();
 
-    private Optional<Course> getCourseOptional(String canvasCourseId, String oAuthToken) throws IOException {
+        return course.isPresent() ? course.get().getName() : null;
+    }
+
+    private Optional<Course> getCourse() throws IOException, NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+
+        String canvasCourseId = ltiSession.getCanvasCourseId();
+        String oAuthToken = ltiSession.getCanvasOauthToken().getToken();
+
         CourseReader reader = canvasApiFactory.getReader(CourseReader.class, oAuthToken);
         return reader.getSingleCourse(canvasCourseId, Collections.emptyList());
     }
+
+    public String getEid() throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        return ltiSession.getEid();
+    }
+
+    public List<Section> getSections(long canvasCourseId) throws IOException, NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+        return sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
+    }
+
+    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections) throws InvalidOauthTokenException, IOException, NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+        Map<Section, List<Enrollment>> ret = new HashMap<>();
+
+        if(sections == null) return null;
+        for (Section section : sections) {
+            for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
+                List<Enrollment> enrollments = ret.get(section);
+
+                if(enrollments == null) {
+                    enrollments = new ArrayList<>();
+                    ret.put(section, enrollments);
+                }
+
+                enrollments.add(enrollment);
+            }
+        }
+
+        return ret;
+    }
+
+    public List<LtiLaunchData.InstitutionRole> getRoles() throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiLaunchData launchData = ltiSession.getLtiLaunchData();
+        return launchData.getRolesList();
+    }
+
+    public void validateOAuthToken() throws OauthTokenRequiredException, MessageUndeliverableException, NoLtiSessionException {
+        ltiLaunch.validateOAuthToken();
+    }
+
+    public void ensureApiTokenPresent(String applicationName) throws OauthTokenRequiredException, NoLtiSessionException {
+        ltiLaunch.ensureApiTokenPresent(applicationName);
+    }
+
 }

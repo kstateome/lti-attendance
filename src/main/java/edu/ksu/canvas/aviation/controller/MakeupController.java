@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,9 +24,9 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.MakeupValidator;
 import edu.ksu.canvas.aviation.services.AviationStudentService;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.model.LtiSession;
 
 
 @Controller
@@ -44,6 +45,9 @@ public class MakeupController extends AviationBaseController {
     @Autowired
     private MakeupValidator validator;
 
+    @Autowired
+    protected CanvasApiWrapperService canvasService;
+
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -53,14 +57,13 @@ public class MakeupController extends AviationBaseController {
 
 
     @RequestMapping("/{sectionId}/{studentId}")
-    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is viewing makeup data");
+    public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException, IOException {
+        LOG.info("eid: " + canvasService.getEid() + " is viewing makeup data");
 
         return studentMakeup(sectionId, studentId, false);
     }
 
-    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
+    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException, IOException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
@@ -85,9 +88,8 @@ public class MakeupController extends AviationBaseController {
     }
 
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
-    public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is saving makeup data.");
+    public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException, IOException {
+        LOG.info("eid: " + canvasService.getEid() + " is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
 
         boolean allUnsavedAndToBeDeleted = false;
