@@ -1,4 +1,4 @@
-"use strict";
+
 $(function() {
     const $date = moment().format('MM/DD/YYYY');
 
