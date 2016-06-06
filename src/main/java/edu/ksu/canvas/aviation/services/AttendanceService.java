@@ -48,7 +48,7 @@ public class AttendanceService {
                 if (attendanceModel.getAttendanceId() == null) {
                     if (aviationStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
+                        aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded " + aviationStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
                     }
@@ -65,7 +65,7 @@ public class AttendanceService {
                 } else {
                     if (attendancesInDBForCourse == null) {
                         long beginLoad = System.currentTimeMillis();
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseByDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
                         long endLoad = System.currentTimeMillis();
                         LOG.debug("loaded " + attendancesInDBForCourse.size() + " attendance entries for course in " + (endLoad - beginLoad) + " millis..");
                     }
@@ -102,13 +102,12 @@ public class AttendanceService {
         long begin = System.currentTimeMillis();
 
         Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
-        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseByDayOfClass(canvaseCourseId, date);
+        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
         LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
-
 
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
-            List<AviationStudent> aviationStudents = studentRepository.findBySectionIdOrderByNameAsc(sectionModel.getSectionId());
+            List<AviationStudent> aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
             for (AviationStudent student : aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);

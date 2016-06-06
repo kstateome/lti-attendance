@@ -1,10 +1,10 @@
 package edu.ksu.canvas.aviation.model;
 
-import java.util.Date;
-
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.enums.Status;
+
+import java.util.Date;
 
 
 public class AttendanceModel {
@@ -16,6 +16,7 @@ public class AttendanceModel {
     private Status status;
     private Integer minutesMissed;
     private Date dateOfClass;
+    private Boolean dropped;
 
 
     public AttendanceModel() { }
@@ -26,6 +27,7 @@ public class AttendanceModel {
         this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
         this.status = status;
         this.dateOfClass = dateOfClass;
+        this.dropped = student == null ? null : student.getDeleted();
     }
 
     public AttendanceModel(Attendance attendance) {
@@ -40,6 +42,7 @@ public class AttendanceModel {
         this.status = attendance.getStatus();
         this.minutesMissed = attendance.getMinutesMissed();
         this.dateOfClass = attendance.getDateOfClass();
+        this.dropped = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getDeleted();
     }
 
 
@@ -97,6 +100,14 @@ public class AttendanceModel {
 
     public void setDateOfClass(Date dateOfClass) {
         this.dateOfClass = dateOfClass;
+    }
+
+    public Boolean getDropped() {
+        return dropped;
+    }
+
+    public void setDropped(Boolean dropped) {
+        this.dropped = dropped;
     }
 
 

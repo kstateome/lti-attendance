@@ -3,6 +3,7 @@ package edu.ksu.canvas.aviation.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.ksu.canvas.aviation.entity.AviationSection;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.form.MakeupValidator;
 import edu.ksu.canvas.aviation.services.AviationStudentService;
 import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.model.LtiSession;
 
 
 @Controller
@@ -52,13 +53,24 @@ public class MakeupController extends AviationBaseController {
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is viewing makeup data");
+        LOG.info("eid: " + canvasService.getEid() + " is viewing makeup data");
 
         return studentMakeup(sectionId, studentId, false);
     }
 
-    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) {
+    private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
+        if(validatedSectionId == null || selectedSection == null) {
+            return new ModelAndView("forward:roster");
+        }
+
+        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+        AviationStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
+        if(validatedStudentId == null || selectedStudent == null) {
+            return new ModelAndView("forward:roster/"+validatedSectionId);
+        }
+
         AviationStudent student = studentService.getStudent(new Long(studentId));
         MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
 
@@ -72,8 +84,7 @@ public class MakeupController extends AviationBaseController {
 
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        LOG.info("eid: " + ltiSession.getEid() + " is saving makeup data.");
+        LOG.info("eid: " + canvasService.getEid() + " is saving makeup data.");
         validator.validate(makeupForm, bindingResult);
 
         boolean allUnsavedAndToBeDeleted = false;
@@ -85,7 +96,7 @@ public class MakeupController extends AviationBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            LOG.info("There were errors saving the Makeup form" + bindingResult.getAllErrors());
+            LOG.debug("There were user input errors saving the Makeup form" + bindingResult.getAllErrors());
             String errorMessage = "Please correct user input and try saving again.";
 
             ModelAndView page = new ModelAndView("studentMakeup");

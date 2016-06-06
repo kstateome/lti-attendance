@@ -27,24 +27,10 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
-    <script type="text/javascript">
-        $(function() {
-            $(".attendanceStatus").change(function () {
-                selectedIdSplit = $(this).find(':selected').attr('id').split("-");
-                status = selectedIdSplit[0];
-                studentId = selectedIdSplit[1];
-                $('#minutesMissed' + studentId).val('');
-                if (status == 'tardy') {
-                    $('#minutesMissed' + studentId).removeAttr('disabled');
-                } else {
-                    $('#minutesMissed' + studentId).attr('disabled', 'true');
-                }
-            });
-        });
-    </script>
+
     <title>Aviation Reporting Class Roster</title>
 </head>
-<body onload="val = ${selectedSectionId} ; contextPath = '${context}'; toggleSection(val, contextPath);">
+<body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -52,137 +38,159 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
-            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
+            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
+                Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
     </div>
 </nav>
 <div class="container-fluid">
-    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST" action="${context}/roster/${selectedSectionId}/save">
+    <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST"
+               action="${context}/roster/${selectedSectionId}/save">
 
-    <c:if test="${not empty error}">
-    <div class="alert alert-info">
-        <p>${error}</p>
-    </div>
-    </c:if>
-
-    <c:if test="${not empty saveSuccess}">
-        <div class="alert alert-success" id="saveSuccessMessage" role="alert">Attendance successfully saved.</div>
-    </c:if>
-
-    <div class="container">
-        <div class="row">
-            <div class='col-sm-4'>
-                <div class="form-group">
-                   <label for="sectionId">Section</label>
-                   <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}" itemValue="canvasSectionId" itemLabel="name" onchange="toggleSection(value, '${context}');"/>
-                </div>
+        <c:if test="${not empty error}">
+            <div class="alert alert-info">
+                <p>${error}</p>
             </div>
-        </div>
-        
-        <br/>
+        </c:if>
 
-        <div class="alert alert-warning collapse" id="futureDateWarning" role="alert">You have selected a date in the future.</div>
+        <c:if test="${not empty saveSuccess}">
+            <div class="alert alert-success" id="saveSuccessMessage" role="alert">Attendance successfully saved.</div>
+        </c:if>
 
-        <div class="row">
-            <div class='col-sm-4 keep-element-above'>
-                <div class="form-group">
-                    <label for="currentDate">Day of Attendance</label>
-                    <div class="input-group date" id="datePicker">
-                        <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
-                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy" var="currentDateCompare"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+        <div class="container">
+            <div class="row">
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <label for="sectionId">Section</label>
+                        <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}"
+                                     itemValue="canvasSectionId" itemLabel="name"
+                                     onchange="toggleSection(value, '${context}');"/>
                     </div>
                 </div>
             </div>
-            <script type="text/javascript">
-                $(function () {
-                    var datePicker = $('#datePicker');
-                    datePicker.datepicker({
-                        autoclose: true
+
+            <br/>
+
+            <div class="alert alert-warning collapse" id="futureDateWarning" role="alert">You have selected a date in
+                the future.
+            </div>
+
+            <div class="row">
+                <div class='col-sm-4 keep-element-above'>
+                    <div class="form-group">
+                        <label for="currentDate">Day of Attendance</label>
+
+                        <div class="input-group date" id="datePicker">
+                            <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
+                            <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy"
+                                            var="currentDateCompare"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        var datePicker = $('#datePicker');
+                        datePicker.datepicker({
+                            autoclose: true
+                        });
+                        $('#currentDate').on("change", function () {
+                            var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                            $(".sectionTable").hide();
+                            $("#waitLoading").show();
+                            $("#sectionSelect").append($(dateChange));
+                            $("#sectionSelect").submit();
+                        });
                     });
-                    $('#currentDate').on("change", function(){
-                        var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
-                        $(".sectionTable").hide();
-                        $("#waitLoading").show();
-                        $("#sectionSelect").append($(dateChange));
-                        $("#sectionSelect").submit();
-                    });
-                });
-            </script>
-            <div class="col-md-3 saveAttendanceButton">
-                <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
-                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+                </script>
+                <div class="col-md-3 saveAttendanceButton">
+                    <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
+                    <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
+                           value="Save Attendance"/>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div id="waitLoading" class="text-center" style="display: none">
-            <img id="loading-image" src="${context}/img/ajax-loader.gif" alt="Please wait for content to finish loading"/>
-        </div>
-        <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
-            <c:if test="${not empty sectionModel.attendances}">
-                <table class="table table-bordered sectionTable" style="display:none" id="${sectionModel.sectionId}">
-                    <thead>
+        <div class="container">
+            <div id="waitLoading" class="text-center" style="display: none">
+                <img id="loading-image" src="${context}/img/ajax-loader.gif"
+                     alt="Please wait for content to finish loading"/>
+            </div>
+            <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
+                <c:if test="${not empty sectionModel.attendances}">
+                    <table class="table table-bordered sectionTable" style="display:none"
+                           id="${sectionModel.canvasSectionId}">
+                        <thead>
                         <tr>
                             <th>Name</th>
                             <th>WID</th>
                             <th>Status</th>
                             <th>Minutes Missed</th>
                         </tr>
-                    </thead>
+                        </thead>
 
-                    <tbody>
+                        <tbody>
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
-                                <td>
-                                    <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId" />
-                                    <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId" />
-                                    ${attendance.aviationStudentName}
+                                <td class="${attendance.dropped ? 'dropped' : ''}">
+                                    <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}"
+                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
+                                    <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}"
+                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId"/>
+                                        ${attendance.aviationStudentName}
                                 </td>
                                 <td>
-                                    ${attendance.aviationStudentSisUserId}
+                                        ${attendance.aviationStudentSisUserId}
                                 </td>
                                 <td>
-                                    <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy" var="attendanceDate"/>
+                                    <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy"
+                                                    var="attendanceDate"/>
                                     <label>
-                                        <form:select id="attendanceStatus-${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
+                                        <form:select id="attendanceStatus-${attendance.aviationStudentId}"
+                                                     path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding no-width">
-                                            <form:option id="present-${attendance.aviationStudentId}" value="<%=Status.PRESENT%>">Present</form:option>
-                                            <form:option id="tardy-${attendance.aviationStudentId}" value="<%=Status.TARDY%>">Tardy</form:option>
-                                            <form:option id="absent-${attendance.aviationStudentId}" value="<%=Status.ABSENT%>">Absent</form:option>
+                                            <form:option id="present-${attendance.aviationStudentId}"
+                                                         value="<%=Status.PRESENT%>">Present</form:option>
+                                            <form:option id="tardy-${attendance.aviationStudentId}"
+                                                         value="<%=Status.TARDY%>">Tardy</form:option>
+                                            <form:option id="absent-${attendance.aviationStudentId}"
+                                                         value="<%=Status.ABSENT%>">Absent</form:option>
                                         </form:select>
                                     </label>
-                                    <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
-                               </td>
-                               <td>
+                                    <form:errors cssClass="error"
+                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
+                                </td>
+                                <td>
                                     <c:choose>
                                         <c:when test="${attendance.status == 'TARDY'}">
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5" disabled="true"/>
                                         </c:otherwise>
                                     </c:choose>
-                                     <form:errors cssClass="error" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
-                               </td>
+                                    <form:errors cssClass="error"
+                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
+                                </td>
                             </tr>
                         </c:forEach>
-                    </tbody>
+                        </tbody>
 
-                </table>
-            </c:if>
-        </c:forEach>
+                    </table>
+                </c:if>
+            </c:forEach>
 
-        <div>
-            <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+            <div>
+                <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+            </div>
         </div>
-    </div>
     </form:form>
 </div>
 
@@ -193,8 +201,15 @@
 
 
 <script type="text/javascript">
-    $(function() {
-        $('.attendanceStatus').change(function() {
+    $(function () {
+
+        // Deal with selected section information
+        val = ${selectedSectionId};
+        contextPath = '${context}';
+        toggleSection(val, contextPath);
+
+        // Handle changing things with attendance statuses
+        $('.attendanceStatus').change(function () {
             var attendanceId = $(this).attr('id').split('-')[1];
             var minutesMissed = $('#minutesMissed' + attendanceId);
             if ($(this).val() === '<%=Status.TARDY%>') {
@@ -210,12 +225,23 @@
             }
         });
 
+        $(".attendanceStatus").change(function () {
+            selectedIdSplit = $(this).find(':selected').attr('id').split("-");
+            status = selectedIdSplit[0];
+            studentId = selectedIdSplit[1];
+            $('#minutesMissed' + studentId).val('');
+            if (status == 'tardy') {
+                $('#minutesMissed' + studentId).removeAttr('disabled');
+            } else {
+                $('#minutesMissed' + studentId).attr('disabled', 'true');
+            }
+        });
+
         <!-- Used to show a warning if the selected date is in the future -->
         if (moment($("#currentDate").val()).isAfter(moment())) {
             $("#futureDateWarning").show();
         }
     });
 </script>
-
 </body>
 </html>
