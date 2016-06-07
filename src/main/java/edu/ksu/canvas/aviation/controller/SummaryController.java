@@ -55,12 +55,12 @@ public class SummaryController extends AviationBaseController {
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if(validatedSectionId == null) {
-            throw new NullPointerException("Invalid section id.");
+            throw new IllegalArgumentException("Invalid section id.");
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
         if(validatedStudentId == null) {
-            throw new NullPointerException("Invalid student id");
+            throw new IllegalArgumentException("Invalid student id");
         }
 
         AviationStudent student = studentService.getStudent(validatedStudentId);
@@ -85,7 +85,7 @@ public class SummaryController extends AviationBaseController {
             return page;
         }
         else {
-            throw new NullPointerException("Student does not exist.");
+            throw new IllegalArgumentException("Student does not exist.");
         }
     }
 }

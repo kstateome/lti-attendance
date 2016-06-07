@@ -99,37 +99,37 @@ public class SummaryControllerITest extends BaseControllerITest {
         when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void studentSummary_NonNumberSectionId() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void studentSummary_NonNumberSectionId() throws Throwable {
         Long studentId = existingStudent.getStudentId();
         String nonNumberSectionId = "Numbers";
         try {
             mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId));
         } catch (NestedServletException ne) {
-            throw (NullPointerException) ne.getCause();
+            throw ne.getCause();
         }
     }
 
 
-    @Test(expected = NullPointerException.class)
-    public void studentSummary_NonNumberForStudentId() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void studentSummary_NonNumberForStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
         try {
             mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId));
         } catch (NestedServletException ne) {
-            throw (NullPointerException) ne.getCause();
+            throw ne.getCause();
         }
     }
 
-    @Test(expected = NullPointerException.class)
-    public void studentSummary_NonExistantStudentId() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void studentSummary_NonExistantStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         Long nonExistStudentId = -1L;
         try {
             mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId));
         } catch (NestedServletException ne) {
-            throw (NullPointerException) ne.getCause();
+            throw ne.getCause();
         }
     }
 
