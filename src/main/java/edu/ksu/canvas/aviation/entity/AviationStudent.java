@@ -37,6 +37,7 @@ public class AviationStudent implements Serializable {
     @OneToMany(mappedBy = "aviationStudent")
     private List<Attendance> attendances;
 
+    public AviationStudent(){deleted = false;}
 
     @Transient
     private Double percentageOfCourseMissed;
