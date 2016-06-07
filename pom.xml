@@ -103,7 +103,6 @@
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 						<jboss.home>${jboss.home}</jboss.home>
 						<arquillian.debug>false</arquillian.debug>
-						<spring.profiles.active>test</spring.profiles.active>
 					</systemPropertyVariables>
 					<includes>
 						<include>%regex[.*ArquillianTest.*]</include>
