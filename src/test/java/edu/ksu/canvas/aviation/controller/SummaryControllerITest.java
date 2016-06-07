@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.util.NestedServletException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,6 +98,51 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
     }
+
+    @Test(expected = NullPointerException.class)
+    public void studentSummary_NonNumberSectionId() throws Exception {
+        Long studentId = existingStudent.getStudentId();
+        String nonNumberSectionId = "Numbers";
+        try {
+            mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId));
+        }
+        catch (NestedServletException ne) {
+            if(ne.getCause() instanceof  NullPointerException) {
+                throw new NullPointerException();
+            }
+        }
+    }
+
+
+    @Test(expected = NullPointerException.class)
+    public void studentSummary_NonNumberForStudentId() throws Exception {
+        Long sectionId = existingSection.getCanvasSectionId();
+        String nonNumberstudentId = "L33t";
+        try {
+            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId));
+        }
+        catch (NestedServletException ne) {
+            if(ne.getCause() instanceof  NullPointerException) {
+                throw new NullPointerException();
+            }
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void studentSummary_NonExistantStudentId() throws Exception {
+        Long sectionId = existingSection.getCanvasSectionId();
+        Long nonExistStudentId = -1L;
+        try {
+            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId));
+        }
+        catch (NestedServletException ne) {
+            if(ne.getCause() instanceof  NullPointerException) {
+                throw new NullPointerException();
+            }
+        }
+    }
+
+
 
     @Test
     @SuppressWarnings("unchecked")

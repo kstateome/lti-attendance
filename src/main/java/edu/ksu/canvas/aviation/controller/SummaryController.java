@@ -54,26 +54,38 @@ public class SummaryController extends AviationBaseController {
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-        AviationStudent student = studentService.getStudent(new Long(studentId));
-        MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
-
-        ModelAndView page = new ModelAndView("studentSummary");
-
-        List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
-
-        for(AttendanceSummaryModel attendanceSummaryModel : summaryForSections) {
-                for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
-                    if(entry.getStudentId() == new Long(studentId)) {
-                        page.addObject("attendanceSummaryEntry",
-                                new AttendanceSummaryModel.Entry(entry.getCourseId(),entry.getSectionId(),entry.getStudentId(),entry.getStudentName(),student.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed()));
-                    }
-                }
+        if(validatedSectionId == null) {
+            throw new NullPointerException("Invalid section id.");
         }
 
-        page.addObject("sectionId", sectionId);
-        page.addObject("student", student);
-        page.addObject("summaryForm", makeupForm);
+        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+        if(validatedStudentId == null) {
+            throw new NullPointerException("Invalid student id");
+        }
 
-        return page;
+        AviationStudent student = studentService.getStudent(validatedStudentId);
+        if(student != null) {
+            MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
+
+            ModelAndView page = new ModelAndView("studentSummary");
+
+            List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+
+            summaryForSections.stream()
+                    .flatMap(summary -> summary.getEntries().stream())
+                    .filter(entry -> entry.getStudentId() == validatedStudentId)
+                    .findFirst()
+                    .ifPresent(entry -> page.addObject("attendanceSummaryEntry",
+                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
+
+            page.addObject("sectionId", sectionId);
+            page.addObject("student", student);
+            page.addObject("summaryForm", makeupForm);
+
+            return page;
+        }
+        else {
+            throw new NullPointerException("Student does not exist.");
+        }
     }
 }
