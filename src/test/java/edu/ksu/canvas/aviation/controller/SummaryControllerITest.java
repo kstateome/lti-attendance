@@ -105,11 +105,8 @@ public class SummaryControllerITest extends BaseControllerITest {
         String nonNumberSectionId = "Numbers";
         try {
             mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId));
-        }
-        catch (NestedServletException ne) {
-            if(ne.getCause() instanceof  NullPointerException) {
-                throw new NullPointerException();
-            }
+        } catch (NestedServletException ne) {
+            throw (NullPointerException) ne.getCause();
         }
     }
 
@@ -120,11 +117,8 @@ public class SummaryControllerITest extends BaseControllerITest {
         String nonNumberstudentId = "L33t";
         try {
             mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId));
-        }
-        catch (NestedServletException ne) {
-            if(ne.getCause() instanceof  NullPointerException) {
-                throw new NullPointerException();
-            }
+        } catch (NestedServletException ne) {
+            throw (NullPointerException) ne.getCause();
         }
     }
 
@@ -134,11 +128,8 @@ public class SummaryControllerITest extends BaseControllerITest {
         Long nonExistStudentId = -1L;
         try {
             mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId));
-        }
-        catch (NestedServletException ne) {
-            if(ne.getCause() instanceof  NullPointerException) {
-                throw new NullPointerException();
-            }
+        } catch (NestedServletException ne) {
+            throw (NullPointerException) ne.getCause();
         }
     }
 
