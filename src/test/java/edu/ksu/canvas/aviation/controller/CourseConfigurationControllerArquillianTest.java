@@ -85,12 +85,8 @@ public class CourseConfigurationControllerArquillianTest {
             
             @Override
             public void perform() {
-                try {
-                    System.err.println("Submitting roster form");
-                    driver.findElement(By.id("saveAttendanceOnTop")).click();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                System.err.println("Submitting roster form");
+                driver.findElement(By.id("saveAttendanceOnTop")).click();
             }
         }).observe(HttpFilters.request().uri().contains("roster"))
         .inspect(new Inspection() {
@@ -102,7 +98,7 @@ public class CourseConfigurationControllerArquillianTest {
             @AfterServlet
             public void testAfterServlet() {
                 //cannot use logger above
-                System.err.println("modelAndView after save: "+modelAndView);
+                System.out.println("modelAndView after save: "+modelAndView);
                 
                 Boolean saveSuccessExpected = Boolean.TRUE;
                 Boolean saveSuccessActual = (Boolean) modelAndView.getModel().get("saveSuccess");
