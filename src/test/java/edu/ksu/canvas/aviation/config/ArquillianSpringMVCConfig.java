@@ -30,6 +30,8 @@ import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.util.CanvasInstanceChecker;
 import edu.ksu.lti.util.CanvasUtil;
 
+import static org.mockito.Mockito.when;
+
 
 @Configuration
 @EnableWebMvc
@@ -113,7 +115,8 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
         CanvasApiWrapperService ret = Mockito.mock(CanvasApiWrapperService.class);
         
         try {
-            Mockito.when(ret.getCourseId()).thenReturn(COURSE_ID_EXISTING.intValue());
+            when(ret.getCourseId()).thenReturn(COURSE_ID_EXISTING.intValue());
+            when(ret.getEid()).thenReturn("randomEid");
         } catch (NoLtiSessionException e) {
             LOG.error("failed to setup CanvasApiWrapper", e);
         }
