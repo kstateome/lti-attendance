@@ -83,8 +83,7 @@ public class SummaryController extends AviationBaseController {
             page.addObject("summaryForm", makeupForm);
 
             return page;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Student does not exist.");
         }
     }
