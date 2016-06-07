@@ -65,26 +65,26 @@ public class SummaryController extends AviationBaseController {
 
         AviationStudent student = studentService.getStudent(validatedStudentId);
         if(student != null) {
-            MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
-
-            ModelAndView page = new ModelAndView("studentSummary");
-
-            List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
-
-            summaryForSections.stream()
-                    .flatMap(summary -> summary.getEntries().stream())
-                    .filter(entry -> entry.getStudentId() == validatedStudentId)
-                    .findFirst()
-                    .ifPresent(entry -> page.addObject("attendanceSummaryEntry",
-                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
-
-            page.addObject("sectionId", sectionId);
-            page.addObject("student", student);
-            page.addObject("summaryForm", makeupForm);
-
-            return page;
-        } else {
             throw new IllegalArgumentException("Student does not exist.");
         }
+
+        MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
+
+        ModelAndView page = new ModelAndView("studentSummary");
+
+        List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+
+        summaryForSections.stream()
+                .flatMap(summary -> summary.getEntries().stream())
+                .filter(entry -> entry.getStudentId() == validatedStudentId)
+                .findFirst()
+                .ifPresent(entry -> page.addObject("attendanceSummaryEntry",
+                        new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
+
+        page.addObject("sectionId", sectionId);
+        page.addObject("student", student);
+        page.addObject("summaryForm", makeupForm);
+
+        return page;
     }
 }
