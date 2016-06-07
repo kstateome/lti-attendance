@@ -1,4 +1,4 @@
-package edu.ksu.canvas.aviation.controller;
+package edu.ksu.canvas.aviation.controller.arquillian;
 
 import java.io.File;
 import java.net.URL;

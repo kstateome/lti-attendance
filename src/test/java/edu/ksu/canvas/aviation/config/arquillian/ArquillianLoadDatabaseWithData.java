@@ -1,4 +1,4 @@
-package edu.ksu.canvas.aviation.config;
+package edu.ksu.canvas.aviation.config.arquillian;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

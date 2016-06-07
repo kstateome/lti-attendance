@@ -1,4 +1,4 @@
-package edu.ksu.canvas.aviation.config;
+package edu.ksu.canvas.aviation.config.arquillian;
 
 import java.util.List;
 
@@ -38,14 +38,14 @@ import static org.mockito.Mockito.when;
 @Profile("Arquillian")
 @ComponentScan(
         basePackages = {
-           "edu.ksu.canvas.aviation.config",
+           "edu.ksu.canvas.aviation.config.arquillian",
            "edu.ksu.canvas.aviation.controller",
            "edu.ksu.canvas.aviation.form",
            "edu.ksu.canvas.aviation.model",
            "edu.ksu.canvas.aviation.services"},
         excludeFilters = {
            @ComponentScan.Filter(value = SynchronizationService.class, type = FilterType.ASSIGNABLE_TYPE),
-           @ComponentScan.Filter(value = CanvasApiWrapperService.class, type = FilterType.ASSIGNABLE_TYPE),
+           @ComponentScan.Filter(value = CanvasApiWrapperService.class, type = FilterType.ASSIGNABLE_TYPE)
         })
 public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     

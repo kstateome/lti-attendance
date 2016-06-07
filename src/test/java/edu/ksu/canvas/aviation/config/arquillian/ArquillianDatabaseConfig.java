@@ -1,4 +1,4 @@
-package edu.ksu.canvas.aviation.config;
+package edu.ksu.canvas.aviation.config.arquillian;
 
 import java.util.Properties;
 
