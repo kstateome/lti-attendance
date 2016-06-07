@@ -20,6 +20,20 @@
         <url>https://github.com/kstateome/aviation-reporting</url>
     </scm>
 
+	<properties>
+	    <browser>phantomjs</browser>
+        <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
+        <version.org.wildfly.core.full>9.0.2.Final</version.org.wildfly.core.full>
+	
+        <provisioning.config.dir>${project.parent.basedir}</provisioning.config.dir>
+        <org.wildfly.groupId>org.wildfly</org.wildfly.groupId>
+        <org.wildfly.artifactId>wildfly-servlet-feature-pack</org.wildfly.artifactId>
+        <org.wildfly.version>${version.org.wildfly.core.full}</org.wildfly.version>
+        <org.wildfly.dist-name>wildfly</org.wildfly.dist-name>
+        <jboss.home>${basedir}/target/${org.wildfly.dist-name}</jboss.home>
+        <version.org.wildfly.build-tools>1.1.2.Final</version.org.wildfly.build-tools>
+	</properties>
+
     <distributionManagement>
         <repository>
             <id>ome-appdev-release</id>
@@ -34,6 +48,17 @@
     </distributionManagement>
 
     <build>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}</directory>
+				<includes><include>pom.xml</include></includes>
+			</testResource>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		
         <plugins>
             <plugin> <!-- copy .jsp files from lti-common -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -66,6 +91,25 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>org.wildfly.build</groupId>
+				<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+						<jboss.home>${jboss.home}</jboss.home>
+						<arquillian.debug>false</arquillian.debug>
+						<spring.profiles.active>test</spring.profiles.active>
+					</systemPropertyVariables>
+					<includes>
+						<include>%regex[.*ArquillianTest.*]</include>
+					</includes>
+				</configuration>
+			</plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -98,24 +142,179 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
-
                 <plugin>
-                   <groupId>org.apache.maven.plugins</groupId>
-                   <artifactId>maven-surefire-plugin</artifactId>
-                   <version>2.19.1</version>
-                   <configuration>
-                       <classpathDependencyExcludes>
-                           <!-- avoid sl4j warning-->
-                           <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
-                       </classpathDependencyExcludes>
-                  </configuration>
-               </plugin>
+                    <groupId>org.wildfly.build</groupId>
+                    <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+                    <version>${version.org.wildfly.build-tools}</version>
+                    <executions>
+                        <execution>
+                            <id>server-provisioning</id>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                            <phase>process-test-resources</phase>
+                            <configuration>
+                                <config-dir>${provisioning.config.dir}</config-dir>
+                                <config-file>server-provisioning.xml</config-file>
+                                <server-name>${org.wildfly.dist-name}</server-name>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.org.wildfly.plugins.wildfly-maven-plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
     
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>1.1.11.Final</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-warp-bom</artifactId>
+				<version>1.0.0.Alpha7</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-drone-bom</artifactId>
+				<version>2.0.0.Final</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+	        <dependency>
+	            <groupId>org.jboss.arquillian.selenium</groupId>
+	            <artifactId>selenium-bom</artifactId>
+	            <version>2.53.0</version>
+	            <type>pom</type>
+	            <scope>import</scope>
+	        </dependency>
+		</dependencies>
+	</dependencyManagement>
+    
 
     <dependencies>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version> <!-- must be this version for Arquillian to work -->
+			<scope>test</scope>
+		</dependency>
+ 		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-warp</artifactId>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-warp-spring</artifactId>
+			<version>1.1.0.Alpha1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-drone-webdriver-depchain</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-phantom-driver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-service-integration-spring-inject</artifactId>
+			<version>1.1.0.Alpha1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-service-integration-spring-javaconfig</artifactId>
+			<version>1.1.0.Alpha1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.arquillian</groupId>
+			<artifactId>wildfly-arquillian-common</artifactId>
+			<version>2.0.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.arquillian</groupId>
+			<artifactId>wildfly-arquillian-container-managed</artifactId>
+			<version>2.0.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-embedded</artifactId>
+			<version>2.0.10.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-protocol</artifactId>
+			<version>2.0.10.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly.arquillian</groupId>
+			<artifactId>wildfly-arquillian-protocol-jmx</artifactId>
+			<version>2.0.1.Final-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+        
+        
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
@@ -176,7 +375,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>

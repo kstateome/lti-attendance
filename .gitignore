@@ -4,3 +4,5 @@ rebel.xml
 rebel-remote.xml
 *.iml
 .idea
+lib/
+log.txt
