@@ -56,8 +56,8 @@ public class CourseConfigurationControllerArquillianTest {
     }
     
     private static WebArchive addStaticResourcesTo(WebArchive archive) {
-        final File webAppDirectory = new File("src/main/resources/static");
-        for (File file : FileUtils.listFiles(webAppDirectory, null, true)) {
+        final File staticResourcesDirectory = new File("src/main/resources/static");
+        for (File file : FileUtils.listFiles(staticResourcesDirectory, null, true)) {
             if (!file.isDirectory()) {
                 String pathInWar = file.getPath().substring("src/main/resources/static".length());
                 //System.err.println("adding file "+file+" to path: "+pathInWar);
