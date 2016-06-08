@@ -65,7 +65,7 @@ public class SummaryController extends AviationBaseController {
 
         AviationStudent student = studentService.getStudent(validatedStudentId);
         if(student == null) {
-            throw new IllegalArgumentException("Student does not exist.");
+            throw new IllegalArgumentException("Student does not exist in database.");
         }
 
         MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
