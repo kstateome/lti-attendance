@@ -133,6 +133,32 @@
         </profile>
 
         <profile>
+            <!-- Do a sonar run with 1) mvn clean install -Pdefault -Psonar; mvn sonar:sonar -->
+			<id>sonar</id>
+			<properties>
+				<jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+			</properties>
+
+			<build>
+				<plugins>
+				    <plugin>
+				        <groupId>org.jacoco</groupId>
+				        <artifactId>jacoco-maven-plugin</artifactId>
+				        <version>${jacoco-maven-plugin.version}</version>
+				        <executions>
+                            <execution>
+						        <phase>process-test-resources</phase>
+						        <goals>
+						            <goal>prepare-agent</goal>
+						        </goals>
+                            </execution>
+				        </executions>
+				    </plugin>
+				</plugins>
+			</build>
+        </profile>
+
+        <profile>
             <id>arquillian</id>
 			<properties>
 			    <browser>phantomjs</browser>
