@@ -53,7 +53,9 @@ public class AviationStudent implements Serializable {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
-    public AviationStudent(){deleted = false;}
+    public AviationStudent() {
+        deleted = false;
+    }
 
     public Long getStudentId() {
         return studentId;
