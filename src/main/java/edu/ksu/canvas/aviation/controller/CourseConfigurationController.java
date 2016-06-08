@@ -38,7 +38,7 @@ public class CourseConfigurationController extends AviationBaseController {
 
 
     @RequestMapping()
-    public ModelAndView classSetup() throws NoLtiSessionException, NumberFormatException {
+    public ModelAndView classSetup() throws NoLtiSessionException {
         return classSetup(null, false);
     }
 
@@ -77,14 +77,14 @@ public class CourseConfigurationController extends AviationBaseController {
             LOG.info("eid: " + canvasService.getEid() + " is saving course settings for " + canvasService.getCourseId() + ", minutes: "
                     + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
-            courseService.save(classSetupForm, Long.valueOf(canvasService.getCourseId()));
+            courseService.save(classSetupForm, canvasService.getCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
-    public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException, NumberFormatException {
+    public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
         

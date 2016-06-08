@@ -1,6 +1,10 @@
 package edu.ksu.canvas.aviation.entity;
 
 import javax.persistence.*;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -115,29 +119,32 @@ public class AviationStudent implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         AviationStudent that = (AviationStudent) o;
-
-        if (canvasCourseId != null ? !canvasCourseId.equals(that.canvasCourseId) : that.canvasCourseId != null)
-            return false;
-        if (canvasSectionId != null ? !canvasSectionId.equals(that.canvasSectionId) : that.canvasSectionId != null)
-            return false;
-        if (deleted != null ? !deleted.equals(that.deleted) : that.deleted != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (sisUserId != null ? !sisUserId.equals(that.sisUserId) : that.sisUserId != null) return false;
-
-        return true;
+        return new EqualsBuilder()
+                .append(canvasCourseId, that.canvasCourseId)
+                .append(canvasSectionId, that.canvasSectionId)
+                .append(deleted, that.deleted)
+                .append(name, that.name)
+                .append(sisUserId, that.sisUserId)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = sisUserId != null ? sisUserId.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (canvasCourseId != null ? canvasCourseId.hashCode() : 0);
-        result = 31 * result + (canvasSectionId != null ? canvasSectionId.hashCode() : 0);
-        result = 31 * result + (deleted != null ? deleted.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17,31)
+                .append(canvasCourseId)
+                .append(canvasSectionId)
+                .append(deleted)
+                .append(name)
+                .append(sisUserId)
+                .toHashCode();
     }
 }

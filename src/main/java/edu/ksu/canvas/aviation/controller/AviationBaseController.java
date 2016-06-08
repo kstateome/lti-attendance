@@ -7,7 +7,6 @@ import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.error.OauthTokenRequiredException;
 import edu.ksu.lti.LtiLaunchData;
 import edu.ksu.lti.controller.LtiLaunchController;
 import org.apache.log4j.Logger;
@@ -59,7 +58,7 @@ public class AviationBaseController extends LtiLaunchController {
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
 
-    protected void ensureCanvasApiTokenPresent() throws OauthTokenRequiredException, NoLtiSessionException {
+    protected void ensureCanvasApiTokenPresent() throws NoLtiSessionException {
         canvasService.ensureApiTokenPresent(getApplicationName());
     }
 
@@ -84,7 +83,11 @@ public class AviationBaseController extends LtiLaunchController {
     }
 
 
-    private void assertPrivilegedUser() throws NoLtiSessionException, AccessDeniedException {
+    /**
+     * @throws NoLtiSessionException if the user doesn't have a LTISession
+     * @throws AccessDeniedException if the user isn't authorized
+     */
+    private void assertPrivilegedUser() throws NoLtiSessionException {
         if (canvasService.getEid() == null || canvasService.getEid().isEmpty()) {
             throw new AccessDeniedException("You cannot access this content without a valid session");
         }

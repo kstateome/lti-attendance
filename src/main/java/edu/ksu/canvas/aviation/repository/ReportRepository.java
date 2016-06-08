@@ -2,7 +2,6 @@ package edu.ksu.canvas.aviation.repository;
 
 import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
 import edu.ksu.canvas.aviation.model.AttendanceSummaryModel.Entry;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,8 +17,6 @@ public class ReportRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    private static final Logger LOG = Logger.getLogger(ReportRepository.class);
 
 
     public List<AttendanceSummaryModel> getAttendanceSummary(long canvasSectionId) {
