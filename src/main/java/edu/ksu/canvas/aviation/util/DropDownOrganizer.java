@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 public class DropDownOrganizer {
 
 
+    private DropDownOrganizer() {
+        // This is a utility class, so it doesn't need a public constructor
+    }
+
+
     /**
      * Puts the selected section first in the list and sorts the rest alphabetically.
      */
