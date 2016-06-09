@@ -205,6 +205,7 @@ public class SynchronizationServiceUTest {
         String expectedSisUserId = "uniqueSisId";
         String expectedName = "Zoglmann, Kurt";
         Integer expectedStudentsSavedToDb = 1;
+        Boolean expectedDeleted = Boolean.FALSE;
 
         User user = new User();
         user.setSisUserId(expectedSisUserId);
@@ -231,6 +232,7 @@ public class SynchronizationServiceUTest {
         assertEquals(expectedCanvasCourseId, capturedStudent.getValue().getCanvasCourseId());
         assertEquals(expectedSisUserId, capturedStudent.getValue().getSisUserId());
         assertEquals(expectedName, capturedStudent.getValue().getName());
+        assertEquals(expectedDeleted, capturedStudent.getValue().getDeleted());
     }
 
     @Test
@@ -252,6 +254,7 @@ public class SynchronizationServiceUTest {
         String expectedSisUserId = "uniqueSisId";
         String expectedName = "Zoglmann, Kurt";
         Integer expectedStudentsSavedToDb = 1;
+        Boolean expectedDeleted = Boolean.FALSE;
 
         User user = new User();
         user.setSisUserId(expectedSisUserId);
@@ -277,6 +280,56 @@ public class SynchronizationServiceUTest {
         assertEquals(expectedCanvasCourseId, expectedStudentInDb.getCanvasCourseId());
         assertEquals(expectedSisUserId, expectedStudentInDb.getSisUserId());
         assertEquals(expectedName, expectedStudentInDb.getName());
+        assertEquals(expectedDeleted, expectedStudentInDb.getDeleted());
+    }
+
+    @Test
+    public void synchronizeStudentsFromCanvasToDb_UpdateDeletedStudentInCourse_StayDeleted() throws Exception {
+        Long previousCanvasSectionId = 350L;
+        Long previousCanvasCourseId = 350L;
+        String previousSisUserId = "uniqueSisId";
+        String previousName = "Zoglmann, Chris";
+        AviationStudent expectedStudentInDb = new AviationStudent();
+        expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
+        expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
+        expectedStudentInDb.setSisUserId(previousSisUserId);
+        expectedStudentInDb.setName(previousName);
+        expectedStudentInDb.setDeleted(Boolean.TRUE);
+        List<AviationStudent> studentsInDbForCourse = new ArrayList<>();
+        studentsInDbForCourse.add(expectedStudentInDb);
+
+        Long expectedCanvasSectionId = 250L;
+        Long expectedCanvasCourseId = 550L;
+        String expectedSisUserId = "uniqueSisId";
+        String expectedName = "Zoglmann, Kurt";
+        Integer expectedStudentsSavedToDb = 1;
+        Boolean expectedDeleted = Boolean.TRUE;
+
+        User user = new User();
+        user.setSisUserId(expectedSisUserId);
+        user.setSortableName(expectedName);
+        Enrollment enrollment = new Enrollment();
+        enrollment.setUser(user);
+        List<Enrollment> enrollments = new ArrayList<>();
+        enrollments.add(enrollment);
+        Section section = new Section();
+        section.setId(expectedCanvasSectionId);
+        section.setCourseId(expectedCanvasCourseId.intValue());
+        Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
+        canvasSectionMap.put(section, enrollments);
+
+        when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
+        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentInDb);
+        List<AviationStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+
+        verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
+        assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
+        assertSame(expectedStudentInDb, actualStudents.get(0));
+        assertEquals(expectedCanvasSectionId, expectedStudentInDb.getCanvasSectionId());
+        assertEquals(expectedCanvasCourseId, expectedStudentInDb.getCanvasCourseId());
+        assertEquals(expectedSisUserId, expectedStudentInDb.getSisUserId());
+        assertEquals(expectedName, expectedStudentInDb.getName());
+        assertEquals(expectedDeleted, expectedStudentInDb.getDeleted());
     }
 
     @Test
@@ -306,7 +359,6 @@ public class SynchronizationServiceUTest {
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertEquals(droppedStudent, secondSetOfStudents.get(0));
         assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).getDeleted());
-
     }
 
 }
