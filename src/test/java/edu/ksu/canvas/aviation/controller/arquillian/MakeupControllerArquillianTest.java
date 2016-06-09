@@ -19,25 +19,27 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
     public void shouldBeAbleToGetMakeupPage() throws Exception{
         System.out.println("Testing makeup page...");
 
-        driver.navigate().to(baseUrl + "roster");
-        driver.findElement(By.id("attendanceSummaryLink")).click();
-
-        System.err.println("Page source: \n" + driver.getPageSource());
-        driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
+        navigateToMakeupPage();
         assertTrue("Makeup form should be displayed", driver.findElement(By.id("makeupForm")).isDisplayed());
 
     }
+
+
 
     @Test
     public void shouldBeAbleToAddMakeupRow() throws Exception{
         System.out.println("Testing adding makeup row...");
 
-        driver.navigate().to(baseUrl + "roster");
-        driver.findElement(By.id("attendanceSummaryLink")).click();
-
-        driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
+        navigateToMakeupPage();
         driver.findElement(By.id("addMakeupBtn")).click();
         assertFalse("Clicking the add makeup btn should add a new row", driver.findElements(By.className("addedMakeupRow")).isEmpty());
+    }
+
+    private void navigateToMakeupPage() {
+        driver.navigate().to(baseUrl + "roster");
+        driver.findElement(By.id("attendanceSummaryLink")).click();
+        driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
+        System.out.println("Page source: \n" + driver.getPageSource());
     }
 
 }
