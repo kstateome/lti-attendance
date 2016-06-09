@@ -55,7 +55,7 @@ public class SynchronizationService {
     public void synchronize(long canvasCourseId) throws NoLtiSessionException {
         List<Section> sections = canvasService.getSections(canvasCourseId);
 
-        synchronizeCourseFromCanvasToDb(Long.valueOf(canvasCourseId));
+        synchronizeCourseFromCanvasToDb(canvasCourseId);
         synchronizeSectionsFromCanvasToDb(sections);
 
         Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections);

@@ -13,6 +13,7 @@ import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
@@ -27,6 +28,7 @@ import java.util.List;
 @ComponentScan({"edu.ksu.canvas", "edu.ksu.lti"})
 @EntityScan({"edu.ksu.canvas", "edu.ksu.canvas.interfaces"})
 @PropertySource({"classpath:application.properties"})
+@Profile("Production")
 public class AppConfig extends CommonAppConfig {
 
     @Autowired
