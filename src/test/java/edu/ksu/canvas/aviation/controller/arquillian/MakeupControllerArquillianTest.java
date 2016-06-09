@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @WarpTest
@@ -23,8 +24,20 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
 
         System.err.println("Page source: \n" + driver.getPageSource());
         driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
-        assertTrue(driver.findElement(By.id("makeupForm")).isDisplayed());
+        assertTrue("Makeup form should be displayed", driver.findElement(By.id("makeupForm")).isDisplayed());
 
+    }
+
+    @Test
+    public void shouldBeAbleToAddMakeupRow() throws Exception{
+        System.out.println("Testing adding makeup row...");
+
+        driver.navigate().to(baseUrl + "roster");
+        driver.findElement(By.id("attendanceSummaryLink")).click();
+
+        driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
+        driver.findElement(By.id("addMakeupBtn")).click();
+        assertFalse("Clicking the add makeup btn should add a new row", driver.findElements(By.className("addedMakeupRow")).isEmpty());
     }
 
 }
