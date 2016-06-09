@@ -8,7 +8,6 @@ import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.aviation.services.ReportService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -29,8 +28,6 @@ import java.util.List;
 @RequestMapping("/studentSummary")
 public class SummaryController extends AviationBaseController {
 
-    private static final Logger LOG = Logger.getLogger(SummaryController.class);
-
     @Autowired
     private MakeupService makeupService;
 
@@ -39,6 +36,7 @@ public class SummaryController extends AviationBaseController {
 
     @Autowired
     private ReportService reportService;
+
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -87,4 +85,5 @@ public class SummaryController extends AviationBaseController {
 
         return page;
     }
+
 }
