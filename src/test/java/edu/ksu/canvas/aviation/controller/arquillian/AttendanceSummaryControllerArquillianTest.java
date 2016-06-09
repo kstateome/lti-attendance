@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @WarpTest
 @RunAsClient
@@ -56,6 +57,18 @@ public class AttendanceSummaryControllerArquillianTest extends BaseArquillianTes
                 });
 
 
+
+    }
+
+    @Test
+    public void pageShouldHaveReportTable() throws Exception {
+        System.out.println("Testing summary page.. using driver: "+driver+"  .. fetching this url: " + baseUrl + "attendanceSummary");
+
+        driver.navigate().to(baseUrl + "attendanceSummary");
+        driver.findElement(By.id("attendanceSummaryLink")).click();
+
+        System.out.println("Page source: \n" + driver.getPageSource());
+        assertFalse("There should be at least one report table.", driver.findElements(By.className("sectionTable")).isEmpty());
 
     }
 }
