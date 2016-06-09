@@ -61,7 +61,7 @@ public class CanvasApiWrapperService {
         try {
             return reader.getSingleCourse(canvasCourseId, Collections.emptyList());
         } catch (IOException e) {
-            throw new RuntimeException("Unexpected problem getting Course from Canvas", e);
+            throw new UnexpectedCanvasWrapperException("Unexpected problem getting Course from Canvas", e);
         }
     }
 
@@ -77,7 +77,7 @@ public class CanvasApiWrapperService {
         try {
             return sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
         } catch (IOException e) {
-            throw new RuntimeException("Unexpected problem getting Sections from Canvas", e);
+            throw new UnexpectedCanvasWrapperException("Unexpected problem getting Sections from Canvas", e);
         }
     }
 
@@ -87,7 +87,10 @@ public class CanvasApiWrapperService {
         EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
         Map<Section, List<Enrollment>> ret = new HashMap<>();
 
-        if(sections == null) return null;
+        if(sections == null) {
+            return null;
+        }
+
         for (Section section : sections) {
             try {
                 for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
@@ -101,7 +104,7 @@ public class CanvasApiWrapperService {
                     enrollments.add(enrollment);
                 }
             } catch (InvalidOauthTokenException | IOException e) {
-                throw new RuntimeException("Unexpected problem getting Enrollments from Canvas", e);
+                throw new UnexpectedCanvasWrapperException("Unexpected problem getting Enrollments from Canvas", e);
             }
         }
 

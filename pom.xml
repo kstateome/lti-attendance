@@ -14,25 +14,12 @@
         <version>1.1.7</version>
     </parent>
 
+
     <scm>
         <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
         <url>https://github.com/kstateome/aviation-reporting</url>
     </scm>
-
-	<properties>
-	    <browser>phantomjs</browser>
-        <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
-        <version.org.wildfly.core.full>9.0.2.Final</version.org.wildfly.core.full>
-	
-        <provisioning.config.dir>${project.parent.basedir}</provisioning.config.dir>
-        <org.wildfly.groupId>org.wildfly</org.wildfly.groupId>
-        <org.wildfly.artifactId>wildfly-servlet-feature-pack</org.wildfly.artifactId>
-        <org.wildfly.version>${version.org.wildfly.core.full}</org.wildfly.version>
-        <org.wildfly.dist-name>wildfly</org.wildfly.dist-name>
-        <jboss.home>${basedir}/target/${org.wildfly.dist-name}</jboss.home>
-        <version.org.wildfly.build-tools>1.1.2.Final</version.org.wildfly.build-tools>
-	</properties>
 
     <distributionManagement>
         <repository>
@@ -48,17 +35,6 @@
     </distributionManagement>
 
     <build>
-		<testResources>
-			<testResource>
-				<directory>${project.basedir}</directory>
-				<includes><include>pom.xml</include></includes>
-			</testResource>
-			<testResource>
-				<directory>${project.basedir}/src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-		</testResources>
-		
         <plugins>
             <plugin> <!-- copy .jsp files from lti-common -->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -91,28 +67,10 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
-				<groupId>org.wildfly.build</groupId>
-				<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-						<jboss.home>${jboss.home}</jboss.home>
-						<arquillian.debug>false</arquillian.debug>
-					</systemPropertyVariables>
-					<includes>
-						<include>%regex[.*ArquillianTest.*]</include>
-					</includes>
-				</configuration>
-			</plugin>
         </plugins>
+
         <pluginManagement>
             <plugins>
-    
                 <!-- this is needed for eclipse to handle all of the special 
                     plugins used by the different modules of this project. -->
                 <plugin>
@@ -141,34 +99,180 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.wildfly.build</groupId>
-                    <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
-                    <version>${version.org.wildfly.build-tools}</version>
-                    <executions>
-                        <execution>
-                            <id>server-provisioning</id>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                            <phase>process-test-resources</phase>
-                            <configuration>
-                                <config-dir>${provisioning.config.dir}</config-dir>
-                                <config-file>server-provisioning.xml</config-file>
-                                <server-name>${org.wildfly.dist-name}</server-name>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>${version.org.wildfly.plugins.wildfly-maven-plugin}</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-    
+
+
+    <profiles>
+        <profile>
+          <id>default</id>
+          <activation>
+              <activeByDefault>true</activeByDefault>
+          </activation>
+          <build>
+              <pluginManagement>
+                <plugins>
+	                <plugin>
+	                   <groupId>org.apache.maven.plugins</groupId>
+	                   <artifactId>maven-surefire-plugin</artifactId>
+	                   <version>2.19.1</version>
+	                   <configuration>
+	                      <classpathDependencyExcludes>
+	                          <!-- avoid sl4j warning-->
+	                          <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
+	                      </classpathDependencyExcludes>
+				          <excludes>
+				            <exclude>**/*ArquillianTest.java</exclude>
+				          </excludes>
+	                  </configuration>
+	               </plugin>
+                </plugins>
+              </pluginManagement>
+          </build>
+        </profile>
+
+        <profile>
+            <!-- Do a sonar run with 1) mvn clean install -Pdefault -Psonar; mvn sonar:sonar -->
+			<id>sonar</id>
+			<properties>
+				<jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+			</properties>
+
+			<build>
+				<plugins>
+	                <plugin>
+	                   <groupId>org.apache.maven.plugins</groupId>
+	                   <artifactId>maven-surefire-plugin</artifactId>
+	                   <version>2.19.1</version>
+	                   <configuration>
+                            <systemPropertyVariables>
+                                <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                            </systemPropertyVariables>
+	                  </configuration>
+	               </plugin>
+				    <plugin>
+				        <groupId>org.jacoco</groupId>
+				        <artifactId>jacoco-maven-plugin</artifactId>
+				        <version>${jacoco-maven-plugin.version}</version>
+			            <executions>
+			                <execution>
+			                    <id>default-instrument</id>
+			                    <goals>
+			                        <goal>instrument</goal>
+			                    </goals>
+			                </execution>
+			                <execution>
+			                    <id>default-restore-instrumented-classes</id>
+			                    <goals>
+			                        <goal>restore-instrumented-classes</goal>
+			                    </goals>
+			                </execution>
+			                <execution>
+			                    <id>default-report</id>
+			                    <phase>prepare-package</phase>
+			                    <goals>
+			                        <goal>report</goal>
+			                    </goals>
+			                </execution>
+			            </executions>
+				    </plugin>
+				</plugins>
+			</build>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.jacoco</groupId>
+					<artifactId>org.jacoco.agent</artifactId>
+					<classifier>runtime</classifier>
+					<version>${jacoco-maven-plugin.version}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+        </profile>
+
+        <profile>
+            <id>arquillian</id>
+			<properties>
+			    <browser>phantomjs</browser>
+		        <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
+		        <version.org.wildfly.core.full>9.0.2.Final</version.org.wildfly.core.full>
+
+		        <provisioning.config.dir>${project.parent.basedir}</provisioning.config.dir>
+		        <org.wildfly.groupId>org.wildfly</org.wildfly.groupId>
+		        <org.wildfly.artifactId>wildfly-servlet-feature-pack</org.wildfly.artifactId>
+		        <org.wildfly.version>${version.org.wildfly.core.full}</org.wildfly.version>
+		        <org.wildfly.dist-name>wildfly</org.wildfly.dist-name>
+		        <jboss.home>${basedir}/target/${org.wildfly.dist-name}</jboss.home>
+		        <version.org.wildfly.build-tools>1.1.2.Final</version.org.wildfly.build-tools>
+			</properties>
+
+			<build>
+				<testResources>
+					<testResource>
+						<directory>${project.basedir}</directory>
+						<includes><include>pom.xml</include></includes>
+					</testResource>
+					<testResource>
+						<directory>${project.basedir}/src/test/resources</directory>
+						<filtering>true</filtering>
+					</testResource>
+				</testResources>
+
+			    <pluginManagement>
+			        <plugins>
+		                <plugin>
+		                    <groupId>org.wildfly.build</groupId>
+		                    <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+		                    <version>${version.org.wildfly.build-tools}</version>
+		                    <executions>
+		                        <execution>
+		                            <id>server-provisioning</id>
+		                            <goals>
+		                                <goal>build</goal>
+		                            </goals>
+		                            <phase>process-test-resources</phase>
+		                            <configuration>
+		                                <config-dir>${provisioning.config.dir}</config-dir>
+		                                <config-file>server-provisioning.xml</config-file>
+		                                <server-name>${org.wildfly.dist-name}</server-name>
+		                            </configuration>
+		                        </execution>
+		                    </executions>
+		                </plugin>
+		                <plugin>
+		                    <groupId>org.wildfly.plugins</groupId>
+		                    <artifactId>wildfly-maven-plugin</artifactId>
+		                    <version>${version.org.wildfly.plugins.wildfly-maven-plugin}</version>
+		                </plugin>
+			        </plugins>
+			    </pluginManagement>
+
+			    <plugins>
+					<plugin>
+						<groupId>org.wildfly.build</groupId>
+						<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<inherited>false</inherited>
+						<configuration>
+							<systemPropertyVariables>
+		                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+								<jboss.home>${jboss.home}</jboss.home>
+								<arquillian.debug>false</arquillian.debug>
+							</systemPropertyVariables>
+							<includes>
+								<include>%regex[.*ArquillianTest.*]</include>
+							</includes>
+						</configuration>
+					</plugin>
+			    </plugins>
+			</build>
+        </profile>
+    </profiles>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -192,36 +296,24 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-	        <dependency>
-	            <groupId>org.jboss.arquillian.selenium</groupId>
-	            <artifactId>selenium-bom</artifactId>
-	            <version>2.53.0</version>
-	            <type>pom</type>
-	            <scope>import</scope>
-	        </dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.selenium</groupId>
+				<artifactId>selenium-bom</artifactId>
+				<version>2.53.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-    
 
     <dependencies>
+        <!-- Arquillian related dependencies for compilation -->
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version> <!-- must be this version for Arquillian to work -->
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-warp-spring</artifactId>
+			<version>1.1.0.Alpha1</version>
 			<scope>test</scope>
 		</dependency>
- 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.2.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-warp</artifactId>
@@ -231,23 +323,42 @@
 					<groupId>javassist</groupId>
 					<artifactId>javassist</artifactId>
 				</exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
 			</exclusions>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-warp-spring</artifactId>
-			<version>1.1.0.Alpha1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-drone-webdriver-depchain</artifactId>
 			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--  End Arquillian related dependencies for compilation -->
+
+	    <!-- Arquillian related dependencies for running the Arquillian tests -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version> <!-- must be this version for Arquillian to work -->
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -273,11 +384,6 @@
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-service-integration-spring-javaconfig</artifactId>
 			<version>1.1.0.Alpha1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -316,8 +422,9 @@
 			<version>2.0.0.Final</version>
 			<scope>test</scope>
 		</dependency>
-        
-        
+		<!-- End of Arquillian related dependencies for running the tests -->
+
+
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>

@@ -19,7 +19,9 @@ public class AttendanceModel {
     private Boolean dropped;
 
 
-    public AttendanceModel() { }
+    public AttendanceModel() {
+
+    }
 
     public AttendanceModel(AviationStudent student, Status status, Date dateOfClass) {
         this.aviationStudentId = student == null ? null : student.getStudentId();

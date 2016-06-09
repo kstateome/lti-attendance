@@ -39,7 +39,9 @@ public class Attendance implements Serializable {
     private Date dateOfClass;
 
 
-    public Attendance() { }
+    public Attendance() {
+
+    }
 
     public Attendance(AviationStudent aviationStudent, Status status, Date dateOfClass) {
         this.aviationStudent = aviationStudent;

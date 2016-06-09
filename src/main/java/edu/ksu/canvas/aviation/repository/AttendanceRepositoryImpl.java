@@ -27,6 +27,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     /**
      * @throws NullPointerException when the dateOfClass parameter is null
      */
+    @Override
     public List<Attendance> getAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass) {
         Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
 
@@ -41,10 +42,10 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         return query.getResultList();
     }
 
-
+    @Override
     @Transactional
     public void saveInBatches(List<Attendance> attendances) {
-        if (attendances == null || attendances.size() == 0) {
+        if (attendances == null || attendances.isEmpty()) {
             return;
         }
 

@@ -33,7 +33,9 @@ public class AviationSection implements Serializable {
     private String name;
 
 
-    public AviationSection() { }
+    public AviationSection() {
+
+    }
 
 
     public Long getSectionId() {
