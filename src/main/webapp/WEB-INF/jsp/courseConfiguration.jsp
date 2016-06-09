@@ -61,7 +61,7 @@
     </c:if>
 
     <c:if test="${synchronizationSuccessful}">
-        <div class="alert alert-success">
+        <div class="alert alert-success" id="synchronizationSuccessful">
             <p>Synchronization with canvas was successful.</p>
         </div>
         <br/><br/>

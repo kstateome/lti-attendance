@@ -16,6 +16,7 @@ import org.openqa.selenium.By;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 @WarpTest
@@ -52,6 +53,17 @@ public class CourseConfigurationControllerArquillianTest extends BaseArquillianT
                         assertEquals(true, updateSuccessful);
                     }
                 });
+    }
+
+    @Test
+    public void shouldBeAbleToUseSynchronizationButton() throws Exception {
+        driver.navigate().to(baseUrl + "courseConfiguration");
+        driver.findElement(By.id("classSetupLink")).click();
+        System.out.println("Page source: \n" + driver.getPageSource());
+
+        System.out.println("Synchronizing course");
+        driver.findElement(By.id("synchronizeWithCanvas")).click();
+        assertTrue(driver.findElement(By.id("synchronizationSuccessful")).isDisplayed());
     }
     
 }
