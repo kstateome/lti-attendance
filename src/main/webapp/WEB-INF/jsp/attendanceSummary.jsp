@@ -77,7 +77,7 @@
                             <a class="hidden-print" href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a>
                             <span class="visible-print">${attendancesummaryEntry.studentName}</span>
                         </td>
-                        <td class="text-center">${attendancesummaryEntry.sumMinutesMissed}</td>
+                        <td class="text-center"><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.sumMinutesMissed}</a></td>
                         <td class="text-center">${attendancesummaryEntry.sumMinutesMadeup}</td>
                         <td class="text-center">${attendancesummaryEntry.remainingMinutesMadeup}</td>
                         <td class="percentMissed text-center">${attendancesummaryEntry.percentCourseMissed}</td>

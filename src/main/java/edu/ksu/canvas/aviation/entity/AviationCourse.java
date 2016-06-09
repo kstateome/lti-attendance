@@ -28,7 +28,9 @@ public class AviationCourse implements Serializable {
     private Long canvasCourseId;
 
 
-    public AviationCourse() { }
+    public AviationCourse() {
+
+    }
 
     public AviationCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
         this.canvasCourseId = canvasCourseId;
