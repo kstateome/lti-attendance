@@ -30,6 +30,7 @@
 
 <body>
 
+<a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
 
 <style>
     th, td {
@@ -70,7 +71,7 @@
             <td class="percentMissed text-center">${attendanceSummaryEntry.percentCourseMissed}</td>
         </tr>
     </table>
-
+    
     <h3>Makeup Logs</h3>
 
     <table class="table table-bordered">
@@ -86,13 +87,37 @@
         <tbody id="summaryTableBody">
         <c:forEach items="${summaryForm.entries}" var="makeup" varStatus="makeupLoop">
             <tr>
-                <td>${makeup.dateOfClass}</td>
-                <td>${makeup.dateMadeUp}</td>
+                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateOfClass}"/></td>
+                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateMadeUp}"/></td>
                 <td class="text-center">${makeup.minutesMadeUp}</td>
                 <td>${makeup.projectDescription}</td>
             </tr>
         </c:forEach>
         </tbody>
+    </table>
+
+    <h3>Attendance Logs</h3>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="col-md-1">Class Date</th>
+            <th class="col-md-1">Status</th>
+            <th class="col-md-2">Minutes Missed</th>
+        </tr>
+        </thead>
+
+    <tbody id="summaryTableBody">
+    <c:forEach items="${student.attendances}" var="attendance" varStatus="makeupLoop">
+        <tr>
+            <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
+            <td>${attendance.status}</td>
+            <td>${attendance.minutesMissed}</td>
+        </tr>
+    </c:forEach>
+
+    </tbody>
+
     </table>
 
 </form:form>

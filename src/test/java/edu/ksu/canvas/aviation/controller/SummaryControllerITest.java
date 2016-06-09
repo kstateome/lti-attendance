@@ -151,31 +151,43 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
-                            .andExpect(model().attribute("student", hasProperty("studentId", is(studentId))))
-                            .andExpect(model().attribute("attendanceSummaryEntry",
-                                    allOf(
-                                            hasProperty("sumMinutesMissed", is(studentSummary.getSumMinutesMissed())),
-                                            hasProperty("sumMinutesMadeup", is(studentSummary.getSumMinutesMadeup())),
-                                            hasProperty("remainingMinutesMadeup", is(studentSummary.getRemainingMinutesMadeup())),
-                                            hasProperty("percentCourseMissed", is(studentSummary.getPercentCourseMissed()))
-                                    )))
-                            .andExpect(model().attribute("summaryForm",
-                                    allOf(
-                                            hasProperty("sectionId", is(sectionId)),
-                                            hasProperty("studentId", is(studentId)),
-                                            hasProperty("entries", hasSize(1)),
-                                            hasProperty("entries",
-                                                    containsInAnyOrder(
-                                                            allOf(
-                                                                    hasProperty("makeupId", is(existingMakeup.getMakeupId())),
-                                                                    hasProperty("dateOfClass", is(existingMakeup.getDateOfClass())),
-                                                                    hasProperty("dateMadeUp", is(existingMakeup.getDateMadeUp())),
-                                                                    hasProperty("projectDescription", is(existingMakeup.getProjectDescription())),
-                                                                    hasProperty("minutesMadeUp", is(existingMakeup.getMinutesMadeUp())),
-                                                                    hasProperty("toBeDeletedFlag", is(false))
+                            .andExpect(model().attribute("student",
+                                            allOf(
+                                                    hasProperty("studentId",is(existingStudent.getStudentId())),
+                                                    hasProperty("attendances", hasSize(1)),
+                                                    hasProperty("attendances",
+                                                            containsInAnyOrder(
+                                                                    allOf(
+                                                                            hasProperty("minutesMissed", is(existingAttendance.getMinutesMissed())),
+                                                                            hasProperty("status" ,is(existingAttendance.getStatus())),
+                                                                            hasProperty("dateOfClass", is(existingAttendance.getDateOfClass()))
+                                                                    )
+                                                             ))
+                                                    )))
+                                    .andExpect(model().attribute("attendanceSummaryEntry",
+                                            allOf(
+                                                    hasProperty("sumMinutesMissed", is(studentSummary.getSumMinutesMissed())),
+                                                    hasProperty("sumMinutesMadeup", is(studentSummary.getSumMinutesMadeup())),
+                                                    hasProperty("remainingMinutesMadeup", is(studentSummary.getRemainingMinutesMadeup())),
+                                                    hasProperty("percentCourseMissed", is(studentSummary.getPercentCourseMissed()))
+                                            )))
+                                    .andExpect(model().attribute("summaryForm",
+                                            allOf(
+                                                    hasProperty("sectionId", is(sectionId)),
+                                                    hasProperty("studentId", is(studentId)),
+                                                    hasProperty("entries", hasSize(1)),
+                                                    hasProperty("entries",
+                                                            containsInAnyOrder(
+                                                                    allOf(
+                                                                            hasProperty("makeupId", is(existingMakeup.getMakeupId())),
+                                                                            hasProperty("dateOfClass", is(existingMakeup.getDateOfClass())),
+                                                                            hasProperty("dateMadeUp", is(existingMakeup.getDateMadeUp())),
+                                                                            hasProperty("projectDescription", is(existingMakeup.getProjectDescription())),
+                                                                            hasProperty("minutesMadeUp", is(existingMakeup.getMinutesMadeUp())),
+                                                                            hasProperty("toBeDeletedFlag", is(false))
+                                                                    )
                                                             )
-                                                    )
-                                            ))));
+                                                    ))));
                 }
             }
         }
