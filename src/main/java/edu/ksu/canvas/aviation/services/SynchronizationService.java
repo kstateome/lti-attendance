@@ -122,6 +122,7 @@ public class SynchronizationService {
                 student.setName(enrollment.getUser().getSortableName());
                 student.setCanvasSectionId(section.getId());
                 student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+                student.setDeleted(foundUser.isPresent() ? foundUser.get().getDeleted() : Boolean.FALSE);
 
                 ret.add(studentRepository.save(student));
             }
