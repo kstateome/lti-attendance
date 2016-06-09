@@ -28,7 +28,7 @@ import java.util.List;
 @ComponentScan({"edu.ksu.canvas", "edu.ksu.lti"})
 @EntityScan({"edu.ksu.canvas", "edu.ksu.canvas.interfaces"})
 @PropertySource({"classpath:application.properties"})
-@Profile("Production")
+@Profile("prod")
 public class AppConfig extends CommonAppConfig {
 
     @Autowired

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-@Profile("Production")
+@Profile("prod")
 public class AppInit extends SpringBootServletInitializer {
 
     
