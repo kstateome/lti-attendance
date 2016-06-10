@@ -38,7 +38,6 @@ public class RosterControllerArquillianTest extends BaseArquillianTest {
         System.out.println("Testing Roster page.. using driver: "+driver+"  .. fetching this url: " + baseUrl + page);
 
         driver.navigate().to(baseUrl + page);
-        System.out.println("Page source: \n" + driver.getPageSource());
 
         Warp.initiate(new Activity() {
 
@@ -56,8 +55,6 @@ public class RosterControllerArquillianTest extends BaseArquillianTest {
 
                     @AfterServlet
                     public void testAfterServlet() {
-                        //cannot use logger above
-                        System.out.println("modelAndView after save: " + modelAndView);
 
                         Boolean saveSuccessExpected = Boolean.TRUE;
                         Boolean saveSuccessActual = (Boolean) modelAndView.getModel().get("saveSuccess");

@@ -54,7 +54,6 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
         driver.navigate().to(baseUrl + "roster");
         driver.findElement(By.id("attendanceSummaryLink")).click();
         driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
-        System.out.println("Page source: \n" + driver.getPageSource());
     }
 
 }

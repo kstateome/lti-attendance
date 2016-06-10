@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 @WarpTest
@@ -31,8 +30,6 @@ public class AttendanceSummaryControllerArquillianTest extends BaseArquillianTes
         System.out.println("Testing summary page.. using driver: "+driver+"  .. fetching this url: " + baseUrl + "attendanceSummary");
 
         driver.navigate().to(baseUrl + "attendanceSummary");
-
-        System.out.println("Page source: \n" + driver.getPageSource());
 
         Warp.initiate(new Activity() {
             @Override
@@ -48,10 +45,8 @@ public class AttendanceSummaryControllerArquillianTest extends BaseArquillianTes
 
                     @AfterServlet
                     public void testAfterServlet() {
-                        System.out.println("modelAndView: " + modelAndView);
-
                         List<AttendanceSummaryModel> summaryList = (ArrayList<AttendanceSummaryModel>) modelAndView.getModel().get("attendanceSummaryForSections");
-                        assertEquals(false, summaryList.isEmpty());
+                        assertFalse("There should be a report contained in the page", summaryList.isEmpty());
 
                     }
                 });
@@ -66,8 +61,6 @@ public class AttendanceSummaryControllerArquillianTest extends BaseArquillianTes
 
         driver.navigate().to(baseUrl + "attendanceSummary");
         driver.findElement(By.id("attendanceSummaryLink")).click();
-
-        System.out.println("Page source: \n" + driver.getPageSource());
         assertFalse("There should be at least one report table.", driver.findElements(By.className("sectionTable")).isEmpty());
 
     }

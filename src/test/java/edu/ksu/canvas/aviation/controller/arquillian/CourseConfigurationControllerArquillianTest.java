@@ -30,7 +30,6 @@ public class CourseConfigurationControllerArquillianTest extends BaseArquillianT
 
         driver.navigate().to(baseUrl + "courseConfiguration");
         driver.findElement(By.id("classSetupLink")).click();
-        System.out.println("Page source: \n" + driver.getPageSource());
 
         Warp.initiate(new Activity() {
             @Override
@@ -47,8 +46,6 @@ public class CourseConfigurationControllerArquillianTest extends BaseArquillianT
 
                     @AfterServlet
                     public void testAfterServlet() {
-                        //cannot use logger above
-                        System.out.println("modelAndView after save: " + modelAndView);
                         Boolean updateSuccessful = (Boolean) modelAndView.getModel().get("updateSuccessful");
                         assertEquals(true, updateSuccessful);
                     }
@@ -59,7 +56,6 @@ public class CourseConfigurationControllerArquillianTest extends BaseArquillianT
     public void shouldBeAbleToUseSynchronizationButton() throws Exception {
         driver.navigate().to(baseUrl + "courseConfiguration");
         driver.findElement(By.id("classSetupLink")).click();
-        System.out.println("Page source: \n" + driver.getPageSource());
 
         System.out.println("Synchronizing course");
         driver.findElement(By.id("synchronizeWithCanvas")).click();
