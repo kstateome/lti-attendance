@@ -90,7 +90,7 @@ public class MakeupController extends AviationBaseController {
         boolean allUnsavedAndToBeDeleted = false;
         if (makeupForm.getEntries() != null) {
             long count = makeupForm.getEntries().stream()
-                    .filter(entry -> (entry.getMakeupId() == null && entry.isToBeDeletedFlag()))
+                    .filter(entry -> entry.getMakeupId() == null && entry.isToBeDeletedFlag())
                     .count();
             allUnsavedAndToBeDeleted = makeupForm.getEntries().size() == count;
         }

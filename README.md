@@ -32,3 +32,8 @@ In order to properly test the application functionality you will need to install
 - Beta: https://k-state.beta.instructure.com
 - Test: https://k-state.test.instructure.com
 - Production: https://k-state.instructure.com
+
+It is necessary to install the application as an LTI integration into Canvas. The following URL's are needed during the installation process
+- Dev: https://localhost:10443/aviationReporting
+- LTI Test 1: https://lti.test.canvas.k-state.edu/aviationReporting
+- Production: https://lti.canvas.k-state.edu/aviationReporting

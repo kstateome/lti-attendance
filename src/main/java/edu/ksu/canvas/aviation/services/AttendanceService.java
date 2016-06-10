@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
@@ -34,6 +35,7 @@ public class AttendanceService {
     /**
      * This method is tuned to save as fast as possible. Data is loaded and saved in batches.
      */
+    @Transactional
     public void save(RosterForm rosterForm) {
         long begin = System.currentTimeMillis();
 

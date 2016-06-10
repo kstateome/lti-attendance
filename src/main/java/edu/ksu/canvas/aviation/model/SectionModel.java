@@ -13,7 +13,9 @@ public class SectionModel {
     private List<AttendanceModel> attendances;
 
 
-    public SectionModel() { }
+    public SectionModel() {
+
+    }
 
     public SectionModel(Section section) {
         canvasSectionId = section.getId();
