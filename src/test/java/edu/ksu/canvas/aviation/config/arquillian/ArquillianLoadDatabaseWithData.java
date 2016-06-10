@@ -1,18 +1,23 @@
 package edu.ksu.canvas.aviation.config.arquillian;
 
+import edu.ksu.canvas.aviation.entity.Attendance;
+import edu.ksu.canvas.aviation.entity.AviationCourse;
+import edu.ksu.canvas.aviation.entity.AviationSection;
+import edu.ksu.canvas.aviation.entity.AviationStudent;
+import edu.ksu.canvas.aviation.enums.Status;
+import edu.ksu.canvas.aviation.repository.AttendanceRepository;
+import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
+import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
+import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.aviation.entity.AviationCourse;
-import edu.ksu.canvas.aviation.entity.AviationSection;
-import edu.ksu.canvas.aviation.entity.AviationStudent;
-import edu.ksu.canvas.aviation.repository.AviationCourseRepository;
-import edu.ksu.canvas.aviation.repository.AviationSectionRepository;
-import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
-import edu.ksu.canvas.aviation.services.SynchronizationService;
+import java.util.Collections;
+import java.util.Date;
 
 
 @Component
@@ -27,6 +32,9 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
     
     @Autowired
     private AviationStudentRepository studentRepository;
+
+    @Autowired
+    private AttendanceRepository attendanceRepository;
     
     
     @Override
@@ -47,7 +55,15 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
         existingStudent.setName("Zoglmann, Brian");
         existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());
         existingStudent.setSisUserId("SisId");
+        existingStudent.setDeleted(false);
         existingStudent = studentRepository.save(existingStudent);
+
+        Attendance existingAttendance = new Attendance();
+        existingAttendance.setAviationStudent(studentRepository.findByStudentId(existingStudent.getStudentId()));
+        existingAttendance.setStatus(Status.PRESENT);
+        existingAttendance.setDateOfClass(new Date());
+        existingStudent.setAttendances(Collections.singletonList(existingAttendance));
+        studentRepository.save(existingStudent);
     }
 
 }
