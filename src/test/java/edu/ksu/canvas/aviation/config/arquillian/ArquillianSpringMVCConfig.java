@@ -8,7 +8,12 @@ import edu.ksu.canvas.aviation.util.RoleChecker;
 import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.model.User;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.LtiLaunch;
 import edu.ksu.lti.LtiLaunchData;
@@ -27,6 +32,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,15 +87,37 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     public CanvasApiFactory canvasApiFactory() throws IOException {
 
         CanvasApiFactory mockApiFactory = Mockito.mock(CanvasApiFactory.class);
+
         CourseReader mockCourseReader = Mockito.mock(CourseReader.class);
         when(mockCourseReader.getSingleCourse(any(), any())).thenReturn(Optional.of(new Course()));
+        SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
+        when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
+        EnrollmentsReader mockEnrollmentsReader = Mockito.mock(EnrollmentsReader.class);
+        when(mockEnrollmentsReader.getSectionEnrollments(any(), any())).thenReturn(Collections.singletonList(buildFakeEnrollment()));
+
         when(mockApiFactory.getReader(eq(CourseReader.class), anyString())).thenReturn(mockCourseReader);
+        when(mockApiFactory.getReader(eq(SectionReader.class), anyString())).thenReturn(mockSectionReader);
+        when(mockApiFactory.getReader(eq(EnrollmentsReader.class), anyString())).thenReturn(mockEnrollmentsReader);
         return mockApiFactory;
     }
-    
+
+    private Enrollment buildFakeEnrollment() {
+        Enrollment enrollment = new Enrollment();
+        enrollment.setUser(new User());
+        enrollment.getUser().setSisUserId("userId");
+        return enrollment;
+    }
+
+    private Section buildFakeSection() {
+        Section section = new Section();
+        section.setId(10L);
+        section.setCourseId(COURSE_ID_EXISTING.intValue());
+        return section;
+    }
+
     @Bean
     public CanvasInstanceChecker canvasInstanceChecker() {
-        return Mockito.mock(CanvasInstanceChecker.class);
+         return new CanvasInstanceChecker();
     }
     
     @Bean
@@ -119,21 +147,12 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public SynchronizationService synchronizationService() {
-        return Mockito.mock(SynchronizationService.class);
+        return new SynchronizationService();
     }
     
     @Bean
     public CanvasApiWrapperService canvasApiWrapperService() {
-//        CanvasApiWrapperService ret = Mockito.mock(CanvasApiWrapperService.class);
-//
-//        try {
-//            when(ret.getCourseId()).thenReturn(COURSE_ID_EXISTING.intValue());
-//            when(ret.getEid()).thenReturn("randomEid");
-//        } catch (NoLtiSessionException e) {
-//            LOG.error("failed to setup CanvasApiWrapper", e);
-//        }
-//
-//        return ret;
+
         return new CanvasApiWrapperService();
     }
     
