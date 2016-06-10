@@ -14,7 +14,9 @@ public class MakeupModel {
     private boolean toBeDeletedFlag;
 
 
-    public MakeupModel() { }
+    public MakeupModel() {
+
+    }
 
     public MakeupModel(Long makeupId, Date dateOfClass, Date dateMadeUp, String projectDescription, Integer minutesMadeUp) {
         this.makeupId = makeupId;
