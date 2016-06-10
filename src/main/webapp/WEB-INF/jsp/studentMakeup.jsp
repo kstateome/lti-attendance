@@ -42,7 +42,7 @@
     <c:if test="${updateSuccessful}">
         <br/><br/>
 
-        <div class="alert alert-success">
+        <div class="alert alert-success" id="saveSuccessMessage">
             <p>Makeups Successfully Saved.</p>
         </div>
     </c:if>
@@ -143,7 +143,7 @@
             </tbody>
         </table>
         <div>
-            <input type="submit" class="hovering-purple-button" name="saveMakeup" value="Save Makeups"/>
+            <input type="submit" class="hovering-purple-button" name="saveMakeup" value="Save Makeups" id="saveMakeupBtn"/>
             <input type="button" id="addMakeupBtn" class="hovering-purple-button" name="addMakeup" value="Add Makeup"/>
         </div>
 
