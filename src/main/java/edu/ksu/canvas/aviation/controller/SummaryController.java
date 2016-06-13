@@ -4,9 +4,11 @@ import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
 import edu.ksu.canvas.aviation.services.AviationStudentService;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.MakeupService;
 import edu.ksu.canvas.aviation.services.ReportService;
 import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.lti.LtiLaunchData;
 import org.apache.commons.validator.routines.LongValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -36,6 +38,9 @@ public class SummaryController extends AviationBaseController {
 
     @Autowired
     private ReportService reportService;
+
+    @Autowired
+    protected CanvasApiWrapperService canvasService;
 
 
     @InitBinder
@@ -71,6 +76,7 @@ public class SummaryController extends AviationBaseController {
         ModelAndView page = new ModelAndView("studentSummary");
 
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
         summaryForSections.stream()
                 .flatMap(summary -> summary.getEntries().stream())
@@ -78,6 +84,12 @@ public class SummaryController extends AviationBaseController {
                 .findFirst()
                 .ifPresent(entry -> page.addObject("attendanceSummaryEntry",
                         new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
+
+        institutionRoles.stream()
+                .filter(institutionRole -> institutionRole.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0)
+                .findFirst()
+                .ifPresent(role -> page.addObject("isStudent", true));
+
 
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);

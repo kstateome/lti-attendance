@@ -70,6 +70,11 @@ public class CanvasApiWrapperService {
         return ltiSession.getEid();
     }
 
+    public String getSisID() throws NoLtiSessionException {
+        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        return ltiSession.getLtiLaunchData().getLis_person_sourcedid();
+    }
+
     public List<Section> getSections(long canvasCourseId) throws NoLtiSessionException {
         LtiSession ltiSession = ltiLaunch.getLtiSession();
         OauthToken oauthToken = ltiSession.getCanvasOauthToken();
