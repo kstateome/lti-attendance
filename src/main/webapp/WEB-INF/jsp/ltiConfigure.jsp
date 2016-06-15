@@ -37,7 +37,7 @@
       &lt;lticm:property name="privacy_level"&gt;public&lt;/lticm:property&gt;
       &lt;lticm:options name="course_navigation"&gt;
         &lt;lticm:property name="enabled"&gt;true&lt;/lticm:property&gt;
-        &lt;lticm:property name="visibility"&gt;admins&lt;/lticm:property&gt;
+        &lt;lticm:property name="visibility"&gt;members&lt;/lticm:property&gt;
       &lt;/lticm:options&gt;
     &lt;/blti:extensions&gt;
 &lt;/cartridge_basiclti_link&gt;
