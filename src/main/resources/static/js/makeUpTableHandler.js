@@ -59,7 +59,7 @@ $(function() {
         const $deleteTD = $("<td>");
 
         //creating row
-        const $newRow = $("<tr>", {id: "row-" + index});
+        const $newRow = $("<tr>", {id: "row-" + index, class: "addedMakeupRow"});
 
         //appending inputs to tds
         $classDateTD.append($makeUpId, createDatePicker($classDate));

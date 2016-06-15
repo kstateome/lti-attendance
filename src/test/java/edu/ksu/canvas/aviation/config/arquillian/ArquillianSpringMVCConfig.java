@@ -1,14 +1,28 @@
 package edu.ksu.canvas.aviation.config.arquillian;
 
-import java.util.List;
-
+import com.google.common.collect.ImmutableList;
+import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
+import edu.ksu.canvas.aviation.services.SynchronizationService;
+import edu.ksu.canvas.aviation.util.RoleChecker;
+import edu.ksu.canvas.entity.lti.OauthToken;
+import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.SectionReader;
+import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.model.User;
+import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.lti.LtiLaunch;
+import edu.ksu.lti.LtiLaunchData;
+import edu.ksu.lti.model.LtiSession;
+import edu.ksu.lti.util.CanvasInstanceChecker;
+import edu.ksu.lti.util.CanvasUtil;
 import org.apache.log4j.Logger;
 import org.mockito.Mockito;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,19 +31,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
-import com.google.common.collect.ImmutableList;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
-import edu.ksu.canvas.aviation.services.SynchronizationService;
-import edu.ksu.canvas.aviation.util.RoleChecker;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.repository.ConfigRepository;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.LtiLaunchData;
-import edu.ksu.lti.util.CanvasInstanceChecker;
-import edu.ksu.lti.util.CanvasUtil;
-
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -77,13 +84,40 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CanvasApiFactory canvasApiFactory() {
-        return Mockito.mock(CanvasApiFactory.class);
+    public CanvasApiFactory canvasApiFactory() throws IOException {
+
+        CanvasApiFactory mockApiFactory = Mockito.mock(CanvasApiFactory.class);
+
+        CourseReader mockCourseReader = Mockito.mock(CourseReader.class);
+        when(mockCourseReader.getSingleCourse(any(), any())).thenReturn(Optional.of(new Course()));
+        SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
+        when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
+        EnrollmentsReader mockEnrollmentsReader = Mockito.mock(EnrollmentsReader.class);
+        when(mockEnrollmentsReader.getSectionEnrollments(any(), any())).thenReturn(Collections.singletonList(buildFakeEnrollment()));
+
+        when(mockApiFactory.getReader(eq(CourseReader.class), anyString())).thenReturn(mockCourseReader);
+        when(mockApiFactory.getReader(eq(SectionReader.class), anyString())).thenReturn(mockSectionReader);
+        when(mockApiFactory.getReader(eq(EnrollmentsReader.class), anyString())).thenReturn(mockEnrollmentsReader);
+        return mockApiFactory;
     }
-    
+
+    private Enrollment buildFakeEnrollment() {
+        Enrollment enrollment = new Enrollment();
+        enrollment.setUser(new User());
+        enrollment.getUser().setSisUserId("userId");
+        return enrollment;
+    }
+
+    private Section buildFakeSection() {
+        Section section = new Section();
+        section.setId(10L);
+        section.setCourseId(COURSE_ID_EXISTING.intValue());
+        return section;
+    }
+
     @Bean
     public CanvasInstanceChecker canvasInstanceChecker() {
-        return Mockito.mock(CanvasInstanceChecker.class);
+         return new CanvasInstanceChecker();
     }
     
     @Bean
@@ -92,8 +126,14 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
     
     @Bean
-    public LtiLaunch ltiLaunch() {
-        return Mockito.mock(LtiLaunch.class);
+    public LtiLaunch ltiLaunch() throws NoLtiSessionException {
+        LtiLaunch ltiLaunch = Mockito.mock(LtiLaunch.class);
+        LtiSession fakeLtiSession = new LtiSession();
+        fakeLtiSession.setEid("randomEid");
+        fakeLtiSession.setCanvasCourseId(String.valueOf(COURSE_ID_EXISTING.intValue()));
+        fakeLtiSession.setCanvasOauthToken(Mockito.mock(OauthToken.class));
+        when(ltiLaunch.getLtiSession()).thenReturn(fakeLtiSession);
+        return ltiLaunch;
     }
     
     @Bean
@@ -106,23 +146,14 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public SynchronizationService synchornizationService() {
-        return Mockito.mock(SynchronizationService.class);
+    public SynchronizationService synchronizationService() {
+        return new SynchronizationService();
     }
     
     @Bean
     public CanvasApiWrapperService canvasApiWrapperService() {
-        CanvasApiWrapperService ret = Mockito.mock(CanvasApiWrapperService.class);
-        
-        try {
-            when(ret.getCourseId()).thenReturn(COURSE_ID_EXISTING.intValue());
-            when(ret.getEid()).thenReturn("randomEid");
-        } catch (NoLtiSessionException e) {
-            LOG.error("failed to setup CanvasApiWrapper", e);
-        }
-        
-        return ret;
-        
+
+        return new CanvasApiWrapperService();
     }
     
     @Bean
