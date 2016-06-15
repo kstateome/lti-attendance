@@ -1,15 +1,5 @@
 package edu.ksu.canvas.aviation.services;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.enums.Status;
@@ -18,6 +8,15 @@ import edu.ksu.canvas.aviation.model.AttendanceModel;
 import edu.ksu.canvas.aviation.model.SectionModel;
 import edu.ksu.canvas.aviation.repository.AttendanceRepository;
 import edu.ksu.canvas.aviation.repository.AviationStudentRepository;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -40,7 +39,6 @@ public class AttendanceService {
         long begin = System.currentTimeMillis();
 
         List<Attendance> saveToDb = new ArrayList<>();
-        int defaultMinutesMissedPerSession = rosterForm.getDefaultMinutesPerSession();
 
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
@@ -61,7 +59,7 @@ public class AttendanceService {
                     attendance.setDateOfClass(attendanceModel.getDateOfClass());
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
                     attendance.setStatus(attendanceModel.getStatus());
-                    adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
+                    adjustMinutesMissedBasedOnAttendanceStatus(attendance);
 
                     saveToDb.add(attendance);
                 } else {
@@ -75,7 +73,7 @@ public class AttendanceService {
                     Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
                     attendance.setStatus(attendanceModel.getStatus());
-                    adjustMinutesMissedBasedOnAttendnaceStatus(attendance, defaultMinutesMissedPerSession);
+                    adjustMinutesMissedBasedOnAttendanceStatus(attendance);
 
                     saveToDb.add(attendance);
                 }
@@ -91,11 +89,9 @@ public class AttendanceService {
         LOG.info("Saving attendances took " + (end - begin) + " millis");
     }
 
-    private void adjustMinutesMissedBasedOnAttendnaceStatus(Attendance attendance, int defaultMinutesMissedPerSession) {
+    private void adjustMinutesMissedBasedOnAttendanceStatus(Attendance attendance) {
         if (attendance.getStatus() == Status.PRESENT) {
             attendance.setMinutesMissed(null);
-        } else if (attendance.getStatus() == Status.ABSENT) {
-            attendance.setMinutesMissed(defaultMinutesMissedPerSession);
         }
     }
 

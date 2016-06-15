@@ -215,13 +215,16 @@
             if ($(this).val() === '<%=Status.TARDY%>') {
                 minutesMissed.removeAttr('disabled');
                 minutesMissed.focus();
-            } else {
+            }
+            else if ($(this).val() === '<%=Status.ABSENT%>') {
+                minutesMissed.removeAttr('disabled');
+                minutesMissed.focus();
+                minutesMissed.val(${rosterForm.defaultMinutesPerSession});
+                attendanceId.val(${rosterForm.defaultMinutesPerSession});
+            }
+            else {
                 minutesMissed.attr('disabled', 'disabled');
-                if ($(this).val() === '<%=Status.PRESENT%>') {
-                    minutesMissed.val('');
-                } else if ($(this).val() === '<%=Status.ABSENT%>') {
-                    minutesMissed.val(${rosterForm.defaultMinutesPerSession});
-                }
+                minutesMissed.val('');
             }
         });
 
@@ -230,7 +233,7 @@
             status = selectedIdSplit[0];
             studentId = selectedIdSplit[1];
             $('#minutesMissed' + studentId).val('');
-            if (status == 'tardy') {
+            if (status == 'tardy' || status == 'absent') {
                 $('#minutesMissed' + studentId).removeAttr('disabled');
             } else {
                 $('#minutesMissed' + studentId).attr('disabled', 'true');
