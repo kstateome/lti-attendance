@@ -29,8 +29,9 @@
 </head>
 
 <body>
-
-<a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
+<c:if test="${!isStudent}">
+    <a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
+</c:if>
 
 <style>
     th, td {
@@ -71,7 +72,7 @@
             <td class="percentMissed text-center">${attendanceSummaryEntry.percentCourseMissed}</td>
         </tr>
     </table>
-    
+
     <h3>Makeup Logs</h3>
 
     <table class="table table-bordered">
@@ -108,7 +109,7 @@
         </thead>
 
     <tbody id="summaryTableBody">
-    <c:forEach items="${student.attendances}" var="attendance" varStatus="makeupLoop">
+    <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
         <tr>
             <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
             <td>${attendance.status}</td>

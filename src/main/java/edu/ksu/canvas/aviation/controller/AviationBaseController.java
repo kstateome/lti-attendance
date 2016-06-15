@@ -2,7 +2,9 @@ package edu.ksu.canvas.aviation.controller;
 
 import edu.ksu.canvas.aviation.config.AppConfig;
 import edu.ksu.canvas.aviation.entity.AviationSection;
+import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.services.AviationSectionService;
+import edu.ksu.canvas.aviation.services.AviationStudentService;
 import edu.ksu.canvas.aviation.services.CanvasApiWrapperService;
 import edu.ksu.canvas.aviation.services.SynchronizationService;
 import edu.ksu.canvas.aviation.util.RoleChecker;
@@ -39,6 +41,9 @@ public class AviationBaseController extends LtiLaunchController {
     @Autowired
     protected CanvasApiWrapperService canvasService;
 
+    @Autowired
+    protected AviationStudentService aviationStudentService;
+
 
     @Override
     protected String getInitialViewPath() {
@@ -71,6 +76,13 @@ public class AviationBaseController extends LtiLaunchController {
 
         synchronizationService.synchronizeWhenCourseNotExistsInDB(canvasService.getCourseId());
 
+        for(LtiLaunchData.InstitutionRole role : canvasService.getRoles()) {
+            if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0) {
+                LOG.info(canvasService.getEid() + " is accessing student summary information");
+                AviationStudent aviationStudent = aviationStudentService.getStudent(canvasService.getSisID());
+                return new ModelAndView("forward:studentSummary/"+aviationStudent.getCanvasSectionId().toString()+"/"+aviationStudent.getStudentId().toString());
+            }
+        }
         return new ModelAndView("forward:roster");
     }
 

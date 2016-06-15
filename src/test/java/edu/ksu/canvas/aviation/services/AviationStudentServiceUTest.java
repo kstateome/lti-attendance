@@ -31,7 +31,7 @@ public class AviationStudentServiceUTest {
     
     
     @Test
-    public void getStudent_HappyPath() {
+    public void getStudentByStudentID_HappyPath() {
         long studentId = 500;
         AviationStudent expectedStudent = new AviationStudent();
         expectedStudent.setStudentId(50L);
@@ -40,5 +40,17 @@ public class AviationStudentServiceUTest {
        AviationStudent actualStudent = studentService.getStudent(studentId);
        
        assertEquals(expectedStudent, actualStudent);
+    }
+
+    @Test
+    public void getStudentBySISID_HappyPath() {
+        String sisID = "sisId";
+        AviationStudent expectedStudent = new AviationStudent();
+        expectedStudent.setSisUserId(sisID);
+
+        when(mockStudentRepository.findBySisUserId(sisID)).thenReturn(expectedStudent);
+        AviationStudent actualStudent = studentService.getStudent(sisID);
+
+        assertEquals(expectedStudent, actualStudent);
     }
 }
