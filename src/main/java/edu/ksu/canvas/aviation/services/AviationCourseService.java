@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.services;
 
+import edu.ksu.canvas.aviation.enums.AttendanceType;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class AviationCourseService {
         } else {
             aviationCourse.setDefaultMinutesPerSession(courseForm.getDefaultMinutesPerSession());
             aviationCourse.setTotalMinutes(courseForm.getTotalClassMinutes());
+            if (courseForm.getSimpleAttendance() != null && courseForm.getSimpleAttendance()) {
+                aviationCourse.setAttendanceType(AttendanceType.SIMPLE);
+            }
+            else {
+                aviationCourse.setAttendanceType(AttendanceType.MINUTES);
+            }
         }
 
         aviationCourseRepository.save(aviationCourse);
@@ -50,6 +57,7 @@ public class AviationCourseService {
 
         courseForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
         courseForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
+        courseForm.setSimpleAttendance(aviationCourse.getAttendanceType().equals(AttendanceType.SIMPLE));
     }
 
 }

@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.services;
 
+import edu.ksu.canvas.aviation.enums.AttendanceType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,6 +73,7 @@ public class AviationCourseServiceUTest {
         long nonExistantCanvasCourseId = -1;
         Integer expectedTotalClassMinutes = 500;
         Integer expectedDefaultMinutesPerSession = 45;
+        AttendanceType expectedDefaultType = AttendanceType.SIMPLE;
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
@@ -83,13 +85,15 @@ public class AviationCourseServiceUTest {
         verify(mockCourseRepository, atLeastOnce()).save(capturedAviationCourse.capture());
         assertEquals("expectedTotalClassMinutes", capturedAviationCourse.getValue().getTotalMinutes(), expectedTotalClassMinutes);
         assertEquals("expectedDefaultMinutesPerSession", capturedAviationCourse.getValue().getDefaultMinutesPerSession(), expectedDefaultMinutesPerSession);
+        assertEquals("expectedDefaultAttendanceType", capturedAviationCourse.getValue().getAttendanceType(), expectedDefaultType);
     }
     
     @Test
-    public void save_ExistingCourse() {
+    public void save_ExistingCourseMinutesAttendance() {
         long nonExistantCanvasCourseId = -1;
         Integer expectedTotalClassMinutes = 500;
         Integer expectedDefaultMinutesPerSession = 45;
+        AttendanceType expectedAttendanceType = AttendanceType.MINUTES;
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
@@ -99,8 +103,32 @@ public class AviationCourseServiceUTest {
         courseService.save(courseForm, nonExistantCanvasCourseId);
         
         verify(mockCourseRepository, atLeastOnce()).save(existingCourse);
-        assertEquals("expectedTotalClassMinutes", existingCourse.getTotalMinutes(), expectedTotalClassMinutes);
-        assertEquals("expectedDefaultMinutesPerSession", existingCourse.getDefaultMinutesPerSession(), expectedDefaultMinutesPerSession);
+        assertEquals("expectedTotalClassMinutes", expectedTotalClassMinutes, existingCourse.getTotalMinutes());
+        assertEquals("expectedDefaultMinutesPerSession", expectedDefaultMinutesPerSession, existingCourse.getDefaultMinutesPerSession());
+        assertEquals("expectedAttendanceType", expectedAttendanceType, existingCourse.getAttendanceType());
+
+    }
+
+    @Test
+    public void save_ExistingCourseSimpleAttendance() {
+        long nonExistantCanvasCourseId = -1;
+        Integer expectedTotalClassMinutes = 500;
+        Integer expectedDefaultMinutesPerSession = 45;
+        AttendanceType expectedAttendanceType = AttendanceType.SIMPLE;
+        CourseConfigurationForm courseForm = new CourseConfigurationForm();
+        courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
+        courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
+        courseForm.setSimpleAttendance(true);
+        AviationCourse existingCourse = new AviationCourse();
+
+        when(mockCourseRepository.findByCanvasCourseId(nonExistantCanvasCourseId)).thenReturn(existingCourse);
+        courseService.save(courseForm, nonExistantCanvasCourseId);
+
+        verify(mockCourseRepository, atLeastOnce()).save(existingCourse);
+        assertEquals("expectedTotalClassMinutes", expectedTotalClassMinutes, existingCourse.getTotalMinutes());
+        assertEquals("expectedDefaultMinutesPerSession", expectedDefaultMinutesPerSession, existingCourse.getDefaultMinutesPerSession());
+        assertEquals("expectedAttendanceType", expectedAttendanceType, existingCourse.getAttendanceType());
+
     }
     
     @Test(expected = NullPointerException.class)
