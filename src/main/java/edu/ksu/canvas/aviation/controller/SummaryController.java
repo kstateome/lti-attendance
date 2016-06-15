@@ -86,7 +86,7 @@ public class SummaryController extends AviationBaseController {
                         new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
 
         institutionRoles.stream()
-                .filter(institutionRole -> institutionRole.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0)
+                .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
 
