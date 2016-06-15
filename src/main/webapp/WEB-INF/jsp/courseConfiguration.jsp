@@ -85,6 +85,12 @@
                                 cssClass="form-control" placeholder="Normal Class Length" size="5"/>
                     <form:errors cssClass="error center-block" path="defaultMinutesPerSession"/>
                 </div>
+                <div class="col-md-3">
+                    <label for="simpleAttendance">
+                    <form:checkbox path="simpleAttendance" id="simpleAttendance" cssClass="form-control"/> Use Simple Attendance (non-minute based) features
+                    </label>
+                </div>
+
             </fieldset>
         </div>
         <input value="Save Class Minutes" id="saveCourseConfiguration" name="saveCourseConfiguration"
