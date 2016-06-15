@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.controller;
 
+import edu.ksu.canvas.aviation.enums.AttendanceType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
+        existingCourse.setAttendanceType(AttendanceType.SIMPLE);
         existingCourse = courseRepository.save(existingCourse);
         
         existingSection = new AviationSection();
@@ -88,17 +90,40 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         Long irrlevantSectionId = 3000L;
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
+        Boolean expectedSimpleAttendanceValue = true;
         
         mockMvc.perform(post("/courseConfiguration/"+irrlevantSectionId+"/save")
+                .param("saveCourseConfiguration", "Save Course Configuration")
+                .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
+                .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes))
+                .param("simpleAttendance", String.valueOf(expectedSimpleAttendanceValue)))
+                .andExpect(status().isOk())
+                .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId + "?updateSuccessful=true"));
+        
+        AviationCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
+        assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
+        assertEquals(expectedTotalClassMinutes, course.getTotalMinutes());
+        assertEquals(expectedSimpleAttendanceValue, course.getAttendanceType().equals(AttendanceType.SIMPLE));
+    }
+
+    @Test
+    public void saveCourseConfiguration_MinuteBasedAttendance() throws Exception {
+        Long irrlevantSectionId = 3000L;
+        Integer expectedDefaultMinutesPerSession = 100;
+        Integer expectedTotalClassMinutes = 1000;
+        Boolean expectedSimpleAttendanceValue = true;
+
+        mockMvc.perform(post("/courseConfiguration/" + irrlevantSectionId + "/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
-        
+
         AviationCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
         assertEquals(expectedTotalClassMinutes, course.getTotalMinutes());
+        assertEquals(expectedSimpleAttendanceValue, course.getAttendanceType().equals(AttendanceType.MINUTES));
     }
     
     @Test
