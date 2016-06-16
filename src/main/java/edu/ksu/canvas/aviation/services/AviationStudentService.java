@@ -18,4 +18,6 @@ public class AviationStudentService {
         return studentRepository.findByStudentId(studentId);
     }
 
+    public AviationStudent getStudent(String sisId) { return studentRepository.findBySisUserId(sisId) ;}
+
 }

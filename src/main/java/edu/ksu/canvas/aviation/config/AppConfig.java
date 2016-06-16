@@ -40,6 +40,7 @@ public class AppConfig extends CommonAppConfig {
         final List<LtiLaunchData.InstitutionRole> validRoles = new ImmutableList.Builder<LtiLaunchData.InstitutionRole>()
                 .add(LtiLaunchData.InstitutionRole.Instructor)
                 .add(LtiLaunchData.InstitutionRole.TeachingAssistant)
+                .add(LtiLaunchData.InstitutionRole.Learner)
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
     }
