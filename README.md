@@ -37,4 +37,6 @@ In order to properly test the application functionality you will need to install
 It is necessary to install the application as an LTI integration into Canvas. The following URL's are needed during the installation process
 - Dev: https://localhost:10443/aviationReporting
 - LTI Test 1: https://lti.test.canvas.k-state.edu/aviationReporting
+- LTI Test 2: https://lti.test2.canvas.k-state.edu/aviationReporting
+- LTI Test 3: https://lti.test3.canvas.k-state.edu/aviationReporting
 - Production: https://lti.canvas.k-state.edu/aviationReporting
