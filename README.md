@@ -7,6 +7,7 @@ Technologies Used
 - Spring MVC 4
 - Maven 3.1.1
 - Java 8
+- Arquillian 1.11.11
 
 
 Environment Setup
