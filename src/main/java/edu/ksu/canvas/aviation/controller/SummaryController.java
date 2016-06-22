@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.controller;
 
+import edu.ksu.canvas.aviation.entity.Attendance;
 import edu.ksu.canvas.aviation.entity.AviationStudent;
 import edu.ksu.canvas.aviation.form.MakeupForm;
 import edu.ksu.canvas.aviation.model.AttendanceSummaryModel;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -77,6 +79,9 @@ public class SummaryController extends AviationBaseController {
 
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
+
+        Comparator<Attendance> comparator = Comparator.comparing(attendance -> attendance.getDateOfClass());
+        student.getAttendances().sort(comparator.reversed());
 
         summaryForSections.stream()
                 .flatMap(summary -> summary.getEntries().stream())
