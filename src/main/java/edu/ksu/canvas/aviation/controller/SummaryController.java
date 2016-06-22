@@ -80,8 +80,7 @@ public class SummaryController extends AviationBaseController {
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
-        Comparator<Attendance> comparator = Comparator.comparing(attendance -> attendance.getDateOfClass());
-        student.getAttendances().sort(comparator.reversed());
+        student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
 
         summaryForSections.stream()
                 .flatMap(summary -> summary.getEntries().stream())
