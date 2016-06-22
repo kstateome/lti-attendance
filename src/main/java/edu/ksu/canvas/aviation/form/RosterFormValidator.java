@@ -1,12 +1,11 @@
 package edu.ksu.canvas.aviation.form;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
 import edu.ksu.canvas.aviation.enums.Status;
 import edu.ksu.canvas.aviation.model.AttendanceModel;
 import edu.ksu.canvas.aviation.model.SectionModel;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 
 @Component
@@ -35,7 +34,7 @@ public class RosterFormValidator implements Validator {
                     errors.rejectValue(minutesMissedField, MINIMUM_MINUTES_MISSED_ERROR_CODE);
                 }
 
-                if (attendance.getStatus() == Status.TARDY && attendance.getMinutesMissed() == null) {
+                if (attendance.getStatus() == Status.TARDY && attendance.getMinutesMissed() == null && !rosterForm.getSimpleAttendance()) {
                     errors.rejectValue(minutesMissedField, SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE);
                 }
                 attendanceIndex++;

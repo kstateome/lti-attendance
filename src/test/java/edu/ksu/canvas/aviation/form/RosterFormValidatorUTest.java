@@ -1,8 +1,8 @@
 package edu.ksu.canvas.aviation.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import edu.ksu.canvas.aviation.enums.Status;
+import edu.ksu.canvas.aviation.model.AttendanceModel;
+import edu.ksu.canvas.aviation.model.SectionModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,12 +11,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 
-import edu.ksu.canvas.aviation.enums.Status;
-import edu.ksu.canvas.aviation.model.AttendanceModel;
-import edu.ksu.canvas.aviation.model.SectionModel;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,6 +45,7 @@ public class RosterFormValidatorUTest {
         sectionModel.setAttendances(attendanceModels);
         sectionModels.add(sectionModel);
         rosterForm.setSectionModels(sectionModels);
+        rosterForm.setSimpleAttendance(false);
     }
 
     @Test

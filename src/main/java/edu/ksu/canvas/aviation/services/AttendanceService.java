@@ -59,6 +59,7 @@ public class AttendanceService {
                     attendance.setDateOfClass(attendanceModel.getDateOfClass());
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
                     attendance.setStatus(attendanceModel.getStatus());
+                    attendance.setNotes(attendanceModel.getNotes());
                     adjustMinutesMissedBasedOnAttendanceStatus(attendance);
 
                     saveToDb.add(attendance);
@@ -73,6 +74,7 @@ public class AttendanceService {
                     Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
                     attendance.setStatus(attendanceModel.getStatus());
+                    attendance.setNotes(attendanceModel.getNotes());
                     adjustMinutesMissedBasedOnAttendanceStatus(attendance);
 
                     saveToDb.add(attendance);

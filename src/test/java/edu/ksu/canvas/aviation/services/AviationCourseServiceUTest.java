@@ -49,6 +49,7 @@ public class AviationCourseServiceUTest {
         
         assertEquals(expectedDefaultMinutesPerSession, courseForm.getDefaultMinutesPerSession());
         assertEquals(expectedTotalMinutes, courseForm.getTotalClassMinutes());
+        assertTrue(courseForm.getSimpleAttendance());
     }
     
     @Test(expected = ContextedRuntimeException.class)

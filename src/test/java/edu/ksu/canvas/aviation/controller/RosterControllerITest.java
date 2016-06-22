@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.controller;
 
+import edu.ksu.canvas.aviation.enums.AttendanceType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,7 @@ public class RosterControllerITest extends BaseControllerITest {
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
+        existingCourse.setAttendanceType(AttendanceType.MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
         existingSection = new AviationSection();

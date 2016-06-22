@@ -17,6 +17,7 @@ public class AttendanceModel {
     private Integer minutesMissed;
     private Date dateOfClass;
     private Boolean dropped;
+    private String notes;
 
 
     public AttendanceModel() {
@@ -30,6 +31,7 @@ public class AttendanceModel {
         this.status = status;
         this.dateOfClass = dateOfClass;
         this.dropped = student == null ? null : student.getDeleted();
+        this.notes = "";
     }
 
     public AttendanceModel(Attendance attendance) {
@@ -45,6 +47,7 @@ public class AttendanceModel {
         this.minutesMissed = attendance.getMinutesMissed();
         this.dateOfClass = attendance.getDateOfClass();
         this.dropped = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getDeleted();
+        this.notes = attendance.getNotes();
     }
 
 
@@ -121,4 +124,11 @@ public class AttendanceModel {
                 + ", dateOfClass=" + dateOfClass + "]";
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }
