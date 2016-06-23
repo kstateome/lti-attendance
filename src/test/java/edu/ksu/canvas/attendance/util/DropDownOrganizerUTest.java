@@ -31,37 +31,37 @@ public class DropDownOrganizerUTest {
     }
 
     @Before
-    public void setupPresortedAviationSections() {
+    public void setupPresortedAttendanceSections() {
         preSortedAttendanceSections = Arrays.asList(section1, section2, section3);
     }
 
     @Before
-    public void setupUnSortedAviationSections() {
+    public void setupUnSortedAttendanceSections() {
         unSortedAttendanceSections = Arrays.asList(section3, section1, section2);
     }
 
     @Test
-    public void sortsWithNullSelectedAviationSectionId() {
+    public void sortsWithNullSelectedAttendanceSectionId() {
         List<AttendanceSection> sortedAttendanceSections = DropDownOrganizer.sortWithSelectedSectionFirst(unSortedAttendanceSections, null);
-        Assert.assertEquals("Expected sorted preSortedAviationSections to match presortedAviationSections", preSortedAttendanceSections, sortedAttendanceSections);
+        Assert.assertEquals("Expected sorted preSortedAttendanceSections to match presortedAttendanceSections", preSortedAttendanceSections, sortedAttendanceSections);
     }
 
     @Test
-    public void putsSelectedAviationSectionInFirstPosition() {
-        long selectedAviationSectionId = sectionId3;
-        List<AttendanceSection> sortedAttendanceSections = DropDownOrganizer.sortWithSelectedSectionFirst(unSortedAttendanceSections, String.valueOf(selectedAviationSectionId));
-        long index0AviationSectionId = sortedAttendanceSections.get(0).getCanvasSectionId();
-        Assert.assertEquals("Expected selected section to be at index 0 after sorted", selectedAviationSectionId, index0AviationSectionId);
+    public void putsSelectedAttendanceSectionInFirstPosition() {
+        long selectedAttendanceSectionId = sectionId3;
+        List<AttendanceSection> sortedAttendanceSections = DropDownOrganizer.sortWithSelectedSectionFirst(unSortedAttendanceSections, String.valueOf(selectedAttendanceSectionId));
+        long index0AttendanceSectionId = sortedAttendanceSections.get(0).getCanvasSectionId();
+        Assert.assertEquals("Expected selected section to be at index 0 after sorted", selectedAttendanceSectionId, index0AttendanceSectionId);
     }
 
     @Test
-    public void restOfListIsSortedWhenAviationSectionIsSelected() {
-        long selectedAviationSectionId = sectionId3;
-        List<AttendanceSection> sortedAttendanceSections = DropDownOrganizer.sortWithSelectedSectionFirst(unSortedAttendanceSections, String.valueOf(selectedAviationSectionId));
-        long index1AviationSectionId = sortedAttendanceSections.get(1).getCanvasSectionId();
-        long index2AviationSectionId = sortedAttendanceSections.get(2).getCanvasSectionId();
-        Assert.assertEquals("Expected section 1 to be at 2nd position of list", sectionId1, index1AviationSectionId);
-        Assert.assertEquals("Expected section 2 to be at 3rd position of list", sectionId2, index2AviationSectionId);
+    public void restOfListIsSortedWhenAttendanceSectionIsSelected() {
+        long selectedAttendanceSectionId = sectionId3;
+        List<AttendanceSection> sortedAttendanceSections = DropDownOrganizer.sortWithSelectedSectionFirst(unSortedAttendanceSections, String.valueOf(selectedAttendanceSectionId));
+        long index1AttendanceSectionId = sortedAttendanceSections.get(1).getCanvasSectionId();
+        long index2AttendanceSectionId = sortedAttendanceSections.get(2).getCanvasSectionId();
+        Assert.assertEquals("Expected section 1 to be at 2nd position of list", sectionId1, index1AttendanceSectionId);
+        Assert.assertEquals("Expected section 2 to be at 3rd position of list", sectionId2, index2AttendanceSectionId);
     }
 
 }
