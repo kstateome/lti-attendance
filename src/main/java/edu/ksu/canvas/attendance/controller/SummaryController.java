@@ -28,7 +28,7 @@ import java.util.List;
 @Controller
 @Scope("session")
 @RequestMapping("/studentSummary")
-public class SummaryController extends AviationBaseController {
+public class SummaryController extends AttendanceBaseController {
 
     @Autowired
     private MakeupService makeupService;

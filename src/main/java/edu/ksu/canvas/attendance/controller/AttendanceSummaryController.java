@@ -22,7 +22,7 @@ import java.util.List;
 @Controller
 @Scope("session")
 @RequestMapping("/attendanceSummary")
-public class AttendanceSummaryController extends AviationBaseController {
+public class AttendanceSummaryController extends AttendanceBaseController {
 
     private static final Logger LOG = Logger.getLogger(AttendanceSummaryController.class);
 

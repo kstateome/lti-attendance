@@ -23,7 +23,7 @@ import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 @Controller
 @Scope("session")
 @RequestMapping("/courseConfiguration")
-public class CourseConfigurationController extends AviationBaseController {
+public class CourseConfigurationController extends AttendanceBaseController {
 
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
 

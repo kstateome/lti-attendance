@@ -25,9 +25,9 @@ import java.util.List;
 
 @Controller
 @Scope("session")
-public class AviationBaseController extends LtiLaunchController {
+public class AttendanceBaseController extends LtiLaunchController {
 
-    private static final Logger LOG = Logger.getLogger(AviationBaseController.class);
+    private static final Logger LOG = Logger.getLogger(AttendanceBaseController.class);
 
     @Autowired
     protected SynchronizationService synchronizationService;

@@ -30,7 +30,7 @@ import edu.ksu.canvas.error.NoLtiSessionException;
 @Controller
 @Scope("session")
 @RequestMapping("/studentMakeup")
-public class MakeupController extends AviationBaseController {
+public class MakeupController extends AttendanceBaseController {
 
     private static final Logger LOG = Logger.getLogger(MakeupController.class);
 

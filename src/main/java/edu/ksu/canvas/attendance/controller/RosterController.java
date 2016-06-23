@@ -31,7 +31,7 @@ import java.util.List;
 @Scope("session")
 @SessionAttributes("rosterForm")
 @RequestMapping("/roster")
-public class RosterController extends AviationBaseController {
+public class RosterController extends AttendanceBaseController {
 
     private static final Logger LOG = Logger.getLogger(RosterController.class);
 
