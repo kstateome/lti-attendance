@@ -1,16 +1,15 @@
 package edu.ksu.canvas.attendance.entity;
 
-import javax.persistence.*;
-
 import org.hibernate.annotations.Check;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
 @Entity
-@Table(name = "aviation_makeup")
+@Table(name = "attendance_makeup")
 @Check(constraints = "minutes_madeup >= 0")
 public class Makeup implements Serializable {
 
@@ -96,7 +95,7 @@ public class Makeup implements Serializable {
         return "Makeup [makeupId=" + makeupId + ", dateOfClass="
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
                 + (dateMadeUp == null ? null : sdf.format(dateMadeUp))
-                + ", minutesMadeUp=" + minutesMadeUp + ", aviationStudent="
+                + ", minutesMadeUp=" + minutesMadeUp + ", attendanceStudent="
                 + (attendanceStudent == null ? null : attendanceStudent.getStudentId())
                 + "projectDescription='" + projectDescription + "']";
     }

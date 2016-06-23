@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "aviation_attendance")
+@Table(name = "kstate_attendance")
 @Check(constraints = "minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED')")
 public class Attendance implements Serializable {
 
@@ -95,7 +95,7 @@ public class Attendance implements Serializable {
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
-        return "Attendance [attendanceId=" + attendanceId + ", aviationStudent="
+        return "Attendance [attendanceId=" + attendanceId + ", attendanceStudent="
                 + (attendanceStudent == null ? null : attendanceStudent.getStudentId()) + ", status=" + status
                 + ", minutesMissed=" + minutesMissed + ", dateOfClass="
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + "]";

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "aviation_section")
+@Table(name = "attendance_section")
 public class AttendanceSection implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ public class AttendanceSection implements Serializable {
 
     @Override
     public String toString() {
-        return "AviationSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
+        return "AttendanceSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
                 + canvasSectionId + ", name=" + name + "]";
     }
 

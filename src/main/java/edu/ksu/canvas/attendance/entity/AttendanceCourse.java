@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "aviation_course")
+@Table(name = "attendance_course")
 @Check(constraints = "default_minutes_per_session >= 0 and total_minutes >= 0")
 public class AttendanceCourse implements Serializable {
 
@@ -80,7 +80,7 @@ public class AttendanceCourse implements Serializable {
 
     @Override
     public String toString() {
-        return "AviationCourse [courseId=" + courseId + ", totalMinutes=" + totalMinutes + ", defaultMinutesPerSession="
+        return "AttendanceCourse [courseId=" + courseId + ", totalMinutes=" + totalMinutes + ", defaultMinutesPerSession="
                 + defaultMinutesPerSession + ", canvasCourseId=" + canvasCourseId + "]";
     }
 
