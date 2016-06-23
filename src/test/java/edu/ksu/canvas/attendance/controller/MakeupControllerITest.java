@@ -210,7 +210,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                                 ))))
                 .andExpect(model().attribute("updateSuccessful", is(true)));
         
-        List<Makeup> savedMakeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(existingStudent);
+        List<Makeup> savedMakeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(existingStudent);
         assertEquals(expectedMakeupsSavedInDB, savedMakeups.size());
         Makeup savedMakeupInDB = savedMakeups.get(0);
         assertEquals(newMakeup.getDateMadeUp(), savedMakeupInDB.getDateMadeUp());
@@ -268,7 +268,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                                 ))))
                 .andExpect(model().attribute("updateSuccessful", is(true)));
         
-        List<Makeup> savedMakeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(existingStudent);
+        List<Makeup> savedMakeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(existingStudent);
         assertEquals(expectedMakeupsSavedInDB, savedMakeups.size());
         Makeup savedMakeupInDB = savedMakeups.get(0);
         assertEquals(expectedDateMadeup, savedMakeupInDB.getDateMadeUp());
@@ -310,7 +310,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                              )))
                 .andExpect(model().attribute("updateSuccessful", is(true)));
         
-        List<Makeup> savedMakeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(existingStudent);
+        List<Makeup> savedMakeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(existingStudent);
         assertEquals(expectedMakeupsSavedInDB, savedMakeups.size());
     }
     
@@ -346,7 +346,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                                 hasProperty("entries", hasSize(0))
                              )));
         
-        List<Makeup> savedMakeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(existingStudent);
+        List<Makeup> savedMakeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(existingStudent);
         assertEquals(expectedMakeupsSavedInDB, savedMakeups.size());
     }
     
@@ -398,7 +398,7 @@ public class MakeupControllerITest extends BaseControllerITest {
                                 ))))
                 .andExpect(model().attribute("error", notNullValue()));
         
-        List<Makeup> savedMakeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(existingStudent);
+        List<Makeup> savedMakeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(existingStudent);
         assertEquals(expectedMakeupsSavedInDB, savedMakeups.size());
     }
     

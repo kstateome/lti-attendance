@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "aviation_student")
+@Table(name = "attendance_student")
 public class AttendanceStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class AttendanceStudent implements Serializable {
     @Column(name = "deleted", columnDefinition = "NUMBER(1,0) default 0", nullable = false)
     private Boolean deleted;
 
-    @OneToMany(mappedBy = "aviationStudent")
+    @OneToMany(mappedBy = "attendanceStudent")
     private List<Attendance> attendances;
 
 

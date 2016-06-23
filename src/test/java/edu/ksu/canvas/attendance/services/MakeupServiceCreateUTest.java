@@ -57,7 +57,7 @@ public class MakeupServiceCreateUTest extends BaseMakeupServiceUTest {
         expectedMakeups.add(secondMakeup);
         
         when(mockStudentRepository.findByStudentId(studentId)).thenReturn(student);
-        when(mockMakeupRepository.findByAviationStudentOrderByDateOfClassAsc(student)).thenReturn(expectedMakeups);
+        when(mockMakeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(student)).thenReturn(expectedMakeups);
         MakeupForm makeupForm = makeupService.createMakeupForm(studentId, sectionId, dontAddEmptyEntry);
         
         assertEquals(sectionId, makeupForm.getSectionId());
@@ -78,7 +78,7 @@ public class MakeupServiceCreateUTest extends BaseMakeupServiceUTest {
         List<Makeup> expectedMakeups = new ArrayList<Makeup>();
         
         when(mockStudentRepository.findByStudentId(studentId)).thenReturn(student);
-        when(mockMakeupRepository.findByAviationStudentOrderByDateOfClassAsc(student)).thenReturn(expectedMakeups);
+        when(mockMakeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(student)).thenReturn(expectedMakeups);
         MakeupForm makeupForm = makeupService.createMakeupForm(studentId, sectionId, addEmptyEntry);
         
         assertEquals("Should contain one empty entry", 1, makeupForm.getEntries().size());

@@ -1,18 +1,17 @@
 package edu.ksu.canvas.attendance.services;
 
-import java.util.List;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.exception.ContextedRuntimeException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.MakeupModel;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.ContextedRuntimeException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Component
@@ -36,7 +35,7 @@ public class MakeupService {
             throw new ContextedRuntimeException(e).addContextValue("studentId", studentId);
         }
         
-        List<Makeup> makeups = makeupRepository.findByAviationStudentOrderByDateOfClassAsc(student);
+        List<Makeup> makeups = makeupRepository.findByAttendanceStudentOrderByDateOfClassAsc(student);
         if (addEmptyEntry) {
             makeups.add(new Makeup());
         }

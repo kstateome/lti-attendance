@@ -32,8 +32,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
 
         String jpql = "SELECT a " +
-                      "FROM Attendance a join fetch a.aviationStudent " +
-                      "WHERE a.aviationStudent.canvasCourseId = :courseId and trunc(a.dateOfClass) = trunc(:dateOfClass)";
+                      "FROM Attendance a join fetch a.attendanceStudent " +
+                      "WHERE a.attendanceStudent.canvasCourseId = :courseId and trunc(a.dateOfClass) = trunc(:dateOfClass)";
 
         TypedQuery<Attendance> query = entityManager.createQuery(jpql, Attendance.class);
         query.setParameter("courseId", courseId);

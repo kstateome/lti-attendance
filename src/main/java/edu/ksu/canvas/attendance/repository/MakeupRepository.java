@@ -12,7 +12,7 @@ import java.util.List;
 public interface MakeupRepository extends CrudRepository<Makeup, Long> {
     
 
-    List<Makeup> findByAviationStudentOrderByDateOfClassAsc(AttendanceStudent attendanceStudent);
+    List<Makeup> findByAttendanceStudentOrderByDateOfClassAsc(AttendanceStudent attendanceStudent);
     
     Makeup findByMakeupId(Long makeUpId);
     

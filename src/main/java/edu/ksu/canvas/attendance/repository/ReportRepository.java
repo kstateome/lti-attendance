@@ -33,7 +33,7 @@ public class ReportRepository {
                 "  nvl(madeup.sum_minutes_madeup,0) as sum_minutes_madeup " +
                 "  from aviation_course course " +
                 "       left outer join " +
-                "       aviation_student student on course.canvas_course_id = student.canvas_course_id " +
+                "       attendance_student student on course.canvas_course_id = student.canvas_course_id " +
                 "       left outer join " +
                 "       ( " +
                 "         select student_id, sum(nvl(minutes_missed,0)) as sum_minutes_missed " +
@@ -49,7 +49,7 @@ public class ReportRepository {
                 "  where course.course_id IN " +
                 "  ( " +
                 "    select distinct course.course_id " +
-                "    from aviation_student student, aviation_course course " +
+                "    from attendance_student student, aviation_course course " +
                 "    where student.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
                 "  ) " +
                 ") " +

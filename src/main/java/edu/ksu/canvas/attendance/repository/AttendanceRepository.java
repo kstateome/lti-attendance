@@ -13,7 +13,7 @@ import java.util.List;
 public interface AttendanceRepository extends CrudRepository<Attendance, Long>, AttendanceRepositoryCustom {
 
 
-    List<Attendance> findByAviationStudent(AttendanceStudent attendanceStudent);
+    List<Attendance> findByAttendanceStudent(AttendanceStudent attendanceStudent);
 
     Attendance findByAttendanceId(Long attendanceId);
 
