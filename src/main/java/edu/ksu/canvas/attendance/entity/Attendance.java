@@ -24,7 +24,7 @@ public class Attendance implements Serializable {
     private Long attendanceId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student"))
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_attendance_student"))
     private AttendanceStudent attendanceStudent;
 
     @Column(name = "status")

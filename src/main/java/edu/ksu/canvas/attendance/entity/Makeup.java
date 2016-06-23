@@ -35,7 +35,7 @@ public class Makeup implements Serializable {
     private Integer minutesMadeUp;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable = false)
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup"), nullable = false)
     private AttendanceStudent attendanceStudent;
 
 
