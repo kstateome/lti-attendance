@@ -27,13 +27,13 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
-    <title>Aviation Reporting Class Setup</title>
+    <title>Class Setup</title>
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a id="classSetupLink"

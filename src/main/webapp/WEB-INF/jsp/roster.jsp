@@ -28,13 +28,13 @@
     <script src="${context}/js/scripts.js"></script>
 
 
-    <title>Aviation Reporting Class Roster</title>
+    <title>Attendance Class Roster</title>
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
             <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
