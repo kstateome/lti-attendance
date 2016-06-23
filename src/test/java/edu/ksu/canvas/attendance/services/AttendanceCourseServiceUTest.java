@@ -1,5 +1,6 @@
 package edu.ksu.canvas.attendance.services;
 
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 
@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class AviationCourseServiceUTest {
+public class AttendanceCourseServiceUTest {
 
     private AviationCourseService courseService;
     
@@ -39,7 +39,7 @@ public class AviationCourseServiceUTest {
         int expectedTotalMinutes = 500;
         int expectedDefaultMinutesPerSession = 45;
         long canvasCourseId = 1001;
-        AviationCourse course = new AviationCourse();
+        AttendanceCourse course = new AttendanceCourse();
         course.setTotalMinutes(expectedTotalMinutes);
         course.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
@@ -77,7 +77,7 @@ public class AviationCourseServiceUTest {
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
-        ArgumentCaptor<AviationCourse> capturedAviationCourse = ArgumentCaptor.forClass(AviationCourse.class);
+        ArgumentCaptor<AttendanceCourse> capturedAviationCourse = ArgumentCaptor.forClass(AttendanceCourse.class);
  
         when(mockCourseRepository.findByCanvasCourseId(nonExistantCanvasCourseId)).thenReturn(null);
         courseService.save(courseForm, nonExistantCanvasCourseId);
@@ -97,7 +97,7 @@ public class AviationCourseServiceUTest {
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
-        AviationCourse existingCourse = new AviationCourse();
+        AttendanceCourse existingCourse = new AttendanceCourse();
  
         when(mockCourseRepository.findByCanvasCourseId(nonExistantCanvasCourseId)).thenReturn(existingCourse);
         courseService.save(courseForm, nonExistantCanvasCourseId);
@@ -119,7 +119,7 @@ public class AviationCourseServiceUTest {
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
         courseForm.setSimpleAttendance(true);
-        AviationCourse existingCourse = new AviationCourse();
+        AttendanceCourse existingCourse = new AttendanceCourse();
 
         when(mockCourseRepository.findByCanvasCourseId(nonExistantCanvasCourseId)).thenReturn(existingCourse);
         courseService.save(courseForm, nonExistantCanvasCourseId);

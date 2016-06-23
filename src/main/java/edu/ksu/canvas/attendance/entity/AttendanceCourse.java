@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "aviation_course")
 @Check(constraints = "default_minutes_per_session >= 0 and total_minutes >= 0")
-public class AviationCourse implements Serializable {
+public class AttendanceCourse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,11 +33,11 @@ public class AviationCourse implements Serializable {
     private Long canvasCourseId;
 
 
-    public AviationCourse() {
+    public AttendanceCourse() {
         this.attendanceType = AttendanceType.SIMPLE;
     }
 
-    public AviationCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
+    public AttendanceCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
         this.canvasCourseId = canvasCourseId;
         this.totalMinutes = totalClassMinutes;
         this.defaultMinutesPerSession = defaultMinutesPerSession;
