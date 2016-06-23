@@ -72,5 +72,18 @@ public class RosterFormValidatorUTest {
         assertEquals(expectedMinutesMissedField, capturedField.getValue());
         assertEquals(RosterFormValidator.SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE, capturedErrorCode.getValue());
     }
+
+    @Test
+    public void allowNullMinutesWhenSimpleAttendance() {
+        rosterForm.setSimpleAttendance(true);
+        attendanceModel.setMinutesMissed(null);
+
+        ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
+
+        rosterFormValidator.validate(rosterForm, errors);
+        verify(errors, times(0)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
+
+    }
     
 }

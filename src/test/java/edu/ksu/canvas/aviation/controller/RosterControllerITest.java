@@ -67,7 +67,6 @@ public class RosterControllerITest extends BaseControllerITest {
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
-        existingCourse.setAttendanceType(AttendanceType.MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
         existingSection = new AviationSection();
@@ -148,6 +147,13 @@ public class RosterControllerITest extends BaseControllerITest {
                                     )
                                 )
                     )));
+    }
+
+    @Test
+    public void defaultToSimpleAttendance() throws Exception {
+        mockMvc.perform(get("/roster/"+existingSection.getCanvasSectionId()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("rosterForm", hasProperty("simpleAttendance", is(Boolean.TRUE))));
     }
     
     @Test
