@@ -54,7 +54,7 @@ public class AttendanceService {
                     }
 
                     Attendance attendance = new Attendance();
-                    AttendanceStudent attendanceStudent = attendanceStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAviationStudentId())).findFirst().get();
+                    AttendanceStudent attendanceStudent = attendanceStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAttendanceStudentId())).findFirst().get();
                     attendance.setAttendanceStudent(attendanceStudent);
                     attendance.setDateOfClass(attendanceModel.getDateOfClass());
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());

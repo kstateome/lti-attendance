@@ -138,7 +138,7 @@ public class RosterControllerITest extends BaseControllerITest {
                                                     hasProperty("attendances",
                                                             containsInAnyOrder(
                                                                     allOf(
-                                                                            hasProperty("aviationStudentId", is(existingStudent.getStudentId()))
+                                                                            hasProperty("attendanceStudentId", is(existingStudent.getStudentId()))
                                                                     )
                                                             )
                                                     )
@@ -211,7 +211,7 @@ public class RosterControllerITest extends BaseControllerITest {
                 .param("currentDate", dateOfAttendanceAsString)
                 .param("sectionId", sectionOfExistingCourse.toString())
                 .param("sectionModels[0].attendances[0].attendanceId", "")
-                .param("sectionModels[0].attendances[0].aviationStudentId", existingStudent.getStudentId().toString())
+                .param("sectionModels[0].attendances[0].attendanceStudentId", existingStudent.getStudentId().toString())
                 .param("sectionModels[0].attendances[0].status", status.toString())
                 .param("sectionModels[0].attendances[0].minutesMissed",  badMinutesMissed.toString())
                 .sessionAttr("rosterForm", rosterForm)
@@ -245,7 +245,7 @@ public class RosterControllerITest extends BaseControllerITest {
                 .param("currentDate", dateOfAttendanceAsString)
                 .param("sectionId", existingSection.getSectionId().toString())
                 .param("sectionModels[0].attendances[0].attendanceId", "")
-                .param("sectionModels[0].attendances[0].aviationStudentId", existingStudent.getStudentId().toString())
+                .param("sectionModels[0].attendances[0].attendanceStudentId", existingStudent.getStudentId().toString())
                 .param("sectionModels[0].attendances[0].status", expectedStatus.toString())
                 .param("sectionModels[0].attendances[0].minutesMissed",  expectedMinutesMissed.toString())
                 .sessionAttr("rosterForm", rosterForm)
@@ -272,7 +272,7 @@ public class RosterControllerITest extends BaseControllerITest {
                                                 hasProperty("attendances",
                                                     containsInAnyOrder(
                                                         allOf(
-                                                                hasProperty("aviationStudentId", is(existingStudent.getStudentId())),
+                                                                hasProperty("attendanceStudentId", is(existingStudent.getStudentId())),
                                                                 hasProperty("status", is(expectedStatus)),
                                                                 hasProperty("minutesMissed", is(expectedMinutesMissed))
                                                         )

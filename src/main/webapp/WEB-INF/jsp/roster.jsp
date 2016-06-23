@@ -136,27 +136,27 @@
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
                                 <td class="${attendance.dropped ? 'dropped' : ''}">
-                                    <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}"
+                                    <form:input type="hidden" id="attendanceId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
-                                    <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}"
-                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId"/>
-                                        ${attendance.aviationStudentName}
+                                    <form:input type="hidden" id="attendanceStudentId-${attendance.attendanceStudentId}"
+                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceStudentId"/>
+                                        ${attendance.attendanceStudentName}
                                 </td>
                                 <td>
-                                        ${attendance.aviationStudentSisUserId}
+                                        ${attendance.attendanceStudentSisUserId}
                                 </td>
                                 <td>
                                     <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy"
                                                     var="attendanceDate"/>
                                     <label>
-                                        <form:select id="attendanceStatus-${attendance.aviationStudentId}"
+                                        <form:select id="attendanceStatus-${attendance.attendanceStudentId}"
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding no-width">
-                                            <form:option id="present-${attendance.aviationStudentId}"
+                                            <form:option id="present-${attendance.attendanceStudentId}"
                                                          value="<%=Status.PRESENT%>">Present</form:option>
-                                            <form:option id="tardy-${attendance.aviationStudentId}"
+                                            <form:option id="tardy-${attendance.attendanceStudentId}"
                                                          value="<%=Status.TARDY%>">Tardy</form:option>
-                                            <form:option id="absent-${attendance.aviationStudentId}"
+                                            <form:option id="absent-${attendance.attendanceStudentId}"
                                                          value="<%=Status.ABSENT%>">Absent</form:option>
                                         </form:select>
                                     </label>
@@ -166,12 +166,12 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${attendance.status == 'TARDY'}">
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5" disabled="true"/>
                                         </c:otherwise>

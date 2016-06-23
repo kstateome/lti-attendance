@@ -10,9 +10,9 @@ import java.util.Date;
 public class AttendanceModel {
 
     private Long attendanceId;
-    private Long aviationStudentId;
-    private String aviationStudentName;
-    private String aviationStudentSisUserId;
+    private Long attendanceStudentId;
+    private String attendanceStudentName;
+    private String attendanceStudentSisUserId;
     private Status status;
     private Integer minutesMissed;
     private Date dateOfClass;
@@ -24,9 +24,9 @@ public class AttendanceModel {
     }
 
     public AttendanceModel(AttendanceStudent student, Status status, Date dateOfClass) {
-        this.aviationStudentId = student == null ? null : student.getStudentId();
-        this.aviationStudentName = student == null ? null : student.getName();
-        this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
+        this.attendanceStudentId = student == null ? null : student.getStudentId();
+        this.attendanceStudentName = student == null ? null : student.getName();
+        this.attendanceStudentSisUserId = student == null ? null : student.getSisUserId();
         this.status = status;
         this.dateOfClass = dateOfClass;
         this.dropped = student == null ? null : student.getDeleted();
@@ -38,9 +38,9 @@ public class AttendanceModel {
         }
 
         this.attendanceId = attendance.getAttendanceId();
-        this.aviationStudentId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getStudentId();
-        this.aviationStudentName = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getName();
-        this.aviationStudentSisUserId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getSisUserId();
+        this.attendanceStudentId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getStudentId();
+        this.attendanceStudentName = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getName();
+        this.attendanceStudentSisUserId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getSisUserId();
         this.status = attendance.getStatus();
         this.minutesMissed = attendance.getMinutesMissed();
         this.dateOfClass = attendance.getDateOfClass();
@@ -56,28 +56,28 @@ public class AttendanceModel {
         this.attendanceId = attendanceId;
     }
 
-    public Long getAviationStudentId() {
-        return aviationStudentId;
+    public Long getAttendanceStudentId() {
+        return attendanceStudentId;
     }
 
-    public String getAviationStudentName() {
-        return aviationStudentName;
+    public String getAttendanceStudentName() {
+        return attendanceStudentName;
     }
 
-    public void setAviationStudentName(String aviationStudentName) {
-        this.aviationStudentName = aviationStudentName;
+    public void setAttendanceStudentName(String attendanceStudentName) {
+        this.attendanceStudentName = attendanceStudentName;
     }
 
-    public String getAviationStudentSisUserId() {
-        return aviationStudentSisUserId;
+    public String getAttendanceStudentSisUserId() {
+        return attendanceStudentSisUserId;
     }
 
-    public void setAviationStudentSisUserId(String aviationStudentSisUserId) {
-        this.aviationStudentSisUserId = aviationStudentSisUserId;
+    public void setAttendanceStudentSisUserId(String attendanceStudentSisUserId) {
+        this.attendanceStudentSisUserId = attendanceStudentSisUserId;
     }
 
-    public void setAviationStudentId(Long aviationStudentId) {
-        this.aviationStudentId = aviationStudentId;
+    public void setAttendanceStudentId(Long attendanceStudentId) {
+        this.attendanceStudentId = attendanceStudentId;
     }
 
     public Status getStatus() {
@@ -115,9 +115,9 @@ public class AttendanceModel {
 
     @Override
     public String toString() {
-        return "AttendanceModel [attendanceId=" + attendanceId + ", aviationStudentId=" + aviationStudentId
-                + ", aviationStudentName=" + aviationStudentName + ", aviationStudentSisUserId="
-                + aviationStudentSisUserId + ", status=" + status + ", minutesMissed=" + minutesMissed
+        return "AttendanceModel [attendanceId=" + attendanceId + ", attendanceStudentId=" + attendanceStudentId
+                + ", attendanceStudentName=" + attendanceStudentName + ", attendanceStudentSisUserId="
+                + attendanceStudentSisUserId + ", status=" + status + ", minutesMissed=" + minutesMissed
                 + ", dateOfClass=" + dateOfClass + "]";
     }
 
