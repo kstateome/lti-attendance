@@ -4,7 +4,7 @@ import edu.ksu.canvas.attendance.config.AppConfig;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
-import edu.ksu.canvas.attendance.services.AviationStudentService;
+import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.attendance.util.RoleChecker;
@@ -42,7 +42,7 @@ public class AttendanceBaseController extends LtiLaunchController {
     protected CanvasApiWrapperService canvasService;
 
     @Autowired
-    protected AviationStudentService aviationStudentService;
+    protected AttendanceStudentService attendanceStudentService;
 
 
     @Override
@@ -79,7 +79,7 @@ public class AttendanceBaseController extends LtiLaunchController {
         for(LtiLaunchData.InstitutionRole role : canvasService.getRoles()) {
             if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0) {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
-                AttendanceStudent attendanceStudent = aviationStudentService.getStudent(canvasService.getSisID());
+                AttendanceStudent attendanceStudent = attendanceStudentService.getStudent(canvasService.getSisID());
                 return new ModelAndView("forward:studentSummary/"+ attendanceStudent.getCanvasSectionId().toString()+"/"+ attendanceStudent.getStudentId().toString());
             }
         }

@@ -3,7 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
-import edu.ksu.canvas.attendance.services.AviationStudentService;
+import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.canvas.attendance.services.ReportService;
@@ -34,7 +34,7 @@ public class SummaryController extends AttendanceBaseController {
     private MakeupService makeupService;
 
     @Autowired
-    private AviationStudentService studentService;
+    private AttendanceStudentService studentService;
 
     @Autowired
     private ReportService reportService;

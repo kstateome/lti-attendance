@@ -8,7 +8,7 @@ import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 
 
 @Component
-public class AviationStudentService {
+public class AttendanceStudentService {
 
     @Autowired
     private AttendanceStudentRepository studentRepository;

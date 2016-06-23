@@ -22,7 +22,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.form.MakeupValidator;
-import edu.ksu.canvas.attendance.services.AviationStudentService;
+import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -38,7 +38,7 @@ public class MakeupController extends AttendanceBaseController {
     private MakeupService makeupService;
 
     @Autowired
-    private AviationStudentService studentService;
+    private AttendanceStudentService studentService;
 
     @Autowired
     private MakeupValidator validator;

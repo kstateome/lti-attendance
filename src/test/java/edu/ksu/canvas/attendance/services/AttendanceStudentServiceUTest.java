@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class AttendanceStudentServiceUTest {
 
-    private AviationStudentService studentService;
+    private AttendanceStudentService studentService;
     
     @Mock
     private AttendanceStudentRepository mockStudentRepository;
@@ -25,7 +25,7 @@ public class AttendanceStudentServiceUTest {
     
     @Before
     public void setup() {
-        studentService = new AviationStudentService();
+        studentService = new AttendanceStudentService();
         Whitebox.setInternalState(studentService, mockStudentRepository);
     }
     
