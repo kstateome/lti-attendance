@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
@@ -37,7 +37,7 @@ public class SynchronizationService {
     private AttendanceCourseRepository attendanceCourseRepository;
 
     @Autowired
-    private AviationStudentRepository studentRepository;
+    private AttendanceStudentRepository studentRepository;
 
     @Autowired
     private AttendanceSectionRepository sectionRepository;

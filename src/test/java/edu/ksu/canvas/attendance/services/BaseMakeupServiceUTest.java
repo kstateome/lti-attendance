@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.mockito.Mock;
 import org.powermock.reflect.Whitebox;
 
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
 
 
@@ -16,7 +16,7 @@ public class BaseMakeupServiceUTest {
     protected MakeupRepository mockMakeupRepository;
     
     @Mock
-    protected AviationStudentRepository mockStudentRepository;
+    protected AttendanceStudentRepository mockStudentRepository;
     
     
     @Before

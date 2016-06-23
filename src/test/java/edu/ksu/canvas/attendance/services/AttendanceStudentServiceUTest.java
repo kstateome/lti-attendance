@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -20,7 +20,7 @@ public class AttendanceStudentServiceUTest {
     private AviationStudentService studentService;
     
     @Mock
-    private AviationStudentRepository mockStudentRepository;
+    private AttendanceStudentRepository mockStudentRepository;
     
     
     @Before

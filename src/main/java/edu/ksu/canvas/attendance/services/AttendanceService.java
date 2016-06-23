@@ -7,7 +7,7 @@ import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.AttendanceModel;
 import edu.ksu.canvas.attendance.model.SectionModel;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class AttendanceService {
     private AttendanceRepository attendanceRepository;
 
     @Autowired
-    private AviationStudentRepository studentRepository;
+    private AttendanceStudentRepository studentRepository;
 
 
     /**

@@ -4,7 +4,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.MakeupModel;
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
@@ -22,14 +22,14 @@ public class MakeupService {
     private MakeupRepository makeupRepository;
 
     @Autowired
-    private AviationStudentRepository aviationStudentRepository;
+    private AttendanceStudentRepository attendanceStudentRepository;
 
 
     /**
      * @throws IllegalArgumentException when a student cannot be found in the database for the given studentId
      */
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
-        AttendanceStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
+        AttendanceStudent student = attendanceStudentRepository.findByStudentId(new Long(studentId));
         if(student == null) {
             RuntimeException e = new IllegalArgumentException("student does not exist in the database");
             throw new ContextedRuntimeException(e).addContextValue("studentId", studentId);
@@ -68,7 +68,7 @@ public class MakeupService {
                 continue;
             }
             if (makeupModel.getMakeupId() == null) {
-                AttendanceStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
+                AttendanceStudent student = attendanceStudentRepository.findByStudentId(form.getStudentId());
 
                 Makeup makeup = new Makeup();
                 makeup.setDateOfClass(makeupModel.getDateOfClass());

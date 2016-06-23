@@ -18,7 +18,7 @@ import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
@@ -49,7 +49,7 @@ public class MakeupControllerITest extends BaseControllerITest {
     private AttendanceSectionRepository sectionRepository;
     
     @Autowired
-    private AviationStudentRepository studentRepository;
+    private AttendanceStudentRepository studentRepository;
     
     @Autowired
     private MakeupRepository makeupRepository;

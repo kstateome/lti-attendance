@@ -35,7 +35,7 @@ public class AttendanceRepositoryImplITest {
     private AttendanceRepository attendanceRepository;
     
     @Autowired
-    private AviationStudentRepository studentRepository;
+    private AttendanceStudentRepository studentRepository;
     
     private Attendance existingAttendance; 
     

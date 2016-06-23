@@ -49,7 +49,7 @@ public class SummaryControllerITest extends BaseControllerITest {
     private AttendanceSectionRepository sectionRepository;
 
     @Autowired
-    private AviationStudentRepository studentRepository;
+    private AttendanceStudentRepository studentRepository;
 
     @Autowired
     private MakeupRepository makeupRepository;

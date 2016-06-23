@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Repository
-public interface AviationStudentRepository extends CrudRepository<AttendanceStudent, Long> {
+public interface AttendanceStudentRepository extends CrudRepository<AttendanceStudent, Long> {
 
 
     AttendanceStudent findByStudentId(Long studentId);
