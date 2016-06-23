@@ -11,7 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 
@@ -25,7 +25,7 @@ public class AttendanceCourseServiceUTest {
     private AviationCourseService courseService;
     
     @Mock
-    private AviationCourseRepository mockCourseRepository;
+    private AttendanceCourseRepository mockCourseRepository;
     
     
     @Before

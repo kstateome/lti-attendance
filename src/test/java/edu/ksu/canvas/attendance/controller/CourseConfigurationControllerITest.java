@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
@@ -30,7 +30,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     private AttendanceSection existingSection;
     
     @Autowired
-    private AviationCourseRepository courseRepository;
+    private AttendanceCourseRepository courseRepository;
     
     @Autowired
     private AviationSectionRepository sectionRepository;

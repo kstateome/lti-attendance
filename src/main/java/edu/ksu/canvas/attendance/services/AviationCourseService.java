@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 
 
 @Component
 public class AviationCourseService {
 
     @Autowired
-    private AviationCourseRepository aviationCourseRepository;
+    private AttendanceCourseRepository attendanceCourseRepository;
 
 
     /**
@@ -24,7 +24,7 @@ public class AviationCourseService {
     public void save(CourseConfigurationForm courseForm, long canvasCourseId) {
         Validate.notNull(courseForm, "courseForm must not be null");
         
-        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        AttendanceCourse attendanceCourse = attendanceCourseRepository.findByCanvasCourseId(canvasCourseId);
         if (attendanceCourse == null) {
             attendanceCourse = new AttendanceCourse(canvasCourseId, courseForm.getTotalClassMinutes(), courseForm.getDefaultMinutesPerSession());
         } else {
@@ -38,7 +38,7 @@ public class AviationCourseService {
             }
         }
 
-        aviationCourseRepository.save(attendanceCourse);
+        attendanceCourseRepository.save(attendanceCourse);
     }
 
 
@@ -48,7 +48,7 @@ public class AviationCourseService {
     public void loadIntoForm(CourseConfigurationForm courseForm, long courseId) {
         Validate.notNull(courseForm, "courseForm must not be null");
         
-        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
+        AttendanceCourse attendanceCourse = attendanceCourseRepository.findByCanvasCourseId(courseId);
         
         if(attendanceCourse == null) {
             RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");

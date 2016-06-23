@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -34,7 +34,7 @@ public class SynchronizationService {
     private static final Logger LOG = Logger.getLogger(SynchronizationService.class);
 
     @Autowired
-    private AviationCourseRepository aviationCourseRepository;
+    private AttendanceCourseRepository attendanceCourseRepository;
 
     @Autowired
     private AviationStudentRepository studentRepository;
@@ -47,7 +47,7 @@ public class SynchronizationService {
 
 
     public void synchronizeWhenCourseNotExistsInDB(long canvasCourseId) throws NoLtiSessionException {
-        if (aviationCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
+        if (attendanceCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
             synchronize(canvasCourseId);
         }
     }
@@ -63,7 +63,7 @@ public class SynchronizationService {
     }
 
     private AttendanceCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
-        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        AttendanceCourse attendanceCourse = attendanceCourseRepository.findByCanvasCourseId(canvasCourseId);
 
         if (attendanceCourse == null) {
             attendanceCourse = new AttendanceCourse();
@@ -72,7 +72,7 @@ public class SynchronizationService {
             attendanceCourse.setCanvasCourseId(canvasCourseId);
         }
 
-        return aviationCourseRepository.save(attendanceCourse);
+        return attendanceCourseRepository.save(attendanceCourse);
     }
 
     private List<AttendanceSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {

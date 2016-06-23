@@ -19,7 +19,7 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -57,7 +57,7 @@ public class SynchronizationServiceUTest {
     private SynchronizationService synchronizationService;
 
     @Mock
-    private AviationCourseRepository mockCourseRepository;
+    private AttendanceCourseRepository mockCourseRepository;
 
     @Mock
     private AviationStudentRepository mockStudentRepository;

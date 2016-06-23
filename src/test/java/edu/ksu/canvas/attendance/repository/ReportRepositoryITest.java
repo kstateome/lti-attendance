@@ -43,7 +43,7 @@ public class ReportRepositoryITest {
     private MakeupRepository makeupRepository;
     
     @Autowired
-    private AviationCourseRepository courseRepository;
+    private AttendanceCourseRepository courseRepository;
     
     @Autowired
     private ReportRepository reportRepository;

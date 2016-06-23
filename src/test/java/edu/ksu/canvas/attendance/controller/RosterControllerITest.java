@@ -12,7 +12,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
-import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.attendance.services.AttendanceService;
@@ -42,7 +42,7 @@ public class RosterControllerITest extends BaseControllerITest {
     private AttendanceStudent existingStudent;
     
     @Autowired
-    private AviationCourseRepository courseRepository;
+    private AttendanceCourseRepository courseRepository;
     
     @Autowired
     private AviationSectionRepository sectionRepository;

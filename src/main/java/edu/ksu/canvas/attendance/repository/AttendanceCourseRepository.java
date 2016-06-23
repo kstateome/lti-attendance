@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface AviationCourseRepository extends CrudRepository<AttendanceCourse, Long> {
+public interface AttendanceCourseRepository extends CrudRepository<AttendanceCourse, Long> {
 
 
     AttendanceCourse findByCourseId(Long courseId);

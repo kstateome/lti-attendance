@@ -40,7 +40,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
 
     @Autowired
-    private AviationCourseRepository courseRepository;
+    private AttendanceCourseRepository courseRepository;
 
     @Autowired
     private ReportRepository reportRepository;
