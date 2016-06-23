@@ -3,7 +3,7 @@ package edu.ksu.canvas.attendance.config.arquillian;
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
@@ -50,7 +50,7 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
         
-        AviationStudent existingStudent = new AviationStudent();
+        AttendanceStudent existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
         existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());
@@ -59,7 +59,7 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
         existingStudent = studentRepository.save(existingStudent);
 
         Attendance existingAttendance = new Attendance();
-        existingAttendance.setAviationStudent(studentRepository.findByStudentId(existingStudent.getStudentId()));
+        existingAttendance.setAttendanceStudent(studentRepository.findByStudentId(existingStudent.getStudentId()));
         existingAttendance.setStatus(Status.PRESENT);
         existingAttendance.setDateOfClass(new Date());
         existingStudent.setAttendances(Collections.singletonList(existingAttendance));

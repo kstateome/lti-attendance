@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.form.MakeupValidator;
 import edu.ksu.canvas.attendance.services.AviationStudentService;
@@ -66,12 +66,12 @@ public class MakeupController extends AttendanceBaseController {
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-        AviationStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
+        AttendanceStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
         if(validatedStudentId == null || selectedStudent == null) {
             return new ModelAndView("forward:roster/"+validatedSectionId);
         }
 
-        AviationStudent student = studentService.getStudent(new Long(studentId));
+        AttendanceStudent student = studentService.getStudent(new Long(studentId));
         MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
 
         ModelAndView page = new ModelAndView("studentMakeup");
@@ -100,7 +100,7 @@ public class MakeupController extends AttendanceBaseController {
             String errorMessage = "Please correct user input and try saving again.";
 
             ModelAndView page = new ModelAndView("studentMakeup");
-            AviationStudent student = studentService.getStudent(makeupForm.getStudentId());
+            AttendanceStudent student = studentService.getStudent(makeupForm.getStudentId());
             page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
             page.addObject("makeupForm", makeupForm);

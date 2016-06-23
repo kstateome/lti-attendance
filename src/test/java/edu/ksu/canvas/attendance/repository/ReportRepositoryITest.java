@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
@@ -49,7 +49,7 @@ public class ReportRepositoryITest {
     private ReportRepository reportRepository;
     
     private AttendanceCourse existingCourse;
-    private AviationStudent existingStudent;
+    private AttendanceStudent existingStudent;
     private List<Attendance> existingAttendances;
     private List<Makeup> existingMakeups;
     
@@ -73,7 +73,7 @@ public class ReportRepositoryITest {
         course.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(course);
         
-        AviationStudent student = new AviationStudent();
+        AttendanceStudent student = new AttendanceStudent();
         student.setSisUserId("1001");
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
         student.setCanvasSectionId(expectedSectionId);
@@ -82,7 +82,7 @@ public class ReportRepositoryITest {
         existingStudent = studentRepository.save(student);
         
         Attendance attendance = new Attendance();
-        attendance.setAviationStudent(existingStudent);
+        attendance.setAttendanceStudent(existingStudent);
         attendance.setDateOfClass(sdf.parse("5/21/2016"));
         attendance.setMinutesMissed(5);
         attendance.setStatus(Status.TARDY);
@@ -91,7 +91,7 @@ public class ReportRepositoryITest {
         existingAttendances.add(attendance);
         
         attendance = new Attendance();
-        attendance.setAviationStudent(existingStudent);
+        attendance.setAttendanceStudent(existingStudent);
         attendance.setDateOfClass(sdf.parse("5/22/2016"));
         attendance.setMinutesMissed(6);
         attendance.setStatus(Status.TARDY);
@@ -99,7 +99,7 @@ public class ReportRepositoryITest {
         existingAttendances.add(attendance);
         
         Makeup makeup = new Makeup();
-        makeup.setAviationStudent(existingStudent);
+        makeup.setAttendanceStudent(existingStudent);
         makeup.setDateMadeUp(sdf.parse("6/1/16"));
         makeup.setMinutesMadeUp(2);
         makeup.setProjectDescription("random project");
@@ -108,7 +108,7 @@ public class ReportRepositoryITest {
         existingMakeups.add(makeup);
         
         makeup = new Makeup();
-        makeup.setAviationStudent(existingStudent);
+        makeup.setAttendanceStudent(existingStudent);
         makeup.setDateMadeUp(sdf.parse("6/2/16"));
         makeup.setMinutesMadeUp(3);
         makeup.setProjectDescription("random project");

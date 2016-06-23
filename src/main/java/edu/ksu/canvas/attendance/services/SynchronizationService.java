@@ -9,12 +9,12 @@ import java.util.Set;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
@@ -95,10 +95,10 @@ public class SynchronizationService {
         return ret;
     }
 
-    private List<AviationStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) {
-        List<AviationStudent> ret = new ArrayList<>();
-        List<AviationStudent> existingStudentsInDb = null;
-        Set<AviationStudent> droppedStudents = new HashSet<>();
+    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) {
+        List<AttendanceStudent> ret = new ArrayList<>();
+        List<AttendanceStudent> existingStudentsInDb = null;
+        Set<AttendanceStudent> droppedStudents = new HashSet<>();
 
         for(Section section: canvasSectionMap.keySet()) {
 
@@ -109,7 +109,7 @@ public class SynchronizationService {
 
             for(Enrollment enrollment: canvasSectionMap.get(section)) {
 
-                Optional<AviationStudent> foundUser = 
+                Optional<AttendanceStudent> foundUser =
                         existingStudentsInDb.stream()
                                         .filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()))
                                         .findFirst();
@@ -117,7 +117,7 @@ public class SynchronizationService {
                 if (foundUser.isPresent()){
                     droppedStudents.remove(foundUser.get());
                 }
-                AviationStudent student = foundUser.isPresent() ? foundUser.get() : new AviationStudent();
+                AttendanceStudent student = foundUser.isPresent() ? foundUser.get() : new AttendanceStudent();
                 student.setSisUserId(enrollment.getUser().getSisUserId());
                 student.setName(enrollment.getUser().getSortableName());
                 student.setCanvasSectionId(section.getId());
@@ -133,7 +133,7 @@ public class SynchronizationService {
         return ret;
     }
 
-    private void addDroppedStudents(List<AviationStudent> studentList, Set<AviationStudent> droppedStudents) {
+    private void addDroppedStudents(List<AttendanceStudent> studentList, Set<AttendanceStudent> droppedStudents) {
         if (!droppedStudents.isEmpty()){
             droppedStudents.forEach(student -> {
                 student.setDeleted(true);

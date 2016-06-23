@@ -34,7 +34,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
-    private AviationStudent existingStudent;
+    private AttendanceStudent existingStudent;
     private Attendance existingAttendance;
     private Makeup existingMakeup;
 
@@ -71,7 +71,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
 
-        existingStudent = new AviationStudent();
+        existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
@@ -81,7 +81,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         existingAttendance = new Attendance();
-        existingAttendance.setAviationStudent(existingStudent);
+        existingAttendance.setAttendanceStudent(existingStudent);
         existingAttendance.setDateOfClass(sdf.parse("5/21/2016"));
         existingAttendance.getDateOfClass();
         existingAttendance.setMinutesMissed(5);
@@ -89,7 +89,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingAttendance = attendanceRepository.save(existingAttendance);
 
         existingMakeup = new Makeup();
-        existingMakeup.setAviationStudent(existingStudent);
+        existingMakeup.setAttendanceStudent(existingStudent);
         existingMakeup.setDateOfClass(sdf.parse("05/01/2016"));
         existingMakeup.setDateMadeUp(sdf.parse("05/20/2016"));
         existingMakeup.setMinutesMadeUp(10);

@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.model;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 
 import java.util.Date;
@@ -23,7 +23,7 @@ public class AttendanceModel {
 
     }
 
-    public AttendanceModel(AviationStudent student, Status status, Date dateOfClass) {
+    public AttendanceModel(AttendanceStudent student, Status status, Date dateOfClass) {
         this.aviationStudentId = student == null ? null : student.getStudentId();
         this.aviationStudentName = student == null ? null : student.getName();
         this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
@@ -38,13 +38,13 @@ public class AttendanceModel {
         }
 
         this.attendanceId = attendance.getAttendanceId();
-        this.aviationStudentId = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getStudentId();
-        this.aviationStudentName = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getName();
-        this.aviationStudentSisUserId = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getSisUserId();
+        this.aviationStudentId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getStudentId();
+        this.aviationStudentName = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getName();
+        this.aviationStudentSisUserId = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getSisUserId();
         this.status = attendance.getStatus();
         this.minutesMissed = attendance.getMinutesMissed();
         this.dateOfClass = attendance.getDateOfClass();
-        this.dropped = attendance.getAviationStudent() == null ? null : attendance.getAviationStudent().getDeleted();
+        this.dropped = attendance.getAttendanceStudent() == null ? null : attendance.getAttendanceStudent().getDeleted();
     }
 
 

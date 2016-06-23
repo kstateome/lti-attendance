@@ -3,7 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
@@ -86,7 +86,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingSection.setCanvasSectionId(existingSectionId);
         existingSection = sectionRepository.save(existingSection);
         
-        AviationStudent existingStudent = new AviationStudent();
+        AttendanceStudent existingStudent = new AttendanceStudent();
         existingStudent.setSisUserId("1001");
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setCanvasSectionId(existingSectionId);
@@ -95,7 +95,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingStudent = studentRepository.save(existingStudent);
         
         Attendance existingAttendance = new Attendance();
-        existingAttendance.setAviationStudent(existingStudent);
+        existingAttendance.setAttendanceStudent(existingStudent);
         existingAttendance.setDateOfClass(sdf.parse("5/21/2016"));
         existingAttendance.setMinutesMissed(5);
         existingAttendance.setStatus(Status.TARDY);

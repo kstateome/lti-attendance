@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.repository;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,17 +8,17 @@ import java.util.List;
 
 
 @Repository
-public interface AviationStudentRepository extends CrudRepository<AviationStudent, Long> {
+public interface AviationStudentRepository extends CrudRepository<AttendanceStudent, Long> {
 
 
-    AviationStudent findByStudentId(Long studentId);
+    AttendanceStudent findByStudentId(Long studentId);
 
-    AviationStudent findBySisUserId(String sisUserId);
+    AttendanceStudent findBySisUserId(String sisUserId);
 
-    AviationStudent findBySisUserIdAndCanvasSectionId(String sisUserId, Long canvasSectionId);
+    AttendanceStudent findBySisUserIdAndCanvasSectionId(String sisUserId, Long canvasSectionId);
 
-    List<AviationStudent> findByCanvasSectionIdOrderByNameAsc(long sectionId);
+    List<AttendanceStudent> findByCanvasSectionIdOrderByNameAsc(long sectionId);
 
-    List<AviationStudent> findByCanvasCourseId(long courseId);
+    List<AttendanceStudent> findByCanvasCourseId(long courseId);
 
 }

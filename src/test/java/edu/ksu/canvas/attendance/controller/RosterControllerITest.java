@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
@@ -39,7 +39,7 @@ public class RosterControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
-    private AviationStudent existingStudent;
+    private AttendanceStudent existingStudent;
     
     @Autowired
     private AviationCourseRepository courseRepository;
@@ -73,7 +73,7 @@ public class RosterControllerITest extends BaseControllerITest {
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
         
-        existingStudent = new AviationStudent();
+        existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
         existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());

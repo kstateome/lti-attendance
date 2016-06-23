@@ -37,7 +37,7 @@ public class Makeup implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student_for_makeup_tracker"), nullable = false)
-    private AviationStudent aviationStudent;
+    private AttendanceStudent attendanceStudent;
 
 
     public Long getMakeupId() {
@@ -72,12 +72,12 @@ public class Makeup implements Serializable {
         this.minutesMadeUp = minutesMadeUp;
     }
 
-    public AviationStudent getAviationStudent() {
-        return aviationStudent;
+    public AttendanceStudent getAttendanceStudent() {
+        return attendanceStudent;
     }
 
-    public void setAviationStudent(AviationStudent aviationStudent) {
-        this.aviationStudent = aviationStudent;
+    public void setAttendanceStudent(AttendanceStudent attendanceStudent) {
+        this.attendanceStudent = attendanceStudent;
     }
 
     public String getProjectDescription() {
@@ -97,7 +97,7 @@ public class Makeup implements Serializable {
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + ", dateMadeUp="
                 + (dateMadeUp == null ? null : sdf.format(dateMadeUp))
                 + ", minutesMadeUp=" + minutesMadeUp + ", aviationStudent="
-                + (aviationStudent == null ? null : aviationStudent.getStudentId())
+                + (attendanceStudent == null ? null : attendanceStudent.getStudentId())
                 + "projectDescription='" + projectDescription + "']";
     }
 

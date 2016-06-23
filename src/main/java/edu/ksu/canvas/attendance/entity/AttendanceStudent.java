@@ -1,17 +1,16 @@
 package edu.ksu.canvas.attendance.entity;
 
-import javax.persistence.*;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 
 @Entity
 @Table(name = "aviation_student")
-public class AviationStudent implements Serializable {
+public class AttendanceStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,7 +52,7 @@ public class AviationStudent implements Serializable {
         this.percentageOfCourseMissed = percentageOfCourseMissed;
     }
 
-    public AviationStudent() {
+    public AttendanceStudent() {
         deleted = false;
     }
 
@@ -131,7 +130,7 @@ public class AviationStudent implements Serializable {
             return false;
         }
 
-        AviationStudent that = (AviationStudent) o;
+        AttendanceStudent that = (AttendanceStudent) o;
         return new EqualsBuilder()
                 .append(canvasCourseId, that.canvasCourseId)
                 .append(canvasSectionId, that.canvasSectionId)

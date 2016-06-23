@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AviationStudentService;
@@ -66,7 +66,7 @@ public class SummaryController extends AttendanceBaseController {
             throw new IllegalArgumentException("Invalid student id");
         }
 
-        AviationStudent student = studentService.getStudent(validatedStudentId);
+        AttendanceStudent student = studentService.getStudent(validatedStudentId);
         if(student == null) {
             throw new IllegalArgumentException("Student does not exist in database.");
         }

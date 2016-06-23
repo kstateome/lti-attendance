@@ -7,7 +7,7 @@ import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.MakeupModel;
@@ -30,7 +30,7 @@ public class MakeupService {
      * @throws IllegalArgumentException when a student cannot be found in the database for the given studentId
      */
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
-        AviationStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
+        AttendanceStudent student = aviationStudentRepository.findByStudentId(new Long(studentId));
         if(student == null) {
             RuntimeException e = new IllegalArgumentException("student does not exist in the database");
             throw new ContextedRuntimeException(e).addContextValue("studentId", studentId);
@@ -69,14 +69,14 @@ public class MakeupService {
                 continue;
             }
             if (makeupModel.getMakeupId() == null) {
-                AviationStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
+                AttendanceStudent student = aviationStudentRepository.findByStudentId(form.getStudentId());
 
                 Makeup makeup = new Makeup();
                 makeup.setDateOfClass(makeupModel.getDateOfClass());
                 makeup.setDateMadeUp(makeupModel.getDateMadeUp());
                 makeup.setProjectDescription(makeupModel.getProjectDescription());
                 makeup.setMinutesMadeUp(makeupModel.getMinutesMadeUp());
-                makeup.setAviationStudent(student);
+                makeup.setAttendanceStudent(student);
 
                 makeupRepository.save(makeup);
             } else {

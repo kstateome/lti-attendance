@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
@@ -36,7 +36,7 @@ public class MakeupControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
-    private AviationStudent existingStudent;
+    private AttendanceStudent existingStudent;
     private Makeup existingMakeup;
     
     @Autowired
@@ -68,7 +68,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
         
-        existingStudent = new AviationStudent();
+        existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setName("Zoglmann, Brian");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
@@ -79,7 +79,7 @@ public class MakeupControllerITest extends BaseControllerITest {
     private void initalizeExistingMakeup() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         existingMakeup = new Makeup();
-        existingMakeup.setAviationStudent(existingStudent);
+        existingMakeup.setAttendanceStudent(existingStudent);
         existingMakeup.setDateOfClass(sdf.parse("05/01/2016"));
         existingMakeup.setDateMadeUp(sdf.parse("05/20/2016"));
         existingMakeup.setMinutesMadeUp(10);

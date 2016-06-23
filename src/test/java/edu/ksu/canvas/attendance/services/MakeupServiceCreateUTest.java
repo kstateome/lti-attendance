@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 
@@ -23,13 +23,13 @@ public class MakeupServiceCreateUTest extends BaseMakeupServiceUTest {
 
     private long studentId = 500;
     long sectionId = 600;
-    private AviationStudent student;
+    private AttendanceStudent student;
     private Makeup firstMakeup, secondMakeup;
 
     
     @Before
     public void additionalSetup() {
-        student = new AviationStudent();
+        student = new AttendanceStudent();
         student.setStudentId(studentId);
         
         firstMakeup = new Makeup();

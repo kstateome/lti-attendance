@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,6 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
@@ -218,11 +218,11 @@ public class SynchronizationServiceUTest {
         section.setCourseId(expectedCanvasCourseId.intValue());
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
-        ArgumentCaptor<AviationStudent> capturedStudent = ArgumentCaptor.forClass(AviationStudent.class);
-        AviationStudent expectedStudentSavedToDb = new AviationStudent();
+        ArgumentCaptor<AttendanceStudent> capturedStudent = ArgumentCaptor.forClass(AttendanceStudent.class);
+        AttendanceStudent expectedStudentSavedToDb = new AttendanceStudent();
 
-        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentSavedToDb);
-        List<AviationStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentSavedToDb);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
 
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -240,12 +240,12 @@ public class SynchronizationServiceUTest {
         Long previousCanvasCourseId = 350L;
         String previousSisUserId = "uniqueSisId";
         String previousName = "Zoglmann, Chris";
-        AviationStudent expectedStudentInDb = new AviationStudent();
+        AttendanceStudent expectedStudentInDb = new AttendanceStudent();
         expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
         expectedStudentInDb.setSisUserId(previousSisUserId);
         expectedStudentInDb.setName(previousName);
-        List<AviationStudent> studentsInDbForCourse = new ArrayList<>();
+        List<AttendanceStudent> studentsInDbForCourse = new ArrayList<>();
         studentsInDbForCourse.add(expectedStudentInDb);
 
         Long expectedCanvasSectionId = 250L;
@@ -269,8 +269,8 @@ public class SynchronizationServiceUTest {
         canvasSectionMap.put(section, enrollments);
 
         when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
-        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentInDb);
-        List<AviationStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
 
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -288,13 +288,13 @@ public class SynchronizationServiceUTest {
         Long previousCanvasCourseId = 350L;
         String previousSisUserId = "uniqueSisId";
         String previousName = "Zoglmann, Chris";
-        AviationStudent expectedStudentInDb = new AviationStudent();
+        AttendanceStudent expectedStudentInDb = new AttendanceStudent();
         expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
         expectedStudentInDb.setSisUserId(previousSisUserId);
         expectedStudentInDb.setName(previousName);
         expectedStudentInDb.setDeleted(Boolean.TRUE);
-        List<AviationStudent> studentsInDbForCourse = new ArrayList<>();
+        List<AttendanceStudent> studentsInDbForCourse = new ArrayList<>();
         studentsInDbForCourse.add(expectedStudentInDb);
 
         Long expectedCanvasSectionId = 250L;
@@ -318,8 +318,8 @@ public class SynchronizationServiceUTest {
         canvasSectionMap.put(section, enrollments);
 
         when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
-        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentInDb);
-        List<AviationStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
 
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -341,20 +341,20 @@ public class SynchronizationServiceUTest {
         section.setCourseId(expectedCanvasCourseId.intValue());
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, Collections.emptyList());
-        ArgumentCaptor<AviationStudent> capturedStudent = ArgumentCaptor.forClass(AviationStudent.class);
-        AviationStudent expectedStudentSavedToDb = new AviationStudent();
+        ArgumentCaptor<AttendanceStudent> capturedStudent = ArgumentCaptor.forClass(AttendanceStudent.class);
+        AttendanceStudent expectedStudentSavedToDb = new AttendanceStudent();
 
-        when(mockStudentRepository.save(any(AviationStudent.class))).thenReturn(expectedStudentSavedToDb);
+        when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentSavedToDb);
         when(mockStudentRepository.findByCanvasCourseId(anyLong())).thenReturn(Collections.singletonList(expectedStudentSavedToDb));
-        AviationStudent droppedStudent = new AviationStudent();
+        AttendanceStudent droppedStudent = new AttendanceStudent();
         droppedStudent.setDeleted(true);
         when(mockStudentRepository.save(
                 argThat(
                         Matchers.both(
-                                Matchers.isA(AviationStudent.class)).
+                                Matchers.isA(AttendanceStudent.class)).
                                 and(Matchers.hasProperty("deleted", Matchers.hasValue(true))))))
                 .thenReturn(droppedStudent);
-        List<AviationStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        List<AttendanceStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertEquals(droppedStudent, secondSetOfStudents.get(0));
         assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).getDeleted());

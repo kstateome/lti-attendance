@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 
 import static org.mockito.Mockito.*;
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class AviationStudentServiceUTest {
+public class AttendanceStudentServiceUTest {
 
     private AviationStudentService studentService;
     
@@ -33,11 +33,11 @@ public class AviationStudentServiceUTest {
     @Test
     public void getStudentByStudentID_HappyPath() {
         long studentId = 500;
-        AviationStudent expectedStudent = new AviationStudent();
+        AttendanceStudent expectedStudent = new AttendanceStudent();
         expectedStudent.setStudentId(50L);
         
        when(mockStudentRepository.findByStudentId(studentId)).thenReturn(expectedStudent);
-       AviationStudent actualStudent = studentService.getStudent(studentId);
+       AttendanceStudent actualStudent = studentService.getStudent(studentId);
        
        assertEquals(expectedStudent, actualStudent);
     }
@@ -45,11 +45,11 @@ public class AviationStudentServiceUTest {
     @Test
     public void getStudentBySISID_HappyPath() {
         String sisID = "sisId";
-        AviationStudent expectedStudent = new AviationStudent();
+        AttendanceStudent expectedStudent = new AttendanceStudent();
         expectedStudent.setSisUserId(sisID);
 
         when(mockStudentRepository.findBySisUserId(sisID)).thenReturn(expectedStudent);
-        AviationStudent actualStudent = studentService.getStudent(sisID);
+        AttendanceStudent actualStudent = studentService.getStudent(sisID);
 
         assertEquals(expectedStudent, actualStudent);
     }

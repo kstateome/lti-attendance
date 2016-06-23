@@ -25,7 +25,7 @@ public class Attendance implements Serializable {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student"))
-    private AviationStudent aviationStudent;
+    private AttendanceStudent attendanceStudent;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -43,8 +43,8 @@ public class Attendance implements Serializable {
 
     }
 
-    public Attendance(AviationStudent aviationStudent, Status status, Date dateOfClass) {
-        this.aviationStudent = aviationStudent;
+    public Attendance(AttendanceStudent attendanceStudent, Status status, Date dateOfClass) {
+        this.attendanceStudent = attendanceStudent;
         this.status = status;
         this.dateOfClass = dateOfClass;
     }
@@ -58,12 +58,12 @@ public class Attendance implements Serializable {
         this.attendanceId = attendanceId;
     }
 
-    public AviationStudent getAviationStudent() {
-        return aviationStudent;
+    public AttendanceStudent getAttendanceStudent() {
+        return attendanceStudent;
     }
 
-    public void setAviationStudent(AviationStudent aviationStudent) {
-        this.aviationStudent = aviationStudent;
+    public void setAttendanceStudent(AttendanceStudent attendanceStudent) {
+        this.attendanceStudent = attendanceStudent;
     }
 
     public void setStatus(Status status) {
@@ -96,7 +96,7 @@ public class Attendance implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
         return "Attendance [attendanceId=" + attendanceId + ", aviationStudent="
-                + (aviationStudent == null ? null : aviationStudent.getStudentId()) + ", status=" + status
+                + (attendanceStudent == null ? null : attendanceStudent.getStudentId()) + ", status=" + status
                 + ", minutesMissed=" + minutesMissed + ", dateOfClass="
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + "]";
     }

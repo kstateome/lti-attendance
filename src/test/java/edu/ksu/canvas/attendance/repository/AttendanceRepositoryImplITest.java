@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 
 import static org.junit.Assert.*;
@@ -44,7 +44,7 @@ public class AttendanceRepositoryImplITest {
     public void setup() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
-        AviationStudent student = new AviationStudent();
+        AttendanceStudent student = new AttendanceStudent();
         student.setSisUserId("1001");
         student.setCanvasCourseId(1000L);
         student.setCanvasSectionId(500L);
@@ -52,7 +52,7 @@ public class AttendanceRepositoryImplITest {
         studentRepository.save(student);
         
         Attendance attendance = new Attendance();
-        attendance.setAviationStudent(student);
+        attendance.setAttendanceStudent(student);
         attendance.setDateOfClass(sdf.parse("5/21/2016"));
         attendance.setMinutesMissed(5);
         attendance.setStatus(Status.TARDY);
@@ -61,7 +61,7 @@ public class AttendanceRepositoryImplITest {
     
     @Test
     public void getAttendanceByCourseAndDayOfClass_findExistingOneAttendance() {
-        long existingCanvasCourseId = existingAttendance.getAviationStudent().getCanvasCourseId();
+        long existingCanvasCourseId = existingAttendance.getAttendanceStudent().getCanvasCourseId();
         Date existingDateOfClass = existingAttendance.getDateOfClass();
         int expectedNumberOfAttendances = 1;
         

@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.AttendanceModel;
@@ -42,20 +42,20 @@ public class AttendanceService {
 
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
-            List<AviationStudent> aviationStudents = null;
+            List<AttendanceStudent> attendanceStudents = null;
 
             for (AttendanceModel attendanceModel : sectionModel.getAttendances()) {
                 if (attendanceModel.getAttendanceId() == null) {
-                    if (aviationStudents == null) {
+                    if (attendanceStudents == null) {
                         long beginLoad = System.currentTimeMillis();
-                        aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
+                        attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
                         long endLoad = System.currentTimeMillis();
-                        LOG.debug("loaded " + aviationStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
+                        LOG.debug("loaded " + attendanceStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
                     }
 
                     Attendance attendance = new Attendance();
-                    AviationStudent aviationStudent = aviationStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAviationStudentId())).findFirst().get();
-                    attendance.setAviationStudent(aviationStudent);
+                    AttendanceStudent attendanceStudent = attendanceStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAviationStudentId())).findFirst().get();
+                    attendance.setAttendanceStudent(attendanceStudent);
                     attendance.setDateOfClass(attendanceModel.getDateOfClass());
                     attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
                     attendance.setStatus(attendanceModel.getStatus());
@@ -105,9 +105,9 @@ public class AttendanceService {
 
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
-            List<AviationStudent> aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
+            List<AttendanceStudent> attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
-            for (AviationStudent student : aviationStudents) {
+            for (AttendanceStudent student : attendanceStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if (foundAttendance == null) {
                     sectionAttendances.add(new AttendanceModel(student, Status.PRESENT, date));
@@ -123,10 +123,10 @@ public class AttendanceService {
         LOG.info("loadAttendanceForDateIntoRoster took: " + (end - begin) + " millis");
     }
 
-    private Attendance findAttendanceFrom(List<Attendance> attendances, AviationStudent student) {
+    private Attendance findAttendanceFrom(List<Attendance> attendances, AttendanceStudent student) {
         List<Attendance> matchingAttendances =
                 attendances.stream()
-                        .filter(attendance -> attendance.getAviationStudent().getStudentId().equals(student.getStudentId()))
+                        .filter(attendance -> attendance.getAttendanceStudent().getStudentId().equals(student.getStudentId()))
                         .collect(Collectors.toList());
 
         // by definition of the data there should only be one...

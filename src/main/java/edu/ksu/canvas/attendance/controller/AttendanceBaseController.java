@@ -2,7 +2,7 @@ package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.config.AppConfig;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AviationStudent;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.services.AviationSectionService;
 import edu.ksu.canvas.attendance.services.AviationStudentService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
@@ -79,8 +79,8 @@ public class AttendanceBaseController extends LtiLaunchController {
         for(LtiLaunchData.InstitutionRole role : canvasService.getRoles()) {
             if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0) {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
-                AviationStudent aviationStudent = aviationStudentService.getStudent(canvasService.getSisID());
-                return new ModelAndView("forward:studentSummary/"+aviationStudent.getCanvasSectionId().toString()+"/"+aviationStudent.getStudentId().toString());
+                AttendanceStudent attendanceStudent = aviationStudentService.getStudent(canvasService.getSisID());
+                return new ModelAndView("forward:studentSummary/"+ attendanceStudent.getCanvasSectionId().toString()+"/"+ attendanceStudent.getStudentId().toString());
             }
         }
         return new ModelAndView("forward:roster");
