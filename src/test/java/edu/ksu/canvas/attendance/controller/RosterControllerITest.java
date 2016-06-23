@@ -16,7 +16,7 @@ import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.services.AttendanceService;
-import edu.ksu.canvas.attendance.services.AviationCourseService;
+import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -51,7 +51,7 @@ public class RosterControllerITest extends BaseControllerITest {
     private AttendanceStudentRepository studentRepository;
     
     @Autowired
-    private AviationCourseService courseService;
+    private AttendanceCourseService courseService;
     
     @Autowired
     private AttendanceService attendanceService;

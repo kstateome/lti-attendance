@@ -4,7 +4,7 @@ package edu.ksu.canvas.attendance.controller;
 import javax.validation.Valid;
 
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
-import edu.ksu.canvas.attendance.services.AviationCourseService;
+import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -31,7 +31,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     private SynchronizationService synchronizationService;
 
     @Autowired
-    private AviationCourseService courseService;
+    private AttendanceCourseService courseService;
 
     @Autowired
     private CourseConfigurationValidator validator;
