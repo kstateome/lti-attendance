@@ -3,7 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.config.AppConfig;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.services.AviationSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.AviationStudentService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
@@ -36,7 +36,7 @@ public class AttendanceBaseController extends LtiLaunchController {
     protected RoleChecker roleChecker;
 
     @Autowired
-    protected AviationSectionService sectionService;
+    protected AttendanceSectionService sectionService;
 
     @Autowired
     protected CanvasApiWrapperService canvasService;

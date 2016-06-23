@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class AttendanceSectionServiceUTest {
 
-    private AviationSectionService sectionService;
+    private AttendanceSectionService sectionService;
     
     @Mock
     private AttendanceSectionRepository mockSectionRepository;
@@ -31,7 +31,7 @@ public class AttendanceSectionServiceUTest {
     
     @Before
     public void setup() {
-        sectionService = new AviationSectionService();
+        sectionService = new AttendanceSectionService();
         Whitebox.setInternalState(sectionService, mockSectionRepository);
     }
     

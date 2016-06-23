@@ -10,7 +10,7 @@ import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 
 
 @Component
-public class AviationSectionService {
+public class AttendanceSectionService {
 
     @Autowired
     private AttendanceSectionRepository sectionRepository;

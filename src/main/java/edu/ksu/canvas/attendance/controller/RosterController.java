@@ -6,7 +6,7 @@ import edu.ksu.canvas.attendance.form.RosterFormValidator;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
 import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
-import edu.ksu.canvas.attendance.services.AviationSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.canvas.error.NoLtiSessionException;
 
@@ -45,7 +45,7 @@ public class RosterController extends AttendanceBaseController {
     private AttendanceCourseService courseService;
 
     @Autowired
-    private AviationSectionService sectionService;
+    private AttendanceSectionService sectionService;
 
     @Autowired
     private RosterFormValidator validator;
