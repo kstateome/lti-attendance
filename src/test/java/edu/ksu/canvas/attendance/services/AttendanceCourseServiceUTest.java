@@ -77,15 +77,15 @@ public class AttendanceCourseServiceUTest {
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
         courseForm.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         courseForm.setTotalClassMinutes(expectedTotalClassMinutes);
-        ArgumentCaptor<AttendanceCourse> capturedAviationCourse = ArgumentCaptor.forClass(AttendanceCourse.class);
+        ArgumentCaptor<AttendanceCourse> capturedAttendanceCourse = ArgumentCaptor.forClass(AttendanceCourse.class);
  
         when(mockCourseRepository.findByCanvasCourseId(nonExistantCanvasCourseId)).thenReturn(null);
         courseService.save(courseForm, nonExistantCanvasCourseId);
         
-        verify(mockCourseRepository, atLeastOnce()).save(capturedAviationCourse.capture());
-        assertEquals("expectedTotalClassMinutes", capturedAviationCourse.getValue().getTotalMinutes(), expectedTotalClassMinutes);
-        assertEquals("expectedDefaultMinutesPerSession", capturedAviationCourse.getValue().getDefaultMinutesPerSession(), expectedDefaultMinutesPerSession);
-        assertEquals("expectedDefaultAttendanceType", capturedAviationCourse.getValue().getAttendanceType(), expectedDefaultType);
+        verify(mockCourseRepository, atLeastOnce()).save(capturedAttendanceCourse.capture());
+        assertEquals("expectedTotalClassMinutes", capturedAttendanceCourse.getValue().getTotalMinutes(), expectedTotalClassMinutes);
+        assertEquals("expectedDefaultMinutesPerSession", capturedAttendanceCourse.getValue().getDefaultMinutesPerSession(), expectedDefaultMinutesPerSession);
+        assertEquals("expectedDefaultAttendanceType", capturedAttendanceCourse.getValue().getAttendanceType(), expectedDefaultType);
     }
     
     @Test
