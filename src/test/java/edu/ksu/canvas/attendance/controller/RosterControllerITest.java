@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.enums.Status;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RosterControllerITest extends BaseControllerITest {
 
-    private AviationCourse existingCourse;
+    private AttendanceCourse existingCourse;
     private AviationSection existingSection;
     private AviationStudent existingStudent;
     
@@ -62,7 +62,7 @@ public class RosterControllerITest extends BaseControllerITest {
     
     @Before
     public void additionalSetup() throws NoLtiSessionException {
-        existingCourse = new AviationCourse();
+        existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

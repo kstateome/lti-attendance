@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.config.arquillian;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.enums.Status;
@@ -39,7 +39,7 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        AviationCourse existingCourse = new AviationCourse();
+        AttendanceCourse existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(ArquillianSpringMVCConfig.COURSE_ID_EXISTING);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

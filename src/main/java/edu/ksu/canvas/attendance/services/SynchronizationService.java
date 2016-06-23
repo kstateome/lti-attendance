@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
@@ -62,17 +62,17 @@ public class SynchronizationService {
         synchronizeStudentsFromCanvasToDb(canvasSectionMap);
     }
 
-    private AviationCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+    private AttendanceCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
+        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
 
-        if (aviationCourse == null) {
-            aviationCourse = new AviationCourse();
-            aviationCourse.setTotalMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
-            aviationCourse.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
-            aviationCourse.setCanvasCourseId(canvasCourseId);
+        if (attendanceCourse == null) {
+            attendanceCourse = new AttendanceCourse();
+            attendanceCourse.setTotalMinutes(DEFAULT_TOTAL_CLASS_MINUTES);
+            attendanceCourse.setDefaultMinutesPerSession(DEFAULT_MINUTES_PER_CLASS);
+            attendanceCourse.setCanvasCourseId(canvasCourseId);
         }
 
-        return aviationCourseRepository.save(aviationCourse);
+        return aviationCourseRepository.save(attendanceCourse);
     }
 
     private List<AviationSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {

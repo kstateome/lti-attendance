@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.enums.Status;
@@ -75,7 +75,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         Long existingSectionId = 2000L;
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
-        AviationCourse existingCourse = new AviationCourse();
+        AttendanceCourse existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(4000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

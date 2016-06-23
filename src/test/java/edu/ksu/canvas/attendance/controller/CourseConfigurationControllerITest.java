@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class CourseConfigurationControllerITest extends BaseControllerITest {
 
-    private AviationCourse existingCourse;
+    private AttendanceCourse existingCourse;
     private AviationSection existingSection;
     
     @Autowired
@@ -41,7 +41,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     @Before
     public void additionalSetup() throws NoLtiSessionException {
-        existingCourse = new AviationCourse();
+        existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
@@ -100,7 +100,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId + "?updateSuccessful=true"));
         
-        AviationCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
+        AttendanceCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
         assertEquals(expectedTotalClassMinutes, course.getTotalMinutes());
         assertEquals(expectedSimpleAttendanceValue, course.getAttendanceType().equals(AttendanceType.SIMPLE));
@@ -120,7 +120,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
 
-        AviationCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
+        AttendanceCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
         assertEquals(expectedTotalClassMinutes, course.getTotalMinutes());
         assertEquals(expectedSimpleAttendanceValue, course.getAttendanceType().equals(AttendanceType.MINUTES));

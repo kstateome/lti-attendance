@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,6 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
@@ -81,7 +81,7 @@ public class SynchronizationServiceUTest {
     @Test
     public void synchronizeWhenCourseNotExistsInDB_CourseExists() throws IOException, NoLtiSessionException {
         long canvasCourseId = 500;
-        AviationCourse existingCourse = new AviationCourse();
+        AttendanceCourse existingCourse = new AttendanceCourse();
 
         SynchronizationService spy = spy(synchronizationService);
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(existingCourse);
@@ -126,11 +126,11 @@ public class SynchronizationServiceUTest {
     @Test
     public void synchronizeCourseFromCanvasToDb_NoExistingCourse() throws Exception {
         Long expectedCanvasCourseId = 500L;
-        ArgumentCaptor<AviationCourse> capturedCourse = ArgumentCaptor.forClass(AviationCourse.class);
-        AviationCourse expectedDbCourse = new AviationCourse();
+        ArgumentCaptor<AttendanceCourse> capturedCourse = ArgumentCaptor.forClass(AttendanceCourse.class);
+        AttendanceCourse expectedDbCourse = new AttendanceCourse();
 
-        when(mockCourseRepository.save(any(AviationCourse.class))).thenReturn(expectedDbCourse);
-        AviationCourse actualCourse = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeCourseFromCanvasToDb", expectedCanvasCourseId);
+        when(mockCourseRepository.save(any(AttendanceCourse.class))).thenReturn(expectedDbCourse);
+        AttendanceCourse actualCourse = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeCourseFromCanvasToDb", expectedCanvasCourseId);
 
         verify(mockCourseRepository, atLeastOnce()).save(capturedCourse.capture());
         assertEquals(expectedCanvasCourseId, capturedCourse.getValue().getCanvasCourseId());

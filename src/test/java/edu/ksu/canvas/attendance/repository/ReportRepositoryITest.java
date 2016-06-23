@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
 import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.enums.Status;
@@ -48,7 +48,7 @@ public class ReportRepositoryITest {
     @Autowired
     private ReportRepository reportRepository;
     
-    private AviationCourse existingCourse;
+    private AttendanceCourse existingCourse;
     private AviationStudent existingStudent;
     private List<Attendance> existingAttendances;
     private List<Makeup> existingMakeups;
@@ -67,7 +67,7 @@ public class ReportRepositoryITest {
     public void setup() throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
-        AviationCourse course = new AviationCourse();
+        AttendanceCourse course = new AttendanceCourse();
         course.setCanvasCourseId(2000L);
         course.setDefaultMinutesPerSession(courseTotalMinutes);
         course.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

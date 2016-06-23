@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MakeupControllerITest extends BaseControllerITest {
 
-    private AviationCourse existingCourse;
+    private AttendanceCourse existingCourse;
     private AviationSection existingSection;
     private AviationStudent existingStudent;
     private Makeup existingMakeup;
@@ -57,7 +57,7 @@ public class MakeupControllerITest extends BaseControllerITest {
     
     @Before
     public void additionalSetup() throws NoLtiSessionException, ParseException {
-        existingCourse = new AviationCourse();
+        existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SummaryControllerITest extends BaseControllerITest {
 
-    private AviationCourse existingCourse;
+    private AttendanceCourse existingCourse;
     private AviationSection existingSection;
     private AviationStudent existingStudent;
     private Attendance existingAttendance;
@@ -60,7 +60,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
     @Before
     public void additionalSetup() throws NoLtiSessionException, ParseException {
-        existingCourse = new AviationCourse();
+        existingCourse = new AttendanceCourse();
         existingCourse.setCanvasCourseId(2000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);

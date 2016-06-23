@@ -1,16 +1,16 @@
 package edu.ksu.canvas.attendance.repository;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface AviationCourseRepository extends CrudRepository<AviationCourse, Long> {
+public interface AviationCourseRepository extends CrudRepository<AttendanceCourse, Long> {
 
 
-    AviationCourse findByCourseId(Long courseId);
+    AttendanceCourse findByCourseId(Long courseId);
 
-    AviationCourse findByCanvasCourseId(Long canvasCourseId);
+    AttendanceCourse findByCanvasCourseId(Long canvasCourseId);
 
 }

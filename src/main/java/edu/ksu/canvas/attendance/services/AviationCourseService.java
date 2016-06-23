@@ -1,12 +1,12 @@
 package edu.ksu.canvas.attendance.services;
 
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationCourse;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 
@@ -24,21 +24,21 @@ public class AviationCourseService {
     public void save(CourseConfigurationForm courseForm, long canvasCourseId) {
         Validate.notNull(courseForm, "courseForm must not be null");
         
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
-        if (aviationCourse == null) {
-            aviationCourse = new AviationCourse(canvasCourseId, courseForm.getTotalClassMinutes(), courseForm.getDefaultMinutesPerSession());
+        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(canvasCourseId);
+        if (attendanceCourse == null) {
+            attendanceCourse = new AttendanceCourse(canvasCourseId, courseForm.getTotalClassMinutes(), courseForm.getDefaultMinutesPerSession());
         } else {
-            aviationCourse.setDefaultMinutesPerSession(courseForm.getDefaultMinutesPerSession());
-            aviationCourse.setTotalMinutes(courseForm.getTotalClassMinutes());
+            attendanceCourse.setDefaultMinutesPerSession(courseForm.getDefaultMinutesPerSession());
+            attendanceCourse.setTotalMinutes(courseForm.getTotalClassMinutes());
             if (courseForm.getSimpleAttendance() != null && courseForm.getSimpleAttendance()) {
-                aviationCourse.setAttendanceType(AttendanceType.SIMPLE);
+                attendanceCourse.setAttendanceType(AttendanceType.SIMPLE);
             }
             else {
-                aviationCourse.setAttendanceType(AttendanceType.MINUTES);
+                attendanceCourse.setAttendanceType(AttendanceType.MINUTES);
             }
         }
 
-        aviationCourseRepository.save(aviationCourse);
+        aviationCourseRepository.save(attendanceCourse);
     }
 
 
@@ -48,16 +48,16 @@ public class AviationCourseService {
     public void loadIntoForm(CourseConfigurationForm courseForm, long courseId) {
         Validate.notNull(courseForm, "courseForm must not be null");
         
-        AviationCourse aviationCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
+        AttendanceCourse attendanceCourse = aviationCourseRepository.findByCanvasCourseId(courseId);
         
-        if(aviationCourse == null) {
+        if(attendanceCourse == null) {
             RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", courseId);
         }
 
-        courseForm.setTotalClassMinutes(aviationCourse.getTotalMinutes());
-        courseForm.setDefaultMinutesPerSession(aviationCourse.getDefaultMinutesPerSession());
-        courseForm.setSimpleAttendance(aviationCourse.getAttendanceType().equals(AttendanceType.SIMPLE));
+        courseForm.setTotalClassMinutes(attendanceCourse.getTotalMinutes());
+        courseForm.setDefaultMinutesPerSession(attendanceCourse.getDefaultMinutesPerSession());
+        courseForm.setSimpleAttendance(attendanceCourse.getAttendanceType().equals(AttendanceType.SIMPLE));
     }
 
 }
