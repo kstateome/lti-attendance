@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
-import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.contains;
@@ -26,7 +26,7 @@ public class AttendanceSectionServiceUTest {
     private AviationSectionService sectionService;
     
     @Mock
-    private AviationSectionRepository mockSectionRepository;
+    private AttendanceSectionRepository mockSectionRepository;
     
     
     @Before

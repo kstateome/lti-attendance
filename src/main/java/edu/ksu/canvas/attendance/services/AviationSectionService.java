@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 
 
 @Component
 public class AviationSectionService {
 
     @Autowired
-    private AviationSectionRepository sectionRepository;
+    private AttendanceSectionRepository sectionRepository;
 
 
     public AttendanceSection getSection(long canvasSectionId) {

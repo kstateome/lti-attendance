@@ -7,7 +7,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.interfaces.CourseReader;
@@ -42,7 +42,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     private AttendanceCourseRepository courseRepository;
     
     @Autowired
-    private AviationSectionRepository sectionRepository;
+    private AttendanceSectionRepository sectionRepository;
     
     
     @Test

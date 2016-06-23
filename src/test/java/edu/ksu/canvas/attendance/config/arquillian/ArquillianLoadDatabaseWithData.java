@@ -7,7 +7,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AviationStudentRepository;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
     private AttendanceCourseRepository courseRepository;
     
     @Autowired
-    private AviationSectionRepository sectionRepository;
+    private AttendanceSectionRepository sectionRepository;
     
     @Autowired
     private AviationStudentRepository studentRepository;

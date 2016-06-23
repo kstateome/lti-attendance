@@ -9,7 +9,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 
 
 @Repository
-public interface AviationSectionRepository extends CrudRepository<AttendanceSection, Long> {
+public interface AttendanceSectionRepository extends CrudRepository<AttendanceSection, Long> {
 
     AttendanceSection findBySectionId(Long sectionId);
 

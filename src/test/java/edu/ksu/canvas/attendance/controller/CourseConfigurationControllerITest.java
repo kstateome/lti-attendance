@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.error.NoLtiSessionException;
@@ -33,7 +33,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     private AttendanceCourseRepository courseRepository;
     
     @Autowired
-    private AviationSectionRepository sectionRepository;
+    private AttendanceSectionRepository sectionRepository;
     
     @Autowired
     private CanvasApiWrapperService canvasService;
