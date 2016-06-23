@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
-    private AviationSection existingSection;
+    private AttendanceSection existingSection;
     
     @Autowired
     private AviationCourseRepository courseRepository;
@@ -48,7 +48,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.SIMPLE);
         existingCourse = courseRepository.save(existingCourse);
         
-        existingSection = new AviationSection();
+        existingSection = new AttendanceSection();
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);

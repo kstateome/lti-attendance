@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.form.MakeupValidator;
@@ -60,7 +60,7 @@ public class MakeupController extends AttendanceBaseController {
 
     private ModelAndView studentMakeup(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-        AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
+        AttendanceSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
             return new ModelAndView("forward:roster");
         }

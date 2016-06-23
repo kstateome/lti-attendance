@@ -2,7 +2,7 @@ package edu.ksu.canvas.attendance.config.arquillian;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
@@ -45,7 +45,7 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
-        AviationSection existingSection = new AviationSection();
+        AttendanceSection existingSection = new AttendanceSection();
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);

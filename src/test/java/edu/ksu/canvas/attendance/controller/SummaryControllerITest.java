@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SummaryControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
-    private AviationSection existingSection;
+    private AttendanceSection existingSection;
     private AviationStudent existingStudent;
     private Attendance existingAttendance;
     private Makeup existingMakeup;
@@ -66,7 +66,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
 
-        existingSection = new AviationSection();
+        existingSection = new AttendanceSection();
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);

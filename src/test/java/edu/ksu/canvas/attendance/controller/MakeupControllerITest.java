@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.form.MakeupForm;
@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MakeupControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
-    private AviationSection existingSection;
+    private AttendanceSection existingSection;
     private AviationStudent existingStudent;
     private Makeup existingMakeup;
     
@@ -63,7 +63,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
-        existingSection = new AviationSection();
+        existingSection = new AttendanceSection();
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);

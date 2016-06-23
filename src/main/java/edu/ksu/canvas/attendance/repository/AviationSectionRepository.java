@@ -5,16 +5,16 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 
 
 @Repository
-public interface AviationSectionRepository extends CrudRepository<AviationSection, Long> {
+public interface AviationSectionRepository extends CrudRepository<AttendanceSection, Long> {
 
-    AviationSection findBySectionId(Long sectionId);
+    AttendanceSection findBySectionId(Long sectionId);
 
-    AviationSection findByCanvasSectionId(Long canvasSectionId);
+    AttendanceSection findByCanvasSectionId(Long canvasSectionId);
 
-    List<AviationSection> findByCanvasCourseId(Long canvasCourseId);
+    List<AttendanceSection> findByCanvasCourseId(Long canvasCourseId);
 
 }

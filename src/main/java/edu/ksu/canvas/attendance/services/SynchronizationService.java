@@ -8,12 +8,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
@@ -75,21 +75,21 @@ public class SynchronizationService {
         return aviationCourseRepository.save(attendanceCourse);
     }
 
-    private List<AviationSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {
-        List<AviationSection> ret = new ArrayList<>();
+    private List<AttendanceSection> synchronizeSectionsFromCanvasToDb(List<Section> sections) {
+        List<AttendanceSection> ret = new ArrayList<>();
 
         for (Section section : sections) {
-            AviationSection aviationSection = sectionRepository.findByCanvasSectionId(Long.valueOf(section.getId()));
+            AttendanceSection attendanceSection = sectionRepository.findByCanvasSectionId(Long.valueOf(section.getId()));
 
-            if (aviationSection == null) {
-                aviationSection = new AviationSection();
+            if (attendanceSection == null) {
+                attendanceSection = new AttendanceSection();
             }
 
-            aviationSection.setName(section.getName());
-            aviationSection.setCanvasSectionId(Long.valueOf(section.getId()));
-            aviationSection.setCanvasCourseId(Long.valueOf(section.getCourseId()));
+            attendanceSection.setName(section.getName());
+            attendanceSection.setCanvasSectionId(Long.valueOf(section.getId()));
+            attendanceSection.setCanvasCourseId(Long.valueOf(section.getCourseId()));
 
-            ret.add(sectionRepository.save(aviationSection));
+            ret.add(sectionRepository.save(attendanceSection));
         }
 
         return ret;

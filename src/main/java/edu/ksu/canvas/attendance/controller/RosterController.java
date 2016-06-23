@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.form.RosterFormValidator;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
@@ -67,14 +67,14 @@ public class RosterController extends AttendanceBaseController {
         ensureCanvasApiTokenPresent();
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-        AviationSection selectedSection = getSelectedSection(validatedSectionId);
+        AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
             long canvasCourseId = canvasService.getCourseId();
             selectedSection = sectionService.getFirstSectionOfCourse(canvasCourseId);
             validatedSectionId = selectedSection.getSectionId();
         }
 
-        List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
+        List<AttendanceSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
         sectionId = selectedSection.getCanvasSectionId().toString();
 
         LOG.info("eid: " + canvasService.getEid() + " is viewing the roster.");
@@ -116,8 +116,8 @@ public class RosterController extends AttendanceBaseController {
             ModelAndView page = new ModelAndView("roster");
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
 
-            AviationSection selectedSection = getSelectedSection(validatedSectionId);
-            List<AviationSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
+            AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+            List<AttendanceSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
             page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
 
             page.addObject("selectedSectionId", sectionId);

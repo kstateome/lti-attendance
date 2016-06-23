@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AviationSectionService;
 import edu.ksu.canvas.attendance.services.ReportService;
@@ -47,8 +47,8 @@ public class AttendanceSummaryController extends AttendanceBaseController {
             return new ModelAndView("forward:roster");
         }
 
-        AviationSection selectedSection = getSelectedSection(validatedSectionId);
-        List<AviationSection> sections = selectedSection == null ? new ArrayList<>() : sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
+        AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+        List<AttendanceSection> sections = selectedSection == null ? new ArrayList<>() : sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
 
         ModelAndView page = new ModelAndView("attendanceSummary");
 

@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.model;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 
 import org.springframework.stereotype.Component;
 
@@ -12,10 +12,10 @@ import java.util.List;
 public class SectionModelFactory {
 
 
-    public List<SectionModel> createSectionModels(List<AviationSection> sections) {
+    public List<SectionModel> createSectionModels(List<AttendanceSection> sections) {
         List<SectionModel> ret = new ArrayList<>();
 
-        for (AviationSection section : sections) {
+        for (AttendanceSection section : sections) {
             ret.add(createSectionModel(section));
         }
 
@@ -23,11 +23,11 @@ public class SectionModelFactory {
     }
 
 
-    private SectionModel createSectionModel(AviationSection aviationSection) {
+    private SectionModel createSectionModel(AttendanceSection attendanceSection) {
         SectionModel ret = new SectionModel();
-        ret.setCanvasSectionId(aviationSection.getCanvasSectionId());
-        ret.setCanvasCourseId(aviationSection.getCanvasCourseId());
-        ret.setSectionName(aviationSection.getName());
+        ret.setCanvasSectionId(attendanceSection.getCanvasSectionId());
+        ret.setCanvasCourseId(attendanceSection.getCanvasCourseId());
+        ret.setSectionName(attendanceSection.getName());
 
         return ret;
     }

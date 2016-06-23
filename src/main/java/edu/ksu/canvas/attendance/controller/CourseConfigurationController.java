@@ -16,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 
 
@@ -49,7 +49,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
         LOG.info("eid: " + canvasService.getEid() + " is viewing course configuration...");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-        AviationSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
+        AttendanceSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
             return new ModelAndView("forward:roster");
         }

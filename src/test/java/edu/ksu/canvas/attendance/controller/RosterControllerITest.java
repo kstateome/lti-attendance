@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.*;
 public class RosterControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
-    private AviationSection existingSection;
+    private AttendanceSection existingSection;
     private AviationStudent existingStudent;
     
     @Autowired
@@ -68,7 +68,7 @@ public class RosterControllerITest extends BaseControllerITest {
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
-        existingSection = new AviationSection();
+        existingSection = new AttendanceSection();
         existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingSection.setCanvasSectionId(1000L);
         existingSection = sectionRepository.save(existingSection);
@@ -154,7 +154,7 @@ public class RosterControllerITest extends BaseControllerITest {
         String dateOfAttendanceAsString = "05/18/2016";
         Date dateOfAttendance = sdf.parse(dateOfAttendanceAsString);
         Long sectionOfExistingCourse = existingSection.getSectionId();
-        List<AviationSection> sections = new ArrayList<>();
+        List<AttendanceSection> sections = new ArrayList<>();
         sections.add(existingSection);
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(dateOfAttendance);
@@ -197,7 +197,7 @@ public class RosterControllerITest extends BaseControllerITest {
         Status status = Status.TARDY;
         Integer badMinutesMissed = -1;
         
-        List<AviationSection> sections = new ArrayList<>();
+        List<AttendanceSection> sections = new ArrayList<>();
         sections.add(existingSection);
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(dateOfAttendance);
@@ -231,7 +231,7 @@ public class RosterControllerITest extends BaseControllerITest {
         Status expectedStatus = Status.TARDY;
         Integer expectedMinutesMissed = 10;
         
-        List<AviationSection> sections = new ArrayList<>();
+        List<AttendanceSection> sections = new ArrayList<>();
         sections.add(existingSection);
         RosterForm rosterForm = new RosterForm();
         rosterForm.setCurrentDate(dateOfAttendance);

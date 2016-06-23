@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
 
 
@@ -16,17 +16,17 @@ public class AviationSectionService {
     private AviationSectionRepository sectionRepository;
 
 
-    public AviationSection getSection(long canvasSectionId) {
+    public AttendanceSection getSection(long canvasSectionId) {
         return sectionRepository.findByCanvasSectionId(canvasSectionId);
     }
 
-    public AviationSection getFirstSectionOfCourse(long canvasCourseId) {
-        List<AviationSection> sections = sectionRepository.findByCanvasCourseId(canvasCourseId);
+    public AttendanceSection getFirstSectionOfCourse(long canvasCourseId) {
+        List<AttendanceSection> sections = sectionRepository.findByCanvasCourseId(canvasCourseId);
         return sections.isEmpty() ? null : sections.get(0);
     }
 
 
-    public List<AviationSection> getSectionsByCourse(long canvasCourseId) {
+    public List<AttendanceSection> getSectionsByCourse(long canvasCourseId) {
         return sectionRepository.findByCanvasCourseId(canvasCourseId);
     }
 

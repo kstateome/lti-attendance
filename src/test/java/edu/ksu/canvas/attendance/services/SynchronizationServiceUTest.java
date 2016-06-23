@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,6 @@ import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import edu.ksu.canvas.attendance.entity.AviationSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.repository.AviationCourseRepository;
 import edu.ksu.canvas.attendance.repository.AviationSectionRepository;
@@ -151,11 +151,11 @@ public class SynchronizationServiceUTest {
         section.setId(expectedCanvasSectionId);
         section.setCourseId(expectedCanvasCourseId.intValue());
         sections.add(section);
-        AviationSection expectedDbSection = new AviationSection();
-        ArgumentCaptor<AviationSection> capturedSection = ArgumentCaptor.forClass(AviationSection.class);
+        AttendanceSection expectedDbSection = new AttendanceSection();
+        ArgumentCaptor<AttendanceSection> capturedSection = ArgumentCaptor.forClass(AttendanceSection.class);
 
-        when(mockSectionRepository.save(any(AviationSection.class))).thenReturn(expectedDbSection);
-        List<AviationSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
+        when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
+        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(capturedSection.capture());
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));
@@ -180,14 +180,14 @@ public class SynchronizationServiceUTest {
         section.setId(expectedCanvasSectionId);
         section.setCourseId(expectedCanvasCourseId.intValue());
         sections.add(section);
-        AviationSection expectedDbSection = new AviationSection();
+        AttendanceSection expectedDbSection = new AttendanceSection();
         expectedDbSection.setName(previousSectionName);
         expectedDbSection.setCanvasSectionId(previousCanvasSectionId);
         expectedDbSection.setCanvasCourseId(previousCanvasCourseId);
 
         when(mockSectionRepository.findByCanvasSectionId(expectedCanvasSectionId)).thenReturn(expectedDbSection);
-        when(mockSectionRepository.save(any(AviationSection.class))).thenReturn(expectedDbSection);
-        List<AviationSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
+        when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
+        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(expectedDbSection);
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));

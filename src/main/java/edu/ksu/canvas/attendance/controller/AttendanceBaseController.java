@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.config.AppConfig;
-import edu.ksu.canvas.attendance.entity.AviationSection;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AviationStudent;
 import edu.ksu.canvas.attendance.services.AviationSectionService;
 import edu.ksu.canvas.attendance.services.AviationStudentService;
@@ -86,7 +86,7 @@ public class AttendanceBaseController extends LtiLaunchController {
         return new ModelAndView("forward:roster");
     }
 
-    protected AviationSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {
+    protected AttendanceSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {
         if (previousSelectedSectionId == null) {
             return sectionService.getFirstSectionOfCourse(canvasService.getCourseId());
         } else {

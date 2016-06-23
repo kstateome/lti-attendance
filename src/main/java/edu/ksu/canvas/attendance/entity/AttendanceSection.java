@@ -1,18 +1,12 @@
 package edu.ksu.canvas.attendance.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 
 @Entity
 @Table(name = "aviation_section")
-public class AviationSection implements Serializable {
+public class AttendanceSection implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +27,7 @@ public class AviationSection implements Serializable {
     private String name;
 
 
-    public AviationSection() {
+    public AttendanceSection() {
 
     }
 
