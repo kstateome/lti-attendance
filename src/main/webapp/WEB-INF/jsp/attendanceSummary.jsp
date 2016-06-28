@@ -25,13 +25,13 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
-    <title>Aviation Reporting Attendance Summary Page</title>
+    <title>Attendance Summary Page</title>
 </head>
 <body>
 <nav class="navbar navbar-default hidden-print">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
             <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
