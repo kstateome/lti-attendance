@@ -52,7 +52,7 @@ public class AttendanceBaseController extends LtiLaunchController {
 
     @Override
     protected String getApplicationName() {
-        return "KstateAttendance";
+        return "Attendance";
     }
 
     @RequestMapping("/")
