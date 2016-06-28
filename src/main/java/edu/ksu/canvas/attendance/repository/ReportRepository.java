@@ -37,7 +37,7 @@ public class ReportRepository {
                 "       left outer join " +
                 "       ( " +
                 "         select student_id, sum(nvl(minutes_missed,0)) as sum_minutes_missed " +
-                "         from kstate_attendance " +
+                "         from attendance " +
                 "         group by student_id " +
                 "       ) missed on student.student_id = missed.student_id " +
                 "       left outer join " +

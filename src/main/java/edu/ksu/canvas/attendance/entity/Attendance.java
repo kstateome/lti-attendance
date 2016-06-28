@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 @Entity
-@Table(name = "kstate_attendance")
+@Table(name = "attendance")
 @Check(constraints = "minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED')")
 public class Attendance implements Serializable {
 
@@ -24,7 +24,7 @@ public class Attendance implements Serializable {
     private Long attendanceId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_attendance_student"))
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "fk_student_attendance"))
     private AttendanceStudent attendanceStudent;
 
     @Column(name = "status")
