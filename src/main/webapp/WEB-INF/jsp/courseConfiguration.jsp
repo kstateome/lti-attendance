@@ -67,7 +67,7 @@
         <br/><br/>
     </c:if>
 
-    <h3>Configuration</h3>
+    <h3>Setup</h3>
     <br/>
 
     <div class="container">
