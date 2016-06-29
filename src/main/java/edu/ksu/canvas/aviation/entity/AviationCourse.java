@@ -1,5 +1,6 @@
 package edu.ksu.canvas.aviation.entity;
 
+import edu.ksu.canvas.aviation.enums.AttendanceType;
 import org.hibernate.annotations.Check;
 
 import javax.persistence.*;
@@ -24,18 +25,23 @@ public class AviationCourse implements Serializable {
     @Column(name = "default_minutes_per_session")
     private Integer defaultMinutesPerSession;
 
+    @Column(name = "attendance_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AttendanceType attendanceType;
+
     @Column(name = "canvas_course_id", nullable = false, unique = true)
     private Long canvasCourseId;
 
 
     public AviationCourse() {
-
+        this.attendanceType = AttendanceType.SIMPLE;
     }
 
     public AviationCourse(Long canvasCourseId, int totalClassMinutes, int defaultMinutesPerSession) {
         this.canvasCourseId = canvasCourseId;
         this.totalMinutes = totalClassMinutes;
         this.defaultMinutesPerSession = defaultMinutesPerSession;
+        this.attendanceType = AttendanceType.SIMPLE;
     }
 
 
@@ -78,4 +84,11 @@ public class AviationCourse implements Serializable {
                 + defaultMinutesPerSession + ", canvasCourseId=" + canvasCourseId + "]";
     }
 
+    public AttendanceType getAttendanceType() {
+        return attendanceType;
+    }
+
+    public void setAttendanceType(AttendanceType attendanceType) {
+        this.attendanceType = attendanceType;
+    }
 }

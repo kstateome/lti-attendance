@@ -14,6 +14,8 @@ public class CourseConfigurationForm {
     @Min(1)
     private int defaultMinutesPerSession;
 
+    private Boolean simpleAttendance;
+
 
     public int getTotalClassMinutes() {
         return totalClassMinutes;
@@ -31,4 +33,11 @@ public class CourseConfigurationForm {
         this.defaultMinutesPerSession = defaultMinutesPerSession;
     }
 
+    public void setSimpleAttendance(boolean simpleAttendance) {
+        this.simpleAttendance = simpleAttendance;
+    }
+
+    public Boolean getSimpleAttendance() {
+        return simpleAttendance;
+    }
 }
