@@ -101,7 +101,7 @@ public class AttendanceService {
 
         Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
         List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
-        LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
+        LOG.debug("attendances found for a given course and a given day of class: " + attendancesInDb.size());
 
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
@@ -110,7 +110,8 @@ public class AttendanceService {
             for (AviationStudent student : aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if (foundAttendance == null) {
-                    sectionAttendances.add(new AttendanceModel(student, Status.PRESENT, date));
+                    Status status = student.getDeleted() ? Status.ABSENT : Status.PRESENT;
+                    sectionAttendances.add(new AttendanceModel(student, status, date));
                 } else {
                     sectionAttendances.add(new AttendanceModel(foundAttendance));
                 }

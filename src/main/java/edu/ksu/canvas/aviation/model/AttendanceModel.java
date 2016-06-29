@@ -27,7 +27,7 @@ public class AttendanceModel {
         this.aviationStudentId = student == null ? null : student.getStudentId();
         this.aviationStudentName = student == null ? null : student.getName();
         this.aviationStudentSisUserId = student == null ? null : student.getSisUserId();
-        this.status = status;
+        this.status =  status;
         this.dateOfClass = dateOfClass;
         this.dropped = student == null ? null : student.getDeleted();
     }
