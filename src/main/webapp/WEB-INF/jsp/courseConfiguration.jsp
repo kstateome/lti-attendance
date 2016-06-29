@@ -67,6 +67,19 @@
         <br/><br/>
     </c:if>
 
+    <h3>Synchronization</h3>
+
+    <p>
+        For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
+        students, sections,
+        or other problems, please click the button below to rectify the problem. It may take several seconds for this
+        operation to complete.
+    </p>
+    <br/><br/>
+
+    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
+           class="hovering-purple-button" type="submit"/>
+
     <h3>Setup</h3>
     <br/>
 
@@ -101,19 +114,6 @@
 
     <hr/>
     <br/><br/>
-
-    <h3>Synchronization</h3>
-
-    <p>
-        For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
-        students, sections,
-        or other problems, please click the button below to rectify the problem. It may take several seconds for this
-        operation to complete.
-    </p>
-    <br/><br/>
-
-    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
-           class="hovering-purple-button" type="submit"/>
 
 </form:form>
 
