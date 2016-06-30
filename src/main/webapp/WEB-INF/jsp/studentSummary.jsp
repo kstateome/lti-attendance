@@ -73,29 +73,29 @@
         </tr>
     </table>
 
-<%--    <h3>Makeup Logs</h3>
+    <%--<h3>Makeup Logs</h3>--%>
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th class="col-md-1">Class Date</th>
-            <th class="col-md-1">Date Made Up</th>
-            <th class="col-md-1">Minutes Made Up</th>
-            <th class="col-md-4">Project Description</th>
-        </tr>
-        </thead>
+    <%--<table class="table table-bordered">--%>
+        <%--<thead>--%>
+        <%--<tr>--%>
+            <%--<th class="col-md-1">Class Date</th>--%>
+            <%--<th class="col-md-1">Date Made Up</th>--%>
+            <%--<th class="col-md-1">Minutes Made Up</th>--%>
+            <%--<th class="col-md-4">Project Description</th>--%>
+        <%--</tr>--%>
+        <%--</thead>--%>
 
-        <tbody id="summaryTableBody">
-        <c:forEach items="${summaryForm.entries}" var="makeup" varStatus="makeupLoop">
-            <tr>
-                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateOfClass}"/></td>
-                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateMadeUp}"/></td>
-                <td class="text-center">${makeup.minutesMadeUp}</td>
-                <td>${makeup.projectDescription}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>--%>
+        <%--<tbody id="summaryTableBody">--%>
+        <%--<c:forEach items="${summaryForm.entries}" var="makeup" varStatus="makeupLoop">--%>
+            <%--<tr>--%>
+                <%--<td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateOfClass}"/></td>--%>
+                <%--<td><fmt:formatDate pattern="MM/dd/yyyy" value="${makeup.dateMadeUp}"/></td>--%>
+                <%--<td class="text-center">${makeup.minutesMadeUp}</td>--%>
+                <%--<td>${makeup.projectDescription}</td>--%>
+            <%--</tr>--%>
+        <%--</c:forEach>--%>
+        <%--</tbody>--%>
+    <%--</table>--%>
 
     <h3>Attendance Logs</h3>
 
