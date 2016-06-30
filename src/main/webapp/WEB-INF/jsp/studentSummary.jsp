@@ -33,6 +33,12 @@
     <a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
 </c:if>
 
+<c:if test="${student.deleted}">
+    <div class="alert alert-warning">
+        <p>This student has dropped the course.</p>
+    </div>
+</c:if>
+
 <style>
     th, td {
         padding: 10px;

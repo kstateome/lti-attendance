@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,13 +100,19 @@ public class AttendanceService {
     public void loadIntoForm(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
 
-        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
-        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
+        Long canvasCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
+        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvasCourseId, date);
         LOG.debug("attendances found for a given course and a given day of class: " + attendancesInDb.size());
 
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
             List<AviationStudent> aviationStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
+
+            for (AviationStudent student : aviationStudents) {
+                if (student.getDeleted()) {
+                    Collections.rotate(aviationStudents.subList(aviationStudents.indexOf(student), aviationStudents.size() - 1), -1);
+                }
+            }
 
             for (AviationStudent student : aviationStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
@@ -123,6 +130,7 @@ public class AttendanceService {
         long end = System.currentTimeMillis();
         LOG.info("loadAttendanceForDateIntoRoster took: " + (end - begin) + " millis");
     }
+
 
     private Attendance findAttendanceFrom(List<Attendance> attendances, AviationStudent student) {
         List<Attendance> matchingAttendances =
