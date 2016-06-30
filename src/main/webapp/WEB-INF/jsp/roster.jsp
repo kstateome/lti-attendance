@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="edu.ksu.canvas.aviation.enums.Status" %>
+<%@ page import="edu.ksu.canvas.attendance.enums.Status" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -28,13 +28,13 @@
     <script src="${context}/js/scripts.js"></script>
 
 
-    <title>Aviation Reporting Class Roster</title>
+    <title>Attendance Class Roster</title>
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
             <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
@@ -136,27 +136,27 @@
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
                                 <td class="${attendance.dropped ? 'dropped' : ''}">
-                                    <form:input type="hidden" id="attendanceId-${attendance.aviationStudentId}"
+                                    <form:input type="hidden" id="attendanceId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
-                                    <form:input type="hidden" id="aviationStudentId-${attendance.aviationStudentId}"
-                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].aviationStudentId"/>
-                                        ${attendance.aviationStudentName}
+                                    <form:input type="hidden" id="attendanceStudentId-${attendance.attendanceStudentId}"
+                                                path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceStudentId"/>
+                                        ${attendance.attendanceStudentName}
                                 </td>
                                 <td>
-                                        ${attendance.aviationStudentSisUserId}
+                                        ${attendance.attendanceStudentSisUserId}
                                 </td>
                                 <td>
                                     <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy"
                                                     var="attendanceDate"/>
                                     <label>
-                                        <form:select id="attendanceStatus-${attendance.aviationStudentId}"
+                                        <form:select id="attendanceStatus-${attendance.attendanceStudentId}"
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding no-width">
-                                            <form:option id="present-${attendance.aviationStudentId}"
+                                            <form:option id="present-${attendance.attendanceStudentId}"
                                                          value="<%=Status.PRESENT%>">Present</form:option>
-                                            <form:option id="tardy-${attendance.aviationStudentId}"
+                                            <form:option id="tardy-${attendance.attendanceStudentId}"
                                                          value="<%=Status.TARDY%>">Tardy</form:option>
-                                            <form:option id="absent-${attendance.aviationStudentId}"
+                                            <form:option id="absent-${attendance.attendanceStudentId}"
                                                          value="<%=Status.ABSENT%>">Absent</form:option>
                                         </form:select>
                                     </label>
@@ -166,7 +166,7 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${attendance.status == 'TARDY'}">
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5"/>
                                         </c:when>
@@ -176,7 +176,7 @@
                                                         cssClass="form-control" size="5" value="${rosterForm.defaultMinutesPerSession}"/>
                                         </c:when>
                                         <c:otherwise>
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5" disabled="true"/>
 

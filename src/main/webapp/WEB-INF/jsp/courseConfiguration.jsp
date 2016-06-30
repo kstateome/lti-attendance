@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="edu.ksu.canvas.aviation.enums.Status" %>
+<%@ page import="edu.ksu.canvas.attendance.enums.Status" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -27,13 +27,13 @@
     <script src="${context}/js/jquery-ui.min.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
-    <title>Aviation Reporting Class Setup</title>
+    <title>Class Setup</title>
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">Aviation Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a id="classSetupLink"
@@ -67,7 +67,20 @@
         <br/><br/>
     </c:if>
 
-    <h3>Configuration</h3>
+    <h3>Synchronization</h3>
+
+    <p>
+        For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
+        students, sections,
+        or other problems, please click the button below to rectify the problem. It may take several seconds for this
+        operation to complete.
+    </p>
+    <br/><br/>
+
+    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
+           class="hovering-purple-button" type="submit"/>
+
+    <h3>Setup</h3>
     <br/>
 
     <div class="container">
@@ -101,19 +114,6 @@
 
     <hr/>
     <br/><br/>
-
-    <h3>Synchronization</h3>
-
-    <p>
-        For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
-        students, sections,
-        or other problems, please click the button below to rectify the problem. It may take several seconds for this
-        operation to complete.
-    </p>
-    <br/><br/>
-
-    <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
-           class="hovering-purple-button" type="submit"/>
 
 </form:form>
 

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>Student Aviation Reporting LTI integration</title></head>
+<head><title>Student Attendance Reporting LTI integration</title></head>
 <body>
-<h2>Student Aviation Reporting LTI integration</h2>
-<p>In order to use the Aviation Reporting LTI plugin for Canvas, please follow these steps:</p>
+<h2>Student Attendance Reporting LTI integration</h2>
+<p>In order to use the Attendance LTI plugin for Canvas, please follow these steps:</p>
 <ol>
     <li>Navigate to the account settings</li>
     <li>Click on the "Apps" tab</li>
     <li>Click "View App Configurations"</li>
     <li>Click "Add New App"</li>
-    <li>Enter "Aviation Reporting" in the Name field</li>
+    <li>Enter "K-State Attendance" in the Name field</li>
     <li>Obtain Consumer Key and Shared Secret from an administrator</li>
     <li>In the "Configuration Type" dropdown select: Paste XML</li>
     <li>Copy and paste XML configuration listed below</li>
     <li>Submit the form</li>
-    <li>Navigate to your institution account page. There should now be an "Aviation Reporting" link in the account navigation bar on the left.</li>
+    <li>Navigate to your institution account page. There should now be a "K-State Attendance" link in the account navigation bar on the left.</li>
 </ol>
 
     <pre>
@@ -30,8 +30,8 @@
     http://www.imsglobal.org/xsd/imsbasiclti_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imsbasiclti_v1p0.xsd
     http://www.imsglobal.org/xsd/imslticm_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imslticm_v1p0.xsd
     http://www.imsglobal.org/xsd/imslticp_v1p0 http://www.imsglobal.org/xsd/lti/ltiv1p0/imslticp_v1p0.xsd"&gt;
-    &lt;blti:title&gt;Aviation Reporting&lt;/blti:title&gt;
-    &lt;blti:description&gt;Aviation Reporting&lt;/blti:description&gt;
+    &lt;blti:title&gt;K-State Attendance&lt;/blti:title&gt;
+    &lt;blti:description&gt;K-State Attendance&lt;/blti:description&gt;
     &lt;blti:launch_url&gt;${url}&lt;/blti:launch_url&gt;
     &lt;blti:extensions platform="canvas.instructure.com"&gt;
       &lt;lticm:property name="privacy_level"&gt;public&lt;/lticm:property&gt;
