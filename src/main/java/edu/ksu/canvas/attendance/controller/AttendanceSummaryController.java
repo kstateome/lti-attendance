@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -57,6 +58,16 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
         page.addObject("selectedSectionId", validatedSectionId);
         List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+
+        //Sort so dropped students are at the bottom of the list
+        for (AttendanceSummaryModel model : summaryForSections){
+            for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
+                if (entry.isDropped()) {
+                    Collections.rotate(model.getEntries().subList(model.getEntries().indexOf(entry), model.getEntries().size() - 1), -1);
+                }
+            }
+        }
+
         page.addObject("attendanceSummaryForSections", summaryForSections);
         page.addObject("sectionList", DropDownOrganizer.sortWithSelectedSectionFirst(sections, sectionId));
 

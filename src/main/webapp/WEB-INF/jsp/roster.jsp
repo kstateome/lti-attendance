@@ -170,10 +170,16 @@
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5"/>
                                         </c:when>
+                                        <c:when test="${attendance.status == 'ABSENT'}">
+                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
+                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                        cssClass="form-control" size="5" value="${rosterForm.defaultMinutesPerSession}"/>
+                                        </c:when>
                                         <c:otherwise>
                                             <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                         path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                         cssClass="form-control" size="5" disabled="true"/>
+
                                         </c:otherwise>
                                     </c:choose>
                                     <form:errors cssClass="error"

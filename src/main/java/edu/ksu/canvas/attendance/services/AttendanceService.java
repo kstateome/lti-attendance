@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,9 +109,16 @@ public class AttendanceService {
             List<AttendanceStudent> attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
             for (AttendanceStudent student : attendanceStudents) {
+                if (student.getDeleted()) {
+                    Collections.rotate(attendanceStudents.subList(attendanceStudents.indexOf(student), attendanceStudents.size() - 1), -1);
+                }
+            }
+            
+            for (AttendanceStudent student : attendanceStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if (foundAttendance == null) {
-                    sectionAttendances.add(new AttendanceModel(student, Status.PRESENT, date));
+                    Status status = student.getDeleted() ? Status.ABSENT : Status.PRESENT;
+                    sectionAttendances.add(new AttendanceModel(student, status, date));
                 } else {
                     sectionAttendances.add(new AttendanceModel(foundAttendance));
                 }
