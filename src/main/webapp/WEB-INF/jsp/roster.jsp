@@ -184,7 +184,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <c:choose>
-                                            <c:when test="${attendance.status == 'TARDY'}">
+                                            <c:when test="${attendance.status != 'PRESENT'}">
                                                 <form:input id="minutesMissed${attendance.attendanceStudentId}"
                                                             path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
                                                             cssClass="form-control" size="5"/>
