@@ -35,7 +35,7 @@ public class RosterFormValidator implements Validator {
                     errors.rejectValue(minutesMissedField, MINIMUM_MINUTES_MISSED_ERROR_CODE);
                 }
 
-                if (attendance.getStatus() == Status.TARDY && attendance.getMinutesMissed() == null) {
+                if (attendance.getStatus() == Status.TARDY && attendance.getMinutesMissed() == null && !rosterForm.getSimpleAttendance()) {
                     errors.rejectValue(minutesMissedField, SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE);
                 }
                 attendanceIndex++;

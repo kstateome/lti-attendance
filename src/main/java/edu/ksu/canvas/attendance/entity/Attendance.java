@@ -38,6 +38,9 @@ public class Attendance implements Serializable {
     @Column(name = "date_of_class")
     private Date dateOfClass;
 
+    @Column(name = "notes")
+    private String notes;
+
 
     public Attendance() {
 
@@ -101,4 +104,11 @@ public class Attendance implements Serializable {
                 + (dateOfClass == null ? null : sdf.format(dateOfClass)) + "]";
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }

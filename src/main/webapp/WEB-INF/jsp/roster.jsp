@@ -128,7 +128,14 @@
                             <th>Name</th>
                             <th>WID</th>
                             <th>Status</th>
-                            <th>Minutes Missed</th>
+                            <c:choose>
+                                <c:when test="${rosterForm.simpleAttendance}">
+                                    <th>Notes</th>
+                                </c:when>
+                                <c:otherwise>
+                                    <th>Minutes Missed</th>
+                                </c:otherwise>
+                            </c:choose>
                         </tr>
                         </thead>
 
@@ -164,26 +171,34 @@
                                                  path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
                                 </td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${attendance.status == 'TARDY'}">
-                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
-                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
-                                                        cssClass="form-control" size="5"/>
-                                        </c:when>
-                                        <c:when test="${attendance.status == 'ABSENT'}">
-                                            <form:input id="minutesMissed${attendance.aviationStudentId}"
-                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
-                                                        cssClass="form-control" size="5" value="${rosterForm.defaultMinutesPerSession}"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <form:input id="minutesMissed${attendance.attendanceStudentId}"
-                                                        path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
-                                                        cssClass="form-control" size="5" disabled="true"/>
-
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <form:errors cssClass="error"
-                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
+                                <c:choose>
+                                    <c:when test="${rosterForm.simpleAttendance}">
+                                        <c:choose>
+                                            <c:when test="${attendance.status == 'TARDY' || attendance.status == 'ABSENT'}">
+                                                <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" disabled="true" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${attendance.status == 'TARDY'}">
+                                                <form:input id="minutesMissed${attendance.attendanceStudentId}"
+                                                            path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form:input id="minutesMissed${attendance.attendanceStudentId}"
+                                                            path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"
+                                                            cssClass="form-control" size="5" disabled="true"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <form:errors cssClass="error"
+                                                     path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].minutesMissed"/>
+                                    </c:otherwise>
+                                </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -218,19 +233,28 @@
         $('.attendanceStatus').change(function () {
             var attendanceId = $(this).attr('id').split('-')[1];
             var minutesMissed = $('#minutesMissed' + attendanceId);
+            var notes = $('#notes' + attendanceId);
             if ($(this).val() === '<%=Status.TARDY%>') {
                 minutesMissed.removeAttr('disabled');
                 minutesMissed.focus();
+                notes.removeAttr('disabled');
+                notes.focus();
+
             }
             else if ($(this).val() === '<%=Status.ABSENT%>') {
                 minutesMissed.removeAttr('disabled');
                 minutesMissed.focus();
+                notes.removeAttr('disabled');
+                notes.focus();
                 minutesMissed.val(${rosterForm.defaultMinutesPerSession});
                 attendanceId.val(${rosterForm.defaultMinutesPerSession});
             }
             else {
                 minutesMissed.attr('disabled', 'disabled');
                 minutesMissed.val('');
+                notes.attr('disabled', 'disabled');
+                notes.val('');
+
             }
         });
 
@@ -243,6 +267,12 @@
                 $('#minutesMissed' + studentId).removeAttr('disabled');
             } else {
                 $('#minutesMissed' + studentId).attr('disabled', 'true');
+            }
+            $('#notes' + studentId).val('');
+            if (status == 'tardy' || status == 'absent') {
+                $('#notes' + studentId).removeAttr('disabled');
+            } else {
+                $('#notes' + studentId).attr('disabled', 'true');
             }
         });
 

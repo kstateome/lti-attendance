@@ -1,8 +1,5 @@
 package edu.ksu.canvas.attendance.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,12 +8,15 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.Errors;
 
+import java.util.ArrayList;
+import java.util.List;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.model.AttendanceModel;
 import edu.ksu.canvas.attendance.model.SectionModel;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,6 +45,7 @@ public class RosterFormValidatorUTest {
         sectionModel.setAttendances(attendanceModels);
         sectionModels.add(sectionModel);
         rosterForm.setSectionModels(sectionModels);
+        rosterForm.setSimpleAttendance(false);
     }
 
     @Test
@@ -70,6 +71,19 @@ public class RosterFormValidatorUTest {
         verify(errors, times(1)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
         assertEquals(expectedMinutesMissedField, capturedField.getValue());
         assertEquals(RosterFormValidator.SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE, capturedErrorCode.getValue());
+    }
+
+    @Test
+    public void allowNullMinutesWhenSimpleAttendance() {
+        rosterForm.setSimpleAttendance(true);
+        attendanceModel.setMinutesMissed(null);
+
+        ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
+
+        rosterFormValidator.validate(rosterForm, errors);
+        verify(errors, times(0)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
+
     }
     
 }

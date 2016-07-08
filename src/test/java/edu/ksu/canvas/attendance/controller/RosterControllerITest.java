@@ -147,6 +147,13 @@ public class RosterControllerITest extends BaseControllerITest {
                             )
                     )));
     }
+
+    @Test
+    public void defaultToSimpleAttendance() throws Exception {
+        mockMvc.perform(get("/roster/"+existingSection.getCanvasSectionId()))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("rosterForm", hasProperty("simpleAttendance", is(Boolean.TRUE))));
+    }
     
     @Test
     public void changeDate_HappyPath() throws Exception {
