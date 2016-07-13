@@ -75,10 +75,10 @@
         or other problems, please click the button below to rectify the problem. It may take several seconds for this
         operation to complete.
     </p>
-    <br/><br/>
 
     <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
            class="hovering-purple-button" type="submit"/>
+    <br/><br/>
 
     <h3>Setup</h3>
     <br/>
