@@ -5,6 +5,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.AttendanceModel;
+import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.model.SectionModel;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -110,11 +108,7 @@ public class AttendanceService {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
             List<AttendanceStudent> attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
-            for (AttendanceStudent student : attendanceStudents) {
-                if (student.getDeleted()) {
-                    Collections.rotate(attendanceStudents.subList(attendanceStudents.indexOf(student), attendanceStudents.size() - 1), -1);
-                }
-            }
+            attendanceStudents.sort(Comparator.comparing(AttendanceStudent::getDeleted));
             
             for (AttendanceStudent student : attendanceStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
