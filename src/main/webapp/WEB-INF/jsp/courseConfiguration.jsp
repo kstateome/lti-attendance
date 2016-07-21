@@ -91,15 +91,15 @@
         <div class="row">
             <fieldset class="form-inline">
                 <div class="col-md-2">
-                    <span style="float:left"><label for="courseWorth" class="center-block">Total Class Minutes</label>
+                    <label for="courseWorth">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
-                                placeholder="Total Class Minutes" size="6"/></span>
+                                placeholder="Total Class Minutes" size="6"/>
                     <form:errors cssClass="error center-block" path="totalClassMinutes"/>
                 </div>
                 <div class="col-md-3">
-                    <span style="float:right"><label for="defaultMinutesPerSession" class="center-block">Normal Class Length</label>
+                    <label for="defaultMinutesPerSession">Normal Class Length</label>
                     <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
-                                cssClass="form-control" placeholder="Normal Class Length" size="5"/></span>
+                                cssClass="form-control" placeholder="Normal Class Length" size="5"/>
                     <form:errors cssClass="error center-block" path="defaultMinutesPerSession"/>
                 </div>
             </fieldset>
