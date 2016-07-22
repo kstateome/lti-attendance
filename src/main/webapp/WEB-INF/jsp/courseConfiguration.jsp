@@ -87,6 +87,11 @@
             <form:checkbox path="simpleAttendance" id="simpleAttendance" cssClass="form-control"/> Use Simple Attendance (non-minute based) features
         </label>
     </div>
+    <div class="col-md-3">
+     <label for="simpleAttendance">
+         <input type="checkbox"> Show Notes entered on Class Roster page to students
+        </label>
+     </div>
     <div class="container">
         <div class="row">
             <fieldset class="form-inline">
