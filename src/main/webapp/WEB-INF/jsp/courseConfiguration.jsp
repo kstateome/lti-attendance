@@ -82,8 +82,8 @@
 
     <h3>Setup</h3>
     <br/>
-    <div>
-        <label for="simpleAttendance" class="col-lg-3">
+    <div class="col-lg-3">
+        <label for="simpleAttendance">
             <form:checkbox path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
         </label>
     </div>
@@ -91,7 +91,7 @@
     <div class="container-fluid">
         <div class="row">
             <fieldset class="form-inline">
-                <div>
+                <div class="col-md-3">
                     <label for="courseWorth">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                                 placeholder="Total Class Minutes" size="6"/>
