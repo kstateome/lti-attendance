@@ -83,7 +83,7 @@
     <h3>Setup</h3>
     <br/>
     <div>
-        <label for="simpleAttendance" class="col-md-3">
+        <label for="simpleAttendance" class="col-lg-3">
             <form:checkbox path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
         </label>
     </div>
