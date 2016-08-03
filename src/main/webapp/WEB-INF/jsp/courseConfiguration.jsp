@@ -88,8 +88,8 @@
         </label>
     </div>
     <div class="col-md-3">
-     <label for="simpleAttendance">
-         <input type="checkbox"> Show Notes entered on Class Roster page to students
+     <label for="showNotesToStudents">
+         <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
         </label>
      </div>
     <div class="container">
