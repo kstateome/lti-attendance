@@ -82,15 +82,16 @@
 
     <h3>Setup</h3>
     <br/>
-    <div class="col-md-3">
+    <div class="col-lg-3">
         <label for="simpleAttendance">
-            <form:checkbox path="simpleAttendance" id="simpleAttendance" cssClass="form-control"/> Use Simple Attendance (non-minute based) features
+            <form:checkbox path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
         </label>
     </div>
-    <div class="container">
+    <br/>
+    <div class="container-fluid">
         <div class="row">
             <fieldset class="form-inline">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label for="courseWorth">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                                 placeholder="Total Class Minutes" size="6"/>
