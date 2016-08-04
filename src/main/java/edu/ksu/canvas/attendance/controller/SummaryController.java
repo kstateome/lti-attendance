@@ -77,7 +77,7 @@ public class SummaryController extends AttendanceBaseController {
 
         ModelAndView page = new ModelAndView("studentSummary");
 
-        List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+        List<AttendanceSummaryModel> summaryForSections = reportService.getMinutedAttendanceSummaryReport(validatedSectionId);
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
         student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());

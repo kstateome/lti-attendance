@@ -4,6 +4,7 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
@@ -76,6 +77,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
         AttendanceCourse existingCourse = new AttendanceCourse();
+        existingCourse.setAttendanceType(AttendanceType.MINUTES);
         existingCourse.setCanvasCourseId(4000L);
         existingCourse.setDefaultMinutesPerSession(10);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
@@ -110,6 +112,49 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         .andExpect(model().attribute("attendanceSummaryForSections", hasItem(hasProperty("sectionId", is(existingSectionId)))))
         .andExpect(model().attribute("sectionList", hasSize(1)))
         .andExpect(model().attribute("sectionList", hasItem(hasProperty("canvasSectionId", is(existingSectionId)))));
+    }
+
+    @Test
+    public void SimpleAttendanceSummary_existingSectionId_HappyPath() throws Exception {
+        Long existingSectionId = 2000L;
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+
+        AttendanceCourse existingCourse = new AttendanceCourse();
+        existingCourse.setAttendanceType(AttendanceType.SIMPLE);
+        existingCourse.setCanvasCourseId(4000L);
+        existingCourse.setDefaultMinutesPerSession(10);
+        existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
+        existingCourse = courseRepository.save(existingCourse);
+
+        AttendanceSection existingSection = new AttendanceSection();
+        existingSection.setCanvasCourseId(existingCourse.getCanvasCourseId());
+        existingSection.setCanvasSectionId(existingSectionId);
+        existingSection = sectionRepository.save(existingSection);
+
+        AttendanceStudent existingStudent = new AttendanceStudent();
+        existingStudent.setSisUserId("1001");
+        existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
+        existingStudent.setCanvasSectionId(existingSectionId);
+        existingStudent.setName("Zoglmann, Kurt");
+        existingStudent.setDeleted(false);
+        existingStudent = studentRepository.save(existingStudent);
+
+        Attendance existingAttendance = new Attendance();
+        existingAttendance.setAttendanceStudent(existingStudent);
+        existingAttendance.setDateOfClass(sdf.parse("5/21/2016"));
+        existingAttendance.setMinutesMissed(5);
+        existingAttendance.setStatus(Status.TARDY);
+        existingAttendance = attendanceRepository.save(existingAttendance);
+
+
+        mockMvc.perform(get("/attendanceSummary/"+existingSectionId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("simpleAttendanceSummary"))
+                .andExpect(model().attribute("selectedSectionId", is(existingSectionId)))
+                .andExpect(model().attribute("attendanceSummaryForSections", hasSize(1)))
+                .andExpect(model().attribute("attendanceSummaryForSections", hasItem(hasProperty("sectionId", is(existingSectionId)))))
+                .andExpect(model().attribute("sectionList", hasSize(1)))
+                .andExpect(model().attribute("sectionList", hasItem(hasProperty("canvasSectionId", is(existingSectionId)))));
     }
     
 }
