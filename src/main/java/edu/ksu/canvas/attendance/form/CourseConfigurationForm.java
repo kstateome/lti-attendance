@@ -16,6 +16,8 @@ public class CourseConfigurationForm {
 
     private Boolean simpleAttendance;
 
+    private Boolean showNotesToStudents;
+
 
     public int getTotalClassMinutes() {
         return totalClassMinutes;
@@ -39,5 +41,13 @@ public class CourseConfigurationForm {
 
     public Boolean getSimpleAttendance() {
         return simpleAttendance;
+    }
+
+    public Boolean getShowNotesToStudents() {
+        return showNotesToStudents;
+    }
+
+    public void setShowNotesToStudents(Boolean showNotesToStudents) {
+        this.showNotesToStudents = showNotesToStudents;
     }
 }

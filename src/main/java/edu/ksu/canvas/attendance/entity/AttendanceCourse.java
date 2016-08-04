@@ -32,6 +32,9 @@ public class AttendanceCourse implements Serializable {
     @Column(name = "canvas_course_id", nullable = false, unique = true)
     private Long canvasCourseId;
 
+    @Column(name = "show_notes")
+    private Boolean showNotesToStudents = false;
+
 
     public AttendanceCourse() {
         this.attendanceType = AttendanceType.SIMPLE;
@@ -90,5 +93,13 @@ public class AttendanceCourse implements Serializable {
 
     public void setAttendanceType(AttendanceType attendanceType) {
         this.attendanceType = attendanceType;
+    }
+
+    public Boolean getShowNotesToStudents() {
+        return showNotesToStudents;
+    }
+
+    public void setShowNotesToStudents(Boolean showNotesToStudents) {
+        this.showNotesToStudents = showNotesToStudents;
     }
 }
