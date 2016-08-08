@@ -22,7 +22,7 @@ public class ReportRepository {
     private EntityManager entityManager;
 
 
-    public List<AttendanceSummaryModel> getMinutedAttendanceSummary(long canvasSectionId) {
+    public List<AttendanceSummaryModel> getAviationAttendanceSummary(long canvasSectionId) {
         String sql =
                 "select course_id, canvas_section_id, student_id, student_name, deleted," +
                 "sum_minutes_madeup, " +
@@ -152,7 +152,7 @@ public class ReportRepository {
                     canvasSectionId,
                     ((Number) result[2]).longValue(),
                     (String) result[3],
-                    getBoolean(((Number)result[4]).intValue()),
+                    getBoolean(((Number) result[4]).intValue()),
                     ((Number ) result[5]).intValue(),
                     ((Number ) result[6]).intValue()
             ));

@@ -16,8 +16,8 @@ public class ReportService {
     private ReportRepository reportRepository;
 
 
-    public List<AttendanceSummaryModel> getMinutedAttendanceSummaryReport(long sectionId) {
-        return reportRepository.getMinutedAttendanceSummary(sectionId);
+    public List<AttendanceSummaryModel> getAviationAttendanceSummaryReport(long sectionId) {
+        return reportRepository.getAviationAttendanceSummary(sectionId);
     }
 
     public List<AttendanceSummaryModel> getSimpleAttendanceSummaryReport(long sectionId) {

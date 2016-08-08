@@ -44,6 +44,10 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     
     @Autowired
     private AttendanceSectionRepository sectionRepository;
+
+    private final Long existingSectionId = 2000L;
+    private final Long canvasCourseId = 4000L;
+    private final int defaultMinutesPerSession = 10;
     
     
     @Test
@@ -73,13 +77,12 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
     
     @Test
     public void attendanceSummary_existingSectionId_HappyPath() throws Exception {
-        Long existingSectionId = 2000L;
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         
         AttendanceCourse existingCourse = new AttendanceCourse();
         existingCourse.setAttendanceType(AttendanceType.MINUTES);
-        existingCourse.setCanvasCourseId(4000L);
-        existingCourse.setDefaultMinutesPerSession(10);
+        existingCourse.setCanvasCourseId(canvasCourseId);
+        existingCourse.setDefaultMinutesPerSession(defaultMinutesPerSession);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
         
@@ -104,7 +107,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingAttendance = attendanceRepository.save(existingAttendance);
         
         
-        mockMvc.perform(get("/attendanceSummary/"+existingSectionId))
+        mockMvc.perform(get("/attendanceSummary/"+ existingSectionId))
         .andExpect(status().isOk())
         .andExpect(view().name("attendanceSummary"))
         .andExpect(model().attribute("selectedSectionId", is(existingSectionId)))
@@ -116,13 +119,12 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
 
     @Test
     public void SimpleAttendanceSummary_existingSectionId_HappyPath() throws Exception {
-        Long existingSectionId = 2000L;
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
         AttendanceCourse existingCourse = new AttendanceCourse();
         existingCourse.setAttendanceType(AttendanceType.SIMPLE);
-        existingCourse.setCanvasCourseId(4000L);
-        existingCourse.setDefaultMinutesPerSession(10);
+        existingCourse.setCanvasCourseId(canvasCourseId);
+        existingCourse.setDefaultMinutesPerSession(defaultMinutesPerSession);
         existingCourse.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(existingCourse);
 
@@ -147,7 +149,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingAttendance = attendanceRepository.save(existingAttendance);
 
 
-        mockMvc.perform(get("/attendanceSummary/"+existingSectionId))
+        mockMvc.perform(get("/attendanceSummary/"+ existingSectionId))
                 .andExpect(status().isOk())
                 .andExpect(view().name("simpleAttendanceSummary"))
                 .andExpect(model().attribute("selectedSectionId", is(existingSectionId)))

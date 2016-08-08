@@ -61,7 +61,6 @@ public class ReportRepositoryITest {
     private final int expectedSumMinutesMissed = 11;
     private final int expectedRemainingMinutesMadeup = expectedSumMinutesMissed - expectedSumMinutesMadeUp;
     private final float expectedPercentCourseMissed = Math.round(expectedSumMinutesMissed * 1.0 /courseTotalMinutes * 100) / 2;
-    //TODO: PUT REAL NUMBERS
     private final int expectedTotalClassesMissed = 0;
     private final int expectedTotalClassesTardy = 2;
 
@@ -121,10 +120,10 @@ public class ReportRepositoryITest {
     
     
     @Test
-    public void getMinutedAttendanceSummary_HappyPath() {
+    public void getAviationAttendanceSummary_HappyPath() {
         long existingSectionId = existingStudent.getCanvasSectionId();
         
-        List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getMinutedAttendanceSummary(existingSectionId);
+        List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getAviationAttendanceSummary(existingSectionId);
         
         assertEquals(expectedNumberOfAttendanceSummaries, actualAttendanceSummaries.size());
         AttendanceSummaryModel actualAttendanceSummary = actualAttendanceSummaries.get(0);

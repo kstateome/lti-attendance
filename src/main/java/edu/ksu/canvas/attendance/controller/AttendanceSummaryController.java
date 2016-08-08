@@ -1,8 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
@@ -57,7 +55,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         List<AttendanceSection> sections = selectedSection == null ? new ArrayList<>() : sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
 
-        //Checking if Attendance Summary is Simple or Minuted
+        //Checking if Attendance Summary is Simple or Aviation
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         boolean isSimpleAttendance = false;
         if (selectedSection != null){
@@ -65,16 +63,16 @@ public class AttendanceSummaryController extends AttendanceBaseController {
             isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
         }
 
-        ModelAndView page = !isSimpleAttendance ?
-            new ModelAndView("attendanceSummary") : new ModelAndView("simpleAttendanceSummary");
+        ModelAndView page = isSimpleAttendance ?
+            new ModelAndView("simpleAttendanceSummary") : new ModelAndView("attendanceSummary");
 
         //Add the course name to the page for report printing purposes
         page.addObject("courseName", canvasService.getCourseName());
 
         page.addObject("selectedSectionId", validatedSectionId);
-        List<AttendanceSummaryModel> summaryForSections = !isSimpleAttendance ?
-                reportService.getMinutedAttendanceSummaryReport(validatedSectionId)
-                : reportService.getSimpleAttendanceSummaryReport(validatedSectionId);
+        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
+                reportService.getSimpleAttendanceSummaryReport(validatedSectionId)
+                : reportService.getAviationAttendanceSummaryReport(validatedSectionId);
 
         //Sorts students list so the dropped students are at the bottom of the list with the name crossed off.
         for (AttendanceSummaryModel model : summaryForSections){

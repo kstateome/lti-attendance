@@ -34,12 +34,12 @@ public class ReportServiceUTest {
     
     
     @Test
-    public void getMinutedAttendanceSummaryReport_HappyPath() {
+    public void getAviationAttendanceSummaryReport_HappyPath() {
         long sectionId = 5L;
         List<AttendanceSummaryModel> expected = new ArrayList<>();
         
-        when(mockReportRepository.getMinutedAttendanceSummary(5)).thenReturn(expected);
-        List<AttendanceSummaryModel> actual = reportService.getMinutedAttendanceSummaryReport(sectionId);
+        when(mockReportRepository.getAviationAttendanceSummary(5)).thenReturn(expected);
+        List<AttendanceSummaryModel> actual = reportService.getAviationAttendanceSummaryReport(sectionId);
         
         assertSame(expected, actual);
     }
