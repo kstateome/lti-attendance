@@ -74,7 +74,7 @@
                         <td class="${attendancesummaryEntry.dropped ? 'dropped' : ''}">
                             <span>${attendancesummaryEntry.studentName}</span>
                         </td>
-                        <td class="text-center">${attendancesummaryEntry.totalClassesMissed}</a></td>
+                        <td class="text-center"><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.totalClassesMissed}</a></td>
                         <td class="text-center">${attendancesummaryEntry.totalClassesTardy}</td>
                     </tr>
                 </c:forEach>

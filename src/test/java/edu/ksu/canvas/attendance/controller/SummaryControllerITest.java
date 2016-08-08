@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.*;
+import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.repository.*;
@@ -138,6 +139,7 @@ public class SummaryControllerITest extends BaseControllerITest {
     @Test
     @SuppressWarnings("unchecked")
     public void summaryReport_HappyPath() throws Exception {
+        existingCourse.setAttendanceType(AttendanceType.MINUTES);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
 
@@ -188,6 +190,53 @@ public class SummaryControllerITest extends BaseControllerITest {
                                                                     )
                                                             )
                                                     ))));
+                }
+            }
+        }
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void simpleSummaryReport_HappyPath() throws Exception {
+        existingCourse.setAttendanceType(AttendanceType.SIMPLE);
+        Long sectionId = existingSection.getCanvasSectionId();
+        Long studentId = existingStudent.getStudentId();
+
+        List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getSimpleAttendanceSummary(sectionId);
+
+        for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
+            for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
+                if(entry.getStudentId() == existingStudent.getStudentId()) {
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,existingStudent.getName(),existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed());
+                    mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
+                            .andExpect(status().isOk())
+                            .andExpect(view().name("studentSummary"))
+                            .andExpect(model().attribute("sectionId", is(sectionId.toString())))
+                            .andExpect(model().attribute("student",
+                                    allOf(
+                                            hasProperty("studentId",is(existingStudent.getStudentId())),
+                                            hasProperty("attendances", hasSize(1)),
+                                            hasProperty("attendances",
+                                                    containsInAnyOrder(
+                                                            allOf(
+                                                                    hasProperty("notes", is(existingAttendance.getNotes())),
+                                                                    hasProperty("status" ,is(existingAttendance.getStatus())),
+                                                                    hasProperty("dateOfClass", is(existingAttendance.getDateOfClass()))
+                                                            )
+                                                    ))
+                                    )))
+                            .andExpect(model().attribute("attendanceSummaryEntry",
+                                    allOf(
+                                            hasProperty("totalClassesMissed", is(studentSummary.getTotalClassesMissed())),
+                                            hasProperty("totalClassesTardy", is(studentSummary.getTotalClassesTardy()))
+                                    )))
+                            .andExpect(model().attribute("summaryForm",
+                                    allOf(
+                                            hasProperty("sectionId", is(sectionId)),
+                                            hasProperty("studentId", is(studentId)),
+                                            hasProperty("entries", hasSize(1))
+                                            )));
                 }
             }
         }
