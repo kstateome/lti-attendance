@@ -141,7 +141,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
 
-        List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getAttendanceSummary(sectionId);
+        List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getAviationAttendanceSummary(sectionId);
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
