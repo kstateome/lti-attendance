@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -22,6 +23,7 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
     public void shouldBeAbleToGetMakeupPage() throws Exception{
         System.out.println("Testing makeup page...");
 
+        setAviationTypeAttendance();
         navigateToMakeupPage();
         assertTrue("Makeup form should be displayed", driver.findElement(By.id("makeupForm")).isDisplayed());
 
@@ -35,6 +37,7 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
         final String arbitrayValue = "20";
         final String arbitraryDescription = "Something";
 
+        setAviationTypeAttendance();
         navigateToMakeupPage();
         driver.findElement(By.id("addMakeupBtn")).click();
         List<WebElement> makeupRows = driver.findElements(By.className("addedMakeupRow"));
@@ -51,9 +54,18 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
     }
 
     private void navigateToMakeupPage() {
-        driver.navigate().to(baseUrl + "roster");
         driver.findElement(By.id("attendanceSummaryLink")).click();
         driver.findElement(By.cssSelector("a[href*='studentMakeup']")).click();
     }
+
+    private void setAviationTypeAttendance() {
+        driver.navigate().to(baseUrl + "roster");
+        driver.findElement(By.id("classSetupLink")).click();
+        if(driver.findElement(By.id("simpleAttendance")).isSelected()) {
+            driver.findElement(By.id("simpleAttendance")).click();
+            driver.findElement(By.id("saveCourseConfiguration")).click();
+        }
+    }
+
 
 }
