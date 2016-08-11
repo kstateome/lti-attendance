@@ -55,7 +55,7 @@
 
     <c:if test="${updateSuccessful}">
         <div class="alert alert-success">
-            <p>Course Setup Successfully Updated.</p>
+            <p>Course Setup successfully updated.</p>
         </div>
         <br/><br/>
     </c:if>
