@@ -94,7 +94,7 @@
      </div>
     <br/>
     <div class="container-fluid">
-        <div id="aviationTimeConfig" class="row">
+        <div id="aviationTimeConfig" class="row ${courseConfigurationForm.simpleAttendance? 'hidden' : '' }">
             <fieldset class="form-inline">
                 <div class="col-md-3">
                     <label for="courseWorth">Total Class Minutes</label>
@@ -122,18 +122,10 @@
     <script>
         $('#simpleAttendance').change(function(){
             if (this.checked) {
-                $('#aviationTimeConfig').fadeOut('slow');
+                $('#aviationTimeConfig').addClass('hidden');
             }
             else {
-                $('#aviationTimeConfig').fadeIn('slow');
-            }
-        });
-        $('#simpleAttendance').onload(function(){
-            if (this.checked) {
-                $('#aviationTimeConfig').fadeOut('slow');
-            }
-            else {
-                $('#aviationTimeConfig').fadeIn('slow');
+                $('#aviationTimeConfig').removeClass('hidden');
             }
         });
     </script>
