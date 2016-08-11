@@ -28,6 +28,7 @@ public class AttendanceCourseService {
         if (attendanceCourse == null) {
             attendanceCourse = new AttendanceCourse(canvasCourseId, courseForm.getTotalClassMinutes(), courseForm.getDefaultMinutesPerSession());
         } else {
+            attendanceCourse.setShowNotesToStudents(courseForm.getShowNotesToStudents());
             attendanceCourse.setDefaultMinutesPerSession(courseForm.getDefaultMinutesPerSession());
             attendanceCourse.setTotalMinutes(courseForm.getTotalClassMinutes());
             if (courseForm.getSimpleAttendance() != null && courseForm.getSimpleAttendance()) {
@@ -58,6 +59,7 @@ public class AttendanceCourseService {
         courseForm.setTotalClassMinutes(attendanceCourse.getTotalMinutes());
         courseForm.setDefaultMinutesPerSession(attendanceCourse.getDefaultMinutesPerSession());
         courseForm.setSimpleAttendance(attendanceCourse.getAttendanceType().equals(AttendanceType.SIMPLE));
+        courseForm.setShowNotesToStudents(attendanceCourse.getShowNotesToStudents());
     }
 
 }
