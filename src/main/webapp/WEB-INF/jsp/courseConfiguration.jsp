@@ -55,7 +55,7 @@
 
     <c:if test="${updateSuccessful}">
         <div class="alert alert-success">
-            <p>Course Configuration Successfully Updated.</p>
+            <p>Course Setup successfully updated.</p>
         </div>
         <br/><br/>
     </c:if>
@@ -82,28 +82,32 @@
 
     <h3>Setup</h3>
     <br/>
-
-    <div class="container">
-        <div class="row">
+    <div class="col-lg-3">
+        <label for="simpleAttendance">
+            <form:checkbox path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
+        </label>
+    </div>
+    <div class="col-lg-3">
+     <label for="showNotesToStudents">
+         <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
+        </label>
+     </div>
+    <br/>
+    <div class="container-fluid">
+        <div id="aviationTimeConfig" class="row ${courseConfigurationForm.simpleAttendance? 'hidden' : '' }">
             <fieldset class="form-inline">
-                <div class="col-md-2">
-                    <label for="courseWorth" class="center-block">Total Class Minutes</label>
+                <div class="col-md-3">
+                    <label for="courseWorth">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                                 placeholder="Total Class Minutes" size="6"/>
                     <form:errors cssClass="error center-block" path="totalClassMinutes"/>
                 </div>
                 <div class="col-md-3">
-                    <label for="defaultMinutesPerSession" class="center-block">Normal Class Length</label>
+                    <label for="defaultMinutesPerSession">Normal Class Length</label>
                     <form:input path="defaultMinutesPerSession" type="text" id="defaultMinutesPerSession"
                                 cssClass="form-control" placeholder="Normal Class Length" size="5"/>
                     <form:errors cssClass="error center-block" path="defaultMinutesPerSession"/>
                 </div>
-                <div class="col-md-3">
-                    <label for="simpleAttendance">
-                    <form:checkbox path="simpleAttendance" id="simpleAttendance" cssClass="form-control"/> Use Simple Attendance (non-minute based) features
-                    </label>
-                </div>
-
             </fieldset>
         </div>
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
@@ -114,6 +118,17 @@
 
     <hr/>
     <br/><br/>
+
+    <script>
+        $('#simpleAttendance').change(function(){
+            if (this.checked) {
+                $('#aviationTimeConfig').addClass('hidden');
+            }
+            else {
+                $('#aviationTimeConfig').removeClass('hidden');
+            }
+        });
+    </script>
 
 </form:form>
 

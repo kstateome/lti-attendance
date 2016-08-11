@@ -61,6 +61,8 @@ public class ReportRepositoryITest {
     private final int expectedSumMinutesMissed = 11;
     private final int expectedRemainingMinutesMadeup = expectedSumMinutesMissed - expectedSumMinutesMadeUp;
     private final float expectedPercentCourseMissed = Math.round(expectedSumMinutesMissed * 1.0 /courseTotalMinutes * 100) / 2;
+    private final int expectedTotalClassesMissed = 0;
+    private final int expectedTotalClassesTardy = 2;
 
 
     @Before
@@ -118,10 +120,10 @@ public class ReportRepositoryITest {
     
     
     @Test
-    public void getAttendanceSummary_HappyPath() {
+    public void getAviationAttendanceSummary_HappyPath() {
         long existingSectionId = existingStudent.getCanvasSectionId();
         
-        List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getAttendanceSummary(existingSectionId);
+        List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getAviationAttendanceSummary(existingSectionId);
         
         assertEquals(expectedNumberOfAttendanceSummaries, actualAttendanceSummaries.size());
         AttendanceSummaryModel actualAttendanceSummary = actualAttendanceSummaries.get(0);
@@ -132,6 +134,21 @@ public class ReportRepositoryITest {
         assertEquals(expectedRemainingMinutesMadeup, actualEntry.getRemainingMinutesMadeup());
         assertEquals(expectedSumMinutesMissed, actualEntry.getSumMinutesMissed());
         assertEquals(expectedPercentCourseMissed, actualEntry.getPercentCourseMissed(), 1.0);
+    }
+
+    @Test
+    public void getSimpleAttendanceSummary_HappyPath() {
+        long existingSectionId = existingStudent.getCanvasSectionId();
+
+        List<AttendanceSummaryModel> actualAttendanceSummaries = reportRepository.getSimpleAttendanceSummary(existingSectionId);
+
+        assertEquals(expectedNumberOfAttendanceSummaries, actualAttendanceSummaries.size());
+        AttendanceSummaryModel actualAttendanceSummary = actualAttendanceSummaries.get(0);
+        assertEquals(expectedSectionId, actualAttendanceSummary.getSectionId());
+        assertEquals(expectedNumberOfStudentsInSection, actualAttendanceSummary.getEntries().size());
+        AttendanceSummaryModel.Entry actualEntry = actualAttendanceSummary.getEntries().get(0);
+        assertEquals(expectedTotalClassesMissed, actualEntry.getTotalClassesMissed());
+        assertEquals(expectedTotalClassesTardy, actualEntry.getTotalClassesTardy());
     }
     
 }

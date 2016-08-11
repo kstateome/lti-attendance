@@ -1,16 +1,16 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
-import edu.ksu.canvas.attendance.services.AttendanceStudentService;
-import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.attendance.services.MakeupService;
-import edu.ksu.canvas.attendance.services.ReportService;
+import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.lti.LtiLaunchData;
 import org.apache.commons.validator.routines.LongValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -32,6 +32,8 @@ import java.util.List;
 @RequestMapping("/studentSummary")
 public class SummaryController extends AttendanceBaseController {
 
+    private static final Logger LOG = Logger.getLogger(SummaryController.class);
+
     @Autowired
     private MakeupService makeupService;
 
@@ -43,6 +45,9 @@ public class SummaryController extends AttendanceBaseController {
 
     @Autowired
     protected CanvasApiWrapperService canvasService;
+
+    @Autowired
+    private AttendanceCourseService courseService;
 
 
     @InitBinder
@@ -75,9 +80,21 @@ public class SummaryController extends AttendanceBaseController {
 
         MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
 
-        ModelAndView page = new ModelAndView("studentSummary");
+        //Checking if Attendance Summary is Simple or Aviation
+        AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+        CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
+        boolean isSimpleAttendance = false;
+        if (selectedSection != null){
+            courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+            isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
+        }
 
-        List<AttendanceSummaryModel> summaryForSections = reportService.getAttendanceSummaryReport(validatedSectionId);
+        ModelAndView page = isSimpleAttendance ?
+                new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
+
+        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
+                reportService.getSimpleAttendanceSummaryReport(validatedSectionId) :
+                reportService.getAviationAttendanceSummaryReport(validatedSectionId);
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
         student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
@@ -86,8 +103,9 @@ public class SummaryController extends AttendanceBaseController {
                 .flatMap(summary -> summary.getEntries().stream())
                 .filter(entry -> entry.getStudentId() == validatedStudentId)
                 .findFirst()
-                .ifPresent(entry -> page.addObject("attendanceSummaryEntry",
-                        new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
+                .ifPresent(entry ->  page.addObject("attendanceSummaryEntry", courseConfigurationForm.getSimpleAttendance() ?
+                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed())
+                          : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
 
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
