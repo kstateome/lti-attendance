@@ -463,7 +463,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version>
+			<scope>provided</scope>
 		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -480,6 +480,7 @@
 			<groupId>org.jboss.spec.javax.jms</groupId>
 			<artifactId>jboss-jms-api_1.1_spec</artifactId>
 			<version>1.0.1.Final</version>
+			<scope>test</scope>
 		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>

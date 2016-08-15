@@ -2,7 +2,8 @@ package edu.ksu.canvas.attendance.config.arquillian;
 
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.attendance.services.*;
+import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
+import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -97,7 +98,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
         CanvasApiFactory mockApiFactory = Mockito.mock(CanvasApiFactory.class);
 
         CourseReader mockCourseReader = Mockito.mock(CourseReader.class);
-        GetSingleCourseOptions mockGetSingleCourseOptions = Mockito.mock(GetSingleCourseOptions.class);
+        GetSingleCourseOptions mockGetSingleCourseOptions = new GetSingleCourseOptions(anyString());
         when(mockCourseReader.getSingleCourse(mockGetSingleCourseOptions)).thenReturn(Optional.of(new Course()));
         SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
         when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
@@ -173,12 +174,12 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public SynchronizationService synchronizationService() {
-        return Mockito.mock(SynchronizationService.class);
+        return new SynchronizationService();
     }
     
     @Bean
     public CanvasApiWrapperService canvasApiWrapperService() {
-        return Mockito.mock(CanvasApiWrapperService.class);
+        return new CanvasApiWrapperService();
     }
 
     @Bean
