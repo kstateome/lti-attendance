@@ -1,6 +1,5 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.config.AppConfig;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
@@ -8,9 +7,10 @@ import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.attendance.util.RoleChecker;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.LtiLaunchData;
-import edu.ksu.lti.controller.LtiLaunchController;
+import edu.ksu.lti.launch.controller.LtiLaunchController;
+import edu.ksu.lti.launch.controller.OauthController;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -58,17 +59,17 @@ public class AttendanceBaseController extends LtiLaunchController {
     @RequestMapping("/")
     public ModelAndView home(HttpServletRequest request) {
         LOG.info("Showing Activity Reporting configuration XML");
-        String ltiLaunchUrl = AppConfig.getApplicationBaseUrl(request, true) + "/launch";
+        String ltiLaunchUrl = OauthController.getApplicationBaseUrl(request, true) + "/launch";
         LOG.debug("LTI launch URL: " + ltiLaunchUrl);
         return new ModelAndView("ltiConfigure", "url", ltiLaunchUrl);
     }
 
     protected void ensureCanvasApiTokenPresent() throws NoLtiSessionException {
-        canvasService.ensureApiTokenPresent(getApplicationName());
+        canvasService.ensureApiTokenPresent();
     }
 
     @RequestMapping("/initialize")
-    public ModelAndView initialize() throws NoLtiSessionException {
+    public ModelAndView initialize() throws NoLtiSessionException, IOException {
         ensureCanvasApiTokenPresent();
         canvasService.validateOAuthToken();
 

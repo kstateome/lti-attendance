@@ -5,8 +5,6 @@ import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.attendance.util.RoleChecker;
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
 import edu.ksu.canvas.interfaces.SectionReader;
@@ -15,11 +13,13 @@ import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
 import edu.ksu.canvas.repository.ConfigRepository;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.LtiLaunchData;
-import edu.ksu.lti.model.LtiSession;
-import edu.ksu.lti.util.CanvasInstanceChecker;
-import edu.ksu.lti.util.CanvasUtil;
+import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiLaunchData;
+import edu.ksu.lti.launch.model.LtiSession;
+import edu.ksu.lti.launch.oauth.OauthToken;
+import edu.ksu.lti.launch.security.CanvasInstanceChecker;
+import edu.ksu.lti.launch.service.LtiSessionService;
 import org.apache.log4j.Logger;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
@@ -36,7 +36,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 
@@ -89,7 +91,9 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
         CanvasApiFactory mockApiFactory = Mockito.mock(CanvasApiFactory.class);
 
         CourseReader mockCourseReader = Mockito.mock(CourseReader.class);
-        when(mockCourseReader.getSingleCourse(any(), any())).thenReturn(Optional.of(new Course()));
+        GetSingleCourseOptions mockGetSingleCourseOptions = new GetSingleCourseOptions(any());
+        mockGetSingleCourseOptions.includes(any());
+        when(mockCourseReader.getSingleCourse(mockGetSingleCourseOptions)).thenReturn(Optional.of(new Course()));
         SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
         when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
         EnrollmentsReader mockEnrollmentsReader = Mockito.mock(EnrollmentsReader.class);
@@ -117,7 +121,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public CanvasInstanceChecker canvasInstanceChecker() {
-         return new CanvasInstanceChecker();
+         return Mockito.mock(CanvasInstanceChecker.class);
     }
     
     @Bean
@@ -126,14 +130,14 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
     
     @Bean
-    public LtiLaunch ltiLaunch() throws NoLtiSessionException {
-        LtiLaunch ltiLaunch = Mockito.mock(LtiLaunch.class);
+    public LtiSessionService ltiLaunch() throws NoLtiSessionException {
+        LtiSessionService ltiSessionService = Mockito.mock(LtiSessionService.class);
         LtiSession fakeLtiSession = new LtiSession();
         fakeLtiSession.setEid("randomEid");
         fakeLtiSession.setCanvasCourseId(String.valueOf(COURSE_ID_EXISTING.intValue()));
-        fakeLtiSession.setCanvasOauthToken(Mockito.mock(OauthToken.class));
-        when(ltiLaunch.getLtiSession()).thenReturn(fakeLtiSession);
-        return ltiLaunch;
+        fakeLtiSession.setOauthToken(Mockito.mock(OauthToken.class));
+        when(ltiSessionService.getLtiSession()).thenReturn(fakeLtiSession);
+        return ltiSessionService;
     }
     
     @Bean
@@ -155,12 +159,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
 
         return new CanvasApiWrapperService();
     }
-    
-    @Bean
-    public CanvasUtil canvasUtil() {
-        return Mockito.mock(CanvasUtil.class);
-    }
-    
+
     @Bean
     public JmsTemplate jmsTemplate() {
         return Mockito.mock(JmsTemplate.class);

@@ -13,12 +13,14 @@ import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
@@ -56,7 +58,9 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         Long nonExistantSectionId = 2000L;
 
         CourseReader mockCourseReader = mock(CourseReader.class);
-        when(mockCourseReader.getSingleCourse(anyString(), anyList())).thenReturn(Optional.<Course>empty());
+        GetSingleCourseOptions testSingleCourseOptions = new GetSingleCourseOptions("");
+        testSingleCourseOptions.includes(Collections.emptyList());
+        when(mockCourseReader.getSingleCourse(testSingleCourseOptions)).thenReturn(Optional.<Course>empty());
 
         mockMvc.perform(get("/attendanceSummary/"+nonExistantSectionId))
             .andExpect(status().isOk())

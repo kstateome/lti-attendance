@@ -1,26 +1,20 @@
 package edu.ksu.canvas.attendance.services;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.model.Enrollment;
-import edu.ksu.canvas.model.Section;
+import java.util.*;
 
 
 
