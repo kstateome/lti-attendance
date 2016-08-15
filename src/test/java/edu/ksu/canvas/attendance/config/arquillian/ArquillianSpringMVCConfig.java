@@ -2,8 +2,7 @@ package edu.ksu.canvas.attendance.config.arquillian;
 
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.attendance.services.SynchronizationService;
+import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -17,9 +16,14 @@ import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
+import edu.ksu.lti.launch.oauth.LtiLaunch;
 import edu.ksu.lti.launch.oauth.OauthToken;
 import edu.ksu.lti.launch.security.CanvasInstanceChecker;
 import edu.ksu.lti.launch.service.LtiSessionService;
+import edu.ksu.lti.launch.service.OauthTokenRefreshService;
+import edu.ksu.lti.launch.util.CanvasResponseParser;
+import edu.ksu.lti.launch.validator.OauthTokenValidator;
+import org.apache.http.client.HttpClient;
 import org.apache.log4j.Logger;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
@@ -60,7 +64,9 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     
     public static final Long COURSE_ID_EXISTING = 50L;
     private static final Logger LOG = Logger.getLogger(ArquillianSpringMVCConfig.class);
-    
+
+
+    private final String FAKE_DOMAIN = "someFakeDomain";
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -91,8 +97,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
         CanvasApiFactory mockApiFactory = Mockito.mock(CanvasApiFactory.class);
 
         CourseReader mockCourseReader = Mockito.mock(CourseReader.class);
-        GetSingleCourseOptions mockGetSingleCourseOptions = new GetSingleCourseOptions(any());
-        mockGetSingleCourseOptions.includes(any());
+        GetSingleCourseOptions mockGetSingleCourseOptions = Mockito.mock(GetSingleCourseOptions.class);
         when(mockCourseReader.getSingleCourse(mockGetSingleCourseOptions)).thenReturn(Optional.of(new Course()));
         SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
         when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
@@ -130,7 +135,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
     
     @Bean
-    public LtiSessionService ltiLaunch() throws NoLtiSessionException {
+    public LtiSessionService ltiSessionService() throws NoLtiSessionException {
         LtiSessionService ltiSessionService = Mockito.mock(LtiSessionService.class);
         LtiSession fakeLtiSession = new LtiSession();
         fakeLtiSession.setEid("randomEid");
@@ -150,14 +155,35 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public HttpClient httpClient()  { return Mockito.mock(HttpClient.class); }
+
+    @Bean
+    public String canvasDomain() { return FAKE_DOMAIN; }
+
+    @Bean
+    public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }
+
+    @Bean
+    public OauthTokenValidator oauthTokenValidator() { return Mockito.mock(OauthTokenValidator.class); }
+
+    @Bean
+    public OauthTokenRefreshService oauthTokenRefreshService() {
+        return Mockito.mock(OauthTokenRefreshService.class);
+    }
+
+    @Bean
     public SynchronizationService synchronizationService() {
-        return new SynchronizationService();
+        return Mockito.mock(SynchronizationService.class);
     }
     
     @Bean
     public CanvasApiWrapperService canvasApiWrapperService() {
+        return Mockito.mock(CanvasApiWrapperService.class);
+    }
 
-        return new CanvasApiWrapperService();
+    @Bean
+    public LtiLaunch ltiLaunch() {
+        return Mockito.mock(LtiLaunch.class);
     }
 
     @Bean

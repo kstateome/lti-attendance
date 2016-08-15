@@ -97,7 +97,7 @@ public class TestSpringMVCConfig {
     }
 
     @Bean
-    public SynchronizationService synchornizationService() {
+    public SynchronizationService synchronizationService() {
         return Mockito.mock(SynchronizationService.class);
     }
     
