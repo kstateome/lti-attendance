@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.3.RELEASE</version>
+	</parent>
+
+	<groupId>edu.ksu.ome.lti</groupId>
     <artifactId>lti-attendance</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <parent>
-        <groupId>edu.ksu.ome.lti</groupId>
-        <artifactId>lti-pom</artifactId>
-        <version>1.1.7</version>
-    </parent>
-
 
     <scm>
         <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
@@ -38,21 +38,18 @@
         <plugins>
             <plugin> <!-- copy .jsp files from lti-common -->
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <overlays>
-                        <overlay>
-                            <groupId>edu.ksu.ome.lti</groupId>
-                            <artifactId>lti-common</artifactId>
-                            <type>jar</type>
-                            <includes>
-                                <include>**/*.jsp</include>
-                            </includes>
-                            <targetPath>WEB-INF</targetPath>
-                        </overlay>
-                    </overlays>
-                </configuration>
+                <artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
             </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.1</version>
+			</plugin>
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>
@@ -350,12 +347,6 @@
 
 	    <!-- Arquillian related dependencies for running the Arquillian tests -->
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.2</version> <!-- must be this version for Arquillian to work -->
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.2.12</version>
@@ -449,11 +440,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>edu.ksu.ome.lti</groupId>
-            <artifactId>lti-common</artifactId>
-            <version>1.2.16</version>
-        </dependency>
-        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc7</artifactId>
             <version>12.1.0.1.0</version>
@@ -462,13 +448,40 @@
         <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0-SNAPSHOT</version>
         </dependency>
+		<dependency>
+			<groupId>edu.ksu.ome.lti</groupId>
+			<artifactId>lti-persist</artifactId>
+			<version>1.2.18</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.ksu.ome.lti</groupId>
+			<artifactId>lti-launch</artifactId>
+			<version>1.4.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>provided</scope>
+		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.jms</groupId>
+			<artifactId>jboss-jms-api_1.1_spec</artifactId>
+			<version>1.0.1.Final</version>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -545,6 +558,20 @@
             <artifactId>log4j</artifactId>
             <scope>test</scope>
         </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-w</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j</artifactId>
@@ -556,6 +583,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    </dependencies>
+	</dependencies>
 
 </project>

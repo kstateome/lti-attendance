@@ -22,7 +22,7 @@ import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
-import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

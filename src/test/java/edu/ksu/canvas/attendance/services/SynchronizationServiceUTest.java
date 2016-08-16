@@ -1,53 +1,46 @@
 package edu.ksu.canvas.attendance.services;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
+import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.model.User;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiSession;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.powermock.reflect.Whitebox;
-import org.powermock.reflect.internal.WhiteboxImpl;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
+import org.powermock.reflect.internal.WhiteboxImpl;
 
-import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.canvas.model.Enrollment;
-import edu.ksu.canvas.model.Section;
-import edu.ksu.canvas.model.User;
-import edu.ksu.lti.model.LtiSession;
-import org.hamcrest.Matchers;
-
+import java.io.IOException;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
-import static org.powermock.api.mockito.PowerMockito.when;
-
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.argThat;
-import static org.mockito.Mockito.anyLong;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 
 @RunWith(PowerMockRunner.class)

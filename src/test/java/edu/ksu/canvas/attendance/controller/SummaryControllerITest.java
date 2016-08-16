@@ -6,7 +6,7 @@ import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.repository.*;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
-import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
