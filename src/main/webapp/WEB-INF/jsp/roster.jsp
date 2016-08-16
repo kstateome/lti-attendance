@@ -173,14 +173,7 @@
                                 <td>
                                 <c:choose>
                                     <c:when test="${rosterForm.simpleAttendance}">
-                                        <c:choose>
-                                            <c:when test="${attendance.status == 'TARDY' || attendance.status == 'ABSENT'}">
-                                                <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" disabled="true" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
-                                            </c:otherwise>
-                                        </c:choose>
+                                        <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
                                     </c:when>
                                     <c:otherwise>
                                         <c:choose>
@@ -237,14 +230,12 @@
             if ($(this).val() === '<%=Status.TARDY%>') {
                 minutesMissed.removeAttr('disabled');
                 minutesMissed.focus();
-                notes.removeAttr('disabled');
                 notes.focus();
 
             }
             else if ($(this).val() === '<%=Status.ABSENT%>') {
                 minutesMissed.removeAttr('disabled');
                 minutesMissed.focus();
-                notes.removeAttr('disabled');
                 notes.focus();
                 minutesMissed.val(${rosterForm.defaultMinutesPerSession});
                 attendanceId.val(${rosterForm.defaultMinutesPerSession});
@@ -252,9 +243,7 @@
             else {
                 minutesMissed.attr('disabled', 'disabled');
                 minutesMissed.val('');
-                notes.attr('disabled', 'disabled');
-                notes.val('');
-
+                notes.focus();
             }
         });
 
@@ -267,12 +256,6 @@
                 $('#minutesMissed' + studentId).removeAttr('disabled');
             } else {
                 $('#minutesMissed' + studentId).attr('disabled', 'true');
-            }
-            $('#notes' + studentId).val('');
-            if (status == 'tardy' || status == 'absent') {
-                $('#notes' + studentId).removeAttr('disabled');
-            } else {
-                $('#notes' + studentId).attr('disabled', 'true');
             }
         });
 
