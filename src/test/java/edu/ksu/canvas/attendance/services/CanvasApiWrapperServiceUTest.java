@@ -84,7 +84,7 @@ public class CanvasApiWrapperServiceUTest {
         when(mockCanvasApiFactory.getReader(eq(EnrollmentsReader.class), any(String.class))).thenReturn(mockEnrollmentReader);
         when(mockEnrollmentReader.getSectionEnrollments(eq(Long.toString(firstSectiondId)), any(List.class))).thenReturn(firstSectionEnrollments);
         when(mockEnrollmentReader.getSectionEnrollments(eq(Long.toString(secondSectionId)), any(List.class))).thenReturn(secondSectionEnrollments);
-        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections);
+        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections, mockLtiSession.getApiToken());
 
         assertEquals(expectedMapSize, actualMap.keySet().size());
         assertThat(actualMap.keySet(), containsInAnyOrder(firstSection, secondSection));

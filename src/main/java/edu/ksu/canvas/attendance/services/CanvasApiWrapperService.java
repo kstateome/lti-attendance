@@ -1,8 +1,6 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
-import edu.ksu.lti.launch.oauth.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
@@ -12,6 +10,7 @@ import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
@@ -76,10 +75,8 @@ public class CanvasApiWrapperService {
         return ltiSession.getLtiLaunchData().getLis_person_sourcedid();
     }
 
-    public List<Section> getSections(long canvasCourseId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiSessionService.getLtiSession();
-        OauthToken oauthToken = ltiSession.getOauthToken();
-        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getApiToken());
+    public List<Section> getSections(long canvasCourseId, String oauthToken) throws NoLtiSessionException {
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken);
         try {
             return sectionReader.listCourseSections(Long.toString(canvasCourseId), Collections.singletonList(SectionIncludes.students));
         } catch (IOException e) {
@@ -87,10 +84,8 @@ public class CanvasApiWrapperService {
         }
     }
 
-    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiSessionService.getLtiSession();
-        OauthToken oauthToken = ltiSession.getOauthToken();
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getApiToken());
+    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections, String oauthToken) throws NoLtiSessionException {
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken);
         Map<Section, List<Enrollment>> ret = new HashMap<>();
 
         if(sections == null) {
