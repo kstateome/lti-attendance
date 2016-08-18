@@ -81,6 +81,16 @@ public class AttendanceBaseController extends LtiLaunchController {
             if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0) {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
                 AttendanceStudent attendanceStudent = attendanceStudentService.getStudent(canvasService.getSisID());
+                if (attendanceStudent == null) {
+                    LOG.info("Adding synchronizing to Attendance Database");
+
+                    synchronizationService.synchronize(canvasService.getCourseId());
+                    attendanceStudent = attendanceStudentService.getStudent(canvasService.getSisID());
+                    if (attendanceStudent == null) {
+                        LOG.info("Failed synchronizing student into Attendance Database");
+                        return new ModelAndView("studentSyncFailed");
+                    }
+                }
                 return new ModelAndView("forward:studentSummary/"+ attendanceStudent.getCanvasSectionId().toString()+"/"+ attendanceStudent.getStudentId().toString());
             }
         }

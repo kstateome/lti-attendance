@@ -1,14 +1,19 @@
 package edu.ksu.canvas.attendance.services;
 
+import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
+import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiLaunchData;
+import edu.ksu.lti.launch.service.LtiSessionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -39,6 +44,11 @@ public class SynchronizationService {
     @Autowired
     private CanvasApiWrapperService canvasService;
 
+    @Autowired
+    private ConfigRepository configRepository;
+
+    @Autowired
+    private LtiSessionService ltiSessionService;
 
     public void synchronizeWhenCourseNotExistsInDB(long canvasCourseId) throws NoLtiSessionException {
         if (attendanceCourseRepository.findByCanvasCourseId(canvasCourseId) == null) {
@@ -47,12 +57,19 @@ public class SynchronizationService {
     }
 
     public void synchronize(long canvasCourseId) throws NoLtiSessionException {
-        List<Section> sections = canvasService.getSections(canvasCourseId);
+        String token = ltiSessionService.getLtiSession().getOauthToken().getApiToken();
+
+        if(canvasService.getRoles().contains(LtiLaunchData.InstitutionRole.Learner)) {
+            ConfigItem adminToken = configRepository.findByLtiApplicationAndKey("Attendance", "admin_token");
+            token = adminToken.getValue();
+        }
+
+        List<Section> sections = canvasService.getSections(canvasCourseId, token);
 
         synchronizeCourseFromCanvasToDb(canvasCourseId);
         synchronizeSectionsFromCanvasToDb(sections);
 
-        Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections);
+        Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections, token);
         synchronizeStudentsFromCanvasToDb(canvasSectionMap);
     }
 
@@ -117,6 +134,10 @@ public class SynchronizationService {
                 student.setCanvasSectionId(section.getId());
                 student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
                 student.setDeleted(foundUser.isPresent() ? foundUser.get().getDeleted() : Boolean.FALSE);
+                if (student.getAttendances() == null) {
+                    List<Attendance> attendances = new ArrayList<>();
+                    student.setAttendances(attendances);
+                }
 
                 ret.add(studentRepository.save(student));
             }

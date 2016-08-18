@@ -9,8 +9,12 @@ import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
+import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiSession;
+import edu.ksu.lti.launch.oauth.OauthToken;
+import edu.ksu.lti.launch.service.LtiSessionService;
+import edu.ksu.lti.launch.service.OauthTokenRefreshService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +65,16 @@ public class SynchronizationServiceUTest {
     @Mock
     private CanvasApiWrapperService mockCanvasService;
 
+    @Mock
+    private ConfigRepository mockConfigRepository;
+
+    @Mock
+    private LtiSessionService mockLtiSessionService;
+
+    @Mock
+    private OauthTokenRefreshService mockOauthTokenRefreshService;
+
+    public static final String ARBITRARY_STRING_OATHTOKEN = "1726~apC4CBtG4uZakngggggghsBuxwCkdrJZOu2jDstbizQyAJresn3BFKxIiUXPON0k";
 
     @Before
     public void setup() {
@@ -69,6 +83,8 @@ public class SynchronizationServiceUTest {
         Whitebox.setInternalState(synchronizationService, mockStudentRepository);
         Whitebox.setInternalState(synchronizationService, mockSectionRepository);
         Whitebox.setInternalState(synchronizationService, mockCanvasService);
+        Whitebox.setInternalState(synchronizationService, mockLtiSessionService);
+        Whitebox.setInternalState(synchronizationService, mockConfigRepository);
     }
 
     @Test
@@ -94,11 +110,17 @@ public class SynchronizationServiceUTest {
                 //don't actually try to sync
             }
         };
+        OauthToken oauthToken = new OauthToken(ARBITRARY_STRING_OATHTOKEN, mockOauthTokenRefreshService);
+        LtiSession ltiSession = new LtiSession();
+        ltiSession.setOauthToken(oauthToken);
         Whitebox.setInternalState(neuteredSync, mockCourseRepository);
         Whitebox.setInternalState(neuteredSync, mockCanvasService);
-
+        Whitebox.setInternalState(neuteredSync, mockLtiSessionService);
+        Whitebox.setInternalState(neuteredSync, mockConfigRepository);
         SynchronizationService spy = spy(neuteredSync);
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(null);
+        when(mockLtiSessionService.getLtiSession()).thenReturn(ltiSession);
+
         spy.synchronizeWhenCourseNotExistsInDB(canvasCourseId);
 
         verify(spy, times(1)).synchronize(canvasCourseId);
@@ -108,6 +130,10 @@ public class SynchronizationServiceUTest {
     public void synchronize_HappyPatchCallsInternalSynchornizationMethods() throws Exception {
         long canvasCourseId = 300L;
         SynchronizationService spy = spy(synchronizationService);
+        OauthToken oauthToken = new OauthToken(ARBITRARY_STRING_OATHTOKEN, mockOauthTokenRefreshService);
+        LtiSession ltiSession = new LtiSession();
+        ltiSession.setOauthToken(oauthToken);
+        when(mockLtiSessionService.getLtiSession()).thenReturn(ltiSession);
 
         spy.synchronize(canvasCourseId);
 
