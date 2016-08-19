@@ -11,7 +11,7 @@ import edu.ksu.lti.launch.security.CanvasInstanceChecker;
 import edu.ksu.lti.launch.service.*;
 import edu.ksu.lti.launch.util.CanvasResponseParser;
 import edu.ksu.lti.launch.validator.OauthTokenValidator;
-import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -59,7 +59,7 @@ public class TestSpringMVCConfig {
     public String canvasDomain() { return FAKE_DOMAIN; }
 
     @Bean
-    public HttpClient httpClient()  { return Mockito.mock(HttpClient.class); }
+    public HttpClientBuilder httpClientBuilder()  { return Mockito.mock(HttpClientBuilder.class); }
 
     @Bean
     public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }

@@ -24,8 +24,7 @@ import edu.ksu.lti.launch.service.LtiSessionService;
 import edu.ksu.lti.launch.service.OauthTokenRefreshService;
 import edu.ksu.lti.launch.util.CanvasResponseParser;
 import edu.ksu.lti.launch.validator.OauthTokenValidator;
-import org.apache.http.client.HttpClient;
-import org.apache.log4j.Logger;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
 import org.springframework.jms.core.JmsTemplate;
@@ -64,7 +63,6 @@ import static org.mockito.Mockito.when;
 public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     
     public static final Long COURSE_ID_EXISTING = 50L;
-    private static final Logger LOG = Logger.getLogger(ArquillianSpringMVCConfig.class);
 
 
     private final String FAKE_DOMAIN = "someFakeDomain";
@@ -159,7 +157,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public HttpClient httpClient()  { return Mockito.mock(HttpClient.class); }
+    public HttpClientBuilder httpClientBuilder()  { return Mockito.mock(HttpClientBuilder.class); }
 
     @Bean
     public String canvasDomain() { return FAKE_DOMAIN; }
