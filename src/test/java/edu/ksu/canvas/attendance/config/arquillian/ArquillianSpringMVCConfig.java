@@ -139,6 +139,9 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     public LtiSessionService ltiSessionService() throws NoLtiSessionException {
         LtiSessionService ltiSessionService = Mockito.mock(LtiSessionService.class);
         LtiSession fakeLtiSession = new LtiSession();
+        LtiLaunchData fakeLtiLaunchData = new LtiLaunchData();
+        fakeLtiLaunchData.setRoles("Instructor");
+        fakeLtiSession.setLtiLaunchData(fakeLtiLaunchData);
         fakeLtiSession.setEid("randomEid");
         fakeLtiSession.setCanvasCourseId(String.valueOf(COURSE_ID_EXISTING.intValue()));
         fakeLtiSession.setOauthToken(Mockito.mock(OauthToken.class));
