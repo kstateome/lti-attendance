@@ -1,10 +1,8 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.entity.lti.OauthToken;
 import edu.ksu.canvas.enums.EnrollmentType;
 import edu.ksu.canvas.enums.SectionIncludes;
-import edu.ksu.canvas.error.NoLtiSessionException;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentsReader;
@@ -12,21 +10,18 @@ import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.LtiLaunchData;
-import edu.ksu.lti.model.LtiSession;
-
+import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiLaunchData;
+import edu.ksu.lti.launch.model.LtiSession;
+import edu.ksu.lti.launch.oauth.LtiLaunch;
+import edu.ksu.lti.launch.service.LtiSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Component
@@ -37,11 +32,14 @@ public class CanvasApiWrapperService {
     protected LtiLaunch ltiLaunch;
 
     @Autowired
+    private LtiSessionService ltiSessionService;
+
+    @Autowired
     private CanvasApiFactory canvasApiFactory;
 
 
     public Integer getCourseId() throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiSession ltiSession = ltiSessionService.getLtiSession();
         return Integer.valueOf(ltiSession.getCanvasCourseId());
     }
 
@@ -52,44 +50,42 @@ public class CanvasApiWrapperService {
     }
 
     private Optional<Course> getCourse() throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiSession ltiSession = ltiSessionService.getLtiSession();
 
         String canvasCourseId = ltiSession.getCanvasCourseId();
-        String oAuthToken = ltiSession.getCanvasOauthToken().getToken();
+        String oAuthToken = ltiSession.getApiToken();
 
         CourseReader reader = canvasApiFactory.getReader(CourseReader.class, oAuthToken);
         try {
-            return reader.getSingleCourse(canvasCourseId, Collections.emptyList());
+            GetSingleCourseOptions getSingleCourseOptions = new GetSingleCourseOptions(canvasCourseId);
+            getSingleCourseOptions.includes(Collections.emptyList());
+            return reader.getSingleCourse(getSingleCourseOptions);
         } catch (IOException e) {
             throw new UnexpectedCanvasWrapperException("Unexpected problem getting Course from Canvas", e);
         }
     }
 
     public String getEid() throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiSession ltiSession = ltiSessionService.getLtiSession();
         return ltiSession.getEid();
     }
 
     public String getSisID() throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiSession ltiSession = ltiSessionService.getLtiSession();
         return ltiSession.getLtiLaunchData().getLis_person_sourcedid();
     }
 
-    public List<Section> getSections(long canvasCourseId) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken.getToken());
+    public List<Section> getSections(long canvasCourseId, String oauthToken) throws NoLtiSessionException {
+        SectionReader sectionReader = canvasApiFactory.getReader(SectionReader.class, oauthToken);
         try {
-            return sectionReader.listCourseSections((int) canvasCourseId, Collections.singletonList(SectionIncludes.students));
+            return sectionReader.listCourseSections(Long.toString(canvasCourseId), Collections.singletonList(SectionIncludes.students));
         } catch (IOException e) {
             throw new UnexpectedCanvasWrapperException("Unexpected problem getting Sections from Canvas", e);
         }
     }
 
-    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections) throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
-        OauthToken oauthToken = ltiSession.getCanvasOauthToken();
-        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken.getToken());
+    public Map<Section,List<Enrollment>> getEnrollmentsFromCanvas(List<Section> sections, String oauthToken) throws NoLtiSessionException {
+        EnrollmentsReader enrollmentsReader = canvasApiFactory.getReader(EnrollmentsReader.class, oauthToken);
         Map<Section, List<Enrollment>> ret = new HashMap<>();
 
         if(sections == null) {
@@ -98,7 +94,7 @@ public class CanvasApiWrapperService {
 
         for (Section section : sections) {
             try {
-                for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments((int) section.getId(), Collections.singletonList(EnrollmentType.STUDENT))) {
+                for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments(Long.toString(section.getId()), Collections.singletonList(EnrollmentType.STUDENT))) {
                     List<Enrollment> enrollments = ret.get(section);
 
                     if(enrollments == null) {
@@ -117,17 +113,17 @@ public class CanvasApiWrapperService {
     }
 
     public List<LtiLaunchData.InstitutionRole> getRoles() throws NoLtiSessionException {
-        LtiSession ltiSession = ltiLaunch.getLtiSession();
+        LtiSession ltiSession = ltiSessionService.getLtiSession();
         LtiLaunchData launchData = ltiSession.getLtiLaunchData();
         return launchData.getRolesList();
     }
 
-    public void validateOAuthToken() throws NoLtiSessionException {
+    public void validateOAuthToken() throws NoLtiSessionException, IOException {
         ltiLaunch.validateOAuthToken();
     }
 
-    public void ensureApiTokenPresent(String applicationName) throws NoLtiSessionException {
-        ltiLaunch.ensureApiTokenPresent(applicationName);
+    public void ensureApiTokenPresent() throws NoLtiSessionException {
+        ltiLaunch.ensureApiTokenPresent();
     }
 
 }

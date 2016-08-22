@@ -7,7 +7,7 @@ import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.ReportService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
-import edu.ksu.canvas.error.NoLtiSessionException;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

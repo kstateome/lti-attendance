@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.util;
 
-import edu.ksu.lti.LtiLaunchData;
+import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.log4j.Logger;
 
 import java.util.List;

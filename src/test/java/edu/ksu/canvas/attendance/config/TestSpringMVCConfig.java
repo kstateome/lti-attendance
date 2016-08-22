@@ -1,22 +1,22 @@
 package edu.ksu.canvas.attendance.config;
 
+import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.attendance.services.*;
+import edu.ksu.canvas.attendance.util.RoleChecker;
+import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.canvas.repository.LtiKeyRepository;
+import edu.ksu.canvas.repository.OauthTokenRepository;
+import edu.ksu.lti.launch.oauth.LtiLaunch;
+import edu.ksu.lti.launch.security.CanvasInstanceChecker;
+import edu.ksu.lti.launch.service.*;
+import edu.ksu.lti.launch.util.CanvasResponseParser;
+import edu.ksu.lti.launch.validator.OauthTokenValidator;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
-
-import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.attendance.services.SynchronizationService;
-import edu.ksu.canvas.attendance.util.RoleChecker;
-import edu.ksu.canvas.repository.ConfigRepository;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.util.CanvasInstanceChecker;
 
 
 @Configuration
@@ -34,6 +34,8 @@ import edu.ksu.lti.util.CanvasInstanceChecker;
         })
 public class TestSpringMVCConfig {
 
+    private final String FAKE_DOMAIN = "someFakeDomain";
+
     @Bean
     public CanvasApiFactory canvasApiFactory() {
         return Mockito.mock(CanvasApiFactory.class);
@@ -48,19 +50,54 @@ public class TestSpringMVCConfig {
     public ConfigRepository configRepository() {
         return Mockito.mock(ConfigRepository.class);
     }
-    
+
+
+    @Bean
+    public AttendanceLtiLaunchKeyService attendanceLtiLaunchKeyService () { return Mockito.mock(AttendanceLtiLaunchKeyService.class); }
+
+    @Bean
+    public String canvasDomain() { return FAKE_DOMAIN; }
+
+    @Bean
+    public HttpClientBuilder httpClientBuilder()  { return Mockito.mock(HttpClientBuilder.class); }
+
+    @Bean
+    public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }
+
+    @Bean
+    public OauthTokenRepository oauthTokenRepository () { return Mockito.mock(OauthTokenRepository.class); }
+
+    @Bean
+    public AttendanceOauthTokenService attendanceOauthTokenService() { return  Mockito.mock(AttendanceOauthTokenService.class); }
+
+    @Bean
+    public OauthTokenRefreshService oauthTokenRefreshService() { return Mockito.mock(OauthTokenRefreshService.class); }
+
+    @Bean
+    public OauthTokenValidator oauthTokenValidator() { return Mockito.mock(OauthTokenValidator.class); }
+
+    @Bean
+    public LtiSessionService ltiSessionService() { return Mockito.mock(LtiSessionService.class); }
+
     @Bean
     public LtiLaunch ltiLaunch() {
         return Mockito.mock(LtiLaunch.class);
     }
-    
+
+    @Bean
+    public AttendanceConfigService attendanceConfigService () { return Mockito.mock(AttendanceConfigService.class); }
+
+    @Bean
+    public LtiKeyRepository ltiKeyRepository () { return Mockito.mock(LtiKeyRepository.class); }
+
+
     @Bean
     public RoleChecker roleChecker() {
         return new AppConfig().roleChecker();
     }
 
     @Bean
-    public SynchronizationService synchornizationService() {
+    public SynchronizationService synchronizationService() {
         return Mockito.mock(SynchronizationService.class);
     }
     

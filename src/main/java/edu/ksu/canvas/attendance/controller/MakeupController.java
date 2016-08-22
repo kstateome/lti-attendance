@@ -1,8 +1,12 @@
 package edu.ksu.canvas.attendance.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.form.MakeupForm;
+import edu.ksu.canvas.attendance.form.MakeupValidator;
+import edu.ksu.canvas.attendance.services.AttendanceStudentService;
+import edu.ksu.canvas.attendance.services.MakeupService;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +15,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.form.MakeupForm;
-import edu.ksu.canvas.attendance.form.MakeupValidator;
-import edu.ksu.canvas.attendance.services.AttendanceStudentService;
-import edu.ksu.canvas.attendance.services.MakeupService;
-import edu.ksu.canvas.error.NoLtiSessionException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller

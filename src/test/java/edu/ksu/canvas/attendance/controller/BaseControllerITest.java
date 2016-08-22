@@ -2,10 +2,10 @@ package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
 import edu.ksu.canvas.attendance.config.TestSpringMVCConfig;
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.error.NoLtiSessionException;
-import edu.ksu.lti.LtiLaunch;
-import edu.ksu.lti.model.LtiSession;
+import edu.ksu.lti.launch.oauth.OauthToken;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
+import edu.ksu.lti.launch.model.LtiSession;
+import edu.ksu.lti.launch.service.LtiSessionService;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,7 +33,7 @@ public class BaseControllerITest {
     protected WebApplicationContext webApplicationContext;
     
     @Autowired
-    protected LtiLaunch mockLtiLaunch;
+    protected LtiSessionService ltiSessionService;
     
     protected LtiSession mockLtiSession;
     
@@ -43,10 +43,10 @@ public class BaseControllerITest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockLtiSession = mock(LtiSession.class);
         
-        reset(mockLtiLaunch);
-        when(mockLtiLaunch.getLtiSession()).thenReturn(mockLtiSession);
+        reset(ltiSessionService);
+        when(ltiSessionService.getLtiSession()).thenReturn(mockLtiSession);
         when(mockLtiSession.getEid()).thenReturn("someEid");
-        when(mockLtiSession.getCanvasOauthToken()).thenReturn(mock(OauthToken.class));
+        when(mockLtiSession.getOauthToken()).thenReturn(mock(OauthToken.class));
     }
     
 }
