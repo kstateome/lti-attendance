@@ -453,7 +453,7 @@
         <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.0.3</version>
         </dependency>
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
@@ -463,7 +463,7 @@
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
 			<artifactId>lti-launch</artifactId>
-			<version>1.4.0-SNAPSHOT</version>
+			<version>1.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
