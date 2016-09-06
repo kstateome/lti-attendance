@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.*;
 
 
 @Controller
@@ -84,5 +87,71 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
         return page;
     }
+
+    @RequestMapping("/{sectionId}/csv")
+    public void exportSummaryCVS(@PathVariable("sectionId") String sectionId, HttpServletResponse response) throws IOException, NoLtiSessionException {
+
+        LOG.info("eid:"  + canvasService.getEid() + " has requested a CSV export of the Attendance Summary.");
+        StringBuilder csvStringBuilder = new StringBuilder();
+
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        if (validatedSectionId == null) {
+            return;
+        }
+        AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+
+        //Checking if Attendance Summary is Simple or Aviation
+        CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
+        boolean isSimpleAttendance = false;
+        if (selectedSection != null){
+            courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+            isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
+        }
+
+        //Add headers to the cvs file
+        LOG.debug("Creating CSV export for section " + sectionId);
+        List<String> headers = isSimpleAttendance ? Arrays.asList("Name", "Total Classes Absent", "Total Classes Tardy")
+                                                  : Arrays.asList("Name", "Total Minutes Missed", "Minutes Made Up", "Minutes To Be Made Up", "% of Course Missed");
+        writeLine(csvStringBuilder, headers);
+
+        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
+                reportService.getSimpleAttendanceSummaryReport(validatedSectionId)
+                : reportService.getAviationAttendanceSummaryReport(validatedSectionId);
+
+        List<String> row;
+        //Adds entries as rows to the cvs
+        for (AttendanceSummaryModel model : summaryForSections) {
+            for (AttendanceSummaryModel.Entry entry: model.getEntries()) {
+                if (!entry.isDropped()) {
+                    row = isSimpleAttendance ? Arrays.asList(entry.getStudentName(), entry.getTotalClassesMissed() + "", entry.getTotalClassesTardy() + "")
+                            : Arrays.asList(entry.getStudentName(), entry.getSumMinutesMissed() + "", entry.getSumMinutesMadeup() + "", entry.getRemainingMinutesMadeup() + "", entry.getPercentCourseMissed() + "");
+                    writeLine(csvStringBuilder, row);
+                }
+            }
+        }
+
+        LOG.debug("Exporting created CSV");
+        response.setContentType("text/csv;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=attendance_csv_export.csv");
+        ServletOutputStream out = response.getOutputStream();
+
+        OutputStreamWriter outWriter = new OutputStreamWriter(new BufferedOutputStream(out));
+        outWriter.write(csvStringBuilder.toString());
+        outWriter.flush();
+        outWriter.close();
+    }
+
+    public static void writeLine(StringBuilder sb, List<String> values) throws IOException {
+        StringJoiner sj = new StringJoiner('"'+","+'"', '"'+"", '"'+"\n");
+        for (String value : values) {
+            sj.add(value);
+        }
+        sb.append(sj.toString());
+    }
+
+
+
+
+
 
 }
