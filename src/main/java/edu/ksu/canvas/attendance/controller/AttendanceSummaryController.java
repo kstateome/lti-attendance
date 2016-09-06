@@ -19,13 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.io.OutputStreamWriter;
+import java.util.*;
 
 
 @Controller
@@ -95,7 +92,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
     public void exportSummaryCVS(@PathVariable("sectionId") String sectionId, HttpServletResponse response) throws IOException, NoLtiSessionException {
 
         LOG.info("eid:"  + canvasService.getEid() + " has requested a CSV export of the Attendance Summary.");
-        StringBuffer csvStringBuffer = new StringBuffer();
+        StringBuilder csvStringBuilder = new StringBuilder();
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if (validatedSectionId == null) {
@@ -115,7 +112,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
         LOG.debug("Creating CSV export for section " + sectionId);
         List<String> headers = isSimpleAttendance ? Arrays.asList("Name", "Total Classes Absent", "Total Classes Tardy")
                                                   : Arrays.asList("Name", "Total Minutes Missed", "Minutes Made Up", "Minutes To Be Made Up", "% of Course Missed");
-        writeLine(csvStringBuffer, headers);
+        writeLine(csvStringBuilder, headers);
 
         List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
                 reportService.getSimpleAttendanceSummaryReport(validatedSectionId)
@@ -128,44 +125,28 @@ public class AttendanceSummaryController extends AttendanceBaseController {
                 if (!entry.isDropped()) {
                     row = isSimpleAttendance ? Arrays.asList(entry.getStudentName(), entry.getTotalClassesMissed() + "", entry.getTotalClassesTardy() + "")
                             : Arrays.asList(entry.getStudentName(), entry.getSumMinutesMissed() + "", entry.getSumMinutesMadeup() + "", entry.getRemainingMinutesMadeup() + "", entry.getPercentCourseMissed() + "");
-                    writeLine(csvStringBuffer, row);
+                    writeLine(csvStringBuilder, row);
                 }
             }
         }
 
         LOG.debug("Exporting created CSV");
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename=attendance_csv_export.csv.csv");
+        response.setContentType("text/csv;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=attendance_csv_export.csv");
         ServletOutputStream out = response.getOutputStream();
-        InputStream in = new ByteArrayInputStream(csvStringBuffer.toString().getBytes("UTF-8"));
 
-        byte[] outputByte = new byte[4096];
-        //copy binary contect to output stream
-        while(in.read(outputByte, 0, 4096) != -1)
-        {
-            out.write(outputByte, 0, 4096);
-        }
-        in.close();
-        out.flush();
-        out.close();
+        OutputStreamWriter outWriter = new OutputStreamWriter(new BufferedOutputStream(out));
+        outWriter.write(csvStringBuilder.toString());
+        outWriter.flush();
+        outWriter.close();
     }
 
-    public static void writeLine(StringBuffer sb, List<String> values) throws IOException {
-
-        char separators = ';';
-        boolean first = true;
-
-
+    public static void writeLine(StringBuilder sb, List<String> values) throws IOException {
+        StringJoiner sj = new StringJoiner('"'+","+'"', '"'+"", '"'+"\n");
         for (String value : values) {
-            if (!first) {
-                sb.append(separators);
-            }
-            sb.append('"');
-            sb.append(value);
-            sb.append('"');
-            first = false;
+            sj.add(value);
         }
-        sb.append("\n");
+        sb.append(sj.toString());
     }
 
 
