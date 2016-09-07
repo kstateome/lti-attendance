@@ -6,6 +6,7 @@ import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.ReportService;
+import edu.ksu.canvas.attendance.util.AttendanceSummaryCSVCreator;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -91,9 +92,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
     @RequestMapping("/{sectionId}/csv")
     public void exportSummaryCVS(@PathVariable("sectionId") String sectionId, HttpServletResponse response) throws IOException, NoLtiSessionException {
 
-        LOG.info("eid:"  + canvasService.getEid() + " has requested a CSV export of the Attendance Summary.");
-        StringBuilder csvStringBuilder = new StringBuilder();
-
+        LOG.info("eid:" + canvasService.getEid() + " has requested a CSV export of the Attendance Summary.");
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if (validatedSectionId == null) {
             return;
@@ -108,27 +107,11 @@ public class AttendanceSummaryController extends AttendanceBaseController {
             isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
         }
 
-        //Add headers to the cvs file
-        LOG.debug("Creating CSV export for section " + sectionId);
-        List<String> headers = isSimpleAttendance ? Arrays.asList("Name", "Total Classes Absent", "Total Classes Tardy")
-                                                  : Arrays.asList("Name", "Total Minutes Missed", "Minutes Made Up", "Minutes To Be Made Up", "% of Course Missed");
-        writeLine(csvStringBuilder, headers);
-
         List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
                 reportService.getSimpleAttendanceSummaryReport(validatedSectionId)
                 : reportService.getAviationAttendanceSummaryReport(validatedSectionId);
 
-        List<String> row;
-        //Adds entries as rows to the cvs
-        for (AttendanceSummaryModel model : summaryForSections) {
-            for (AttendanceSummaryModel.Entry entry: model.getEntries()) {
-                if (!entry.isDropped()) {
-                    row = isSimpleAttendance ? Arrays.asList(entry.getStudentName(), entry.getTotalClassesMissed() + "", entry.getTotalClassesTardy() + "")
-                            : Arrays.asList(entry.getStudentName(), entry.getSumMinutesMissed() + "", entry.getSumMinutesMadeup() + "", entry.getRemainingMinutesMadeup() + "", entry.getPercentCourseMissed() + "");
-                    writeLine(csvStringBuilder, row);
-                }
-            }
-        }
+        StringBuilder csvStringBuilder = AttendanceSummaryCSVCreator.createAttendanceSummaryCsv(isSimpleAttendance, summaryForSections);
 
         LOG.debug("Exporting created CSV");
         response.setContentType("text/csv;charset=utf-8");
@@ -140,18 +123,5 @@ public class AttendanceSummaryController extends AttendanceBaseController {
         outWriter.flush();
         outWriter.close();
     }
-
-    public static void writeLine(StringBuilder sb, List<String> values) throws IOException {
-        StringJoiner sj = new StringJoiner('"'+","+'"', '"'+"", '"'+"\n");
-        for (String value : values) {
-            sj.add(value);
-        }
-        sb.append(sj.toString());
-    }
-
-
-
-
-
 
 }
