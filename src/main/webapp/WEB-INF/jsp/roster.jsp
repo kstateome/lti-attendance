@@ -34,13 +34,13 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
+            <a class="navbar-brand navbar-option" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
-            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
+            <li class="navbar-option"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
+            <li class="navbar-option"><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
                 Summary</a></li>
-            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
+            <li class="active navbar-option"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
     </div>
 </nav>
