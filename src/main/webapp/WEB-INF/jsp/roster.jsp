@@ -111,6 +111,11 @@
                     <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
                            value="Save Attendance"/>
                 </div>
+                <div class="col-md-3 ">
+                    <label style="color:white;">Delete Attendance</label>
+                    <input id="daleteAttendance" class="hovering-purple-button" type="button" name="deleteAttendance"
+                           value="Delete Attendance"/>
+                </div>
             </div>
         </div>
 

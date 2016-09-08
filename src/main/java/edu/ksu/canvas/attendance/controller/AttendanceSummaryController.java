@@ -6,7 +6,7 @@ import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.ReportService;
-import edu.ksu.canvas.attendance.util.AttendanceSummaryCSVCreator;
+import edu.ksu.canvas.attendance.services.AttendanceSummaryCSVService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -41,6 +41,9 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
     @Autowired
     private AttendanceCourseService courseService;
+
+    @Autowired
+    private AttendanceSummaryCSVService attendanceSummaryCSVService;
 
     @RequestMapping()
     public ModelAndView attendanceSummary() throws NoLtiSessionException {
@@ -111,7 +114,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
                 reportService.getSimpleAttendanceSummaryReport(validatedSectionId)
                 : reportService.getAviationAttendanceSummaryReport(validatedSectionId);
 
-        StringBuilder csvStringBuilder = AttendanceSummaryCSVCreator.createAttendanceSummaryCsv(isSimpleAttendance, summaryForSections);
+        StringBuilder csvStringBuilder = attendanceSummaryCSVService.createAttendanceSummaryCsv(isSimpleAttendance, summaryForSections);
 
         LOG.debug("Exporting created CSV");
         response.setContentType("text/csv;charset=utf-8");
