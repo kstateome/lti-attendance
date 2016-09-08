@@ -31,12 +31,12 @@
 <nav class="navbar navbar-default hidden-print">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
+            <a class="navbar-brand navbar-option" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
-            <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
-            <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
+            <li class="navbar-option"><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
+            <li class="active navbar-option"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
+            <li class="navbar-option"><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
         </ul>
     </div>
 </nav>
@@ -54,6 +54,7 @@
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print Report</button>
+                    <a target="_blank" class="btn btn-primary hidden-print" href="${context}/attendanceSummary/${selectedSectionId}/csv">Export to CSV</a>
                 </div>
             </div>
         </div>

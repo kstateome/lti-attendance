@@ -63,6 +63,29 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>1.0.2.Final</version>
+				<configuration>
+					<hostname>${wildfly.dc.hostname}</hostname>
+					<port>${wildfly.port}</port>
+					<username>${wildfly.user}</username>
+					<password>${wildfly.pass}</password>
+					<domain>
+						<server-groups>
+							<server-group>blue_cluster_a</server-group>
+						</server-groups>
+					</domain>
+					<filename>${project.artifactId}-${project.version}.${project.packaging}</filename>
+					<execute-commands>
+						<batch>true</batch>
+						<commands>
+							<command>/server-group=blue_cluster_a:restart-servers()</command>
+						</commands>
+					</execute-commands>
+				</configuration>
+			</plugin>
         </plugins>
 
         <pluginManagement>
