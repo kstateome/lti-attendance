@@ -142,9 +142,9 @@ public class RosterController extends AttendanceBaseController {
 
         LOG.info("eid: " + canvasService.getEid() + " is attempting to delete section attendance for section : " + sectionId);
 
-        boolean deleteable = attendanceService.delete(rosterForm);
+        boolean deleted = attendanceService.delete(rosterForm);
         ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
-        if(deleteable) {
+        if(deleted) {
             page.addObject("deleteSuccess", true);
         } else {
             page.addObject("noAttendanceToDelete", true);

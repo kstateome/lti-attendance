@@ -280,11 +280,7 @@
     });
 
     $('#deleteAttendance').click(function () {
-        var answer = confirm('Do you want to delete this Attendance?');
-        if (answer) {
-            return true;
-        }
-        return false;
+        return confirm('Do you want to delete this Attendance?');
     });
 </script>
 </body>
