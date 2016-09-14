@@ -132,4 +132,24 @@ public class RosterController extends AttendanceBaseController {
         }
     }
 
+    @RequestMapping("/{sectionId}/delete")
+    public ModelAndView deleteAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm) throws NoLtiSessionException {
+
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        if(validatedSectionId == null) {
+            return new ModelAndView("redirect:/roster");
+        }
+
+        LOG.info("eid: " + canvasService.getEid() + " is attempting to delete section attendance for section : " + sectionId);
+
+        boolean deleteable = attendanceService.delete(rosterForm);
+        ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
+        if(deleteable) {
+            page.addObject("deleteSuccess", true);
+        } else {
+            page.addObject("noAttendanceToDelete", true);
+        }
+        return page;
+    }
+
 }

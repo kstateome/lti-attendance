@@ -1,18 +1,16 @@
 package edu.ksu.canvas.attendance.repository;
 
-import java.util.Date;
-import java.util.List;
+import edu.ksu.canvas.attendance.entity.Attendance;
+import org.apache.commons.lang3.Validate;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
-
-import org.apache.commons.lang3.Validate;
-import org.springframework.stereotype.Repository;
-
-import edu.ksu.canvas.attendance.entity.Attendance;
+import java.util.Date;
+import java.util.List;
 
 
 @Repository
@@ -62,6 +60,23 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 entityManager.flush();
             }
         }
+    }
+
+    @Override
+    public void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass) {
+        Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
+
+        String jpql = "DELETE FROM Attendance WHERE attendanceId IN (" +
+                "select a.attendanceId " +
+                "FROM Attendance a " +
+                "WHERE a.attendanceStudent.canvasCourseId = :courseId " +
+                "AND trunc(a.dateOfClass) = trunc(:dateOfClass)" +
+                ")";
+
+        javax.persistence.Query query = entityManager.createQuery(jpql);
+        query.setParameter("courseId", courseId);
+        query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
+        int result = query.executeUpdate();
     }
 
 }
