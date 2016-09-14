@@ -58,6 +58,14 @@
             <div class="alert alert-success" id="saveSuccessMessage" role="alert">Attendance successfully saved.</div>
         </c:if>
 
+        <c:if test="${not empty deleteSuccess}">
+            <div class="alert alert-success" id= deleteSuccessMessage" role="alert">Attendance successfully deleted.</div>
+        </c:if>
+
+        <c:if test="${not empty noAttendanceToDelete}">
+            <div class="alert alert-warning" id= deleteErrorMessage" role="alert">No Attendance to delete.</div>
+        </c:if>
+
         <div class="container">
             <div class="row">
                 <div class='col-sm-4'>
@@ -110,6 +118,12 @@
                     <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
                     <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
                            value="Save Attendance"/>
+                </div>
+                <div class="col-md-3 deleteAttendanceButton">
+                    <label style="color:white;" for="deleteAttendance">Delete Attendance</label>
+                    <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
+                        <button  class="hovering-purple-button" type="button">Delete Attendance</button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -263,6 +277,10 @@
         if (moment($("#currentDate").val()).isAfter(moment())) {
             $("#futureDateWarning").show();
         }
+    });
+
+    $('#deleteAttendance').click(function () {
+        return confirm('Do you want to delete this Attendance?');
     });
 </script>
 </body>
