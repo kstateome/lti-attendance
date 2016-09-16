@@ -31,20 +31,19 @@
     <title>Attendance Class Roster</title>
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default hidden-print">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand navbar-option" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="navbar-option"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
-            <li class="navbar-option"><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
-                Summary</a></li>
-            <li class="active navbar-option"><a id="rosterLink" href="#">Class Roster</a></li>
+            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
+            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
+            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
     </div>
 </nav>
-<div class="container-fluid">
+<div class="container>
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST"
                action="${context}/roster/${selectedSectionId}/save">
 
@@ -114,13 +113,13 @@
                         });
                     });
                 </script>
-                <div class="col-md-3 saveAttendanceButton">
+                <div class="col-md-2 saveAttendanceButton">
                     <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
                     <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
                            value="Save Attendance"/>
                 </div>
                 <div class="col-md-3 deleteAttendanceButton">
-                    <label style="color:white;" for="deleteAttendance">Delete Attendance</label>
+                    <label style="color:white;" for="deleteAttendance">Delete Attendanc</label>
                     <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
                         <button  class="hovering-purple-button" type="button">Delete Attendance</button>
                     </a>
