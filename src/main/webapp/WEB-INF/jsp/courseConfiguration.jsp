@@ -84,12 +84,12 @@
     <br/>
     <div class="col-lg-3">
         <label for="simpleAttendance">
-            <form:checkbox path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
+            <form:radiobutton path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
         </label>
     </div>
     <div class="col-lg-3">
      <label for="showNotesToStudents">
-         <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
+         <form:radiobutton path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
         </label>
      </div>
     <br/>
