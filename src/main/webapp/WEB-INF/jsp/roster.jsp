@@ -31,20 +31,19 @@
     <title>Attendance Class Roster</title>
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default hidden-print">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand navbar-option" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
+            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="navbar-option"><a id="classSetupLink" href="${context}/courseConfiguration/${selectedSectionId}">Setup</a></li>
-            <li class="navbar-option"><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
-                Summary</a></li>
-            <li class="active navbar-option"><a id="rosterLink" href="#">Class Roster</a></li>
+            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
+            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
+            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
         </ul>
     </div>
 </nav>
-<div class="container-fluid">
+<div class="container">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST"
                action="${context}/roster/${selectedSectionId}/save">
 
@@ -84,48 +83,53 @@
                 the future.
             </div>
 
-            <div class="row">
-                <div class='col-sm-4 keep-element-above'>
-                    <div class="form-group">
-                        <label for="currentDate">Day of Attendance</label>
-
-                        <div class="input-group date" id="datePicker">
-                            <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
-                            <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy"
-                                            var="currentDateCompare"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+            <table>
+                <tr>
+                    <th><label>Day of Attendance</label></th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class='col-sm-4 keep-element-above'>
+                                <div class="form-group">
+                                    <div class="input-group date" id="datePicker">
+                                        <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
+                                        <fmt:formatDate value="${rosterForm.currentDate}" pattern="MM/dd/yyyy"
+                                                        var="currentDateCompare"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    var datePicker = $('#datePicker');
+                                    datePicker.datepicker({
+                                        autoclose: true
+                                    });
+                                    $('#currentDate').on("change", function () {
+                                        var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
+                                        $(".sectionTable").hide();
+                                        $("#waitLoading").show();
+                                        $("#sectionSelect").append($(dateChange));
+                                        $("#sectionSelect").submit();
+                                    });
+                                });
+                            </script>
+                            <div class="col-md-3 saveAttendanceButton">
+                                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
+                                       value="Save Attendance"/>
+                            </div>
+                            <div class="col-md-4 deleteAttendanceButton">
+                                <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
+                                    <button  class="hovering-purple-button" type="button">Delete Attendance</button>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <script type="text/javascript">
-                    $(function () {
-                        var datePicker = $('#datePicker');
-                        datePicker.datepicker({
-                            autoclose: true
-                        });
-                        $('#currentDate').on("change", function () {
-                            var dateChange = $("<input>").attr("type", "hidden").attr("name", "changeDate");
-                            $(".sectionTable").hide();
-                            $("#waitLoading").show();
-                            $("#sectionSelect").append($(dateChange));
-                            $("#sectionSelect").submit();
-                        });
-                    });
-                </script>
-                <div class="col-md-3 saveAttendanceButton">
-                    <label style="color:white;" for="saveAttendanceOnTop">Save Attendance</label>
-                    <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
-                           value="Save Attendance"/>
-                </div>
-                <div class="col-md-3 deleteAttendanceButton">
-                    <label style="color:white;" for="deleteAttendance">Delete Attendance</label>
-                    <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
-                        <button  class="hovering-purple-button" type="button">Delete Attendance</button>
-                    </a>
-                </div>
-            </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="container">
