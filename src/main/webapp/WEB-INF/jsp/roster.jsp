@@ -65,7 +65,7 @@
             <div class="alert alert-warning" id= deleteErrorMessage" role="alert">No Attendance to delete.</div>
         </c:if>
 
-        <div class="container">
+        <div class="container-fluid ">
             <div class="row">
                 <div class='col-sm-4'>
                     <div class="form-group">
@@ -90,7 +90,7 @@
                 <tr>
                     <td>
                         <div class="row">
-                            <div class='col-sm-4 keep-element-above'>
+                            <div class='col-md-5 keep-element-above'>
                                 <div class="form-group">
                                     <div class="input-group date" id="datePicker">
                                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
