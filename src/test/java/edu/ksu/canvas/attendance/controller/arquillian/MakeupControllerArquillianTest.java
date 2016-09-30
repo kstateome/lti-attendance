@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -61,10 +60,8 @@ public class MakeupControllerArquillianTest extends BaseArquillianTest{
     private void setAviationTypeAttendance() {
         driver.navigate().to(baseUrl + "roster");
         driver.findElement(By.id("classSetupLink")).click();
-        if(driver.findElement(By.id("simpleAttendance")).isSelected()) {
-            driver.findElement(By.id("simpleAttendance")).click();
-            driver.findElement(By.id("saveCourseConfiguration")).click();
-        }
+        driver.findElement(By.id("aviationAttendance")).click();
+        driver.findElement(By.id("saveCourseConfiguration")).click();
     }
 
 
