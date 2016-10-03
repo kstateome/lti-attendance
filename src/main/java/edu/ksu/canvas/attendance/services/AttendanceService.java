@@ -137,4 +137,18 @@ public class AttendanceService {
 
     }
 
+    @Transactional
+    public boolean delete(RosterForm rosterForm) {
+        List<Attendance> attendancesInDBForCourse = null;
+        boolean sectionHasAttendancesForDate = false;
+        for (SectionModel sectionModel : rosterForm.getSectionModels()) {
+            attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+            if (!attendancesInDBForCourse.isEmpty()) {
+                sectionHasAttendancesForDate = true;
+                attendanceRepository.deleteAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+            }
+        }
+        return sectionHasAttendancesForDate;
+    }
+
 }
