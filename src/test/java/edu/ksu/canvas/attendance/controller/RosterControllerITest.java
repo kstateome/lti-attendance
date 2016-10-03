@@ -1,14 +1,13 @@
 package edu.ksu.canvas.attendance.controller;
 
+import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
-import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
+import edu.ksu.canvas.attendance.repository.*;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
@@ -25,12 +24,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Matchers.any;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,8 +60,11 @@ public class RosterControllerITest extends BaseControllerITest {
     
     @Autowired
     private CanvasApiWrapperService canvasService;
-    
-    
+
+    @Autowired
+    private AttendanceRepositoryCustom attendanceRepository;
+
+
     @Before
     public void additionalSetup() throws NoLtiSessionException {
         existingCourse = new AttendanceCourse();
@@ -293,6 +293,100 @@ public class RosterControllerITest extends BaseControllerITest {
                                              )
                                         )
                                     )
+                        )));
+    }
+
+    @Test
+    public void deleteAttendance_NoAttendancesToDelete() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        String dateOfAttendanceAsString = "05/18/2016";
+        Date dateOfAttendance = sdf.parse(dateOfAttendanceAsString);
+        Long sectionOfExistingCourse = existingSection.getSectionId();
+
+        List<AttendanceSection> sections = new ArrayList<>();
+        sections.add(existingSection);
+        RosterForm rosterForm = new RosterForm();
+        rosterForm.setCurrentDate(dateOfAttendance);
+        rosterForm.setSectionId(sectionOfExistingCourse);
+        rosterForm.setSectionModels(new SectionModelFactory().createSectionModels(sections));
+        courseService.loadIntoForm(rosterForm, existingSection.getCanvasCourseId());
+        attendanceService.loadIntoForm(rosterForm, dateOfAttendance);
+
+        mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/delete")
+                        .param("deleteAttendance", "Delete Attendance")
+                        .param("currentDate", dateOfAttendanceAsString)
+                        .param("sectionId", sectionOfExistingCourse.toString())
+                        .sessionAttr("rosterForm", rosterForm)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("roster"))
+                .andExpect(model().attribute("noAttendanceToDelete", is(true)));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void deleteAttendance_HappyPath() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        String dateOfAttendanceAsString = "05/18/2016";
+        Date dateOfAttendance = sdf.parse(dateOfAttendanceAsString);
+
+        Status expectedStatus = Status.TARDY;
+        Integer expectedMinutesMissed = 10;
+
+        List<AttendanceSection> sections = new ArrayList<>();
+        sections.add(existingSection);
+        RosterForm rosterForm = new RosterForm();
+        rosterForm.setCurrentDate(dateOfAttendance);
+        rosterForm.setSectionId(existingSection.getSectionId());
+        rosterForm.setSectionModels(new SectionModelFactory().createSectionModels(sections));
+        courseService.loadIntoForm(rosterForm, existingSection.getCanvasCourseId());
+        attendanceService.loadIntoForm(rosterForm, dateOfAttendance);
+
+        // TODO: This way is not working. Mockito is throwing a NullPointerException whe using any() and not returning the expected attendanceList otherwise.
+        //List<Attendance> attendanceList = new ArrayList<Attendance>();
+        //attendanceList.add(new Attendance());
+        //attendanceRepository = mock(AttendanceRepositoryCustom.class);
+        //when(attendanceRepository.getAttendanceByCourseAndDayOfClass(any(), any())).thenReturn(attendanceList);
+
+        mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/save")
+                        .param("saveAttendance", "Save Attendance")
+                        .param("currentDate", dateOfAttendanceAsString)
+                        .param("sectionId", existingSection.getSectionId().toString())
+                        .param("sectionModels[0].attendances[0].attendanceId", "")
+                        .param("sectionModels[0].attendances[0].attendanceStudentId", existingStudent.getStudentId().toString())
+                        .param("sectionModels[0].attendances[0].status", expectedStatus.toString())
+                        .param("sectionModels[0].attendances[0].minutesMissed",  expectedMinutesMissed.toString())
+                        .sessionAttr("rosterForm", rosterForm)
+        );
+
+        mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/delete")
+                        .param("deleteAttendance", "Delete Attendance")
+                        .param("currentDate", dateOfAttendanceAsString)
+                        .param("sectionId", existingSection.getSectionId().toString())
+                        .sessionAttr("rosterForm", rosterForm)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("roster"))
+                .andExpect(model().attribute("deleteSuccess", is(true)))
+                .andExpect(model().attribute("sectionList",
+                        containsInAnyOrder(
+                                allOf(
+                                        hasProperty("sectionId", is(existingSection.getSectionId()))
+                                )
+                        )))
+                .andExpect(model().attribute("rosterForm",
+                        allOf(
+                                hasProperty("sectionId", is(existingSection.getSectionId())),
+                                hasProperty("sectionModels", hasSize(1)),
+                                hasProperty("sectionModels",
+                                        containsInAnyOrder(
+                                                allOf(
+                                                        hasProperty("canvasSectionId", is(existingSection.getCanvasSectionId())),
+                                                        hasProperty("canvasCourseId", is(existingCourse.getCanvasCourseId()))
+                                                )
+                                        )
+                               )
                         )));
     }
 

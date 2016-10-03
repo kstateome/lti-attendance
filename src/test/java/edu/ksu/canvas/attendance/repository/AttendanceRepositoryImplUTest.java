@@ -1,14 +1,13 @@
 package edu.ksu.canvas.attendance.repository;
 
-import java.util.Date;
-import java.util.List;
-
+import edu.ksu.canvas.attendance.entity.Attendance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import edu.ksu.canvas.attendance.entity.Attendance;
+import java.util.Date;
+import java.util.List;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,6 +36,14 @@ public class AttendanceRepositoryImplUTest {
         List<Attendance> nullAttendances = null;
         
         attendanceRepository.saveInBatches(nullAttendances);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void deleteAttendanceByCourseAndDayOfClass_NullDateOfClass() {
+        int irrelevantCourseId = 2;
+        Date nullDateOfClass = null;
+
+        attendanceRepository.deleteAttendanceByCourseAndDayOfClass(irrelevantCourseId, nullDateOfClass);
     }
 
 }
