@@ -50,21 +50,18 @@
         <div class="alert alert-info">
             <p>${error}</p>
         </div>
-        <br/><br/>
     </c:if>
 
     <c:if test="${updateSuccessful}">
         <div class="alert alert-success">
             <p>Course Setup successfully updated.</p>
         </div>
-        <br/><br/>
     </c:if>
 
     <c:if test="${synchronizationSuccessful}">
         <div class="alert alert-success" id="synchronizationSuccessful">
             <p>Synchronization with canvas was successful.</p>
         </div>
-        <br/><br/>
     </c:if>
 
     <h3>Synchronization</h3>
@@ -84,19 +81,18 @@
     <br/>
     <div class="col-lg-3">
         <label for="simpleAttendance">
-            <form:radiobutton path="simpleAttendance" id="simpleAttendance"/> Use Simple Attendance (non-minute based) features
+            <form:radiobutton path="simpleAttendance" id="simpleAttendance" value="true"/> Use Simple Attendance (non-minute based)
+        </label>
+        <br/>
+        <label for="aviationAttendance">
+            <form:radiobutton path="simpleAttendance" id="aviationAttendance" value="false"/> Use Minute-Based Attendance Accounting (Aviation Maintenance Management)
         </label>
     </div>
-    <div class="col-lg-3">
-     <label for="showNotesToStudents">
-         <form:radiobutton path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
-        </label>
-     </div>
-    <br/>
+
     <div class="container-fluid">
         <div id="aviationTimeConfig" class="row ${courseConfigurationForm.simpleAttendance? 'hidden' : '' }">
             <fieldset class="form-inline">
-                <div class="col-md-3">
+                <div class="col-md-3 col-md-offset-1">
                     <label for="courseWorth">Total Class Minutes</label>
                     <form:input path="totalClassMinutes" type="text" id="courseWorth" cssClass="form-control"
                                 placeholder="Total Class Minutes" size="6"/>
@@ -110,11 +106,14 @@
                 </div>
             </fieldset>
         </div>
+        <br/>
+        <label for="showNotesToStudents">
+            <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
+        </label>
+        <br/>
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
     </div>
-
-    <br/><br/>
 
     <hr/>
     <br/><br/>
@@ -124,7 +123,9 @@
             if (this.checked) {
                 $('#aviationTimeConfig').addClass('hidden');
             }
-            else {
+        });
+        $('#aviationAttendance').change(function(){
+            if (this.checked) {
                 $('#aviationTimeConfig').removeClass('hidden');
             }
         });
