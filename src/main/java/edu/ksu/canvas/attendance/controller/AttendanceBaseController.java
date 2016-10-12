@@ -77,8 +77,11 @@ public class AttendanceBaseController extends LtiLaunchController {
 
         synchronizationService.synchronizeWhenCourseNotExistsInDB(canvasService.getCourseId());
 
-        for(LtiLaunchData.InstitutionRole role : canvasService.getRoles()) {
-            if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0) {
+        List<LtiLaunchData.InstitutionRole> roleList = canvasService.getRoles();
+        boolean hasOneAuthorityRole = roleList != null && (roleList.contains(LtiLaunchData.InstitutionRole.Instructor) || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant));
+
+        for(LtiLaunchData.InstitutionRole role : roleList) {
+            if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0 && !hasOneAuthorityRole) {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
                 AttendanceStudent attendanceStudent = attendanceStudentService.getStudent(canvasService.getSisID());
                 if (attendanceStudent == null) {

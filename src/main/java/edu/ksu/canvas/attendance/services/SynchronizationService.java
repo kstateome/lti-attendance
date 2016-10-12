@@ -59,7 +59,10 @@ public class SynchronizationService {
     public void synchronize(long canvasCourseId) throws NoLtiSessionException {
         String token = ltiSessionService.getLtiSession().getOauthToken().getApiToken();
 
-        if(canvasService.getRoles().contains(LtiLaunchData.InstitutionRole.Learner)) {
+        List<LtiLaunchData.InstitutionRole> roleList = canvasService.getRoles();
+        boolean hasOneAuthorityRole = roleList.contains(LtiLaunchData.InstitutionRole.Instructor) || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant);
+
+        if(roleList.contains(LtiLaunchData.InstitutionRole.Learner) && !hasOneAuthorityRole) {
             ConfigItem adminToken = configRepository.findByLtiApplicationAndKey("Attendance", "admin_token");
             token = adminToken.getValue();
         }
