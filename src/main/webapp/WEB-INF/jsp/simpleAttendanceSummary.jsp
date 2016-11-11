@@ -73,9 +73,9 @@
                 <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
                     <tr>
                         <td class="${attendancesummaryEntry.dropped ? 'dropped' : ''}">
-                            <span>${attendancesummaryEntry.studentName}</span>
+                            <span><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></span>
                         </td>
-                        <td class="text-center"><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.totalClassesMissed}</a></td>
+                        <td class="text-center">${attendancesummaryEntry.totalClassesMissed}</td>
                         <td class="text-center">${attendancesummaryEntry.totalClassesTardy}</td>
                     </tr>
                 </c:forEach>
