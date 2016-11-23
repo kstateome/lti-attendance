@@ -152,18 +152,6 @@
           </build>
         </profile>
 
-		<!-- Profile for the jenkins pull request builder. To get the comments to show up on the pull requests we need to scan the tests in sonar.sources.
-		     It doesn't seem to add comments to the test packages otherwise. Also I just specified src because specifying
-		     src/test will break sonar for modules which don't have that directory. Finally, need to tell it tests do not
-		     exist - otherwise sonar will complain about indexing a file twice in two contexts. -->
-		<profile>
-			<id>sonar-pull-request</id>
-			<properties>
-				<sonar.sources>src</sonar.sources>
-				<sonar.tests></sonar.tests>
-			</properties>
-		</profile>
-
         <profile>
             <!-- Do a sonar run with 1) mvn clean install -Pdefault -Psonar; mvn sonar:sonar -->
 			<id>sonar</id>
