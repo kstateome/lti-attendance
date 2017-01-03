@@ -14,6 +14,12 @@
     width: auto;
 }
 
+/* Used to widen the length of the box so the whole word in the status bar displays */
+.changingWidth
+{
+    width: 90px;
+}
+
 .sectionDropdown{
     padding-left: 15px;
 }
