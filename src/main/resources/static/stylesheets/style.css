@@ -15,8 +15,7 @@
 }
 
 /* Used to widen the length of the box so the whole word in the status bar displays */
-.changingWidth
-{
+.changing-width {
     width: 90px;
 }
 
