@@ -20,4 +20,6 @@ public class AttendanceStudentService {
 
     public AttendanceStudent getStudent(String sisId) { return studentRepository.findBySisUserId(sisId) ;}
 
+    public AttendanceStudent getStudentByCourseAndSisId(String sisId, Integer canvasCourseId) { return studentRepository.findBySisUserIdAndCanvasCourseId(sisId, canvasCourseId) ;}
+
 }
