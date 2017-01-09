@@ -43,7 +43,7 @@
 <div class="container">
 
     <div class="visible-print page-header">${courseName}</div>
-    <div class="sectionDropdown">
+    <div class="section-dropdown">
         <div class="row">
             <div class='col-sm-4'>
                 <div class="form-group">
