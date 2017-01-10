@@ -53,8 +53,8 @@
                                  onchange="toggleSection(value, '${context}'); false;"/>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print Report</button>
-                    <a target="_blank" class="btn btn-primary hidden-print" href="${context}/attendanceSummary/${selectedSectionId}/csv">Export to CSV</a>
+                    <button type="button" class="btn btn-primary hidden-print button-color" onclick="window.print();">Print Report</button>
+                    <a target="_blank" class="btn btn-primary hidden-print button-color" href="${context}/attendanceSummary/${selectedSectionId}/csv">Export to CSV</a>
                 </div>
             </div>
         </div>

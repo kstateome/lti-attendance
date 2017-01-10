@@ -18,6 +18,10 @@
     padding-left: 15px;
 }
 
+.button-color{
+    color: purple;
+}
+
 .error {
     color: red; font-weight: bold;
 }
