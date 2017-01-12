@@ -86,10 +86,7 @@ public class AttendanceBaseController extends LtiLaunchController {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
                 AttendanceStudent attendanceStudent = null;
                 List<AttendanceStudent> attendanceStudentList = attendanceStudentService.getStudentByCourseAndSisId(canvasService.getSisID(), canvasService.getCourseId().longValue());
-                if (!attendanceStudentList.isEmpty()) {
-                    attendanceStudentList = attendanceStudentList.stream().filter(x -> !x.getDeleted()).collect(Collectors.toList());
-                    LOG.info("Multiple students returned when filtering by sisID and Canvas Course ID; this usually means the same student is in multiple sections of a course: " + attendanceStudentList.toString());
-                }
+                attendanceStudentList = attendanceStudentList.stream().filter(x -> !x.getDeleted()).collect(Collectors.toList());
                 if (!attendanceStudentList.isEmpty()) {
                     attendanceStudent = attendanceStudentList.get(0);
                 }
