@@ -22,6 +22,8 @@ public class AttendanceStudentService {
 
     public AttendanceStudent getStudent(String sisId) { return studentRepository.findBySisUserId(sisId) ;}
 
-    public List<AttendanceStudent> getStudentByCourseAndSisId(String sisId, Long canvasCourseId) { return studentRepository.findBySisUserIdAndCanvasCourseId(sisId, canvasCourseId) ;}
+    public List<AttendanceStudent> getStudentByCourseAndSisId(String sisId, Long canvasCourseId) {
+        return studentRepository.findBySisUserIdAndCanvasCourseId(sisId, canvasCourseId) ;
+    }
 
 }
