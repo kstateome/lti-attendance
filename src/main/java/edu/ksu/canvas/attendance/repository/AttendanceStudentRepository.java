@@ -15,7 +15,7 @@ public interface AttendanceStudentRepository extends CrudRepository<AttendanceSt
 
     AttendanceStudent findBySisUserId(String sisUserId);
 
-    AttendanceStudent findBySisUserIdAndCanvasCourseId(String sisUserId, Integer canvasCourseId);
+    List<AttendanceStudent> findBySisUserIdAndCanvasCourseId(String sisUserId, Long canvasCourseId);
 
     AttendanceStudent findBySisUserIdAndCanvasSectionId(String sisUserId, Long canvasSectionId);
 

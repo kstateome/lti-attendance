@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -83,7 +84,15 @@ public class AttendanceBaseController extends LtiLaunchController {
         for(LtiLaunchData.InstitutionRole role : roleList) {
             if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0 && !hasOneAuthorityRole) {
                 LOG.info(canvasService.getEid() + " is accessing student summary information");
-                AttendanceStudent attendanceStudent = attendanceStudentService.getStudentByCourseAndSisId(canvasService.getSisID(), canvasService.getCourseId());
+                AttendanceStudent attendanceStudent = null;
+                List<AttendanceStudent> attendanceStudentList = attendanceStudentService.getStudentByCourseAndSisId(canvasService.getSisID(), canvasService.getCourseId().longValue());
+                if (!attendanceStudentList.isEmpty()) {
+                    attendanceStudentList = attendanceStudentList.stream().filter(x -> !x.getDeleted()).collect(Collectors.toList());
+                    LOG.info("Multiple students returned when filtering by sisID and Canvas Course ID; this usually means the same student is in multiple sections of a course: " + attendanceStudentList.toString());
+                }
+                if (!attendanceStudentList.isEmpty()) {
+                    attendanceStudent = attendanceStudentList.get(0);
+                }
                 if (attendanceStudent == null) {
                     LOG.info("Adding synchronizing to Attendance Database");
 

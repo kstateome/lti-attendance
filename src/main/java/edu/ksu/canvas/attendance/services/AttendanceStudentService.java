@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 
+import java.util.List;
+
 
 @Component
 public class AttendanceStudentService {
@@ -20,6 +22,6 @@ public class AttendanceStudentService {
 
     public AttendanceStudent getStudent(String sisId) { return studentRepository.findBySisUserId(sisId) ;}
 
-    public AttendanceStudent getStudentByCourseAndSisId(String sisId, Integer canvasCourseId) { return studentRepository.findBySisUserIdAndCanvasCourseId(sisId, canvasCourseId) ;}
+    public List<AttendanceStudent> getStudentByCourseAndSisId(String sisId, Long canvasCourseId) { return studentRepository.findBySisUserIdAndCanvasCourseId(sisId, canvasCourseId) ;}
 
 }
