@@ -22,6 +22,11 @@
     color: red; font-weight: bold;
 }
 
+a:hover
+{
+    color: #ffffff;  
+}
+
 .dropped {
     text-decoration: line-through;
 }
