@@ -22,7 +22,6 @@
     color: red; font-weight: bold;
 }
 
-/* Used to keep the text white while hovering over the buttons */
 a:hover {
     color: #ffffff;
 }
