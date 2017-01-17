@@ -26,6 +26,10 @@ a:hover {
     color: #ffffff;
 }
 
+a:visited{
+    color: #ffffff;
+}
+
 .dropped {
     text-decoration: line-through;
 }
