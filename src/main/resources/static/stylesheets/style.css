@@ -22,9 +22,9 @@
     color: red; font-weight: bold;
 }
 
-a:hover
-{
-    color: #ffffff;  
+/* Used to keep the text white while hovering over the buttons */
+a:hover {
+    color: #ffffff;
 }
 
 .dropped {
