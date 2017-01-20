@@ -14,7 +14,12 @@
     width: auto;
 }
 
-.sectionDropdown{
+/* Used to widen the length of the box so the whole word in the status bar displays */
+.changing-width {
+    width: 90px;
+}
+
+.section-dropdown{
     padding-left: 15px;
 }
 
@@ -24,6 +29,14 @@
 
 .dropped {
     text-decoration: line-through;
+}
+
+.hovering-purple-button:hover{
+    color: #ffffff;
+}
+
+.hovering-purple-button:visited{
+    color: #ffffff;
 }
 
 /* Used to prevent link hrefs from showing when printing */

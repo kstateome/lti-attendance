@@ -176,7 +176,7 @@
                                     <label>
                                         <form:select id="attendanceStatus-${attendance.attendanceStudentId}"
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
-                                                     cssClass="attendanceStatus form-control no-padding no-width">
+                                                     cssClass="attendanceStatus form-control no-padding changing-width">
                                             <form:option id="present-${attendance.attendanceStudentId}"
                                                          value="<%=Status.PRESENT%>">Present</form:option>
                                             <form:option id="tardy-${attendance.attendanceStudentId}"
