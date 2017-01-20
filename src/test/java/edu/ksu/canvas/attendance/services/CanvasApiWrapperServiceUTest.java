@@ -1,16 +1,18 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiSession;
-import edu.ksu.lti.launch.oauth.OauthToken;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.lti.launch.service.LtiSessionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
@@ -56,6 +58,7 @@ public class CanvasApiWrapperServiceUTest {
     @Test
     @SuppressWarnings("unchecked")
     public void getEnrollmentsFromCanvas_HappyPath() throws Exception {
+        System.out.println("----------------------------------------------");
         Section firstSection = new Section();
         int firstSectiondId = 1;
         firstSection.setId(firstSectiondId);
@@ -76,15 +79,17 @@ public class CanvasApiWrapperServiceUTest {
         firstSectionEnrollments.add(secondEnrollmentOfFirstSection);
         List<Enrollment> secondSectionEnrollments = new ArrayList<>();
         secondSectionEnrollments.add(firstEnrollmentOfSecondSection);
-        EnrollmentsReader mockEnrollmentReader = mock(EnrollmentsReader.class);
+        EnrollmentReader mockEnrollmentReader = mock(EnrollmentReader.class);
         OauthToken mockOAuthToken = mock(OauthToken.class);
         int expectedMapSize = 2;
+        GetEnrollmentOptions enrollmentOptions1 = new GetEnrollmentOptions(Long.toString(firstSectiondId));
+        GetEnrollmentOptions enrollmentOptions2 = new GetEnrollmentOptions(Long.toString(secondSectionId));
 
         when(mockLtiSession.getOauthToken()).thenReturn(mockOAuthToken);
-        when(mockCanvasApiFactory.getReader(eq(EnrollmentsReader.class), any(String.class))).thenReturn(mockEnrollmentReader);
-        when(mockEnrollmentReader.getSectionEnrollments(eq(Long.toString(firstSectiondId)), any(List.class))).thenReturn(firstSectionEnrollments);
-        when(mockEnrollmentReader.getSectionEnrollments(eq(Long.toString(secondSectionId)), any(List.class))).thenReturn(secondSectionEnrollments);
-        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections, mockLtiSession.getApiToken());
+        when(mockCanvasApiFactory.getReader(eq(EnrollmentReader.class), any(OauthToken.class))).thenReturn(mockEnrollmentReader);
+        when(mockEnrollmentReader.getSectionEnrollments(eq(enrollmentOptions1))).thenReturn(firstSectionEnrollments);
+        when(mockEnrollmentReader.getSectionEnrollments(eq(enrollmentOptions2))).thenReturn(secondSectionEnrollments);
+        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections, mockLtiSession.getOauthToken());
 
         assertEquals(expectedMapSize, actualMap.keySet().size());
         assertThat(actualMap.keySet(), containsInAnyOrder(firstSection, secondSection));
