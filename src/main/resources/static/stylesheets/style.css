@@ -31,6 +31,14 @@
     text-decoration: line-through;
 }
 
+.hovering-purple-button:hover{
+    color: #ffffff;
+}
+
+.hovering-purple-button:visited{
+    color: #ffffff;
+}
+
 /* Used to prevent link hrefs from showing when printing */
 @media print {
     a:link:after, a:visited:after {
