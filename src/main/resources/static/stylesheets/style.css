@@ -22,16 +22,16 @@
     color: red; font-weight: bold;
 }
 
-a:hover {
-    color: #ffffff;
-}
-
-a:visited{
-    color: #ffffff;
-}
-
 .dropped {
     text-decoration: line-through;
+}
+
+.hovering-purple-button:hover{
+    color: #ffffff;
+}
+
+.hovering-purple-button:visited{
+    color: #ffffff;
 }
 
 /* Used to prevent link hrefs from showing when printing */
