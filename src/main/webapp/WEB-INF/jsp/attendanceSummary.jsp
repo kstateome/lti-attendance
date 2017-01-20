@@ -43,7 +43,7 @@
 <div class="container">
 
     <div class="visible-print page-header">${courseName}</div>
-    <div class="sectionDropdown">
+    <div class="section-dropdown">
         <div class="row">
             <div class='col-sm-4'>
                 <div class="form-group">
@@ -53,8 +53,8 @@
                                  onchange="toggleSection(value, '${context}'); false;"/>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary hidden-print" onclick="window.print();">Print Report</button>
-                    <a target="_blank" class="btn btn-primary hidden-print" href="${context}/attendanceSummary/${selectedSectionId}/csv">Export to CSV</a>
+                    <button type="button" class="hidden-print hovering-purple-button" onclick="window.print();">Print Report</button>
+                    <a target="_blank" class="hidden-print hovering-purple-button" href="${context}/attendanceSummary/${selectedSectionId}/csv">Export to CSV</a>
                 </div>
             </div>
         </div>
