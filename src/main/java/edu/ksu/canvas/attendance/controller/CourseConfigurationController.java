@@ -2,6 +2,7 @@ package edu.ksu.canvas.attendance.controller;
 
 
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
@@ -84,12 +85,19 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
+        LOG.info("eid: " + canvasService.getEid() + " is forcing a synchronization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
         
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
         page.addObject("synchronizationSuccessful", true);
 
+        return page;
+    }
+
+    @ExceptionHandler({MissingSisIdException.class})
+    public ModelAndView handleMissingSisIdException(MissingSisIdException exception) {
+        ModelAndView page = new ModelAndView("studentSyncFailed");
+        page.addObject("exception", exception);
         return page;
     }
 
