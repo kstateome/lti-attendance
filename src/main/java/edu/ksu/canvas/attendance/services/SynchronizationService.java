@@ -4,6 +4,7 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
@@ -109,7 +110,7 @@ public class SynchronizationService {
         return ret;
     }
 
-    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) {
+    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) throws MissingSisIdException{
         List<AttendanceStudent> ret = new ArrayList<>();
         List<AttendanceStudent> existingStudentsInDb = null;
         Set<AttendanceStudent> droppedStudents = new HashSet<>();
@@ -142,7 +143,13 @@ public class SynchronizationService {
                     student.setAttendances(attendances);
                 }
 
-                ret.add(studentRepository.save(student));
+                if (student.getSisUserId() == null) {
+                    throw new MissingSisIdException("Student " + student.getStudentId() + " is missing SIS ID");
+                }
+                else {
+                    ret.add(studentRepository.save(student));
+                }
+
             }
 
         }
