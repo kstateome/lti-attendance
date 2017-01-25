@@ -11,6 +11,8 @@ import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
@@ -58,14 +60,14 @@ public class SynchronizationService {
     }
 
     public void synchronize(long canvasCourseId) throws NoLtiSessionException {
-        String token = ltiSessionService.getLtiSession().getOauthToken().getApiToken();
+        OauthToken token = ltiSessionService.getLtiSession().getOauthToken();
 
         List<LtiLaunchData.InstitutionRole> roleList = canvasService.getRoles();
         boolean hasOneAuthorityRole = roleList.contains(LtiLaunchData.InstitutionRole.Instructor) || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant);
 
         if(roleList.contains(LtiLaunchData.InstitutionRole.Learner) && !hasOneAuthorityRole) {
             ConfigItem adminToken = configRepository.findByLtiApplicationAndKey("Attendance", "admin_token");
-            token = adminToken.getValue();
+            token = new NonRefreshableOauthToken(adminToken.getValue());
         }
 
         List<Section> sections = canvasService.getSections(canvasCourseId, token);
