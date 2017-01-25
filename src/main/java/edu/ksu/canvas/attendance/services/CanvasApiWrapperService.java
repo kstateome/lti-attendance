@@ -38,6 +38,7 @@ public class CanvasApiWrapperService {
     @Autowired
     private CanvasApiFactory canvasApiFactory;
 
+    private EnrollmentOptionsFactory enrollmentOptionsFactory = new EnrollmentOptionsFactory();
 
     public Integer getCourseId() throws NoLtiSessionException {
         LtiSession ltiSession = ltiSessionService.getLtiSession();
@@ -95,11 +96,11 @@ public class CanvasApiWrapperService {
 
         for (Section section : sections) {
             try {
-                GetEnrollmentOptions getEnrollmentOptions = new GetEnrollmentOptions(Long.toString(section.getId()));
+                GetEnrollmentOptions enrollmentOptions = enrollmentOptionsFactory.buildEnrollmentOptions(section);
 
-                getEnrollmentOptions.type(Collections.singletonList(GetEnrollmentOptions.EnrollmentType.STUDENT));
+                enrollmentOptions.type(Collections.singletonList(GetEnrollmentOptions.EnrollmentType.STUDENT));
 
-                for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments(getEnrollmentOptions)) {
+                for (Enrollment enrollment : enrollmentsReader.getSectionEnrollments(enrollmentOptions)) {
                     List<Enrollment> enrollments = ret.computeIfAbsent(section, k -> new ArrayList<>());
 
                     enrollments.add(enrollment);
@@ -126,4 +127,14 @@ public class CanvasApiWrapperService {
         ltiLaunch.ensureApiTokenPresent();
     }
 
+    void setEnrollmentOptionsFactory(EnrollmentOptionsFactory enrollmentOptionsFactory) {
+        this.enrollmentOptionsFactory = enrollmentOptionsFactory;
+    }
+
+    class EnrollmentOptionsFactory {
+
+        public GetEnrollmentOptions buildEnrollmentOptions(Section section) {
+           return new GetEnrollmentOptions(Long.toString(section.getId()));
+        }
+    }
 }
