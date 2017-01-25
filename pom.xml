@@ -476,7 +476,7 @@
         <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.9</version>
         </dependency>
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
@@ -486,11 +486,7 @@
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
 			<artifactId>lti-launch</artifactId>
-			<version>1.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
+			<version>1.3.4</version>
 		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
