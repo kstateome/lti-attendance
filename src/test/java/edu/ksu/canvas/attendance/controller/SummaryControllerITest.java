@@ -3,6 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.*;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.enums.Status;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.repository.*;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
@@ -112,7 +113,7 @@ public class SummaryControllerITest extends BaseControllerITest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = MissingSisIdException.class)
     public void studentSummary_NonNumberForStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
