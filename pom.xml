@@ -372,7 +372,6 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -487,10 +486,6 @@
 			<groupId>edu.ksu.ome.lti</groupId>
 			<artifactId>lti-launch</artifactId>
 			<version>1.3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
 		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
