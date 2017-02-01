@@ -2,7 +2,8 @@ package edu.ksu.canvas.attendance.controller;
 
 
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.exception.MissingSisIdException;
+import edu.ksu.canvas.attendance.exception.MissingSisIdInstructorException;
+import edu.ksu.canvas.attendance.exception.MissingSisIdStudentException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
@@ -94,9 +95,18 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return page;
     }
 
-    @ExceptionHandler({MissingSisIdException.class})
-    public ModelAndView handleMissingSisIdException(MissingSisIdException exception) {
+    /*The following methods display appropriate error pages when a student is missing their WID,
+    depending on whether the student or an instructor is currently viewing.*/
+    @ExceptionHandler({MissingSisIdStudentException.class})
+    public ModelAndView handleMissingSisIdExceptionForStudent(MissingSisIdStudentException exception) {
         ModelAndView page = new ModelAndView("studentSyncFailed");
+        page.addObject("exception", exception);
+        return page;
+    }
+
+    @ExceptionHandler({MissingSisIdInstructorException.class})
+    public ModelAndView handleMissingSisIdExceptionForInstructor(MissingSisIdInstructorException exception) {
+        ModelAndView page = new ModelAndView("instructorSyncFailed");
         page.addObject("exception", exception);
         return page;
     }

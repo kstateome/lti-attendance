@@ -8,8 +8,8 @@
 
 <br/>
 
-<p>You do not have access to K-State Attendance because there is not a recorded student ID number (WID) for you
-    in Canvas. Please contact your instructor or the <a href="http://ksu.edu/its/helpdesk">K-State IT Help Desk</a> at
+<p>There is a student without a recorded student ID number (WID) in Canvas. Please contact
+    the <a href="http://ksu.edu/its/helpdesk">K-State IT Help Desk</a> at
     <a href="mailto:helpdesk@k-state.edu">helpdesk@k-state.edu</a> or 785-532-7722 or 800-865-6143.</p>
 
 </body>
