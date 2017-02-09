@@ -35,6 +35,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.argThat;
@@ -139,7 +140,7 @@ public class SynchronizationServiceUTest {
 
         verifyPrivate(spy, times(1)).invoke("synchronizeCourseFromCanvasToDb", canvasCourseId);
         verifyPrivate(spy, times(1)).invoke("synchronizeSectionsFromCanvasToDb", any(List.class));
-        verifyPrivate(spy, times(1)).invoke("synchronizeStudentsFromCanvasToDb", any(Map.class));
+        verifyPrivate(spy, times(1)).invoke("synchronizeStudentsFromCanvasToDb", any(Map.class), anyBoolean());
     }
 
     @Test
@@ -241,7 +242,7 @@ public class SynchronizationServiceUTest {
         AttendanceStudent expectedStudentSavedToDb = new AttendanceStudent();
 
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentSavedToDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap, anyBoolean());
 
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -289,7 +290,7 @@ public class SynchronizationServiceUTest {
 
         when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap, anyBoolean());
 
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -338,7 +339,7 @@ public class SynchronizationServiceUTest {
 
         when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap, anyBoolean());
 
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -373,7 +374,7 @@ public class SynchronizationServiceUTest {
                                 Matchers.isA(AttendanceStudent.class)).
                                 and(Matchers.hasProperty("deleted", Matchers.hasValue(true))))))
                 .thenReturn(droppedStudent);
-        List<AttendanceStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap);
+        List<AttendanceStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap, anyBoolean());
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertEquals(droppedStudent, secondSetOfStudents.get(0));
         assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).getDeleted());

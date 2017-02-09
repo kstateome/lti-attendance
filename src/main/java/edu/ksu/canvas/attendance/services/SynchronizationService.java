@@ -4,7 +4,7 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.exception.MissingSisIdInstructorException;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
@@ -74,7 +74,7 @@ public class SynchronizationService {
         synchronizeSectionsFromCanvasToDb(sections);
 
         Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections, token);
-        synchronizeStudentsFromCanvasToDb(canvasSectionMap);
+        synchronizeStudentsFromCanvasToDb(canvasSectionMap, hasOneAuthorityRole);
     }
 
     private AttendanceCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
@@ -110,7 +110,7 @@ public class SynchronizationService {
         return ret;
     }
 
-    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) throws MissingSisIdInstructorException {
+    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap, boolean hasOneAuthorityRole) throws MissingSisIdException {
         List<AttendanceStudent> ret = new ArrayList<>();
         List<AttendanceStudent> existingStudentsInDb = null;
         Set<AttendanceStudent> droppedStudents = new HashSet<>();
@@ -144,7 +144,7 @@ public class SynchronizationService {
                 }
 
                 if (student.getSisUserId() == null) {
-                    throw new MissingSisIdInstructorException("Student " + student.getStudentId() + " is missing SIS ID");
+                    throw new MissingSisIdException("A student is missing their SISID", hasOneAuthorityRole);
                 }
                 else {
                     ret.add(studentRepository.save(student));
