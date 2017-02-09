@@ -1,5 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
+import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.lti.launch.exception.OauthTokenRequiredException;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,11 @@ public class ExceptionController {
 
     @ExceptionHandler(OauthTokenRequiredException.class)
     public String initiateOauthToken(OauthTokenRequiredException e) {
+        return "redirect:/beginOauth";
+    }
+
+    @ExceptionHandler(InvalidOauthTokenException.class)
+    public String initiateOauthToken(InvalidOauthTokenException e) {
         return "redirect:/beginOauth";
     }
 

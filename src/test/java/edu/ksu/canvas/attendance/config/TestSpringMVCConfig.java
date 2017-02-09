@@ -9,8 +9,6 @@ import edu.ksu.canvas.repository.OauthTokenRepository;
 import edu.ksu.lti.launch.oauth.LtiLaunch;
 import edu.ksu.lti.launch.security.CanvasInstanceChecker;
 import edu.ksu.lti.launch.service.*;
-import edu.ksu.lti.launch.util.CanvasResponseParser;
-import edu.ksu.lti.launch.validator.OauthTokenValidator;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
@@ -62,19 +60,10 @@ public class TestSpringMVCConfig {
     public HttpClientBuilder httpClientBuilder()  { return Mockito.mock(HttpClientBuilder.class); }
 
     @Bean
-    public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }
-
-    @Bean
     public OauthTokenRepository oauthTokenRepository () { return Mockito.mock(OauthTokenRepository.class); }
 
     @Bean
     public AttendanceOauthTokenService attendanceOauthTokenService() { return  Mockito.mock(AttendanceOauthTokenService.class); }
-
-    @Bean
-    public OauthTokenRefreshService oauthTokenRefreshService() { return Mockito.mock(OauthTokenRefreshService.class); }
-
-    @Bean
-    public OauthTokenValidator oauthTokenValidator() { return Mockito.mock(OauthTokenValidator.class); }
 
     @Bean
     public LtiSessionService ltiSessionService() { return Mockito.mock(LtiSessionService.class); }
