@@ -70,8 +70,6 @@ public class SummaryController extends AttendanceBaseController {
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-        System.out.println("Student ID: " + studentId);
-        System.out.println("Validated Student ID: " + validatedStudentId);
         if(validatedStudentId == null || validatedStudentId < 0) {
             throw new MissingSisIdException("Invalid student id", false);
         }

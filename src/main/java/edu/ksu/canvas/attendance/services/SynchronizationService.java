@@ -112,7 +112,7 @@ public class SynchronizationService {
         return ret;
     }
 
-    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap, boolean hasOneAuthorityRole) throws MissingSisIdException {
+    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap, boolean hasOneAuthorityRole) {
         List<AttendanceStudent> ret = new ArrayList<>();
         List<AttendanceStudent> existingStudentsInDb = null;
         Set<AttendanceStudent> droppedStudents = new HashSet<>();
@@ -135,11 +135,9 @@ public class SynchronizationService {
                     droppedStudents.remove(foundUser.get());
                 }
                 AttendanceStudent student = foundUser.isPresent() ? foundUser.get() : new AttendanceStudent();
-                student.setSisUserId(enrollment.getUser().getSisUserId());
-                student.setName(enrollment.getUser().getSortableName());
-                student.setCanvasSectionId(section.getId());
-                student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+                student = setStudentInfo(student, enrollment, section);
                 student.setDeleted(foundUser.isPresent() ? foundUser.get().getDeleted() : Boolean.FALSE);
+
                 if (student.getAttendances() == null) {
                     List<Attendance> attendances = new ArrayList<>();
                     student.setAttendances(attendances);
@@ -158,6 +156,15 @@ public class SynchronizationService {
         addDroppedStudents(ret, droppedStudents);
 
         return ret;
+    }
+
+    private AttendanceStudent setStudentInfo(AttendanceStudent student, Enrollment enrollment, Section section) {
+        student.setSisUserId(enrollment.getUser().getSisUserId());
+        student.setName(enrollment.getUser().getSortableName());
+        student.setCanvasSectionId(section.getId());
+        student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+
+        return student;
     }
 
     private void addDroppedStudents(List<AttendanceStudent> studentList, Set<AttendanceStudent> droppedStudents) {

@@ -5,7 +5,7 @@ package edu.ksu.canvas.attendance.exception;
  */
 public class MissingSisIdException extends RuntimeException {
     private static final long serialVersionUID = 1L;
-    private boolean authority;
+    private final boolean authority;
 
     public MissingSisIdException(String msg, boolean hasOneAuthorityRole) {
         super(msg);
