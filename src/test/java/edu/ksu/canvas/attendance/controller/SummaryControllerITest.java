@@ -18,16 +18,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -112,26 +106,22 @@ public class SummaryControllerITest extends BaseControllerITest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void studentSummary_NonNumberForStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
-        try {
-            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId));
-        } catch (NestedServletException ne) {
-            throw ne.getCause();
-        }
+        mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId))
+                .andExpect(view().name("studentSyncFailed"));
+
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void studentSummary_NonExistantStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         Long nonExistStudentId = -1L;
-        try {
-            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId));
-        } catch (NestedServletException ne) {
-            throw ne.getCause();
-        }
+        mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId))
+                .andExpect(view().name("studentSyncFailed"));
+
     }
 
 

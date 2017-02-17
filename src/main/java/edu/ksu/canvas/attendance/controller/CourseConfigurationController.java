@@ -84,7 +84,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is forcing a syncrhonization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
+        LOG.info("eid: " + canvasService.getEid() + " is forcing a synchronization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
         
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
@@ -92,5 +92,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
         return page;
     }
+
+
 
 }

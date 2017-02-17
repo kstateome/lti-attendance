@@ -2,7 +2,7 @@ package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
 import edu.ksu.canvas.attendance.config.TestSpringMVCConfig;
-import edu.ksu.lti.launch.oauth.OauthToken;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.lti.launch.service.LtiSessionService;
