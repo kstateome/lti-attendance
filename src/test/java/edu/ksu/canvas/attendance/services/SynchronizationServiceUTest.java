@@ -221,7 +221,7 @@ public class SynchronizationServiceUTest {
         Long expectedCanvasSectionId = 200L;
         Long expectedCanvasCourseId = 500L;
         String expectedSisUserId = "uniqueSisId";
-        String expectedName = "Zoglmann, Kurt";
+        String expectedName = "Smith, John";
         Integer expectedStudentsSavedToDb = 1;
         Boolean expectedDeleted = Boolean.FALSE;
 
@@ -258,7 +258,7 @@ public class SynchronizationServiceUTest {
         Long previousCanvasSectionId = 350L;
         Long previousCanvasCourseId = 350L;
         String previousSisUserId = "uniqueSisId";
-        String previousName = "Zoglmann, Chris";
+        String previousName = "Doe, Jane";
         AttendanceStudent expectedStudentInDb = new AttendanceStudent();
         expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
@@ -270,7 +270,7 @@ public class SynchronizationServiceUTest {
         Long expectedCanvasSectionId = 250L;
         Long expectedCanvasCourseId = 550L;
         String expectedSisUserId = "uniqueSisId";
-        String expectedName = "Zoglmann, Kurt";
+        String expectedName = "Smith, John";
         Integer expectedStudentsSavedToDb = 1;
         Boolean expectedDeleted = Boolean.FALSE;
 
@@ -306,7 +306,7 @@ public class SynchronizationServiceUTest {
         Long previousCanvasSectionId = 350L;
         Long previousCanvasCourseId = 350L;
         String previousSisUserId = "uniqueSisId";
-        String previousName = "Zoglmann, Chris";
+        String previousName = "Doe, Jane";
         AttendanceStudent expectedStudentInDb = new AttendanceStudent();
         expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
@@ -319,7 +319,7 @@ public class SynchronizationServiceUTest {
         Long expectedCanvasSectionId = 250L;
         Long expectedCanvasCourseId = 550L;
         String expectedSisUserId = "uniqueSisId";
-        String expectedName = "Zoglmann, Kurt";
+        String expectedName = "Smith, John";
         Integer expectedStudentsSavedToDb = 1;
         Boolean expectedDeleted = Boolean.TRUE;
 
