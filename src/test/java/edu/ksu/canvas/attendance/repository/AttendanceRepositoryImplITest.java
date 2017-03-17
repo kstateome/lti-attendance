@@ -48,7 +48,7 @@ public class AttendanceRepositoryImplITest {
         student.setSisUserId("1001");
         student.setCanvasCourseId(1000L);
         student.setCanvasSectionId(500L);
-        student.setName("Zoglmann, Kurt");
+        student.setName("Smith, John");
         studentRepository.save(student);
         
         Attendance attendance = new Attendance();

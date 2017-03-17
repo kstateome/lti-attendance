@@ -80,7 +80,7 @@ public class RosterControllerITest extends BaseControllerITest {
         
         existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
-        existingStudent.setName("Zoglmann, Brian");
+        existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent = studentRepository.save(existingStudent);
