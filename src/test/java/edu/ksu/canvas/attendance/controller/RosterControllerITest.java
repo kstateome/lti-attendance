@@ -1,6 +1,5 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
@@ -24,10 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,9 +56,6 @@ public class RosterControllerITest extends BaseControllerITest {
     
     @Autowired
     private CanvasApiWrapperService canvasService;
-
-    @Autowired
-    private AttendanceRepositoryCustom attendanceRepository;
 
 
     @Before
