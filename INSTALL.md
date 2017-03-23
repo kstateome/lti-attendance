@@ -76,7 +76,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
       cd ~/wildfly-8.2.0.Final/modules/edu/ksu/canvas/main/
       vi application.properties
     ```
-    * Add the following content. Change the canvas_domain match the URL of the Canvas instance.
+    * Add the following content. Change the canvas_domain property to match the URL of the Canvas instance.
   
     ```
     # Set spring profile to use real database. "dev" sets up an in-memory database for automated tests
