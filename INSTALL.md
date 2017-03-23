@@ -143,6 +143,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
                 </host>
             </server>
     ```
+    * See this documentation for more information https://docs.jboss.org/author/display/WFLY8/Undertow+subsystem+configuration
 
     * In the security-realm element of "ApplicationRealm", add the following sever-identies element. Change the keystore-password and key-password to whatever use used when generating the self signed certificate. In this example, both are set to "attendance".
     ```
@@ -161,6 +162,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
                 </authorization>
             </security-realm>
     ```
+    * See the "Enable SSL" section of this URL for more information https://docs.jboss.org/author/display/WFLY8/Examples
  
 12. Copy the LTI Attendance Artifact into the Wildfly Deploy directory
     ```
