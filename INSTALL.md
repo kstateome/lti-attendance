@@ -144,7 +144,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
             </server>
     ```
 
-    * In the security-realm element of "ApplicationRealm", add the following sever-identies element
+    * In the security-realm element of "ApplicationRealm", add the following sever-identies element. Change the keystore-password and key-password to whatever use used when generating the self signed certificate. In this example, both are set to "attendance".
     ```
               <security-realm name="ApplicationRealm">
                 <server-identities>
