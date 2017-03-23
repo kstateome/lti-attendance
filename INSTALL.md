@@ -21,7 +21,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
 4. Install the downloaded Oracle Driver within Wildfly
     * ```cp ~/Downloads/ojdbc7.jar ~/wildfly-8.2.0.Final/standalone/deployments/ojdbc7-12.1.0.1.0.jar```
   
-5. Add the LtiDS and Quartz datasources to the standalone configuration
+5. Add the LtiDS datasource to the standalone configuration
     * ```vi ~/wildfly-8.2.0.Final/standalone/configuration/standalone.xml```
     * Add the following datasource entries within the datasources element. Be sure to change the username and password based on setting up an Oracle schema earlier.
 
