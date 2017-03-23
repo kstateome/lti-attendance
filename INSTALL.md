@@ -1,6 +1,6 @@
 
 Note: The example commands install Wildfly in your home directory and startup Wildfly in standalone mode. In preparation of 
-this installation, setup an Oracle database and a dedicated schema and user for use with this application.
+this installation, setup an Oracle database and a dedicated schema and user for use with this application. This guide assumes you are working on a unix-ish environment with command line tools like `curl`, `vim` and `unzip` available.
 
 1. Download Wildfly 8.2.0
     * You can see a list of available versions for download at this URL -- http://wildfly.org/downloads/
@@ -26,8 +26,8 @@ this installation, setup an Oracle database and a dedicated schema and user for 
     * Add the following datasource entries within the datasources element. Be sure to change the username, password, and database hostname.
 
     ```
-    <datasource jndi-name="java:/LtiDS" pool-name="lti" enabled="true" use-java-context="true" use-ccm="true">
-    <connection-url>jdbc:oracle:thin:@//database-host-name.edu:1521/OMED.world</connection-url>
+                <datasource jndi-name="java:/LtiDS" pool-name="lti" enabled="true" use-java-context="true" use-ccm="true">
+                    <connection-url>jdbc:oracle:thin:@//database-host-name.edu:1521/OMED.world</connection-url>
                     <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
                     <driver>ojdbc7-12.1.0.1.0.jar</driver>
                    <pool>
