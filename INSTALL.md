@@ -162,7 +162,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
             </security-realm>
     ```
  
-12. Copy LTI Attendance Artifact into the Wildfly Deploy directory
+12. Copy the LTI Attendance Artifact into the Wildfly Deploy directory
     ```
       curl -O https://artifactory.ome.ksu.edu/artifactory/ome-appdev-release/edu/ksu/ome/lti/lti-attendance/1.1.8/lti-attendance-1.1.8.war
       cp ~/lti-attendance-1.1.8.war ~/wildfly-8.2.0.Final/standalone/deployments/
