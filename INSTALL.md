@@ -23,7 +23,7 @@ this installation, setup an Oracle database and a dedicated schema and user for 
   
 5. Add the LtiDS datasource to the standalone configuration
     * ```vi ~/wildfly-8.2.0.Final/standalone/configuration/standalone.xml```
-    * Add the following datasource entries within the datasources element. Be sure to change the username and password based on setting up an Oracle schema earlier.
+    * Add the following datasource entries within the datasources element. Be sure to change the username, password, and database hostname.
 
     ```
     <datasource jndi-name="java:/LtiDS" pool-name="lti" enabled="true" use-java-context="true" use-ccm="true">
