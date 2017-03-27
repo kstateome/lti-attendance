@@ -19,14 +19,4 @@ public class AttendanceLtiLaunchKeyService implements LtiLaunchKeyService {
     public String findSecretForKey(String key) {
         return ltiKeyRepository.findByKeyKey(key).getSecret();
     }
-
-    @Override
-    public String findOauthClientId() {
-        return attendanceConfigService.getConfigValue("oauth_client_id");
-    }
-
-    @Override
-    public String findOauthClientSecret() {
-        return attendanceConfigService.getConfigValue("oauth_client_secret");
-    }
 }

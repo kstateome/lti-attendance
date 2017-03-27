@@ -79,7 +79,7 @@ public class ReportRepositoryITest {
         student.setSisUserId("1001");
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
         student.setCanvasSectionId(expectedSectionId);
-        student.setName("Zoglmann, Kurt");
+        student.setName("Smith, John");
         student.setDeleted(false);
         existingStudent = studentRepository.save(student);
         

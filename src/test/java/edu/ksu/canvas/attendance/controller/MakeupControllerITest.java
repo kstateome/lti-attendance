@@ -70,7 +70,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
-        existingStudent.setName("Zoglmann, Brian");
+        existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent = studentRepository.save(existingStudent);
