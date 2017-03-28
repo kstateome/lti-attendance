@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="navHead" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="edu.ksu.canvas.attendance.enums.Status" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -31,18 +32,7 @@
     <title>Attendance Class Roster</title>
 </head>
 <body>
-<nav class="navbar navbar-default hidden-print">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
-            <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
-            <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
-        </ul>
-    </div>
-</nav>
+<navHead:navigationBar selectedSectionId="${selectedSectionId}" context="${context}" activeLink="roster"/>
 <div class="container">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST"
                action="${context}/roster/${selectedSectionId}/save">

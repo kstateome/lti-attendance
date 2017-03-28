@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="navHead" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -28,18 +29,7 @@
     <title>Attendance Summary Page</title>
 </head>
 <body>
-<nav class="navbar navbar-default hidden-print">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="${context}/roster/${selectedSectionId}">K-State Attendance</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
-            <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
-            <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
-        </ul>
-    </div>
-</nav>
+<navHead:navigationBar selectedSectionId="${selectedSectionId}" context="${context}" activeLink="summary"/>
 <div class="container">
 
     <div class="visible-print page-header">${courseName}</div>
