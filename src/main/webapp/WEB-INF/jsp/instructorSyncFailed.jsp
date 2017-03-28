@@ -10,7 +10,7 @@
 
 <br/>
 
-<p>There is a student without a recorded student ID number (WID) in Canvas. Please contact your instructor or the <a target="_blank" href="http://ksu.edu/its/helpdesk"><spring:message code="institution.name" /> IT Help Desk</a> at
+<p>There is a student without a recorded student ID number in Canvas. Please contact your instructor or the <a target="_blank" href="<spring:message code="institution.helpDesk.website"/>"><spring:message code="institution.name" /> IT Help Desk</a> at
     <a href="<spring:message code="institution.helpDesk.contactInfo.email" />"><spring:message code="institution.helpDesk.contactInfo.email" /></a> or <spring:message code="institution.helpDesk.contactInfo.phone" />.</p>
 </body>
 </html>

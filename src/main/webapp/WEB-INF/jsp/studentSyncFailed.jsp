@@ -11,7 +11,7 @@
 <br/>
 
 <p>You do not have access to K-State Attendance because there is not a recorded student ID number for you
-    in Canvas. Please contact your instructor or the <a target="_blank" href="http://ksu.edu/its/helpdesk"><spring:message code="institution.name" /> IT Help Desk</a> at
+    in Canvas. Please contact your instructor or the <a target="_blank" href="<spring:message code="institution.helpDesk.website"/>"><spring:message code="institution.name" /> IT Help Desk</a> at
     <a href="<spring:message code="institution.helpDesk.contactInfo.email" />"><spring:message code="institution.helpDesk.contactInfo.email" /></a> or <spring:message code="institution.helpDesk.contactInfo.phone" />.</p>
 
 </body>
