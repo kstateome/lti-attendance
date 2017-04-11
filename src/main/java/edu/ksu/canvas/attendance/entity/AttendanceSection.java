@@ -26,6 +26,15 @@ public class AttendanceSection implements Serializable {
     @Column(name = "section_name")
     private String name;
 
+    @Column(name = "canvas_assignment_id")
+    private Long canvasAssignmentId;
+
+    @Column(name = "assignment_points")
+    private Integer assignmentPoints;
+
+    @Column(name = "grading_on", nullable = false)
+    private Boolean gradingOn = false;
+
 
     public AttendanceSection() {
 
@@ -64,11 +73,36 @@ public class AttendanceSection implements Serializable {
         this.name = name;
     }
 
+    public Long getCanvasAssignmentId() {
+        return canvasAssignmentId;
+    }
+
+    public void setCanvasAssignmentId(Long canvasAssignmentId) {
+        this.canvasAssignmentId = canvasAssignmentId;
+    }
+
+    public Integer getAssignmentPoints() {
+        return assignmentPoints;
+    }
+
+    public void setAssignmentPoints(Integer assignmentPoints) {
+        this.assignmentPoints = assignmentPoints;
+    }
+
+    public Boolean getGradingOn() {
+        return gradingOn;
+    }
+
+    public void setGradingOn(Boolean gradingOn) {
+        this.gradingOn = gradingOn;
+    }
+
 
     @Override
     public String toString() {
         return "AttendanceSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
-                + canvasSectionId + ", name=" + name + "]";
+                + canvasSectionId + ", name=" + name + ", gradingOn=" + gradingOn + ", canvasAssignmentId=" + canvasAssignmentId
+                + ", assignmentPoints=" + assignmentPoints +"]";
     }
 
 }
