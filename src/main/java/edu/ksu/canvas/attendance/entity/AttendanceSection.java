@@ -35,6 +35,9 @@ public class AttendanceSection implements Serializable {
     @Column(name = "grading_on", nullable = false)
     private Boolean gradingOn = false;
 
+    @Column(name = "tardy_points")
+    private double tardyPoints;
+
 
     public AttendanceSection() {
 
@@ -97,12 +100,19 @@ public class AttendanceSection implements Serializable {
         this.gradingOn = gradingOn;
     }
 
+    public double getTardyPoints() {
+        return tardyPoints;
+    }
+
+    public void setTardyPoints(double tardyPoints) {
+        this.tardyPoints = tardyPoints;
+    }
 
     @Override
     public String toString() {
         return "AttendanceSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
                 + canvasSectionId + ", name=" + name + ", gradingOn=" + gradingOn + ", canvasAssignmentId=" + canvasAssignmentId
-                + ", assignmentPoints=" + assignmentPoints +"]";
+                + ", assignmentPoints=" + assignmentPoints + ", tardyPoints=" + tardyPoints+"]";
     }
 
 }
