@@ -183,6 +183,10 @@
                                                          value="<%=Status.TARDY%>">Tardy</form:option>
                                             <form:option id="absent-${attendance.attendanceStudentId}"
                                                          value="<%=Status.ABSENT%>">Absent</form:option>
+                                            <c:if test="${rosterForm.simpleAttendance}">
+                                                <form:option id="absentExcused-${attendance.attendanceStudentId}"
+                                                             value="<%=Status.EXCUSED%>">Excused</form:option>
+                                            </c:if>
                                         </form:select>
                                     </label>
                                     <form:errors cssClass="error"
