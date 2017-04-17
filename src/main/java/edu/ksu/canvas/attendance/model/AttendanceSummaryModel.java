@@ -25,7 +25,9 @@ public class AttendanceSummaryModel {
         private final double percentCourseMissed;
         private final boolean dropped;
         private final int totalClassesMissed;
+        private final int totalClassesExcused;
         private final int totalClassesTardy;
+        private final int totalClassesPresent;
 
 
         public Entry(long courseId, long sectionId, long studentId,
@@ -41,24 +43,28 @@ public class AttendanceSummaryModel {
             this.remainingMinutesMadeup = remainingMinutesMadeup;
             this.sumMinutesMissed = sumMinutesMissed;
             this.percentCourseMissed = percentCourseMissed;
+            this.totalClassesExcused = -1;
             this.totalClassesMissed = -1;
             this.totalClassesTardy = -1;
+            this.totalClassesPresent = -1;
         }
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed) {
+                     String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused, int totalClassesPresent) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
             this.studentName = studentName;
             this.dropped = dropped;
+            this.totalClassesExcused = totalClassesExcused;
             this.sumMinutesMadeup = -1;
             this.remainingMinutesMadeup = -1;
             this.sumMinutesMissed = -1;
             this.percentCourseMissed = -1;
             this.totalClassesMissed = totalClassesMissed;
             this.totalClassesTardy = totalClassesTardy;
+            this.totalClassesPresent = totalClassesPresent;
         }
 
 
@@ -113,6 +119,14 @@ public class AttendanceSummaryModel {
             return totalClassesMissed;
         }
 
+        public int getTotalClassesExcused() {
+            return totalClassesExcused;
+        }
+
+
+        public int getTotalClassesPresent() {
+            return totalClassesPresent;
+        }
     }
 
 
