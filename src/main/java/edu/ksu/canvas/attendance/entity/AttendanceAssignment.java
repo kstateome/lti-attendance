@@ -13,7 +13,6 @@ public class AttendanceAssignment implements Serializable {
     @Column(name = "assignment_id")
     private Long assignmentId; //attendance project's local section Id
 
-    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"))
     private Long sectionId; //attendance project's local section Id
 
