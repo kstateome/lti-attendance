@@ -25,6 +25,7 @@ public class AttendanceSummaryModel {
         private final double percentCourseMissed;
         private final boolean dropped;
         private final int totalClassesMissed;
+        private final int totalClassesExcused;
         private final int totalClassesTardy;
 
 
@@ -41,18 +42,20 @@ public class AttendanceSummaryModel {
             this.remainingMinutesMadeup = remainingMinutesMadeup;
             this.sumMinutesMissed = sumMinutesMissed;
             this.percentCourseMissed = percentCourseMissed;
+            this.totalClassesExcused = -1;
             this.totalClassesMissed = -1;
             this.totalClassesTardy = -1;
         }
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed) {
+                     String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
             this.studentName = studentName;
             this.dropped = dropped;
+            this.totalClassesExcused = totalClassesExcused;
             this.sumMinutesMadeup = -1;
             this.remainingMinutesMadeup = -1;
             this.sumMinutesMissed = -1;
@@ -112,6 +115,11 @@ public class AttendanceSummaryModel {
         public int getTotalClassesMissed() {
             return totalClassesMissed;
         }
+
+        public int getTotalClassesExcused() {
+            return totalClassesExcused;
+        }
+
 
     }
 
