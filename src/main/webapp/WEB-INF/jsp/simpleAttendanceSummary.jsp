@@ -67,16 +67,18 @@
                 <tr>
                     <th class="text-center">Name</th>
                     <th class="text-center">Total Classes Absent</th>
+                    <th class="text-center">Total Classes Excused</th>
                     <th class="text-center">Total Classes Tardy</th>
                 </tr>
 
-                <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
+                <c:forEach items="${summaryForSection.entries}" var="attendanceSummaryEntry" varStatus="loop">
                     <tr>
-                        <td class="${attendancesummaryEntry.dropped ? 'dropped' : ''}">
-                            <span><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a></span>
+                        <td class="${attendanceSummaryEntry.dropped ? 'dropped' : ''}">
+                            <span><a href="${context}/studentSummary/${attendanceSummaryEntry.sectionId}/${attendanceSummaryEntry.studentId}">${attendanceSummaryEntry.studentName}</a></span>
                         </td>
-                        <td class="text-center">${attendancesummaryEntry.totalClassesMissed}</td>
-                        <td class="text-center">${attendancesummaryEntry.totalClassesTardy}</td>
+                        <td class="text-center">${attendanceSummaryEntry.totalClassesMissed}</td>
+                        <td class="text-center">${attendanceSummaryEntry.totalClassesExcused}</td>
+                        <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
                     </tr>
                 </c:forEach>
             </table>

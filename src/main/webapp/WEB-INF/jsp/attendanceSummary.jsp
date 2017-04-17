@@ -72,16 +72,16 @@
                     <th class="text-center">% of Course Missed</th>
                 </tr>
 
-                <c:forEach items="${summaryForSection.entries}" var="attendancesummaryEntry" varStatus="loop">
+                <c:forEach items="${summaryForSection.entries}" var="attendanceSummaryEntry" varStatus="loop">
                     <tr>
-                        <td class="${attendancesummaryEntry.dropped ? 'dropped' : ''}">
-                            <a class="hidden-print" href="${context}/studentMakeup/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.studentName}</a>
-                            <span class="visible-print">${attendancesummaryEntry.studentName}</span>
+                        <td class="${attendanceSummaryEntry.dropped ? 'dropped' : ''}">
+                            <a class="hidden-print" href="${context}/studentMakeup/${attendanceSummaryEntry.sectionId}/${attendanceSummaryEntry.studentId}">${attendanceSummaryEntry.studentName}</a>
+                            <span class="visible-print">${attendanceSummaryEntry.studentName}</span>
                         </td>
-                        <td class="text-center"><a href="${context}/studentSummary/${attendancesummaryEntry.sectionId}/${attendancesummaryEntry.studentId}">${attendancesummaryEntry.sumMinutesMissed}</a></td>
-                        <td class="text-center">${attendancesummaryEntry.sumMinutesMadeup}</td>
-                        <td class="text-center">${attendancesummaryEntry.remainingMinutesMadeup}</td>
-                        <td class="percentMissed text-center">${attendancesummaryEntry.percentCourseMissed}</td>
+                        <td class="text-center"><a href="${context}/studentSummary/${attendanceSummaryEntry.sectionId}/${attendanceSummaryEntry.studentId}">${attendanceSummaryEntry.sumMinutesMissed}</a></td>
+                        <td class="text-center">${attendanceSummaryEntry.sumMinutesMadeup}</td>
+                        <td class="text-center">${attendanceSummaryEntry.remainingMinutesMadeup}</td>
+                        <td class="percentMissed text-center">${attendanceSummaryEntry.percentCourseMissed}</td>
                     </tr>
                 </c:forEach>
             </table>

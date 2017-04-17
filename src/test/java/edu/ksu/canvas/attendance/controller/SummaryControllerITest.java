@@ -198,7 +198,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,existingStudent.getName(),existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed());
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,existingStudent.getName(),existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed(), entry.getTotalClassesExcused());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))
