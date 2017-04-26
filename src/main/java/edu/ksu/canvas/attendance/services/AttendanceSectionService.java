@@ -2,6 +2,10 @@ package edu.ksu.canvas.attendance.services;
 
 import java.util.List;
 
+import edu.ksu.canvas.attendance.enums.AttendanceType;
+import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -14,6 +14,7 @@
     <c:set var="context" value="${pageContext.request.contextPath}"/>
 
 
+
     <!-- LOAD BOOTSTRAP -->
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
@@ -51,7 +52,7 @@
             <p>${error}</p>
         </div>
     </c:if>
-
+<!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
     <c:if test="${updateSuccessful}">
         <div class="alert alert-success">
             <p>Course Setup successfully updated.</p>
@@ -111,14 +112,83 @@
             <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
         </label>
         <br/>
+            <label>
+                <input type ="checkbox" id="conversionConfirm"/> Convert Attendance to Assignment
+            </label>
+        <br/>
+
+        <div class = "container-fluid" id="conversionConfig" style="display: none">
+            <br/>
+            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published. Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+            </label>
+            <br/>
+            <div class="col-md-2 col-md-offset-0">
+                <label for="assignmentName">
+                    <h5><i>Assignment Name: </i></h5>
+                    <input type = "text" id = "assignmentName" size = "15"/>
+                </label>
+                <br/>
+                <label for="assignmentPoints">
+                    <h5><i>Total Points: </i></h5>
+                    <input type = "text" id = "assignmentPoints" size = "5"/>
+                </label>
+                <br/>
+            </div>
+            <div class="col-md-7 col-md-offset-0">
+                <h5><i>Attendance Weights: </i></h5>
+                <p>"Present", "Tardy", and both types of "Absences" are possible options for attendance status.
+                    Please enter the percentage of the "Total Points" that each type of status should receive.</p>
+
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Present: </label>
+                    <br/>
+                    <label for="presentPoints">
+                        <input type = "text" id = "presentPoints" placeholder="100" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Tardy: </label>
+                    <br/>
+                    <label for="tardyPoints">
+                        <input type = "text" id = "tardyPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Excused: </label>
+                    <br/>
+                    <label for="excusedPoints">
+                        <input type = "text" id = "excusedPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Unexcused: </label>
+                    <br/>
+                    <label for="absentPoints">
+                        <input type = "text" id = "absentPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+            </div>
+        </div>
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
+        <input value="Push Assignment to Canvas" id="pushAssignmentToCanvas" name="pushAssignmentToCanvas"
+               class="hovering-purple-button pull-right buffer-top" type="submit" style="display: none"/>
     </div>
-
     <hr/>
     <br/><br/>
-
     <script>
+        $(function (){
+            $("#conversionConfirm").click(function () {
+                if ($(this).is(":checked")){
+                    $("#conversionConfig").show();
+                    $("#pushAssignmentToCanvas").show();
+                }
+                else{
+                    $("#conversionConfig").hide();
+                    $("#pushAssignmentToCanvas").hide();
+                }
+            });
+        });
         $('#simpleAttendance').change(function(){
             if (this.checked) {
                 $('#aviationTimeConfig').addClass('hidden');
@@ -129,6 +199,9 @@
                 $('#aviationTimeConfig').removeClass('hidden');
             }
         });
+
+
+
     </script>
 
 </form:form>

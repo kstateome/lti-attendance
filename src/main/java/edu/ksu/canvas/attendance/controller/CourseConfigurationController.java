@@ -35,7 +35,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @Autowired
     private CourseConfigurationValidator validator;
 
-
     @RequestMapping()
     public ModelAndView classSetup() throws NoLtiSessionException {
         return classSetup(null, false);
@@ -92,6 +91,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
         return page;
     }
+
 
 
 
