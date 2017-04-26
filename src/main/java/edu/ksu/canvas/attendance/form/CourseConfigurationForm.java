@@ -18,6 +18,23 @@ public class CourseConfigurationForm {
 
     private Boolean showNotesToStudents;
 
+    //TODO: CREATE MODEL TO CONTAIN ALL THE DATA AND ALSO THE NEW DATA
+
+    private Double assignmentPoints;
+
+    private Double presentPoints;
+
+    private Double tardyPoints;
+
+    private Double excusedPoints;
+
+    private Double absentPoints;
+
+    private Boolean gradingOn;
+
+    private String assignmentName;
+
+
     public int getTotalClassMinutes() {
         return totalClassMinutes;
     }
@@ -50,5 +67,63 @@ public class CourseConfigurationForm {
         this.showNotesToStudents = showNotesToStudents;
     }
 
+    public void setSimpleAttendance(Boolean simpleAttendance) {
+        this.simpleAttendance = simpleAttendance;
+    }
 
+    public Double getAssignmentPoints() {
+        return assignmentPoints;
+    }
+
+    public void setAssignmentPoints(Double assignmentPoints) {
+        this.assignmentPoints = assignmentPoints;
+    }
+
+    public Double getPresentPoints() {
+        return presentPoints;
+    }
+
+    public void setPresentPoints(Double presentPoints) {
+        this.presentPoints = presentPoints;
+    }
+
+    public Double getTardyPoints() {
+        return tardyPoints;
+    }
+
+    public void setTardyPoints(Double tardyPoints) {
+        this.tardyPoints = tardyPoints;
+    }
+
+    public Double getExcusedPoints() {
+        return excusedPoints;
+    }
+
+    public void setExcusedPoints(Double excusedPoints) {
+        this.excusedPoints = excusedPoints;
+    }
+
+    public Double getAbsentPoints() {
+        return absentPoints;
+    }
+
+    public void setAbsentPoints(Double absentPoints) {
+        this.absentPoints = absentPoints;
+    }
+
+    public Boolean getGradingOn() {
+        return gradingOn;
+    }
+
+    public void setGradingOn(Boolean gradingOn) {
+        this.gradingOn = gradingOn;
+    }
+
+    public String getAssignmentName() {
+        return assignmentName;
+    }
+
+    public void setAssignmentName(String assignmentName) {
+        this.assignmentName = assignmentName;
+    }
 }
