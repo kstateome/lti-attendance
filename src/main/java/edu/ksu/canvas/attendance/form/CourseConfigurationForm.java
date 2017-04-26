@@ -18,7 +18,6 @@ public class CourseConfigurationForm {
 
     private Boolean showNotesToStudents;
 
-
     public int getTotalClassMinutes() {
         return totalClassMinutes;
     }
@@ -50,4 +49,6 @@ public class CourseConfigurationForm {
     public void setShowNotesToStudents(Boolean showNotesToStudents) {
         this.showNotesToStudents = showNotesToStudents;
     }
+
+
 }

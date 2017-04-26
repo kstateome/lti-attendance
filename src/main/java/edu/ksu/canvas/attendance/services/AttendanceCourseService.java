@@ -52,7 +52,7 @@ public class AttendanceCourseService {
         AttendanceCourse attendanceCourse = attendanceCourseRepository.findByCanvasCourseId(courseId);
         
         if(attendanceCourse == null) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existent course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", courseId);
         }
 
