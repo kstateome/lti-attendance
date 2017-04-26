@@ -3,15 +3,17 @@ package edu.ksu.canvas.attendance.services;
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.enums.SectionIncludes;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
-import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
-import edu.ksu.canvas.interfaces.CourseReader;
-import edu.ksu.canvas.interfaces.EnrollmentReader;
-import edu.ksu.canvas.interfaces.SectionReader;
+import edu.ksu.canvas.interfaces.*;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
+import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
+import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
+import edu.ksu.canvas.requestOptions.GetSingleAssignmentOptions;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
+import edu.ksu.canvas.requestOptions.MultpleSubmissionsOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
@@ -129,6 +131,28 @@ public class CanvasApiWrapperService {
 
     void setEnrollmentOptionsFactory(EnrollmentOptionsFactory enrollmentOptionsFactory) {
         this.enrollmentOptionsFactory = enrollmentOptionsFactory;
+    }
+
+    public Optional<Assignment> getSingleAssignment(Long courseId, OauthToken adminOauthToken, String assignmentId) throws IOException {
+        AssignmentReader assignmentReader = canvasApiFactory.getReader(AssignmentReader.class, adminOauthToken);
+        GetSingleAssignmentOptions singleAssignmentOptions = new GetSingleAssignmentOptions(courseId.toString(), assignmentId);
+        return assignmentReader.getSingleAssignment(singleAssignmentOptions);
+    }
+
+    public void editAssignment(String courseId, Assignment canvasAssignment, OauthToken adminOauthToken) throws IOException {
+        AssignmentWriter assignmentWriter = canvasApiFactory.getWriter(AssignmentWriter.class, adminOauthToken);
+        assignmentWriter.editAssignment(courseId, canvasAssignment);
+
+    }
+
+    public Optional<Progress> gradeMultipleSubmissionsBySection(OauthToken adminOauthToken, MultpleSubmissionsOptions submissionOptions) throws IOException {
+        SubmissionWriter submissionWriter = canvasApiFactory.getWriter(SubmissionWriter.class, adminOauthToken);
+        return submissionWriter.gradeMultipleSubmissionsBySection(submissionOptions);
+    }
+
+    public Optional<Assignment> createAssignment(Long courseId, Assignment assignment, OauthToken adminOauthToken) throws IOException {
+        AssignmentWriter assignmentWriter = canvasApiFactory.getWriter(AssignmentWriter.class, adminOauthToken);
+        return assignmentWriter.createAssignment(courseId.toString(), assignment);
     }
 
     class EnrollmentOptionsFactory {

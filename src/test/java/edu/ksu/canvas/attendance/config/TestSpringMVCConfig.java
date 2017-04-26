@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.config;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.repository.ConfigRepository;
@@ -79,6 +80,8 @@ public class TestSpringMVCConfig {
     @Bean
     public LtiKeyRepository ltiKeyRepository () { return Mockito.mock(LtiKeyRepository.class); }
 
+    @Bean
+    public AttendanceAssignmentRepository attendanceAssignmentRepository () { return Mockito.mock(AttendanceAssignmentRepository.class); }
 
     @Bean
     public RoleChecker roleChecker() {

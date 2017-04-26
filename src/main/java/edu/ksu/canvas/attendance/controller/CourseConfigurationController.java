@@ -5,6 +5,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
+import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -35,6 +36,9 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @Autowired
     private CourseConfigurationValidator validator;
 
+    @Autowired
+    private AttendanceSectionService sectionService;
+
 
     @RequestMapping()
     public ModelAndView classSetup() throws NoLtiSessionException {
@@ -57,6 +61,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+        sectionService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
         page.addObject("updateSuccessful", successful);
@@ -77,6 +82,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
                     + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
 
             courseService.save(classSetupForm, canvasService.getCourseId());
+            sectionService.save(classSetupForm, canvasService.getCourseId());
             return new ModelAndView("forward:/courseConfiguration/" + sectionId + "?updateSuccessful=true");
         }
 

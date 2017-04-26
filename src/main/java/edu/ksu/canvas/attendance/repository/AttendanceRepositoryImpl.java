@@ -4,13 +4,12 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -38,6 +37,30 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
 
         return query.getResultList();
+    }
+
+    @Override
+    public Map<Long, String> getAttendanceCommentsBySectionId(long sectionId) {
+        Validate.notNull(sectionId, "The sectionId parameter must be not null");
+
+        String sql = "SELECT att.student_id,  LISTAGG(att.date_of_class || ': ' || att.notes, ', /n') WITHIN GROUP (ORDER BY att.student_id) AS notes " +
+                    "FROM attendance att" +
+                    "INNER JOIN attendance_student ats" +
+                    "ON att.student_id = ats.student_id AND ats.canvas_section_id = :canvas_section_id" +
+                    "WHERE att.notes IS NOT NULL" +
+                    "GROUP BY att.student_id";
+
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("canvas_section_id", sectionId);
+
+        List<Object[]> results = query.getResultList();
+        Map<Long, String> studentCommentsMap = new HashMap<>();
+
+        for(Object[] result: results) {
+            studentCommentsMap.put(((Number) result[0]).longValue(), (String) result[1]);
+        }
+
+        return studentCommentsMap;
     }
 
     @Override

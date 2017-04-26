@@ -13,26 +13,27 @@ public class AttendanceAssignment implements Serializable {
     @Column(name = "assignment_id")
     private Long assignmentId; //attendance project's local section Id
 
-    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"))
+/*    @OneToOne(cascade = CascadeType.ALL)*/
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"), nullable = false)
     private Long sectionId; //attendance project's local section Id
 
     @Column(name = "canvas_assignment_id")
     private Long canvasAssignmentId;
 
     @Column(name = "assignment_points")
-    private Integer assignmentPoints;
+    private Double assignmentPoints;
 
     @Column(name = "present_points")
-    private Integer presentPoints;
+    private Double presentPoints;
 
     @Column(name = "tardy_points")
-    private double tardyPoints;
+    private Double tardyPoints;
 
     @Column(name = "excused_points")
-    private double excusedPoints;
+    private Double excusedPoints;
 
     @Column(name = "absent_points")
-    private double absentPoints;
+    private Double absentPoints;
 
     @Column(name = "grading_on", nullable = false)
     private Boolean gradingOn = false;
@@ -67,43 +68,43 @@ public class AttendanceAssignment implements Serializable {
         this.canvasAssignmentId = canvasAssignmentId;
     }
 
-    public Integer getAssignmentPoints() {
+    public Double getAssignmentPoints() {
         return assignmentPoints;
     }
 
-    public void setAssignmentPoints(Integer assignmentPoints) {
+    public void setAssignmentPoints(Double assignmentPoints) {
         this.assignmentPoints = assignmentPoints;
     }
 
-    public Integer getPresentPoints() {
+    public Double getPresentPoints() {
         return presentPoints;
     }
 
-    public void setPresentPoints(Integer presentPoints) {
+    public void setPresentPoints(Double presentPoints) {
         this.presentPoints = presentPoints;
     }
 
-    public double getTardyPoints() {
+    public Double getTardyPoints() {
         return tardyPoints;
     }
 
-    public void setTardyPoints(double tardyPoints) {
+    public void setTardyPoints(Double tardyPoints) {
         this.tardyPoints = tardyPoints;
     }
 
-    public double getExcusedPoints() {
+    public Double getExcusedPoints() {
         return excusedPoints;
     }
 
-    public void setExcusedPoints(double excusedPoints) {
+    public void setExcusedPoints(Double excusedPoints) {
         this.excusedPoints = excusedPoints;
     }
 
-    public double getAbsentPoints() {
+    public Double getAbsentPoints() {
         return absentPoints;
     }
 
-    public void setAbsentPoints(double absentPoints) {
+    public void setAbsentPoints(Double absentPoints) {
         this.absentPoints = absentPoints;
     }
 
