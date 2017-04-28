@@ -1,26 +1,29 @@
 package edu.ksu.canvas.attendance.controller;
 
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
+import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
+import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
+import edu.ksu.canvas.attendance.services.SynchronizationService;
+import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
-import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.attendance.services.SynchronizationService;
-import edu.ksu.lti.launch.exception.NoLtiSessionException;
-
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,6 +31,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
+    private AttendanceAssignment existingAttendanceAssignment;
     
     @Autowired
     private AttendanceCourseRepository courseRepository;
@@ -91,11 +95,13 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
-        
+        Boolean gradingOn = false;
+
         mockMvc.perform(post("/courseConfiguration/"+irrlevantSectionId+"/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes))
+                .param("gradingOn", String.valueOf(gradingOn))
                 .param("simpleAttendance", String.valueOf(expectedSimpleAttendanceValue)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId + "?updateSuccessful=true"));
@@ -112,10 +118,12 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
+        Boolean gradingOn = false;
 
         mockMvc.perform(post("/courseConfiguration/" + irrlevantSectionId + "/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
+                .param("gradingOn", String.valueOf(gradingOn))
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
