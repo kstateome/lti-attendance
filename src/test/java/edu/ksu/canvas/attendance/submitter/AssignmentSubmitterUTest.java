@@ -24,7 +24,11 @@ import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -191,7 +195,7 @@ public class AssignmentSubmitterUTest {
         when(courseRepository.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_ID)).thenReturn(studentCommentsMap);
         when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
-        when(submissionWriter.gradeMultipleSubmissionsBySection(any())).thenReturn(progressOptional);
+        when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
 
         List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList);
