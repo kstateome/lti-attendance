@@ -160,6 +160,7 @@ public class SynchronizationService {
 
     private AttendanceStudent setStudentInfo(AttendanceStudent student, Enrollment enrollment, Section section) {
         student.setSisUserId(enrollment.getUser().getSisUserId());
+        student.setCanvasStudentId((long) enrollment.getUser().getId());
         student.setName(enrollment.getUser().getSortableName());
         student.setCanvasSectionId(section.getId());
         student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));

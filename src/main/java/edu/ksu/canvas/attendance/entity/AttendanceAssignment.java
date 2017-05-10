@@ -8,14 +8,16 @@ import java.io.Serializable;
 @Table(name = "attendance_assignment")
 public class AttendanceAssignment implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "assignment_id")
-    private Long assignmentId; //attendance project's local section Id
+    private Long assignmentId;
 
-/*    @OneToOne(cascade = CascadeType.ALL)*/
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"), nullable = false)
-    private Long sectionId; //attendance project's local section Id
+    private AttendanceSection attendanceSection;
 
     @Column(name = "canvas_assignment_id")
     private Long canvasAssignmentId;
@@ -52,12 +54,12 @@ public class AttendanceAssignment implements Serializable {
         this.assignmentId = assignmentId;
     }
 
-    public Long getSectionId() {
-        return sectionId;
+    public AttendanceSection getAttendanceSection() {
+        return attendanceSection;
     }
 
-    public void setSectionId(Long sectionId) {
-        this.sectionId = sectionId;
+    public void setAttendanceSection(AttendanceSection attendanceSection) {
+        this.attendanceSection = attendanceSection;
     }
 
     public Long getCanvasAssignmentId() {
@@ -126,7 +128,8 @@ public class AttendanceAssignment implements Serializable {
 
     @Override
     public String toString() {
-        return "AttendanceAssignment [assignmentId=" + assignmentId + ", sectionId=" + sectionId + ", canvasAssignmentId="
+        return "AttendanceAssignment [assignmentId=" + assignmentId + ", sectionId=" +
+                (attendanceSection == null? null : attendanceSection.getSectionId()) + ", canvasAssignmentId="
                 + canvasAssignmentId + ", assignmentPoints=" + assignmentPoints + ", presentPoints=" + presentPoints
                 + ", tardyPoints=" + tardyPoints + ", excusedPoints=" + excusedPoints + ", absentPoints=" + absentPoints
                 + ", gradingOn=" + gradingOn + ", assignmentName=" + assignmentName +"]";

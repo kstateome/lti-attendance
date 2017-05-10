@@ -40,6 +40,8 @@ public class AttendanceStudent implements Serializable {
     @OneToMany(mappedBy = "attendanceStudent")
     private List<Attendance> attendances;
 
+    @Column(name = "canvas_student_id")
+    private Long canvasStudentId;
 
     @Transient
     private Double percentageOfCourseMissed;
@@ -112,12 +114,19 @@ public class AttendanceStudent implements Serializable {
         this.deleted = deleted;
     }
 
+    public Long getCanvasStudentId() {
+        return canvasStudentId;
+    }
+
+    public void setCanvasStudentId(Long canvasStudentId) {
+        this.canvasStudentId = canvasStudentId;
+    }
 
     @Override
     public String toString() {
-        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="
-                + canvasCourseId + ", canvasSectionId=" + canvasSectionId + ", percentageOfCourseMissed="
-                + percentageOfCourseMissed + ", deleted=" + deleted + "]";
+        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", canvasStudentId=" + canvasStudentId
+                + ", name=" + name + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId=" + canvasSectionId +
+                ", percentageOfCourseMissed=" + percentageOfCourseMissed + ", deleted=" + deleted + "]";
     }
 
     @Override

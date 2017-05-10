@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.reflect.Whitebox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,20 +51,20 @@ public class CanvasAssignmentAssistantUTest {
     @Mock
     private CanvasApiWrapperService canvasApiWrapperService;
 
-    private NonRefreshableOauthToken adminOauthToken;
+    private NonRefreshableOauthToken oauthToken;
     private AttendanceAssignment attendanceAssignment;
     private Optional<Assignment> assignmentOptional;
     private Assignment assignment;
-    private Error error;
     private AttendanceSection attendanceSection;
     private List<AttendanceSection> sectionList;
+    private Error error;
 
     @Before
     public void setup() {
 
         canvasAssignmentAssistant = new CanvasAssignmentAssistant();
 
-        adminOauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
+        oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
 
         attendanceAssignment = new AttendanceAssignment();
         attendanceAssignment.setAssignmentId(ASSIGNMENT_ID);
@@ -94,32 +94,78 @@ public class CanvasAssignmentAssistantUTest {
         attendanceSection.setCanvasSectionId(SECTION_ID);
         sectionList = new ArrayList<>();
         sectionList.add(attendanceSection);
+        attendanceAssignment.setAttendanceSection(attendanceSection);
 
         Whitebox.setInternalState(canvasAssignmentAssistant, "assignmentService", assignmentService);
         Whitebox.setInternalState(canvasAssignmentAssistant, "attendanceSectionService", attendanceSectionService);
         Whitebox.setInternalState(canvasAssignmentAssistant, "assignmentRepository", assignmentRepository);
-        Whitebox.setInternalState(canvasAssignmentAssistant, "canvasApiWrapper", canvasApiWrapperService);
+        Whitebox.setInternalState(canvasAssignmentAssistant, "canvasApiWrapperService", canvasApiWrapperService);
     }
 
     @Test
     public void createAssignmentInCanvasHappyPath() throws IOException {
         when(canvasApiWrapperService.createAssignment(any(), any(), any())).thenReturn(assignmentOptional);
         when(attendanceSectionService.getSectionsByCourse(COURSE_ID)).thenReturn(sectionList);
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
+        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment);
         when(assignmentRepository.save(attendanceAssignment)).thenReturn(attendanceAssignment);
 
-        Error createError = canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, adminOauthToken);
+        Error createError = canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         Assert.assertNull(createError);
     }
 
     @Test
-    public void editAssignmentInCanvasHappyPath() throws IOException {
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, adminOauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
+    public void createAssignmentInCanvasNullReturnError() throws IOException {
+        error = new Error("Error while creating canvas assignment for section: " + SECTION_NAME);
+        assignmentOptional = Optional.empty();
 
-        Error editError = canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, adminOauthToken);
+        when(canvasApiWrapperService.createAssignment(any(), any(), any())).thenReturn(assignmentOptional);
+
+        Error createError = canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
+        Assert.assertNotNull(createError);
+        Assert.assertEquals("Expected return error from creation", error.getMessage(), createError.getMessage());
+    }
+
+    @Test
+    public void editAssignmentInCanvasHappyPath() throws IOException {
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+
+        Error editError = canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         Assert.assertNull(editError);
     }
-       
+
+    @Test
+    public void editAssignmentInCanvasCanvasAssignmentNotFound() throws IOException {
+        error = new Error("Assignment not found in Canvas");
+        assignmentOptional = Optional.empty();
+
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+
+        Error editError = canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
+        Assert.assertNotNull(editError);
+        Assert.assertEquals("Expected return error by not finding the canvas assignment.", error.getMessage(), editError.getMessage());
+    }
+
+    @Test
+    public void deleteAssignmentInCanvasHappyPath() throws IOException {
+        when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
+        when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
+
+        Error createError = canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
+        Assert.assertNull(createError);
+    }
+
+    @Test
+    public void deleteAssignmentInCanvasAssignmentNotFoundError() throws IOException {
+        error = new Error("Attendance assignment not found for section: " + SECTION_NAME);
+        attendanceAssignment = null;
+
+        when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
+        when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
+
+        Error createError = canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
+        Assert.assertNotNull(createError);
+        Assert.assertEquals("Expected error not found attendance assignment.", error.getMessage(), createError.getMessage());
+    }
+
 
 }

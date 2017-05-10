@@ -4,9 +4,13 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
+import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
+import edu.ksu.canvas.attendance.services.ReportService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
+import edu.ksu.canvas.attendance.submitter.AssignmentSubmitter;
+import edu.ksu.canvas.attendance.submitter.CanvasAssignmentAssistant;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -38,6 +44,15 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @Autowired
     private AttendanceSectionService sectionService;
+
+    @Autowired
+    private AssignmentSubmitter assignmentSubmitter;
+
+    @Autowired
+    private ReportService reportService;
+
+    @Autowired
+    private CanvasAssignmentAssistant assignmentAssistant;
 
 
     @RequestMapping()
@@ -74,7 +89,9 @@ public class CourseConfigurationController extends AttendanceBaseController {
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
-            page.addObject("error", "Please correct user input and try saving again.");
+            List<String> errors = new ArrayList<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
@@ -99,6 +116,44 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return page;
     }
 
+    @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
+    public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+        LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
+        ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
+        Long courseId = Long.valueOf(canvasService.getCourseId());
+
+        boolean isSimpleAttendance = classSetupForm.getSimpleAttendance();
+        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
+                reportService.getSimpleAttendanceSummaryReport(Long.parseLong(sectionId)) :
+                reportService.getAviationAttendanceSummaryReport(Long.parseLong(sectionId));
+
+        List<Error> submissionErrors = assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), classSetupForm);
+
+        if(submissionErrors != null && !submissionErrors.isEmpty()){
+            List<String> errors = new ArrayList<>();
+            submissionErrors.forEach(error -> errors.add(error.getMessage()));
+            page.addObject("error" , errors);
+        } else {
+            page.addObject("pushingSuccessful", true);
+        }
+        return page;
+    }
+
+    @RequestMapping(value = "/{sectionId}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId) throws NoLtiSessionException {
+        LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
+        ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+
+        Error error = assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
+        if (error != null && !error.getMessage().equals("NO CANVAS ASSIGNMENT ASSOCIATED")) {
+            page.addObject("error", error);
+        }
+        sectionService.resetAttendanceAssignmentsForCourse(canvasService.getCourseId());
+
+        page.addObject("deleteSuccessful", true);
+
+        return page;
+    }
 
 }

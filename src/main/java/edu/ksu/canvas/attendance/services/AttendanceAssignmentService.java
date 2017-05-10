@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,8 @@ public class AttendanceAssignmentService {
         return assignmentRepository.findByAssignmentId(assignmentId);
     }
 
-    public AttendanceAssignment findBySectionId(long sectionId) {
-        return assignmentRepository.findBySectionId(sectionId);
+    public AttendanceAssignment findBySection(AttendanceSection section) {
+        return assignmentRepository.findByAttendanceSection(section);
     }
 
 }

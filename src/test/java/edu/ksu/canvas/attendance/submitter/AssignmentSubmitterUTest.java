@@ -1,17 +1,12 @@
 package edu.ksu.canvas.attendance.submitter;
 
-import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
-import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
-import edu.ksu.canvas.attendance.repository.AttendanceRepository;
-import edu.ksu.canvas.attendance.services.AttendanceAssignmentService;
-import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.interfaces.AssignmentReader;
-import edu.ksu.canvas.interfaces.SubmissionWriter;
+import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
@@ -34,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class AssignmentSubmitterUTest {
 
     private static final String CANVAS_URL = "canvas.example.edu";
-    private static final Long SECTION_ID = 111111111111L;
+    private static final Long SECTION_1_ID = 111111111111L;
     private static final Long SECTION_2_ID = 222222222222L;
     private static final Long COURSE_ID = 2121212121L;
     private static final String STUDENT_1_COMMENT = "student 1 comment";
@@ -49,6 +44,10 @@ public class AssignmentSubmitterUTest {
     private static final Long STUDENT_2_ID = 22222222L;
     private static final Long STUDENT_3_ID = 55666555L;
     private static final Long STUDENT_4_ID = 22999222L;
+    private static final Long CANVAS_STUDENT_ID_1 = 1111L;
+    private static final Long CANVAS_STUDENT_ID_2 = 2222L;
+    private static final Long CANVAS_STUDENT_ID_3 = 3333L;
+    private static final Long CANVAS_STUDENT_ID_4 = 4444L;
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
     private static final long ASSIGNMENT_ID = 8484848484L;
     private static final long ASSIGNMENT_ID_2 = 77777778484L;
@@ -57,29 +56,29 @@ public class AssignmentSubmitterUTest {
     private static final Double ASSIGNMENT_POINTS = 100.0;
     private static final long CANVAS_ASSIGNMENT_ID = 514514514L;
     private static final int PROGRESS_ID = 19781971;
+    private static final String SECTION_1_NAME = "SECTION NUMBER 1";
+    private static final String SECTION_2_NAME = "SECTION NUMBER 2";
 
     private AssignmentSubmitter assignmentSubmitter;
-
-    @Mock
-    private CanvasApiFactory canvasApiFactory;
-
-    @Mock
-    private SubmissionWriter submissionWriter;
-
-    @Mock
-    private AssignmentReader assignmentReader;
-
-    @Mock
-    private AttendanceCourseRepository courseRepository;
-
-    @Mock
-    private AttendanceRepository attendanceRepository;
 
     @Mock
     private AttendanceAssignmentService assignmentService;
 
     @Mock
+    private AttendanceSectionService sectionService;
+    //TODO: DONT USE REPOSITORIES AND SERVICES, USE THEIR SERVICES (CALL IN SERVICES IF NEEDED)
+
+    @Mock
+    private AttendanceCourseService attendanceCourseService;
+
+    @Mock
+    private AttendanceService attendanceService;
+
+    @Mock
     private CanvasApiWrapperService canvasApiWrapperService;
+
+    @Mock
+    private AssignmentValidator assignmentValidator;
 
     @Mock
     private CanvasAssignmentAssistant canvasAssignmentAssistant;
@@ -90,32 +89,36 @@ public class AssignmentSubmitterUTest {
     private AttendanceSummaryModel attendanceSummaryModel1;
     private AttendanceSummaryModel attendanceSummaryModel2;
     private List<AttendanceSummaryModel> attendanceSummaryModelList;
-    private AttendanceAssignment attendanceAssignment;
+    private AttendanceAssignment attendanceAssignment1;
     private AttendanceAssignment attendanceAssignment2;
     private Optional<Assignment> assignmentOptional;
     private Assignment assignment;
     private AttendanceCourse course;
-    private Map<Long, String> studentCommentsMap;
+    private Map<Long, String> studentCommentsMap1;
     private Map<Long, String> studentCommentsMap2;
     private Optional<Progress> progressOptional;
     private Progress progress;
     private CourseConfigurationForm courseConfigurationForm;
     private  Error error;
     private Error error2;
+    private AttendanceSection section1;
+    private AttendanceSection section2;
 
     @Before
     public void setup() {
 
+        assignmentSubmitter = new AssignmentSubmitter();
+
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
-        attendanceSummaryModel1 = new AttendanceSummaryModel(SECTION_ID);
-        AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_ID, STUDENT_1_ID, STUDENT_1_NAME, false, 0, 1, 0, 3);
-        AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_ID, STUDENT_2_ID, STUDENT_2_NAME, false, 0, 2, 0, 2);
+        attendanceSummaryModel1 = new AttendanceSummaryModel(SECTION_1_ID);
+        AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_1_ID, CANVAS_STUDENT_ID_1, STUDENT_1_NAME, false, 0, 1, 0, 3);
+        AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_2_ID, CANVAS_STUDENT_ID_2, STUDENT_2_NAME, false, 0, 2, 0, 2);
         attendanceSummaryModel1.add(entry1);
         attendanceSummaryModel1.add(entry2);
 
         attendanceSummaryModel2 = new AttendanceSummaryModel(SECTION_2_ID);
-        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_ID, STUDENT_3_ID, STUDENT_3_NAME, false, 0, 3, 0, 1);
-        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_ID, STUDENT_4_ID, STUDENT_4_NAME, false, 0, 0, 0, 4);
+        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_3_ID, CANVAS_STUDENT_ID_3, STUDENT_3_NAME, false, 0, 3, 0, 1);
+        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_4_ID, CANVAS_STUDENT_ID_4, STUDENT_4_NAME, false, 0, 0, 0, 4);
         attendanceSummaryModel2.add(entry3);
         attendanceSummaryModel2.add(entry4);
 
@@ -129,18 +132,17 @@ public class AssignmentSubmitterUTest {
         courseConfigurationForm.setExcusedPoints(0.0);
         courseConfigurationForm.setPresentPoints(100.0);
         courseConfigurationForm.setTardyPoints(0.0);
-        assignmentSubmitter = new AssignmentSubmitter(assignmentService, courseRepository, attendanceRepository, canvasApiWrapperService, COURSE_ID, oauthToken, courseConfigurationForm);
 
-        attendanceAssignment = new AttendanceAssignment();
-        attendanceAssignment.setAssignmentId(ASSIGNMENT_ID);
-        attendanceAssignment.setAssignmentName(ASSIGNMENT_NAME);
-        attendanceAssignment.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
-        attendanceAssignment.setGradingOn(true);
-        attendanceAssignment.setAssignmentPoints(ASSIGNMENT_POINTS);
-        attendanceAssignment.setAbsentPoints(0.0);
-        attendanceAssignment.setExcusedPoints(0.0);
-        attendanceAssignment.setTardyPoints(0.0);
-        attendanceAssignment.setPresentPoints(100.0);
+        attendanceAssignment1 = new AttendanceAssignment();
+        attendanceAssignment1.setAssignmentId(ASSIGNMENT_ID);
+        attendanceAssignment1.setAssignmentName(ASSIGNMENT_NAME);
+        attendanceAssignment1.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
+        attendanceAssignment1.setGradingOn(true);
+        attendanceAssignment1.setAssignmentPoints(ASSIGNMENT_POINTS);
+        attendanceAssignment1.setAbsentPoints(0.0);
+        attendanceAssignment1.setExcusedPoints(0.0);
+        attendanceAssignment1.setTardyPoints(0.0);
+        attendanceAssignment1.setPresentPoints(100.0);
 
         attendanceAssignment2 = new AttendanceAssignment();
         attendanceAssignment2.setAssignmentId(ASSIGNMENT_ID_2);
@@ -162,9 +164,21 @@ public class AssignmentSubmitterUTest {
         course.setAttendanceType(AttendanceType.SIMPLE);
         course.setShowNotesToStudents(true);
 
-        studentCommentsMap = new HashMap<>();
-        studentCommentsMap.put(STUDENT_1_ID, STUDENT_1_COMMENT);
-        studentCommentsMap.put(STUDENT_2_ID, STUDENT_2_COMMENT);
+        section1 = new AttendanceSection();
+        section1.setSectionId(SECTION_1_ID);
+        section1.setCanvasCourseId(COURSE_ID);
+        section1.setCanvasSectionId(SECTION_1_ID);
+        section1.setName(SECTION_1_NAME);
+
+        section2 = new AttendanceSection();
+        section2.setSectionId(SECTION_2_ID);
+        section2.setCanvasCourseId(COURSE_ID);
+        section2.setCanvasSectionId(SECTION_2_ID);
+        section2.setName(SECTION_2_NAME);
+
+        studentCommentsMap1 = new HashMap<>();
+        studentCommentsMap1.put(STUDENT_1_ID, STUDENT_1_COMMENT);
+        studentCommentsMap1.put(STUDENT_2_ID, STUDENT_2_COMMENT);
 
         studentCommentsMap2 = new HashMap<>();
         studentCommentsMap2.put(STUDENT_3_ID, STUDENT_3_COMMENT);
@@ -176,67 +190,91 @@ public class AssignmentSubmitterUTest {
         progress.setWorkflowState("queued");
         progressOptional = Optional.of(progress);
 
-        error = new Error("Error");
-        Whitebox.setInternalState(assignmentSubmitter, "canvasAssignmentAssistant", canvasAssignmentAssistant);
+        error = new Error("NO CANVAS ASSIGNMENT LINKED");
 
-        error2 = new Error("Could not push grades of section: " + SECTION_ID);
+        Whitebox.setInternalState(assignmentSubmitter, "canvasAssignmentAssistant", canvasAssignmentAssistant);
+        Whitebox.setInternalState(assignmentSubmitter, "assignmentService", assignmentService);
+        Whitebox.setInternalState(assignmentSubmitter, "sectionService", sectionService);
+        Whitebox.setInternalState(assignmentSubmitter, "attendanceCourseService", attendanceCourseService);
+        Whitebox.setInternalState(assignmentSubmitter, "attendanceService", attendanceService);
+        Whitebox.setInternalState(assignmentSubmitter, "canvasApiWrapperService", canvasApiWrapperService);
+        Whitebox.setInternalState(assignmentSubmitter, "assignmentValidator", assignmentValidator);
+
+
+        error2 = new Error("Could not push grades of section: " + SECTION_1_ID);
 
     }
 
     @Test
     public void submitCourseAttendancesHappyPath() throws IOException {
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
-        when(assignmentService.findBySectionId(SECTION_2_ID)).thenReturn(attendanceAssignment2);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
-        when(courseRepository.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
-        when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_ID)).thenReturn(studentCommentsMap);
-        when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
-        when(submissionWriter.gradeMultipleSubmissionsBySection(any())).thenReturn(progressOptional);
+        when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
+        when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
+        when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
+        when(assignmentService.findBySection(section2)).thenReturn(attendanceAssignment2);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
+        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
+        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
+        when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
         Assert.assertTrue(errorList.isEmpty());
+    }
+
+    @Test
+    public void submitCourseAttendancesUnsavedConfigurationError() throws IOException {
+        error = new Error("Please save configuration setup for the assignment before pushing grades to Canvas.");
+        attendanceAssignment1.setAssignmentPoints(null);
+        attendanceAssignment1.setAssignmentName(null);
+
+        when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
+        when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
+
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        Assert.assertFalse(errorList.isEmpty());
+        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
 
 
     @Test
     public void submitCourseAttendancesAttendanceAssignmentValidationError() throws IOException {
-        attendanceAssignment.setCanvasAssignmentId(null);
+        attendanceAssignment1.setCanvasAssignmentId(null);
 
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
-        when(canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken)).thenReturn(error);
+        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
+        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
+        when(canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
         Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error, errorList.get(0));
+        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
 
     @Test
     public void submitCourseAttendancesCanvasAssignmentValidationError() throws IOException {
-        assignmentOptional.get().setPointsPossible(120.0);
+        error = new Error("Assignment configuration needs to be saved before pushing to Canvas");
 
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
-        when(canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken)).thenReturn(error);
+        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
+        when(assignmentValidator.validateCanvasAssignment(courseConfigurationForm, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
         Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error, errorList.get(0));
+        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
 
     @Test
     public void submitCourseAttendancesUnableToPushGradesForSectionError() throws IOException {
         progressOptional.get().setWorkflowState("failed");
 
-        when(assignmentService.findBySectionId(SECTION_ID)).thenReturn(attendanceAssignment);
-        when(assignmentService.findBySectionId(SECTION_2_ID)).thenReturn(attendanceAssignment2);
+        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
-        when(courseRepository.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
-        when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_ID)).thenReturn(studentCommentsMap);
-        when(attendanceRepository.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
-        when(submissionWriter.gradeMultipleSubmissionsBySection(any())).thenReturn(progressOptional);
+        when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
+        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
+        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
+        when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
         Assert.assertFalse(errorList.isEmpty());
         Assert.assertEquals("Expected to return the error", error2.getMessage(), errorList.get(0).getMessage());
     }

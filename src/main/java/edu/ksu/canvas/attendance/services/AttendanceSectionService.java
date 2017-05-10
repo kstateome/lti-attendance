@@ -1,11 +1,5 @@
 package edu.ksu.canvas.attendance.services;
 
-import java.util.List;
-
-import edu.ksu.canvas.attendance.enums.AttendanceType;
-import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
@@ -40,6 +34,9 @@ public class AttendanceSectionService {
         return sections.isEmpty() ? null : sections.get(0);
     }
 
+    public List<AttendanceSection> getSectionByCanvasCourseId(long canvasCourseId) {
+        return sectionRepository.findByCanvasCourseId(canvasCourseId);
+    }
 
     public List<AttendanceSection> getSectionsByCourse(long canvasCourseId) {
         return sectionRepository.findByCanvasCourseId(canvasCourseId);
@@ -59,21 +56,52 @@ public class AttendanceSectionService {
 
         List<AttendanceAssignment> attendanceAssignments = new ArrayList<>();
         for(AttendanceSection section : sections) {
-            AttendanceAssignment assignment = assignmentRepository.findBySectionId(section.getSectionId());
+            AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(section);
             if(assignment == null) {
                 assignment = new AttendanceAssignment();
-                assignment.setSectionId(section.getSectionId());
+                assignment.setAttendanceSection(section);
             }
+
             attendanceAssignments.add(assignment);
         }
 
         for(AttendanceAssignment assignment : attendanceAssignments) {
             assignment.setAssignmentName(courseForm.getAssignmentName());
             assignment.setGradingOn(courseForm.getGradingOn());
+            assignment.setAssignmentPoints(courseForm.getAssignmentPoints());
             assignment.setPresentPoints(courseForm.getPresentPoints());
             assignment.setTardyPoints(courseForm.getTardyPoints());
             assignment.setExcusedPoints(courseForm.getExcusedPoints());
             assignment.setAbsentPoints(courseForm.getAbsentPoints());
+            assignmentRepository.save(assignment);
+        }
+    }
+
+    public void resetAttendanceAssignmentsForCourse(long canvasCourseId) {
+
+        List<AttendanceSection> sections = sectionRepository.findByCanvasCourseId(canvasCourseId);
+        if(sections == null || sections.isEmpty()) {
+            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+            throw new ContextedRuntimeException(e).addContextValue("courseId", canvasCourseId);
+        }
+
+        List<AttendanceAssignment> attendanceAssignments = new ArrayList<>();
+        for(AttendanceSection section : sections) {
+            AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(section);
+            if(assignment != null) {
+                attendanceAssignments.add(assignment);
+            }
+        }
+
+        for (AttendanceAssignment assignment: attendanceAssignments) {
+            assignment.setGradingOn(false);
+            assignment.setCanvasAssignmentId(null);
+            assignment.setAssignmentName(null);
+            assignment.setAssignmentPoints(null);
+            assignment.setPresentPoints(null);
+            assignment.setTardyPoints(null);
+            assignment.setExcusedPoints(null);
+            assignment.setAbsentPoints(null);
             assignmentRepository.save(assignment);
         }
     }
@@ -92,18 +120,24 @@ public class AttendanceSectionService {
             throw new ContextedRuntimeException(e).addContextValue("courseId", courseId);
         }
 
-        AttendanceAssignment attendanceAssignment = assignmentRepository.findBySectionId(sections.get(0).getSectionId());
+        AttendanceAssignment attendanceAssignment = assignmentRepository.findByAttendanceSection(sections.get(0));
         if(attendanceAssignment == null) {
             attendanceAssignment = new AttendanceAssignment();
         }
 
-        courseForm.setAssignmentPoints(attendanceAssignment.getAssignmentPoints());
-        courseForm.setPresentPoints(attendanceAssignment.getPresentPoints());
-        courseForm.setExcusedPoints(attendanceAssignment.getExcusedPoints());
-        courseForm.setAbsentPoints(attendanceAssignment.getAbsentPoints());
+        courseForm.setAssignmentPoints(attendanceAssignment.getAssignmentPoints() == null ? 100 : attendanceAssignment.getAssignmentPoints());
+        courseForm.setPresentPoints(attendanceAssignment.getPresentPoints() == null ? 100 : attendanceAssignment.getPresentPoints());
+        courseForm.setExcusedPoints(attendanceAssignment.getExcusedPoints() == null ? 0 : attendanceAssignment.getExcusedPoints());
+        courseForm.setTardyPoints(attendanceAssignment.getTardyPoints() == null ? 0 : attendanceAssignment.getTardyPoints());
+        courseForm.setAbsentPoints(attendanceAssignment.getAbsentPoints() == null ? 0 : attendanceAssignment.getAbsentPoints());
         courseForm.setGradingOn(attendanceAssignment.getGradingOn());
         courseForm.setAssignmentName(attendanceAssignment.getAssignmentName());
     }
 
+    public AttendanceSection getSectionInListById(Long canvasCourseId, Long sectionId) {
+        List<AttendanceSection> sectionList = sectionRepository.findByCanvasCourseId(canvasCourseId);
+        return sectionList.stream().filter(x -> x.getCanvasSectionId().equals(sectionId)).findFirst().orElse(null);
+
+    }
 
 }

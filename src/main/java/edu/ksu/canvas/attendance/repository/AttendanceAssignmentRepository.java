@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.repository;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,6 @@ public interface AttendanceAssignmentRepository extends CrudRepository<Attendanc
 
     AttendanceAssignment findByAssignmentId(Long assignmentId);
 
-    AttendanceAssignment findBySectionId(Long sectionId);
+    AttendanceAssignment findByAttendanceSection(AttendanceSection section);
 
 }

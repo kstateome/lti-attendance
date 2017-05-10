@@ -62,4 +62,8 @@ public class AttendanceCourseService {
         courseForm.setShowNotesToStudents(attendanceCourse.getShowNotesToStudents());
     }
 
+    public AttendanceCourse findByCanvasCourseId(Long courseId) {
+        return attendanceCourseRepository.findByCanvasCourseId(courseId);
+    }
+
 }
