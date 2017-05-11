@@ -110,11 +110,11 @@ public class AttendanceAssignment implements Serializable {
         this.absentPoints = absentPoints;
     }
 
-    public Boolean getGradingOn() {
+    public boolean getGradingOn() {
         return gradingOn;
     }
 
-    public void setGradingOn(Boolean gradingOn) {
+    public void setGradingOn(boolean gradingOn) {
         this.gradingOn = gradingOn;
     }
 

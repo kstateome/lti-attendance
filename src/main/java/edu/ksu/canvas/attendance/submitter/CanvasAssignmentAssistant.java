@@ -12,6 +12,7 @@ import edu.ksu.canvas.oauth.OauthToken;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Scope(value="session")
 public class CanvasAssignmentAssistant {
 
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistant.class);
