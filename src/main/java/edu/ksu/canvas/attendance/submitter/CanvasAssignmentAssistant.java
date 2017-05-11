@@ -12,15 +12,14 @@ import edu.ksu.canvas.oauth.OauthToken;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-@Scope(value="session")
 public class CanvasAssignmentAssistant {
 
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistant.class);
@@ -116,8 +115,8 @@ public class CanvasAssignmentAssistant {
     public Error deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) {
 
         List<AttendanceSection> sections = attendanceSectionService.getSectionByCanvasCourseId(canvasCourseId);
-        if(sections == null || sections.isEmpty()) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existent course");
+        if(CollectionUtils.isEmpty(sections)) {
+            RuntimeException e = new RuntimeException("Cannot load data into courseForm for non-existent sections for this course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", canvasCourseId);
         }
 

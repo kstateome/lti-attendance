@@ -38,7 +38,7 @@ public class AttendanceAssignment implements Serializable {
     private Double absentPoints;
 
     @Column(name = "grading_on", nullable = false)
-    private Boolean gradingOn = false;
+    private boolean gradingOn = false;
 
     @Column(name = "assignment_name")
     private String assignmentName;

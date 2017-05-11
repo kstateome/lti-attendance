@@ -4,7 +4,6 @@ import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
-import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
@@ -66,7 +65,6 @@ public class AssignmentSubmitterUTest {
 
     @Mock
     private AttendanceSectionService sectionService;
-    //TODO: DONT USE REPOSITORIES AND SERVICES, USE THEIR SERVICES (CALL IN SERVICES IF NEEDED)
 
     @Mock
     private AttendanceCourseService attendanceCourseService;
@@ -98,7 +96,7 @@ public class AssignmentSubmitterUTest {
     private Map<Long, String> studentCommentsMap2;
     private Optional<Progress> progressOptional;
     private Progress progress;
-    private CourseConfigurationForm courseConfigurationForm;
+    private AttendanceAssignment assignmentConfigurationFromSetup;
     private  Error error;
     private Error error2;
     private AttendanceSection section1;
@@ -126,12 +124,12 @@ public class AssignmentSubmitterUTest {
         attendanceSummaryModelList.add(attendanceSummaryModel1);
         attendanceSummaryModelList.add(attendanceSummaryModel2);
 
-        courseConfigurationForm = new CourseConfigurationForm();
-        courseConfigurationForm.setAbsentPoints(0.0);
-        courseConfigurationForm.setAssignmentPoints(ASSIGNMENT_POINTS);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setPresentPoints(100.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAbsentPoints(0.0);
+        assignmentConfigurationFromSetup.setAssignmentPoints(ASSIGNMENT_POINTS);
+        assignmentConfigurationFromSetup.setExcusedPoints(0.0);
+        assignmentConfigurationFromSetup.setPresentPoints(100.0);
+        assignmentConfigurationFromSetup.setTardyPoints(0.0);
 
         attendanceAssignment1 = new AttendanceAssignment();
         attendanceAssignment1.setAssignmentId(ASSIGNMENT_ID);
@@ -217,7 +215,7 @@ public class AssignmentSubmitterUTest {
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         Assert.assertTrue(errorList.isEmpty());
     }
 
@@ -230,7 +228,7 @@ public class AssignmentSubmitterUTest {
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         Assert.assertFalse(errorList.isEmpty());
         Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
@@ -244,7 +242,7 @@ public class AssignmentSubmitterUTest {
         when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
         when(canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         Assert.assertFalse(errorList.isEmpty());
         Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
@@ -256,9 +254,9 @@ public class AssignmentSubmitterUTest {
         when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
         when(canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
-        when(assignmentValidator.validateCanvasAssignment(courseConfigurationForm, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
+        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         Assert.assertFalse(errorList.isEmpty());
         Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
     }
@@ -274,7 +272,7 @@ public class AssignmentSubmitterUTest {
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, courseConfigurationForm);
+        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         Assert.assertFalse(errorList.isEmpty());
         Assert.assertEquals("Expected to return the error", error2.getMessage(), errorList.get(0).getMessage());
     }

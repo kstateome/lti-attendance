@@ -166,7 +166,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         mockMvc.perform(post("/courseConfiguration/" + irrlevantSectionId + "/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
-                .param("gradingOn", String.valueOf(false))
+                .param("gradingOn", "false")
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
@@ -187,7 +187,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         mockMvc.perform(post(postPageURL)
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(invalidDefaultMinutesPerSession))
-                .param("gradingOn", String.valueOf(false))
+                .param("gradingOn", "false")
                 .param("totalClassMinutes", String.valueOf(invalidTotalClassMinutes)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/courseConfiguration"))

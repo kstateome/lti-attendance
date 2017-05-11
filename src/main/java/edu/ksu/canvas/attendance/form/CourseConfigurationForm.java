@@ -18,8 +18,6 @@ public class CourseConfigurationForm {
 
     private Boolean showNotesToStudents;
 
-    //TODO: CREATE MODEL TO CONTAIN ALL THE DATA AND ALSO THE NEW DATA
-
     private Double assignmentPoints;
 
     private Double presentPoints;

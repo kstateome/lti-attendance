@@ -2,20 +2,17 @@ package edu.ksu.canvas.attendance.submitter;
 
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
-import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.exception.ObjectNotFoundException;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Optional;
 
 @Component
-@Scope(value="session")
 public class AssignmentValidator {
 
     private static final Logger LOG = Logger.getLogger(AssignmentValidator.class);
@@ -46,10 +43,10 @@ public class AssignmentValidator {
         return null;
     }
 
-    public Error validateCanvasAssignment(CourseConfigurationForm courseConfigurationForm, Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) {
+    public Error validateCanvasAssignment(AttendanceAssignment assignmentConfigurationFromSetup, Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) {
 
         //Look for changes between the course configuration in the form and in the DB
-        if(!compareFormToDB(courseConfigurationForm, attendanceAssignment)) {
+        if(!isConfigurationInFormAndDBEquals(assignmentConfigurationFromSetup, attendanceAssignment)) {
             LOG.debug("Configuration form is different than saved assignment configuration for section: " + attendanceAssignment.getAttendanceSection().getSectionId());
             return new Error("Assignment configuration needs to be saved before pushing to Canvas");
         }
@@ -68,9 +65,9 @@ public class AssignmentValidator {
         }
 
         //Looks for discrepancy between the assignment in canvas and in database
-        if (assignmentOptional.get().getPointsPossible().doubleValue() != courseConfigurationForm.getAssignmentPoints().doubleValue()) {
+        if (assignmentOptional.get().getPointsPossible().doubleValue() != assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue()) {
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible().doubleValue() +
-                      " and point value of Database assignment is :" + courseConfigurationForm.getAssignmentPoints().doubleValue());
+                      " and point value of Database assignment is :" + assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue());
             return new Error("DISCREPANCY BETWEEN CANVAS AND DATABASE");
         }
 
@@ -80,10 +77,10 @@ public class AssignmentValidator {
     /**
      * Returns true if configuration in the form and in the db is the same
      */
-    private boolean compareFormToDB(CourseConfigurationForm courseConfigurationForm, AttendanceAssignment attendanceAssignment) {
-        return courseConfigurationForm.getAssignmentPoints().doubleValue() == attendanceAssignment.getAssignmentPoints().doubleValue() && courseConfigurationForm.getExcusedPoints().doubleValue() == attendanceAssignment.getExcusedPoints().doubleValue()
-                && courseConfigurationForm.getAbsentPoints().doubleValue() == attendanceAssignment.getAbsentPoints().doubleValue() && courseConfigurationForm.getTardyPoints().doubleValue() == attendanceAssignment.getTardyPoints().doubleValue()
-                && courseConfigurationForm.getPresentPoints().doubleValue() == attendanceAssignment.getPresentPoints().doubleValue();
+    private boolean isConfigurationInFormAndDBEquals(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
+        return assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue() == attendanceAssignmentSaved.getAssignmentPoints().doubleValue() && assignmentConfigurationFromSetup.getExcusedPoints().doubleValue() == attendanceAssignmentSaved.getExcusedPoints().doubleValue()
+                && assignmentConfigurationFromSetup.getAbsentPoints().doubleValue() == attendanceAssignmentSaved.getAbsentPoints().doubleValue() && assignmentConfigurationFromSetup.getTardyPoints().doubleValue() == attendanceAssignmentSaved.getTardyPoints().doubleValue()
+                && assignmentConfigurationFromSetup.getPresentPoints().doubleValue() == attendanceAssignmentSaved.getPresentPoints().doubleValue();
     }
 
 }

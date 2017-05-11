@@ -9,6 +9,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +44,14 @@ public class AttendanceSectionService {
     }
 
     /**
-     * @throws RuntimeException when courseForm is null
+     * @throws RuntimeException when courseForm or sections list are null or empty
      */
     public void save(CourseConfigurationForm courseForm, long canvasCourseId) {
         Validate.notNull(courseForm, "courseForm must not be null");
 
         List<AttendanceSection> sections = sectionRepository.findByCanvasCourseId(canvasCourseId);
-        if(sections == null || sections.isEmpty()) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+        if(CollectionUtils.isEmpty(sections)) {
+            RuntimeException e = new RuntimeException("Cannot load data into courseForm for non-existent sections for this course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", canvasCourseId);
         }
 
@@ -80,8 +81,8 @@ public class AttendanceSectionService {
     public void resetAttendanceAssignmentsForCourse(long canvasCourseId) {
 
         List<AttendanceSection> sections = sectionRepository.findByCanvasCourseId(canvasCourseId);
-        if(sections == null || sections.isEmpty()) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+        if(CollectionUtils.isEmpty(sections)) {
+            RuntimeException e = new RuntimeException("Cannot load data into courseForm for non-existent sections for this course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", canvasCourseId);
         }
 
@@ -114,9 +115,8 @@ public class AttendanceSectionService {
         Validate.notNull(courseForm, "courseForm must not be null");
 
         List<AttendanceSection> sections = sectionRepository.findByCanvasCourseId(courseId);
-
-        if(sections == null || sections.isEmpty()) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+        if(CollectionUtils.isEmpty(sections)){
+            RuntimeException e = new RuntimeException("Cannot load data into courseForm for non-existent sections for this course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", courseId);
         }
 

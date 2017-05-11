@@ -2,7 +2,6 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
@@ -41,7 +40,7 @@ public class AssignmentValidatorUTest {
     private AttendanceAssignment attendanceAssignment;
     private Optional<Assignment> assignmentOptional;
     private Assignment assignment;
-    private CourseConfigurationForm courseConfigurationForm;
+    private AttendanceAssignment assignmentConfigurationFromSetup;
     private  Error error;
     private AttendanceSection attendanceSection;
 
@@ -52,12 +51,12 @@ public class AssignmentValidatorUTest {
 
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
 
-        courseConfigurationForm = new CourseConfigurationForm();
-        courseConfigurationForm.setAbsentPoints(0.0);
-        courseConfigurationForm.setAssignmentPoints(ASSIGNMENT_POINTS);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setPresentPoints(100.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAbsentPoints(0.0);
+        assignmentConfigurationFromSetup.setAssignmentPoints(ASSIGNMENT_POINTS);
+        assignmentConfigurationFromSetup.setExcusedPoints(0.0);
+        assignmentConfigurationFromSetup.setPresentPoints(100.0);
+        assignmentConfigurationFromSetup.setTardyPoints(0.0);
 
         attendanceSection = new AttendanceSection();
         attendanceSection.setName(SECTION_NAME);
@@ -95,7 +94,7 @@ public class AssignmentValidatorUTest {
     public void validateCanvasAssignmentHappyPath() throws IOException {
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(courseConfigurationForm, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertNull(validationError);
     }
 
@@ -127,12 +126,12 @@ public class AssignmentValidatorUTest {
 
     @Test
     public void validateCanvasAssignmentDBMismatchValidationError() throws IOException {
-        courseConfigurationForm.setAssignmentPoints(120.0);
+        assignmentConfigurationFromSetup.setAssignmentPoints(120.0);
         error = new Error("Assignment configuration needs to be saved before pushing to Canvas");
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(courseConfigurationForm, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
 
         Assert.assertNotNull(validationError);
         Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());
@@ -145,7 +144,7 @@ public class AssignmentValidatorUTest {
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(courseConfigurationForm, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
 
         Assert.assertNotNull(validationError);
         Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());

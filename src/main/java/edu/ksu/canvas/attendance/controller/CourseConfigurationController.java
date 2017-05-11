@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
@@ -17,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -117,27 +119,51 @@ public class CourseConfigurationController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
-    public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
-        LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
-        ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
-
-        Long courseId = Long.valueOf(canvasService.getCourseId());
-
-        boolean isSimpleAttendance = classSetupForm.getSimpleAttendance();
-        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
-                reportService.getSimpleAttendanceSummaryReport(Long.parseLong(sectionId)) :
-                reportService.getAviationAttendanceSummaryReport(Long.parseLong(sectionId));
-
-        List<Error> submissionErrors = assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), classSetupForm);
-
-        if(submissionErrors != null && !submissionErrors.isEmpty()){
+    public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+        validator.validate(classSetupForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/courseConfiguration");
             List<String> errors = new ArrayList<>();
-            submissionErrors.forEach(error -> errors.add(error.getMessage()));
-            page.addObject("error" , errors);
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
+            page.addObject("selectedSectionId", sectionId);
+            return page;
         } else {
-            page.addObject("pushingSuccessful", true);
+            LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
+            ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+
+            Long courseId = Long.valueOf(canvasService.getCourseId());
+
+            boolean isSimpleAttendance = classSetupForm.getSimpleAttendance();
+            List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
+                    reportService.getSimpleAttendanceSummaryReport(sectionId) :
+                    reportService.getAviationAttendanceSummaryReport(sectionId);
+
+            AttendanceAssignment assignmentConfigurationFromSetup = getAssignmentFromClassSetupForm(classSetupForm);
+
+            List<Error> submissionErrors = assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
+
+            if (CollectionUtils.isEmpty(submissionErrors)) {
+                List<String> errors = new ArrayList<>();
+                submissionErrors.forEach(error -> errors.add(error.getMessage()));
+                page.addObject("error", errors);
+            } else {
+                page.addObject("pushingSuccessful", true);
+            }
+            return page;
         }
-        return page;
+    }
+
+    private AttendanceAssignment getAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
+        AttendanceAssignment assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAssignmentPoints(classSetupForm.getAssignmentPoints());
+        assignmentConfigurationFromSetup.setGradingOn(true);
+        assignmentConfigurationFromSetup.setPresentPoints(classSetupForm.getPresentPoints());
+        assignmentConfigurationFromSetup.setTardyPoints(classSetupForm.getTardyPoints());
+        assignmentConfigurationFromSetup.setExcusedPoints(classSetupForm.getExcusedPoints());
+        assignmentConfigurationFromSetup.setAbsentPoints(classSetupForm.getAbsentPoints());
+        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
+        return assignmentConfigurationFromSetup;
     }
 
     @RequestMapping(value = "/{sectionId}/delete", method = RequestMethod.POST)

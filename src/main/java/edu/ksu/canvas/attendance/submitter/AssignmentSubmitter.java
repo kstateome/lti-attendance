@@ -3,7 +3,6 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
@@ -51,14 +50,14 @@ public class AssignmentSubmitter {
      * @param summaryForSections
      * @return List<Error> this errors will be displayed to the user.
      */
-    public List<Error> submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId, OauthToken oauthToken, CourseConfigurationForm courseConfigurationForm) {
+    public List<Error> submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId, OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) {
         List<Error> errorList = new ArrayList<>();
 
         for (AttendanceSummaryModel model : summaryForSections) {
 
             //Handles errors by section before handling the pushing of said section
             AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getSectionInListById(courseId, model.getSectionId()));
-            if (checkConfigurationSetup(errorList, model, attendanceAssignment)) {
+            if (checkConfigurationSetupIsSaved(errorList, model, attendanceAssignment)) {
                 return errorList;
             }
 
@@ -67,7 +66,7 @@ public class AssignmentSubmitter {
                 return errorList;
             }
 
-            Error canvasAssignmentValidationError = assignmentValidator.validateCanvasAssignment(courseConfigurationForm, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
+            Error canvasAssignmentValidationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
             if (handleCanvasAssignmentValidationError(errorList, attendanceAssignment, canvasAssignmentValidationError, courseId, oauthToken)) {
                 return errorList;
             }
@@ -140,7 +139,7 @@ public class AssignmentSubmitter {
     /**
      * Checks if the configuration setup have been saved before pushing. Returns error if not.
      */
-    private boolean checkConfigurationSetup(List<Error> errorList, AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) {
+    private boolean checkConfigurationSetupIsSaved(List<Error> errorList, AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) {
         if (attendanceAssignment == null || (attendanceAssignment.getAssignmentName() == null && attendanceAssignment.getAssignmentPoints() == null)) {
             LOG.info("There is no Attendance Assignment associated to section " + model.getSectionId());
             errorList.add(new Error("Please save configuration setup for the assignment before pushing grades to Canvas."));

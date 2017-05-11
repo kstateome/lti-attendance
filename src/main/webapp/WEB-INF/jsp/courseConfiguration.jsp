@@ -234,7 +234,7 @@
         }
 
         function hasAssignmentConfiguration() {
-            if($('#assignmentName') == null || $('#assignmentPoints') == null || $('#assignmentName') == '' || $('#assignmentPoints') == '') {
+            if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
                 return false;
             } else {
                 return true;
