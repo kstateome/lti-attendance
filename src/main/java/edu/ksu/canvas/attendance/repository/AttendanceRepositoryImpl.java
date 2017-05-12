@@ -50,16 +50,14 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     public Map<Long, String> getAttendanceCommentsBySectionId(long sectionId) {
         Validate.notNull(sectionId, "The sectionId parameter must be not null");
 
-        String sql ="SELECT att.student_id, att.date_of_class, att.notes " +
-                    "FROM attendance att " +
-                    "INNER JOIN attendance_student ats " +
-                    "ON att.student_id = ats.student_id AND ats.canvas_section_id = :canvas_section_id " +
-                    "WHERE att.notes IS NOT NULL ";
+        String jpql ="SELECT NEW edu.ksu.canvas.attendance.repository.AttendanceCommentEntry(att.attendanceStudent.studentId, att.dateOfClass, att.notes) " +
+                    "FROM Attendance att " +
+                    "WHERE att.notes IS NOT NULL AND att.attendanceStudent.canvasSectionId = :canvasSectionId ";
 
-        Query query = entityManager.createNativeQuery(sql);
-        query.setParameter("canvas_section_id", sectionId);
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("canvasSectionId", sectionId);
 
-        List<Object[]> results = query.getResultList();
+        List<AttendanceCommentEntry> results = (List<AttendanceCommentEntry>) query.getResultList();
         Map<Long, String> studentCommentsMap = groupCommentsByStudents(results);
 
         return studentCommentsMap;
@@ -67,16 +65,11 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
     /**
      * Group and organize students with his/her comments
-     * @param results
+     * @param studentResults
      * @return a map with pairing a student with all his/her comments
      */
-    private Map<Long, String> groupCommentsByStudents(List<Object[]> results) {
-        List<StudentDailyComment> studentResults = new ArrayList<>();
-        for (Object[] result: results) {
-            studentResults.add(new StudentDailyComment(((Number) result[0]).longValue(), (Date) result[1], (String) result[2]));
-        }
-
-        Map<Long, List<StudentDailyComment>> commentsSeparatedByStudent = studentResults.stream().collect(Collectors.groupingBy(StudentDailyComment::getStudentId));
+    private Map<Long, String> groupCommentsByStudents(List<AttendanceCommentEntry> studentResults) {
+        Map<Long, List<AttendanceCommentEntry>> commentsSeparatedByStudent = studentResults.stream().collect(Collectors.groupingBy(AttendanceCommentEntry::getStudentId));
         Map<Long, String> studentCommentsMap = new HashMap<>();
         commentsSeparatedByStudent.forEach((studentId, studentCommentObjectList) -> {
             StringBuilder stringBuilder = new StringBuilder();
@@ -123,37 +116,6 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         query.setParameter("courseId", courseId);
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
         int result = query.executeUpdate();
-    }
-
-
-    /**
-     * Private class that represents the data extracted from one attendance.
-     * This is needed in order to organize and group comments by student.
-     */
-    private class StudentDailyComment {
-        private Long studentId;
-        private String comment;
-
-        public StudentDailyComment(Long studentId, Date date, String comment) {
-            this.studentId = studentId;
-            this.comment = new SimpleDateFormat("MM/dd/yyyy").format(date)+ ": " + comment;
-        }
-
-        public Long getStudentId() {
-            return studentId;
-        }
-
-        public void setStudentId(Long studentId) {
-            this.studentId = studentId;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
     }
 
 }

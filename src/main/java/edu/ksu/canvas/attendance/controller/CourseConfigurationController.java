@@ -143,7 +143,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
             List<Error> submissionErrors = assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
 
-            if (CollectionUtils.isEmpty(submissionErrors)) {
+            if (!CollectionUtils.isEmpty(submissionErrors)) {
                 List<String> errors = new ArrayList<>();
                 submissionErrors.forEach(error -> errors.add(error.getMessage()));
                 page.addObject("error", errors);
