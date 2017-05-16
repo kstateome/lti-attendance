@@ -77,7 +77,6 @@ public class ReportRepositoryITest {
         
         AttendanceStudent student = new AttendanceStudent();
         student.setSisUserId("1001");
-        student.setCanvasStudentId(111L);
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
         student.setCanvasSectionId(expectedSectionId);
         student.setName("Smith, John");

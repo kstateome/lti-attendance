@@ -264,7 +264,6 @@ public class SynchronizationServiceUTest {
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
         expectedStudentInDb.setSisUserId(previousSisUserId);
         expectedStudentInDb.setName(previousName);
-        expectedStudentInDb.setCanvasStudentId(1000L);
         List<AttendanceStudent> studentsInDbForCourse = new ArrayList<>();
         studentsInDbForCourse.add(expectedStudentInDb);
 
@@ -313,7 +312,6 @@ public class SynchronizationServiceUTest {
         expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
         expectedStudentInDb.setSisUserId(previousSisUserId);
         expectedStudentInDb.setName(previousName);
-        expectedStudentInDb.setCanvasStudentId(1000L);
         expectedStudentInDb.setDeleted(Boolean.TRUE);
         List<AttendanceStudent> studentsInDbForCourse = new ArrayList<>();
         studentsInDbForCourse.add(expectedStudentInDb);

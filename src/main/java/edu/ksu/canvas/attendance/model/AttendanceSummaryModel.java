@@ -18,7 +18,7 @@ public class AttendanceSummaryModel {
         private final long courseId;
         private final long sectionId;
         private final long studentId;
-        private final long canvasStudentId;
+        private final String SisUserId;
         private final String studentName;
         private final int sumMinutesMadeup;
         private final int remainingMinutesMadeup;
@@ -32,13 +32,13 @@ public class AttendanceSummaryModel {
 
 
         public Entry(long courseId, long sectionId, long studentId,
-                     long canvasStudentId, String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
+                     String SisUserId, String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
                      int sumMinutesMissed, double percentCourseMissed) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
-            this.canvasStudentId = canvasStudentId;
+            this.SisUserId = SisUserId;
             this.studentName = studentName;
             this.dropped = dropped;
             this.sumMinutesMadeup = sumMinutesMadeup;
@@ -52,12 +52,12 @@ public class AttendanceSummaryModel {
         }
 
         public Entry(long courseId, long sectionId, long studentId,
-                     long canvasStudentId, String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused, int totalClassesPresent) {
+                     String SisUserId, String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused, int totalClassesPresent) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
-            this.canvasStudentId = canvasStudentId;
+            this.SisUserId = SisUserId;
             this.studentName = studentName;
             this.dropped = dropped;
             this.totalClassesExcused = totalClassesExcused;
@@ -131,8 +131,8 @@ public class AttendanceSummaryModel {
             return totalClassesPresent;
         }
 
-        public long getCanvasStudentId() {
-            return canvasStudentId;
+        public String getSisUserId() {
+            return SisUserId;
         }
     }
 

@@ -99,7 +99,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setCanvasSectionId(existingSectionId);
         existingStudent.setName("Smith, John");
-        existingStudent.setCanvasStudentId(1000L);
         existingStudent.setDeleted(false);
         existingStudent = studentRepository.save(existingStudent);
         
@@ -139,7 +138,6 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
 
         AttendanceStudent existingStudent = new AttendanceStudent();
         existingStudent.setSisUserId("1001");
-        existingStudent.setCanvasStudentId(1111L);
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setCanvasSectionId(existingSectionId);
         existingStudent.setName("Smith, John");

@@ -28,10 +28,10 @@ public class ReportRepository {
                 "sum_minutes_madeup, " +
                 "sum_minutes_missed - sum_minutes_madeup as remaining_minutes_madeup, " +
                 "sum_minutes_missed, " +
-                "round(sum_minutes_missed / course_total_minutes * 100,2) as percent_course_missed, canvas_student_id " +
+                "round(sum_minutes_missed / course_total_minutes * 100,2) as percent_course_missed, sis_user_id " +
                 "from ( " +
                 "  select course.course_id, course.total_minutes as course_total_minutes, " +
-                "  student.canvas_section_id, student.student_id, student.student_name, student.deleted, student.canvas_student_id, " +
+                "  student.canvas_section_id, student.student_id, student.student_name, student.deleted, student.sis_user_id, " +
                 "  nvl(missed.sum_minutes_missed,0) as sum_minutes_missed, " +
                 "  nvl(madeup.sum_minutes_madeup,0) as sum_minutes_madeup " +
                 "  from attendance_course course " +
@@ -81,7 +81,7 @@ public class ReportRepository {
                     ((Number) result[0]).longValue(),
                     canvasSectionId,
                     ((Number) result[2]).longValue(),
-                    ((Number) result[9]).longValue(), (String) result[3],
+                    (String) result[9], (String) result[3],
                     getBoolean(((Number)result[4]).intValue()),
                     ((Number) result[5]).intValue(),
                     ((Number) result[6]).intValue(),
@@ -99,14 +99,14 @@ public class ReportRepository {
                         "total_classes_tardy, " +
                         "total_classes_missed, " +
                         "total_classes_excused, " +
-                        "total_classes_present, canvas_student_id " +
+                        "total_classes_present, sis_user_id " +
                         "from ( " +
                         "  select course.course_id," +
                         "  student.canvas_section_id, student.student_id, student.student_name, student.deleted," +
                         "  nvl(missed.total_classes_missed,0) as total_classes_missed, " +
                         "  nvl(tardy.total_classes_tardy,0) as total_classes_tardy, " +
                         "  nvl(excused.total_classes_excused,0) as total_classes_excused, " +
-                        "  nvl(present.total_classes_present,0) as total_classes_present, student.canvas_student_id " +
+                        "  nvl(present.total_classes_present,0) as total_classes_present, student.sis_user_id " +
                         "  from attendance_course course " +
                         "       left outer join " +
                         "       attendance_student student on course.canvas_course_id = student.canvas_course_id " +
@@ -169,7 +169,7 @@ public class ReportRepository {
                     ((Number) result[0]).longValue(),
                     canvasSectionId,
                     ((Number) result[2]).longValue(),
-                    ((Number) result[9]).longValue(), (String) result[3],
+                    (String) result[9], (String) result[3],
                     getBoolean(((Number) result[4]).intValue()),
                     ((Number ) result[5]).intValue(),
                     ((Number ) result[6]).intValue(),

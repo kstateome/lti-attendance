@@ -132,14 +132,14 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.MINUTES);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
-        Long canvasStudentId = existingStudent.getCanvasStudentId();
+        String sisUserId = existingStudent.getSisUserId();
 
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getAviationAttendanceSummary(sectionId);
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,canvasStudentId,existingStudent.getName(), existingStudent.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed());
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,sisUserId,existingStudent.getName(), existingStudent.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))
@@ -193,14 +193,14 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.SIMPLE);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
-        Long canvasStudentId = existingStudent.getCanvasStudentId();
+        String sisUserId = existingStudent.getSisUserId();
 
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getSimpleAttendanceSummary(sectionId);
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId, canvasStudentId, existingStudent.getName(), existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent());
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId, sisUserId, existingStudent.getName(), existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))

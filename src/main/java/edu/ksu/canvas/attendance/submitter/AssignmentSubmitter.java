@@ -113,8 +113,10 @@ public class AssignmentSubmitter {
 
         //Generates the map with the information to be submitted to Canvas
         for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
-            studentMap.put(Long.toString(entry.getCanvasStudentId()),
-                    generateStudentSubmissionOptions(isSimpleAttendance, submissionOptions, attendanceAssignment, course, studentCommentsMap, entry));
+            if (!entry.isDropped() && entry.getSisUserId() != null) {
+                studentMap.put("sis_user_id:" + entry.getSisUserId(),
+                        generateStudentSubmissionOptions(isSimpleAttendance, submissionOptions, attendanceAssignment, course, studentCommentsMap, entry));
+            }
         }
 
         //Pushing the information to Canvas

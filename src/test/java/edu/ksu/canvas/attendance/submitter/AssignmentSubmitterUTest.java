@@ -44,10 +44,10 @@ public class AssignmentSubmitterUTest {
     private static final Long STUDENT_2_ID = 22222222L;
     private static final Long STUDENT_3_ID = 55666555L;
     private static final Long STUDENT_4_ID = 22999222L;
-    private static final Long CANVAS_STUDENT_ID_1 = 1111L;
-    private static final Long CANVAS_STUDENT_ID_2 = 2222L;
-    private static final Long CANVAS_STUDENT_ID_3 = 3333L;
-    private static final Long CANVAS_STUDENT_ID_4 = 4444L;
+    private static final String SIS_USER_ID_1 = "SIS_USER_1";
+    private static final String SIS_USER_ID_2 = "SIS_USER_2";
+    private static final String SIS_USER_ID_3 = "SIS_USER_3";
+    private static final String SIS_USER_ID_4 = "SIS_USER_4";
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
     private static final long ASSIGNMENT_ID = 8484848484L;
     private static final long ASSIGNMENT_ID_2 = 77777778484L;
@@ -108,14 +108,14 @@ public class AssignmentSubmitterUTest {
 
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
         attendanceSummaryModel1 = new AttendanceSummaryModel(SECTION_1_ID);
-        AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_1_ID, CANVAS_STUDENT_ID_1, STUDENT_1_NAME, false, 0, 1, 0, 3);
-        AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_2_ID, CANVAS_STUDENT_ID_2, STUDENT_2_NAME, false, 0, 2, 0, 2);
+        AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_1_ID, SIS_USER_ID_1, STUDENT_1_NAME, false, 0, 1, 0, 3);
+        AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_2_ID, SIS_USER_ID_2, STUDENT_2_NAME, false, 0, 2, 0, 2);
         attendanceSummaryModel1.add(entry1);
         attendanceSummaryModel1.add(entry2);
 
         attendanceSummaryModel2 = new AttendanceSummaryModel(SECTION_2_ID);
-        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_3_ID, CANVAS_STUDENT_ID_3, STUDENT_3_NAME, false, 0, 3, 0, 1);
-        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_4_ID, CANVAS_STUDENT_ID_4, STUDENT_4_NAME, false, 0, 0, 0, 4);
+        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_3_ID, SIS_USER_ID_3, STUDENT_3_NAME, false, 0, 3, 0, 1);
+        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_4_ID, SIS_USER_ID_4, STUDENT_4_NAME, false, 0, 0, 0, 4);
         attendanceSummaryModel2.add(entry3);
         attendanceSummaryModel2.add(entry4);
 
