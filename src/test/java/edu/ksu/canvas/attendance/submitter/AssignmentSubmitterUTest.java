@@ -4,6 +4,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
+import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
@@ -22,7 +23,7 @@ import java.util.*;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AssignmentSubmitterUTest {
@@ -97,8 +98,6 @@ public class AssignmentSubmitterUTest {
     private Optional<Progress> progressOptional;
     private Progress progress;
     private AttendanceAssignment assignmentConfigurationFromSetup;
-    private  Error error;
-    private Error error2;
     private AttendanceSection section1;
     private AttendanceSection section2;
 
@@ -188,8 +187,6 @@ public class AssignmentSubmitterUTest {
         progress.setWorkflowState("queued");
         progressOptional = Optional.of(progress);
 
-        error = new Error("NO CANVAS ASSIGNMENT LINKED");
-
         Whitebox.setInternalState(assignmentSubmitter, "canvasAssignmentAssistant", canvasAssignmentAssistant);
         Whitebox.setInternalState(assignmentSubmitter, "assignmentService", assignmentService);
         Whitebox.setInternalState(assignmentSubmitter, "sectionService", sectionService);
@@ -199,12 +196,11 @@ public class AssignmentSubmitterUTest {
         Whitebox.setInternalState(assignmentSubmitter, "assignmentValidator", assignmentValidator);
 
 
-        error2 = new Error("Could not push grades of section: " + SECTION_1_ID);
 
     }
 
     @Test
-    public void submitCourseAttendancesHappyPath() throws IOException {
+    public void submitCourseAttendancesHappyPath() throws IOException, CanvasOutOfSyncException {
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
@@ -215,68 +211,30 @@ public class AssignmentSubmitterUTest {
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        Assert.assertTrue(errorList.isEmpty());
+        assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
+        verify(canvasApiWrapperService, times(2)).gradeMultipleSubmissionsBySection(any(), any());
     }
 
     @Test
-    public void submitCourseAttendancesUnsavedConfigurationError() throws IOException {
-        error = new Error("Please save configuration setup for the assignment before pushing grades to Canvas.");
-        attendanceAssignment1.setAssignmentPoints(null);
-        attendanceAssignment1.setAssignmentName(null);
-
-        when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
-        when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
-
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
-    }
-
-
-    @Test
-    public void submitCourseAttendancesAttendanceAssignmentValidationError() throws IOException {
-        attendanceAssignment1.setCanvasAssignmentId(null);
-
-        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
-        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
-        when(canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
-
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
-    }
-
-    @Test
-    public void submitCourseAttendancesCanvasAssignmentValidationError() throws IOException {
-        error = new Error("Assignment configuration needs to be saved before pushing to Canvas");
-
-        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
-        when(canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment1, oauthToken)).thenReturn(error);
-        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(error);
-
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error.getMessage(), errorList.get(0).getMessage());
-    }
-
-    @Test
-    public void submitCourseAttendancesUnableToPushGradesForSectionError() throws IOException {
+    public void submitCourseAttendancesFailCanvasGradingError() throws IOException, CanvasOutOfSyncException {
         progressOptional.get().setWorkflowState("failed");
 
-        when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment1);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+        when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
+        when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
+        when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
+        when(assignmentService.findBySection(section2)).thenReturn(attendanceAssignment2);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
 
-        List<Error> errorList = assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        Assert.assertFalse(errorList.isEmpty());
-        Assert.assertEquals("Expected to return the error", error2.getMessage(), errorList.get(0).getMessage());
+        try {
+            assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
+            verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsBySection(any(), any());
+        } catch (IOException exception) {
+            Assert.assertEquals("Could not push grades of section: " + SECTION_1_ID, exception.getMessage());
+        }
     }
-
-
 
 }

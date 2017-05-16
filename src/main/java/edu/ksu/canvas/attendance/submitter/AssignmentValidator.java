@@ -2,8 +2,9 @@ package edu.ksu.canvas.attendance.submitter;
 
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
+import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
+import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
-import edu.ksu.canvas.exception.ObjectNotFoundException;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
 import org.apache.log4j.Logger;
@@ -17,11 +18,12 @@ public class AssignmentValidator {
 
     private static final Logger LOG = Logger.getLogger(AssignmentValidator.class);
 
-    public Error validateAttendanceAssignment(Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) {
+    public void validateAttendanceAssignment(Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) throws IOException, CanvasOutOfSyncException {
 
         // If there is no linked canvas assignment, creates on in canvas
         if(attendanceAssignment.getCanvasAssignmentId() == null) {
-            return new Error("NO CANVAS ASSIGNMENT LINKED");
+            LOG.info("No Canvas assignment linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
+            throw new CanvasOutOfSyncException("NO CANVAS ASSIGNMENT LINKED");
         }
 
         // Looks for the linked assignment in canvas
@@ -29,26 +31,23 @@ public class AssignmentValidator {
         try {
             assignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
         } catch (IOException e) {
-            LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            return new Error("Could not connect to Canvas to get assignment");
-        } catch (ObjectNotFoundException e) {
-            LOG.debug("Assignment with ID: " + attendanceAssignment.getCanvasAssignmentId() + "not found in Canvas.");
-            return new Error("NO CANVAS ASSIGNMENT LINKED");
+            LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId(), e);
+            throw new IOException("Could not connect to Canvas to get assignment");
         }
 
         if(!assignmentOptional.isPresent()) {
-            return new Error("NO CANVAS ASSIGNMENT LINKED");
+            LOG.info("No Canvas assignment linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
+            throw new CanvasOutOfSyncException("NO CANVAS ASSIGNMENT LINKED");
         }
-
-        return null;
     }
 
-    public Error validateCanvasAssignment(AttendanceAssignment assignmentConfigurationFromSetup, Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) {
+    public void validateCanvasAssignment(AttendanceAssignment assignmentConfigurationFromSetup, Long courseId, AttendanceAssignment attendanceAssignment,
+                                         CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) throws IOException, CanvasOutOfSyncException {
 
         //Look for changes between the course configuration in the form and in the DB
-        if(!isConfigurationInFormAndDBEquals(assignmentConfigurationFromSetup, attendanceAssignment)) {
-            LOG.debug("Configuration form is different than saved assignment configuration for section: " + attendanceAssignment.getAttendanceSection().getSectionId());
-            return new Error("Assignment configuration needs to be saved before pushing to Canvas");
+        if(!isAssignmentConfigurationSaved(assignmentConfigurationFromSetup, attendanceAssignment)) {
+            LOG.info("Configuration form is different than saved assignment configuration for section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
+            throw new CanvasOutOfSyncException("Assignment configuration needs to be saved before pushing to Canvas");
         }
 
         //Look for the canvas assignment in canvas
@@ -57,30 +56,41 @@ public class AssignmentValidator {
             assignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
         } catch (IOException e) {
             LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            return new Error("Could not connect to Canvas to get assignment");
+            throw new IOException("Could not connect to Canvas to get assignment");
         }
 
         if(!assignmentOptional.isPresent()) {
-            return new Error("Assignment not found in Canvas");
+            LOG.error("Assignment not found in Canvas. Empty optional returned from api call.");
+            throw new IOException("Assignment not found in Canvas");
         }
 
         //Looks for discrepancy between the assignment in canvas and in database
         if (assignmentOptional.get().getPointsPossible().doubleValue() != assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue()) {
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible().doubleValue() +
                       " and point value of Database assignment is :" + assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue());
-            return new Error("DISCREPANCY BETWEEN CANVAS AND DATABASE");
+            throw new CanvasOutOfSyncException("DISCREPANCY BETWEEN CANVAS AND DATABASE");
         }
-
-        return null;
     }
 
     /**
      * Returns true if configuration in the form and in the db is the same
      */
-    private boolean isConfigurationInFormAndDBEquals(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
-        return assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue() == attendanceAssignmentSaved.getAssignmentPoints().doubleValue() && assignmentConfigurationFromSetup.getExcusedPoints().doubleValue() == attendanceAssignmentSaved.getExcusedPoints().doubleValue()
-                && assignmentConfigurationFromSetup.getAbsentPoints().doubleValue() == attendanceAssignmentSaved.getAbsentPoints().doubleValue() && assignmentConfigurationFromSetup.getTardyPoints().doubleValue() == attendanceAssignmentSaved.getTardyPoints().doubleValue()
+    private boolean isAssignmentConfigurationSaved(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
+        return assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue() == attendanceAssignmentSaved.getAssignmentPoints().doubleValue()
+                && assignmentConfigurationFromSetup.getExcusedPoints().doubleValue() == attendanceAssignmentSaved.getExcusedPoints().doubleValue()
+                && assignmentConfigurationFromSetup.getAbsentPoints().doubleValue() == attendanceAssignmentSaved.getAbsentPoints().doubleValue()
+                && assignmentConfigurationFromSetup.getTardyPoints().doubleValue() == attendanceAssignmentSaved.getTardyPoints().doubleValue()
                 && assignmentConfigurationFromSetup.getPresentPoints().doubleValue() == attendanceAssignmentSaved.getPresentPoints().doubleValue();
+    }
+
+    /**
+     * Checks if the configuration setup have been saved before pushing. Throw CanvasOutOfSyncException if not.
+     */
+    public void validateConfigurationSetupExistence(AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws CanvasOutOfSyncException {
+        if (attendanceAssignment == null || (attendanceAssignment.getAssignmentName() == null && attendanceAssignment.getAssignmentPoints() == null)) {
+            LOG.info("There is no Attendance Assignment associated to section " + model.getSectionId());
+            throw new CanvasOutOfSyncException("Please save configuration setup for the assignment before pushing grades to Canvas.");
+        }
     }
 
 }

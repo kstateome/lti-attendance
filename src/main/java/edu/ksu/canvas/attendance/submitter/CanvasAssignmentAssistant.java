@@ -3,6 +3,7 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
 import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.AttendanceAssignmentService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
@@ -39,7 +40,7 @@ public class CanvasAssignmentAssistant {
     @Autowired
     private CanvasApiWrapperService canvasApiWrapperService;
 
-    public Error createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) {
+    public void createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws IOException {
         Optional<Assignment> canvasAssignmentOptional;
 
         Assignment assignment = generateCanvasAssignment(courseId, attendanceAssignment);
@@ -47,18 +48,16 @@ public class CanvasAssignmentAssistant {
             canvasAssignmentOptional = canvasApiWrapperService.createAssignment(courseId, assignment, oauthToken);
         } catch (IOException e) {
             LOG.error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            return new Error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getName());
+            throw new IOException("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getName());
         }
 
         if(!canvasAssignmentOptional.isPresent())  {
             LOG.error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getSectionId());
-            return new Error("Error while creating canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
+            throw new IOException("Error while creating canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
         }
 
         LOG.info("Created canvas assignment: " + canvasAssignmentOptional.get().getId());
         saveCanvasAssignmentId(courseId, canvasAssignmentOptional.get());
-
-        return null;
     }
 
     private Assignment generateCanvasAssignment(Long courseId, AttendanceAssignment attendanceAssignment) {
@@ -87,18 +86,18 @@ public class CanvasAssignmentAssistant {
     }
 
 
-    public Error editAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) {
+    public void editAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws IOException {
 
         Optional<Assignment> canvasAssignmentOptional;
         try {
             canvasAssignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
         } catch (IOException e) {
             LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            return new Error("Could not connect to Canvas to get assignment");
+            throw new IOException("Could not connect to Canvas to get assignment");
         }
 
         if(!canvasAssignmentOptional.isPresent()) {
-            return new Error("Assignment not found in Canvas");
+            throw new IOException("Assignment not found in Canvas");
         }
 
         Assignment canvasAssignment = canvasAssignmentOptional.get();
@@ -107,14 +106,13 @@ public class CanvasAssignmentAssistant {
             canvasApiWrapperService.editAssignment(courseId.toString(), canvasAssignment, oauthToken);
         } catch (IOException e) {
             LOG.error("Error while editing canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            return new Error("Error while editing canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
+            throw new IOException("Error while editing canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
         }
 
         LOG.info("Canvas assignment edited based on information in the section configuration.");
-        return null;
     }
 
-    public Error deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) {
+    public void deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) throws IOException, CanvasOutOfSyncException {
 
         List<AttendanceSection> sections = attendanceSectionService.getSectionByCanvasCourseId(canvasCourseId);
         if(CollectionUtils.isEmpty(sections)) {
@@ -126,19 +124,18 @@ public class CanvasAssignmentAssistant {
 
         if(assignment == null) {
             LOG.error("Attendance assignment not found for section: " + sections.get(0).getName());
-            return new Error("Attendance assignment not found for section: " + sections.get(0).getName());
+            return;
         } else if (assignment.getCanvasAssignmentId() == null) {
             LOG.info("No Canvas assignment associated to Attendance assignment  to be deleted for section: " + sections.get(0).getName());
-            return new Error("NO CANVAS ASSIGNMENT ASSOCIATED");
+            return;
         }
 
         try {
             canvasApiWrapperService.deleteAssignment(canvasCourseId.toString(), assignment.getCanvasAssignmentId().toString(), oauthToken);
         } catch (IOException e) {
             LOG.error("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId(), e);
-            return new Error("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId());
+            throw new IOException("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId());
         }
         LOG.info("Canvas assignment " + assignment.getCanvasAssignmentId() + " was successfully deleted.");
-        return null;
     }
 }

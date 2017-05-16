@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -139,22 +138,20 @@ public class CourseConfigurationController extends AttendanceBaseController {
                     reportService.getSimpleAttendanceSummaryReport(sectionId) :
                     reportService.getAviationAttendanceSummaryReport(sectionId);
 
-            AttendanceAssignment assignmentConfigurationFromSetup = getAssignmentFromClassSetupForm(classSetupForm);
-
-            List<Error> submissionErrors = assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
-
-            if (!CollectionUtils.isEmpty(submissionErrors)) {
-                List<String> errors = new ArrayList<>();
-                submissionErrors.forEach(error -> errors.add(error.getMessage()));
-                page.addObject("error", errors);
-            } else {
+            AttendanceAssignment assignmentConfigurationFromSetup = generateAssignmentFromClassSetupForm(classSetupForm);
+            try {
+                assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
                 page.addObject("pushingSuccessful", true);
+
+            } catch (Exception submissionErrors) {
+                page.addObject("error", submissionErrors.getMessage());
             }
+
             return page;
         }
     }
 
-    private AttendanceAssignment getAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
+    private AttendanceAssignment generateAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
         AttendanceAssignment assignmentConfigurationFromSetup = new AttendanceAssignment();
         assignmentConfigurationFromSetup.setAssignmentPoints(classSetupForm.getAssignmentPoints());
         assignmentConfigurationFromSetup.setGradingOn(true);
@@ -171,12 +168,14 @@ public class CourseConfigurationController extends AttendanceBaseController {
         LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
-        Error error = assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
-        if (error != null && !error.getMessage().equals("NO CANVAS ASSIGNMENT ASSOCIATED")) {
-            page.addObject("error", error);
+        try {
+            assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
+        } catch (Exception exception) {
+            page.addObject("error", exception.getMessage());
+            return page;
         }
-        sectionService.resetAttendanceAssignmentsForCourse(canvasService.getCourseId());
 
+        sectionService.resetAttendanceAssignmentsForCourse(canvasService.getCourseId());
         page.addObject("deleteSuccessful", true);
 
         return page;

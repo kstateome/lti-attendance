@@ -2,6 +2,7 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
@@ -41,7 +42,6 @@ public class AssignmentValidatorUTest {
     private Optional<Assignment> assignmentOptional;
     private Assignment assignment;
     private AttendanceAssignment assignmentConfigurationFromSetup;
-    private  Error error;
     private AttendanceSection attendanceSection;
 
     @Before
@@ -83,71 +83,73 @@ public class AssignmentValidatorUTest {
     }
 
     @Test
-    public void validateAttendanceAssignmentHappyPath() throws IOException {
+    public void validateAttendanceAssignmentHappyPath() throws IOException, CanvasOutOfSyncException {
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
-
-        Error validationError = assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
-        Assert.assertNull(validationError);
+    assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
     }
 
     @Test
-    public void validateCanvasAssignmentHappyPath() throws IOException {
+    public void validateCanvasAssignmentHappyPath() throws IOException, CanvasOutOfSyncException {
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
-        Assert.assertNull(validationError);
+        assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+
     }
 
     @Test
-    public void validateAttendanceAssignmentNullAssignmentIdValidationError() throws IOException {
-        error = new Error("NO CANVAS ASSIGNMENT LINKED");
-
+    public void validateAttendanceAssignmentNullAssignmentIdValidationError() throws IOException, CanvasOutOfSyncException {
         attendanceAssignment.setCanvasAssignmentId(null);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        try {
+            assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
 
-        Assert.assertNotNull(validationError);
-        Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());
+            Assert.fail("Expected  CanvasOutOfSyncException.");
+        } catch (CanvasOutOfSyncException exception) {
+            Assert.assertEquals("NO CANVAS ASSIGNMENT LINKED", exception.getMessage());
+        }
     }
 
     @Test
-    public void validateAttendanceAssignmentEmptyOptionalIdValidationError() throws IOException {
-        error = new Error("NO CANVAS ASSIGNMENT LINKED");
-
+    public void validateAttendanceAssignmentEmptyOptionalIdValidationError() throws IOException, CanvasOutOfSyncException {
         attendanceAssignment.setCanvasAssignmentId(null);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
-
-        Assert.assertNotNull(validationError);
-        Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());
+        try {
+            assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+            Assert.fail("Expected  CanvasOutOfSyncException.");
+        } catch (CanvasOutOfSyncException exception) {
+            Assert.assertEquals("NO CANVAS ASSIGNMENT LINKED", exception.getMessage());
+        }
     }
 
     @Test
-    public void validateCanvasAssignmentDBMismatchValidationError() throws IOException {
+    public void validateCanvasAssignmentDBMismatchValidationError() throws IOException, CanvasOutOfSyncException {
         assignmentConfigurationFromSetup.setAssignmentPoints(120.0);
-        error = new Error("Assignment configuration needs to be saved before pushing to Canvas");
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        try {
+            assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
 
-        Assert.assertNotNull(validationError);
-        Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());
+            Assert.fail("Expected  CanvasOutOfSyncException.");
+        } catch (CanvasOutOfSyncException exception) {
+            Assert.assertEquals("Assignment configuration needs to be saved before pushing to Canvas", exception.getMessage());
+        }
     }
 
     @Test
-    public void validateCanvasAssignmentEmptyAssignmentValidationError() throws IOException {
+    public void validateCanvasAssignmentEmptyAssignmentValidationError() throws IOException, CanvasOutOfSyncException {
         assignmentOptional.get().setPointsPossible(12.0);
-        error = new Error("DISCREPANCY BETWEEN CANVAS AND DATABASE");
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
 
-        Error validationError = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
-
-        Assert.assertNotNull(validationError);
-        Assert.assertEquals("Expected to return the error", error.getMessage(), validationError.getMessage());
+        try {
+            assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
+            Assert.fail("Expected  CanvasOutOfSyncException.");
+        } catch (CanvasOutOfSyncException exception) {
+            Assert.assertEquals("DISCREPANCY BETWEEN CANVAS AND DATABASE", exception.getMessage());
+        }
     }
 
 }
