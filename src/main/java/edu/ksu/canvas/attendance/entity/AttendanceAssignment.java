@@ -15,8 +15,8 @@ public class AttendanceAssignment implements Serializable {
     @Column(name = "assignment_id")
     private Long assignmentId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"), nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "section_id", foreignKey = @ForeignKey(name = "fk_section_attendance"), nullable = false, unique = true)
     private AttendanceSection attendanceSection;
 
     @Column(name = "canvas_assignment_id")
