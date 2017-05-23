@@ -35,7 +35,6 @@ public class AssignmentValidator {
         if (!assignmentOptional.isPresent()) {
             LOG.info("No Canvas assignment linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS);
-            return attendanceAssignment;
         }
 
         return attendanceAssignment;
@@ -59,7 +58,6 @@ public class AssignmentValidator {
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible() +
                       " and point value of Database assignment is :" + attendanceAssignment.getAssignmentPoints());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY);
-            return attendanceAssignment;
         }
         return attendanceAssignment;
     }
@@ -76,7 +74,7 @@ public class AssignmentValidator {
     }
 
     /**
-     * Checks if the configuration setup have been saved before pushing. Throw CanvasOutOfSyncException if not.
+     * Checks if the configuration setup have been saved before pushing. Throw AttendanceAssignmentException if not.
      */
     public AttendanceAssignment validateConfigurationSetupExistence(AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
@@ -88,8 +86,7 @@ public class AssignmentValidator {
     }
 
     // Looks for the linked assignment in canvas
-
-    public Optional<Assignment> lookForAssignmentInCanvas (Long courseId, AttendanceAssignment attendanceAssignment,
+    private Optional<Assignment> lookForAssignmentInCanvas (Long courseId, AttendanceAssignment attendanceAssignment,
                                                            CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) throws AttendanceAssignmentException{
         Optional<Assignment> assignmentOptional;
         try {

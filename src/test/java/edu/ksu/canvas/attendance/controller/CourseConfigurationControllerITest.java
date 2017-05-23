@@ -1,5 +1,6 @@
 package edu.ksu.canvas.attendance.controller;
 
+import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
@@ -30,6 +31,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
+    private AttendanceAssignment existingAssignment;
     
     @Autowired
     private AttendanceCourseRepository courseRepository;
@@ -216,9 +218,4 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
                 .andExpect(view().name("forward:/courseConfiguration/" + irrelevantSectionId));
     }
 
-    @Test
-    public void pushGradesToCanvas_HappyPath() {
-
-    }
-    
 }

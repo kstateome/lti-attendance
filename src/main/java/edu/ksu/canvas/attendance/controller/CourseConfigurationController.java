@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
-    public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException, AttendanceAssignmentException{
+    public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
@@ -140,9 +141,14 @@ public class CourseConfigurationController extends AttendanceBaseController {
                     reportService.getAviationAttendanceSummaryReport(sectionId);
 
             AttendanceAssignment assignmentConfigurationFromSetup = generateAssignmentFromClassSetupForm(classSetupForm);
+            try {
+                assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
+                page.addObject("pushingSuccessful", true);
+            }
+            catch (AttendanceAssignmentException e){
+                page.addObject("error", e.getMessage());
+            }
 
-            assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
-            page.addObject("pushingSuccessful", true);
 
 
             return page;
@@ -162,7 +168,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId, BindingResult bindingResult) throws NoLtiSessionException {
+    public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 

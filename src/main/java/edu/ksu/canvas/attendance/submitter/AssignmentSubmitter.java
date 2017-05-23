@@ -83,14 +83,14 @@ public class AssignmentSubmitter {
         }
         if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
             attendanceAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
-            attendanceAssignment.setStatus(AttendanceAssignment.Status.OKAY);
         }
-        if (attendanceAssignment.getStatus().toString() == "DISCREPANCY BETWEEN CANVAS AND DATABASE"){
+        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY){
             canvasAssignmentAssistant.editAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
         }
-        if (attendanceAssignment.getStatus().toString() == "NO CANVAS ASSIGNMENT LINKED"){
+        else if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
             canvasAssignmentAssistant.createAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
         }
+        attendanceAssignment.setStatus(AttendanceAssignment.Status.OKAY);
 
     }
 

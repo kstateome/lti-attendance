@@ -4,7 +4,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
-import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
+import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
@@ -140,6 +140,7 @@ public class AssignmentSubmitterUTest {
         attendanceAssignment1.setExcusedPoints(0.0);
         attendanceAssignment1.setTardyPoints(0.0);
         attendanceAssignment1.setPresentPoints(100.0);
+        attendanceAssignment1.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
         attendanceAssignment2 = new AttendanceAssignment();
         attendanceAssignment2.setAssignmentId(ASSIGNMENT_ID_2);
@@ -151,6 +152,7 @@ public class AssignmentSubmitterUTest {
         attendanceAssignment2.setExcusedPoints(0.0);
         attendanceAssignment2.setTardyPoints(0.0);
         attendanceAssignment2.setPresentPoints(100.0);
+        attendanceAssignment2.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
         assignment = new Assignment();
         assignment.setPointsPossible(ASSIGNMENT_POINTS);
@@ -200,7 +202,7 @@ public class AssignmentSubmitterUTest {
     }
 
     @Test
-    public void submitCourseAttendancesHappyPath() throws IOException, CanvasOutOfSyncException {
+    public void submitCourseAttendancesHappyPath() throws IOException, AttendanceAssignmentException {
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
@@ -210,30 +212,36 @@ public class AssignmentSubmitterUTest {
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
+        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel1, attendanceAssignment1)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment2, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment2);
+        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment2, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment2);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel2, attendanceAssignment2)).thenReturn(attendanceAssignment2);
 
         assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
         verify(canvasApiWrapperService, times(2)).gradeMultipleSubmissionsBySection(any(), any());
     }
 
     @Test
-    public void submitCourseAttendancesFailCanvasGradingError() throws IOException, CanvasOutOfSyncException {
+    public void submitCourseAttendancesFailCanvasGradingError() throws IOException, AttendanceAssignmentException {
         progressOptional.get().setWorkflowState("failed");
 
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
-        when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
-        when(assignmentService.findBySection(section2)).thenReturn(attendanceAssignment2);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
-        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
+        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel1, attendanceAssignment1)).thenReturn(attendanceAssignment1);
 
         try {
             assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
             verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsBySection(any(), any());
-        } catch (IOException exception) {
-            Assert.assertEquals("Could not push grades of section: " + SECTION_1_ID, exception.getMessage());
+        } catch (AttendanceAssignmentException exception) {
+            Assert.assertEquals(AttendanceAssignmentException.Error.FAILED_PUSH, exception.error);
         }
     }
 
