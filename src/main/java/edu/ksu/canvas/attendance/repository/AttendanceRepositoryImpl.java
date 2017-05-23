@@ -2,20 +2,16 @@ package edu.ksu.canvas.attendance.repository;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
 import org.apache.commons.lang3.Validate;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Repository
 public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
-
-    private static final Logger LOG = Logger.getLogger(AttendanceRepositoryImpl.class);
 
     private static final int BATCH_SIZE = 30;
 
@@ -58,9 +54,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         query.setParameter("canvasSectionId", sectionId);
 
         List<AttendanceCommentEntry> results = (List<AttendanceCommentEntry>) query.getResultList();
-        Map<Long, String> studentCommentsMap = groupCommentsByStudents(results);
 
-        return studentCommentsMap;
+        return groupCommentsByStudents(results);
     }
 
     /**

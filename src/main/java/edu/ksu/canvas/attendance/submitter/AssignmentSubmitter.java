@@ -152,7 +152,7 @@ public class AssignmentSubmitter {
     }
 
     private boolean isValidProgress(Optional<Progress> returnedProgress) {
-        return (returnedProgress.isPresent() && !returnedProgress.get().getWorkflowState().equals("failed"));
+        return returnedProgress.isPresent() && !"failed".equals(returnedProgress.get().getWorkflowState());
     }
 
     /**
