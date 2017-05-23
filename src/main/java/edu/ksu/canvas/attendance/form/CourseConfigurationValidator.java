@@ -23,7 +23,7 @@ public class CourseConfigurationValidator implements Validator {
         }
 
         if(courseConfigurationForm.getGradingOn()) {
-            if (courseConfigurationForm.getAssignmentName() == null || courseConfigurationForm.getAssignmentName().length() <= 1) {
+            if (courseConfigurationForm.getAssignmentName() == null || courseConfigurationForm.getAssignmentName().length() <= 1 || courseConfigurationForm.getAssignmentName().trim().isEmpty()) {
                 errors.rejectValue("assignmentName", "Assignment Name is required.");
             }
 
