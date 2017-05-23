@@ -3,7 +3,7 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
+import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +53,13 @@ public class AssignmentSubmitter {
      * @param summaryForSections
      */
     public void submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId,
-                                        OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws IOException, CanvasOutOfSyncException {
+                                        OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws AttendanceAssignmentException{
 
         for (AttendanceSummaryModel sectionSummary : summaryForSections) {
 
             AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getSectionInListById(courseId, sectionSummary.getSectionId()));
+
+            attendanceAssignment.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
             gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, sectionSummary, attendanceAssignment);
 
@@ -72,25 +73,23 @@ public class AssignmentSubmitter {
      * associated to the attendance assignment then a new canvas assignment will be created and associate to the attendance assignment.
      */
     private void gradePushingValidation(Long courseId, OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup,
-                                        AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws CanvasOutOfSyncException, IOException {
-        try {
-            assignmentValidator.validateConfigurationSetupExistence(model, attendanceAssignment);
+                                        AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
-            assignmentValidator.validateAttendanceAssignment(courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
-
-            assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
-
-        } catch (CanvasOutOfSyncException exception) {
-
-            if(exception.getMessage().equals("DISCREPANCY BETWEEN CANVAS AND DATABASE")) {
-                canvasAssignmentAssistant.editAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
-            }
-            else if (exception.getMessage().equals("NO CANVAS ASSIGNMENT LINKED")) {
-                canvasAssignmentAssistant.createAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
-            }
-            else {
-                throw  exception;
-            }
+        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            attendanceAssignment = assignmentValidator.validateConfigurationSetupExistence(model, attendanceAssignment);
+        }
+        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            attendanceAssignment = assignmentValidator.validateAttendanceAssignment(courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        }
+        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            attendanceAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
+            attendanceAssignment.setStatus(AttendanceAssignment.Status.OKAY);
+        }
+        if (attendanceAssignment.getStatus().toString() == "DISCREPANCY BETWEEN CANVAS AND DATABASE"){
+            canvasAssignmentAssistant.editAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
+        }
+        if (attendanceAssignment.getStatus().toString() == "NO CANVAS ASSIGNMENT LINKED"){
+            canvasAssignmentAssistant.createAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
         }
 
     }
@@ -98,7 +97,7 @@ public class AssignmentSubmitter {
     /**
      * Handles the push grades and/or comments to canvas for just one section.
      */
-    private void submitSectionAttendances(boolean isSimpleAttendance, AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws IOException {
+    private void submitSectionAttendances(boolean isSimpleAttendance, AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws AttendanceAssignmentException {
         Map<String, MultipleSubmissionsOptions.StudentSubmissionOption> studentMap;
         MultipleSubmissionsOptions submissionOptions;
         studentMap = new HashMap<>();
@@ -124,12 +123,12 @@ public class AssignmentSubmitter {
             returnedProgress = canvasApiWrapperService.gradeMultipleSubmissionsBySection(oauthToken, submissionOptions);
         } catch (IOException e) {
             LOG.error("Error while pushing the grades of section: " + model.getSectionId(), e);
-            throw new IOException("Could not push grades of section: " + model.getSectionId());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
 
         if (!isValidProgress(returnedProgress)) {
             LOG.error("Error object returned while pushing the grades of section: " + model.getSectionId());
-            throw new IOException("Could not push grades of section: " + model.getSectionId());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
     }
 

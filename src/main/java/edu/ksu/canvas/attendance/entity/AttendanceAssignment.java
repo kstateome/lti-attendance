@@ -43,7 +43,18 @@ public class AttendanceAssignment implements Serializable {
     @Column(name = "assignment_name")
     private String assignmentName;
 
+    @Transient
+    public Status status;
+
+    public enum Status{
+        UNKNOWN,
+        OKAY,
+        NOT_LINKED_TO_CANVAS,
+        CANVAS_AND_DB_DISCREPANCY
+    }
+
     public AttendanceAssignment() {
+
     }
 
     public Long getAssignmentId() {
@@ -125,6 +136,16 @@ public class AttendanceAssignment implements Serializable {
     public void setAssignmentName(String assignmentName) {
         this.assignmentName = assignmentName;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+
 
     @Override
     public String toString() {
