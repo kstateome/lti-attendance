@@ -2,7 +2,7 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
+import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.AttendanceAssignmentService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
@@ -105,7 +105,7 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void createAssignmentInCanvasHappyPath() throws IOException {
+    public void createAssignmentInCanvasHappyPath() throws IOException, AttendanceAssignmentException {
         when(canvasApiWrapperService.createAssignment(any(), any(), any())).thenReturn(assignmentOptional);
         when(attendanceSectionService.getSectionsByCourse(COURSE_ID)).thenReturn(sectionList);
         when(assignmentService.findBySection(any())).thenReturn(attendanceAssignment);
@@ -115,21 +115,21 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void createAssignmentInCanvasNullReturnError() throws IOException {
+    public void createAssignmentInCanvasNullReturnError() throws IOException, AttendanceAssignmentException {
         assignmentOptional = Optional.empty();
 
         when(canvasApiWrapperService.createAssignment(any(), any(), any())).thenReturn(assignmentOptional);
 
         try {
             canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
-            Assert.fail("Expected IOException");
-        } catch (IOException e) {
-            Assert.assertEquals("Error while creating canvas assignment for section: " + SECTION_NAME, e.getMessage());
+            Assert.fail("Expected AttendanceAssignmentException");
+        } catch (AttendanceAssignmentException e) {
+            Assert.assertEquals(AttendanceAssignmentException.Error.CREATION_ERROR, e.error);
         }
     }
 
     @Test
-    public void editAssignmentInCanvasHappyPath() throws IOException {
+    public void editAssignmentInCanvasHappyPath() throws IOException, AttendanceAssignmentException {
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
@@ -137,20 +137,20 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void editAssignmentInCanvasCanvasAssignmentNotFound() throws IOException {
+    public void editAssignmentInCanvasCanvasAssignmentNotFound() throws IOException, AttendanceAssignmentException {
         assignmentOptional = Optional.empty();
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
 
         try {
             canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
-        } catch(IOException exception ) {
-            Assert.assertEquals("Assignment not found in Canvas", exception.getMessage());
+        } catch(AttendanceAssignmentException exception ) {
+            Assert.assertEquals(AttendanceAssignmentException.Error.NO_ASSIGNMENT_FOUND, exception.error);
         }
     }
 
     @Test
-    public void deleteAssignmentInCanvasHappyPath() throws IOException, CanvasOutOfSyncException {
+    public void deleteAssignmentInCanvasHappyPath() throws IOException, AttendanceAssignmentException {
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
         when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
 
@@ -159,7 +159,7 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void deleteAssignmentInCanvasAssignmentNotFoundError() throws IOException, CanvasOutOfSyncException {
+    public void deleteAssignmentInCanvasAssignmentNotFoundError() throws IOException, AttendanceAssignmentException {
         attendanceAssignment = null;
 
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
@@ -167,8 +167,8 @@ public class CanvasAssignmentAssistantUTest {
 
         try {
             canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
-        } catch (IOException exception) {
-            Assert.assertEquals("Attendance assignment not found for section: " + SECTION_NAME, exception.getMessage());
+        } catch (AttendanceAssignmentException exception) {
+            Assert.assertEquals(AttendanceAssignmentException.Error.DELETION_ERROR, exception.error);
         }
     }
 

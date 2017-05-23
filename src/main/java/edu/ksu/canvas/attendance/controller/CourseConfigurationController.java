@@ -3,6 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -142,10 +144,12 @@ public class CourseConfigurationController extends AttendanceBaseController {
             try {
                 assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
                 page.addObject("pushingSuccessful", true);
-
-            } catch (Exception submissionErrors) {
-                page.addObject("error", submissionErrors.getMessage());
             }
+            catch (AttendanceAssignmentException e){
+                page.addObject("error", e.getMessage());
+            }
+
+
 
             return page;
         }
@@ -169,6 +173,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
         try {
+
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
             page.addObject("error", exception.getMessage());

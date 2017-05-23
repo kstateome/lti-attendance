@@ -3,19 +3,19 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
-import edu.ksu.canvas.attendance.exception.CanvasOutOfSyncException;
+import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.AttendanceAssignmentService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.Errors;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,20 +40,19 @@ public class CanvasAssignmentAssistant {
     @Autowired
     private CanvasApiWrapperService canvasApiWrapperService;
 
-    public void createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws IOException {
+    public void createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws AttendanceAssignmentException {
         Optional<Assignment> canvasAssignmentOptional;
-
         Assignment assignment = generateCanvasAssignment(courseId, attendanceAssignment);
         try {
             canvasAssignmentOptional = canvasApiWrapperService.createAssignment(courseId, assignment, oauthToken);
         } catch (IOException e) {
             LOG.error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            throw new IOException("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getName());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.CREATION_ERROR);
         }
 
         if(!canvasAssignmentOptional.isPresent())  {
             LOG.error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getSectionId());
-            throw new IOException("Error while creating canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.CREATION_ERROR);
         }
 
         LOG.info("Created canvas assignment: " + canvasAssignmentOptional.get().getId());
@@ -86,18 +85,18 @@ public class CanvasAssignmentAssistant {
     }
 
 
-    public void editAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws IOException {
+    public void editAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws AttendanceAssignmentException{
 
         Optional<Assignment> canvasAssignmentOptional;
         try {
             canvasAssignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
         } catch (IOException e) {
             LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            throw new IOException("Could not connect to Canvas to get assignment");
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NO_CONNECTION);
         }
 
         if(!canvasAssignmentOptional.isPresent()) {
-            throw new IOException("Assignment not found in Canvas");
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NO_ASSIGNMENT_FOUND);
         }
 
         Assignment canvasAssignment = canvasAssignmentOptional.get();
@@ -106,18 +105,17 @@ public class CanvasAssignmentAssistant {
             canvasApiWrapperService.editAssignment(courseId.toString(), canvasAssignment, oauthToken);
         } catch (IOException e) {
             LOG.error("Error while editing canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            throw new IOException("Error while editing canvas assignment for section: " + attendanceAssignment.getAttendanceSection().getName());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.EDITING_ERROR);
         }
 
         LOG.info("Canvas assignment edited based on information in the section configuration.");
     }
 
-    public void deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) throws IOException, CanvasOutOfSyncException {
+    public void deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) throws AttendanceAssignmentException{
 
         List<AttendanceSection> sections = attendanceSectionService.getSectionByCanvasCourseId(canvasCourseId);
         if(CollectionUtils.isEmpty(sections)) {
-            RuntimeException e = new RuntimeException("Cannot load data into courseForm for non-existent sections for this course");
-            throw new ContextedRuntimeException(e).addContextValue("courseId", canvasCourseId);
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NON_EXISTENT_SECTION_ERROR);
         }
 
         AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));
@@ -134,7 +132,7 @@ public class CanvasAssignmentAssistant {
             canvasApiWrapperService.deleteAssignment(canvasCourseId.toString(), assignment.getCanvasAssignmentId().toString(), oauthToken);
         } catch (IOException e) {
             LOG.error("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId(), e);
-            throw new IOException("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.DELETION_ERROR);
         }
         LOG.info("Canvas assignment " + assignment.getCanvasAssignmentId() + " was successfully deleted.");
     }
