@@ -52,9 +52,10 @@ public class ArquillianLoadDatabaseWithData implements ApplicationListener<Conte
         
         AttendanceStudent existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
-        existingStudent.setName("Zoglmann, Brian");
+        existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getCanvasSectionId());
         existingStudent.setSisUserId("SisId");
+        existingStudent.setCanvasSectionId(1000L);
         existingStudent.setDeleted(false);
         existingStudent = studentRepository.save(existingStudent);
 

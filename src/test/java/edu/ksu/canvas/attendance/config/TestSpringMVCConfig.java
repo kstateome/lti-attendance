@@ -1,16 +1,18 @@
 package edu.ksu.canvas.attendance.config;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.*;
+import edu.ksu.canvas.attendance.submitter.AssignmentSubmitter;
+import edu.ksu.canvas.attendance.submitter.AssignmentValidator;
+import edu.ksu.canvas.attendance.submitter.CanvasAssignmentAssistant;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.canvas.repository.LtiKeyRepository;
 import edu.ksu.canvas.repository.OauthTokenRepository;
 import edu.ksu.lti.launch.oauth.LtiLaunch;
 import edu.ksu.lti.launch.security.CanvasInstanceChecker;
-import edu.ksu.lti.launch.service.*;
-import edu.ksu.lti.launch.util.CanvasResponseParser;
-import edu.ksu.lti.launch.validator.OauthTokenValidator;
+import edu.ksu.lti.launch.service.LtiSessionService;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
@@ -62,19 +64,10 @@ public class TestSpringMVCConfig {
     public HttpClientBuilder httpClientBuilder()  { return Mockito.mock(HttpClientBuilder.class); }
 
     @Bean
-    public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }
-
-    @Bean
     public OauthTokenRepository oauthTokenRepository () { return Mockito.mock(OauthTokenRepository.class); }
 
     @Bean
     public AttendanceOauthTokenService attendanceOauthTokenService() { return  Mockito.mock(AttendanceOauthTokenService.class); }
-
-    @Bean
-    public OauthTokenRefreshService oauthTokenRefreshService() { return Mockito.mock(OauthTokenRefreshService.class); }
-
-    @Bean
-    public OauthTokenValidator oauthTokenValidator() { return Mockito.mock(OauthTokenValidator.class); }
 
     @Bean
     public LtiSessionService ltiSessionService() { return Mockito.mock(LtiSessionService.class); }
@@ -90,6 +83,17 @@ public class TestSpringMVCConfig {
     @Bean
     public LtiKeyRepository ltiKeyRepository () { return Mockito.mock(LtiKeyRepository.class); }
 
+    @Bean
+    public AttendanceAssignmentRepository attendanceAssignmentRepository () { return Mockito.mock(AttendanceAssignmentRepository.class); }
+
+    @Bean
+    public AssignmentSubmitter assignmentSubmitter() { return Mockito.mock(AssignmentSubmitter.class); }
+
+    @Bean
+    public CanvasAssignmentAssistant canvasAssignmentAssistant() { return Mockito.mock(CanvasAssignmentAssistant.class); }
+
+    @Bean
+    public AssignmentValidator assignmentValidator() { return Mockito.mock(AssignmentValidator.class); }
 
     @Bean
     public RoleChecker roleChecker() {

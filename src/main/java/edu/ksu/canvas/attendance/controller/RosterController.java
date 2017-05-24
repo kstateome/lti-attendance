@@ -113,6 +113,7 @@ public class RosterController extends AttendanceBaseController {
         }
 
         if (bindingResult.hasErrors()) {
+            LOG.warn(bindingResult.getAllErrors().toString());
             ModelAndView page = new ModelAndView("roster");
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
 

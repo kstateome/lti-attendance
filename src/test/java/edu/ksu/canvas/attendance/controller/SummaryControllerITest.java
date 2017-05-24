@@ -18,16 +18,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -74,7 +68,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
-        existingStudent.setName("Zoglmann, Brian");
+        existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
         existingStudent.setDeleted(false);
@@ -112,26 +106,22 @@ public class SummaryControllerITest extends BaseControllerITest {
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void studentSummary_NonNumberForStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
-        try {
-            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId));
-        } catch (NestedServletException ne) {
-            throw ne.getCause();
-        }
+        mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId))
+                .andExpect(view().name("studentSyncFailed"));
+
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void studentSummary_NonExistantStudentId() throws Throwable {
         Long sectionId = existingSection.getCanvasSectionId();
         Long nonExistStudentId = -1L;
-        try {
-            mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId));
-        } catch (NestedServletException ne) {
-            throw ne.getCause();
-        }
+        mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId))
+                .andExpect(view().name("studentSyncFailed"));
+
     }
 
 
@@ -142,13 +132,14 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.MINUTES);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
+        String sisUserId = existingStudent.getSisUserId();
 
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getAviationAttendanceSummary(sectionId);
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,existingStudent.getName(),existingStudent.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed());
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,sisUserId,existingStudent.getName(), existingStudent.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))
@@ -202,13 +193,14 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.SIMPLE);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
+        String sisUserId = existingStudent.getSisUserId();
 
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getSimpleAttendanceSummary(sectionId);
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,existingStudent.getName(),existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed());
+                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId, sisUserId, existingStudent.getName(), existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))

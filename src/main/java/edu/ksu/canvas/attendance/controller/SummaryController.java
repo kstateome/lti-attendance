@@ -3,6 +3,7 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
@@ -69,8 +70,8 @@ public class SummaryController extends AttendanceBaseController {
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-        if(validatedStudentId == null) {
-            throw new IllegalArgumentException("Invalid student id");
+        if(validatedStudentId == null || validatedStudentId < 0) {
+            throw new MissingSisIdException("Invalid student id", false);
         }
 
         AttendanceStudent student = studentService.getStudent(validatedStudentId);
@@ -104,8 +105,8 @@ public class SummaryController extends AttendanceBaseController {
                 .filter(entry -> entry.getStudentId() == validatedStudentId)
                 .findFirst()
                 .ifPresent(entry ->  page.addObject("attendanceSummaryEntry", courseConfigurationForm.getSimpleAttendance() ?
-                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed())
-                          : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
+                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent())
+                          : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
 
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))

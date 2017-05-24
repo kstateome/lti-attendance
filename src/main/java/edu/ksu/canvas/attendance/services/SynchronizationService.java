@@ -4,12 +4,15 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
+import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.entity.config.ConfigItem;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
@@ -57,14 +60,14 @@ public class SynchronizationService {
     }
 
     public void synchronize(long canvasCourseId) throws NoLtiSessionException {
-        String token = ltiSessionService.getLtiSession().getOauthToken().getApiToken();
+        OauthToken token = ltiSessionService.getLtiSession().getOauthToken();
 
         List<LtiLaunchData.InstitutionRole> roleList = canvasService.getRoles();
         boolean hasOneAuthorityRole = roleList.contains(LtiLaunchData.InstitutionRole.Instructor) || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant);
 
         if(roleList.contains(LtiLaunchData.InstitutionRole.Learner) && !hasOneAuthorityRole) {
             ConfigItem adminToken = configRepository.findByLtiApplicationAndKey("Attendance", "admin_token");
-            token = adminToken.getValue();
+            token = new NonRefreshableOauthToken(adminToken.getValue());
         }
 
         List<Section> sections = canvasService.getSections(canvasCourseId, token);
@@ -73,7 +76,7 @@ public class SynchronizationService {
         synchronizeSectionsFromCanvasToDb(sections);
 
         Map<Section, List<Enrollment>> canvasSectionMap = canvasService.getEnrollmentsFromCanvas(sections, token);
-        synchronizeStudentsFromCanvasToDb(canvasSectionMap);
+        synchronizeStudentsFromCanvasToDb(canvasSectionMap, hasOneAuthorityRole);
     }
 
     private AttendanceCourse synchronizeCourseFromCanvasToDb(long canvasCourseId) {
@@ -109,7 +112,7 @@ public class SynchronizationService {
         return ret;
     }
 
-    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap) {
+    private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap, boolean hasOneAuthorityRole) {
         List<AttendanceStudent> ret = new ArrayList<>();
         List<AttendanceStudent> existingStudentsInDb = null;
         Set<AttendanceStudent> droppedStudents = new HashSet<>();
@@ -132,23 +135,36 @@ public class SynchronizationService {
                     droppedStudents.remove(foundUser.get());
                 }
                 AttendanceStudent student = foundUser.isPresent() ? foundUser.get() : new AttendanceStudent();
-                student.setSisUserId(enrollment.getUser().getSisUserId());
-                student.setName(enrollment.getUser().getSortableName());
-                student.setCanvasSectionId(section.getId());
-                student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+                student = setStudentInfo(student, enrollment, section);
                 student.setDeleted(foundUser.isPresent() ? foundUser.get().getDeleted() : Boolean.FALSE);
+
                 if (student.getAttendances() == null) {
                     List<Attendance> attendances = new ArrayList<>();
                     student.setAttendances(attendances);
                 }
 
-                ret.add(studentRepository.save(student));
+                if (student.getSisUserId() == null) {
+                    throw new MissingSisIdException("A student is missing their SISID", hasOneAuthorityRole);
+                }
+                else {
+                    ret.add(studentRepository.save(student));
+                }
+
             }
 
         }
         addDroppedStudents(ret, droppedStudents);
 
         return ret;
+    }
+
+    private AttendanceStudent setStudentInfo(AttendanceStudent student, Enrollment enrollment, Section section) {
+        student.setSisUserId(enrollment.getUser().getSisUserId());
+        student.setName(enrollment.getUser().getSortableName());
+        student.setCanvasSectionId(section.getId());
+        student.setCanvasCourseId(section.getCourseId() == null ? null : Long.valueOf(section.getCourseId()));
+
+        return student;
     }
 
     private void addDroppedStudents(List<AttendanceStudent> studentList, Set<AttendanceStudent> droppedStudents) {

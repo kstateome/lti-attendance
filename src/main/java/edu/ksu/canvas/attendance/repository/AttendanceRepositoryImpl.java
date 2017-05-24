@@ -4,13 +4,10 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 import org.apache.commons.lang3.Validate;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -38,6 +35,43 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
 
         return query.getResultList();
+    }
+
+    /**
+     * Gets from the data base all the comments, grouped by student, of one section
+     * @param sectionId
+     * @return a map with pairing a student with all his/her comments
+     */
+    @Override
+    public Map<Long, String> getAttendanceCommentsBySectionId(long sectionId) {
+        Validate.notNull(sectionId, "The sectionId parameter must be not null");
+
+        String jpql ="SELECT NEW edu.ksu.canvas.attendance.repository.AttendanceCommentEntry(att.attendanceStudent.studentId, att.dateOfClass, att.notes) " +
+                    "FROM Attendance att " +
+                    "WHERE att.notes IS NOT NULL AND att.attendanceStudent.canvasSectionId = :canvasSectionId ";
+
+        Query query = entityManager.createQuery(jpql);
+        query.setParameter("canvasSectionId", sectionId);
+
+        List<AttendanceCommentEntry> results = (List<AttendanceCommentEntry>) query.getResultList();
+
+        return groupCommentsByStudents(results);
+    }
+
+    /**
+     * Group and organize students with his/her comments
+     * @param studentResults
+     * @return a map with pairing a student with all his/her comments
+     */
+    private Map<Long, String> groupCommentsByStudents(List<AttendanceCommentEntry> studentResults) {
+        Map<Long, List<AttendanceCommentEntry>> commentsSeparatedByStudent = studentResults.stream().collect(Collectors.groupingBy(AttendanceCommentEntry::getStudentId));
+        Map<Long, String> studentCommentsMap = new HashMap<>();
+        commentsSeparatedByStudent.forEach((studentId, studentCommentObjectList) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            studentCommentObjectList.forEach(sdc -> stringBuilder.append(sdc.getComment() + "\n"));
+            studentCommentsMap.put(studentId, stringBuilder.toString());
+        });
+        return studentCommentsMap;
     }
 
     @Override

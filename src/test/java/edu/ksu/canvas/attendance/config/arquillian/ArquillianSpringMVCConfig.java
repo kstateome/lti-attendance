@@ -2,28 +2,30 @@ package edu.ksu.canvas.attendance.config.arquillian;
 
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
+import edu.ksu.canvas.attendance.submitter.AssignmentSubmitter;
+import edu.ksu.canvas.attendance.submitter.AssignmentValidator;
+import edu.ksu.canvas.attendance.submitter.CanvasAssignmentAssistant;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.interfaces.CourseReader;
-import edu.ksu.canvas.interfaces.EnrollmentsReader;
+import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.interfaces.SectionReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.lti.launch.oauth.LtiLaunch;
-import edu.ksu.lti.launch.oauth.OauthToken;
 import edu.ksu.lti.launch.security.CanvasInstanceChecker;
 import edu.ksu.lti.launch.service.LtiSessionService;
-import edu.ksu.lti.launch.service.OauthTokenRefreshService;
-import edu.ksu.lti.launch.util.CanvasResponseParser;
-import edu.ksu.lti.launch.validator.OauthTokenValidator;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.*;
@@ -40,9 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -100,12 +100,12 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
         when(mockCourseReader.getSingleCourse(mockGetSingleCourseOptions)).thenReturn(Optional.of(new Course()));
         SectionReader mockSectionReader = Mockito.mock(SectionReader.class);
         when(mockSectionReader.listCourseSections(any(), any())).thenReturn(Collections.singletonList(buildFakeSection()));
-        EnrollmentsReader mockEnrollmentsReader = Mockito.mock(EnrollmentsReader.class);
-        when(mockEnrollmentsReader.getSectionEnrollments(any(), any())).thenReturn(Collections.singletonList(buildFakeEnrollment()));
+        EnrollmentReader mockEnrollmentsReader = Mockito.mock(EnrollmentReader.class);
+        when(mockEnrollmentsReader.getSectionEnrollments(new GetEnrollmentOptions(any()))).thenReturn(Collections.singletonList(buildFakeEnrollment()));
 
-        when(mockApiFactory.getReader(eq(CourseReader.class), anyString())).thenReturn(mockCourseReader);
-        when(mockApiFactory.getReader(eq(SectionReader.class), anyString())).thenReturn(mockSectionReader);
-        when(mockApiFactory.getReader(eq(EnrollmentsReader.class), anyString())).thenReturn(mockEnrollmentsReader);
+        when(mockApiFactory.getReader(eq(CourseReader.class), any(OauthToken.class))).thenReturn(mockCourseReader);
+        when(mockApiFactory.getReader(eq(SectionReader.class), any(OauthToken.class))).thenReturn(mockSectionReader);
+        when(mockApiFactory.getReader(eq(EnrollmentReader.class), any(OauthToken.class))).thenReturn(mockEnrollmentsReader);
         return mockApiFactory;
     }
 
@@ -163,17 +163,6 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     public String canvasDomain() { return FAKE_DOMAIN; }
 
     @Bean
-    public CanvasResponseParser canvasResponseParser() {return Mockito.mock(CanvasResponseParser.class); }
-
-    @Bean
-    public OauthTokenValidator oauthTokenValidator() { return Mockito.mock(OauthTokenValidator.class); }
-
-    @Bean
-    public OauthTokenRefreshService oauthTokenRefreshService() {
-        return Mockito.mock(OauthTokenRefreshService.class);
-    }
-
-    @Bean
     public SynchronizationService synchronizationService() {
         return new SynchronizationService();
     }
@@ -182,6 +171,18 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     public CanvasApiWrapperService canvasApiWrapperService() {
         return new CanvasApiWrapperService();
     }
+
+    @Bean
+    public AttendanceAssignmentRepository attendanceAssignmentRepository () { return Mockito.mock(AttendanceAssignmentRepository.class); }
+
+    @Bean
+    public AssignmentSubmitter assignmentSubmitter() { return Mockito.mock(AssignmentSubmitter.class); }
+
+    @Bean
+    public CanvasAssignmentAssistant canvasAssignmentAssistant() { return Mockito.mock(CanvasAssignmentAssistant.class); }
+
+    @Bean
+    public AssignmentValidator assignmentValidator() { return Mockito.mock(AssignmentValidator.class); }
 
     @Bean
     public LtiLaunch ltiLaunch() {
