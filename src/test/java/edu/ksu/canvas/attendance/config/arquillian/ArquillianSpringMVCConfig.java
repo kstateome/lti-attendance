@@ -2,8 +2,12 @@ package edu.ksu.canvas.attendance.config.arquillian;
 
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
+import edu.ksu.canvas.attendance.submitter.AssignmentSubmitter;
+import edu.ksu.canvas.attendance.submitter.AssignmentValidator;
+import edu.ksu.canvas.attendance.submitter.CanvasAssignmentAssistant;
 import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.EnrollmentReader;
@@ -12,6 +16,7 @@ import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.User;
+import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
@@ -19,7 +24,6 @@ import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.lti.launch.oauth.LtiLaunch;
-import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.lti.launch.security.CanvasInstanceChecker;
 import edu.ksu.lti.launch.service.LtiSessionService;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -38,9 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -169,6 +171,18 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     public CanvasApiWrapperService canvasApiWrapperService() {
         return new CanvasApiWrapperService();
     }
+
+    @Bean
+    public AttendanceAssignmentRepository attendanceAssignmentRepository () { return Mockito.mock(AttendanceAssignmentRepository.class); }
+
+    @Bean
+    public AssignmentSubmitter assignmentSubmitter() { return Mockito.mock(AssignmentSubmitter.class); }
+
+    @Bean
+    public CanvasAssignmentAssistant canvasAssignmentAssistant() { return Mockito.mock(CanvasAssignmentAssistant.class); }
+
+    @Bean
+    public AssignmentValidator assignmentValidator() { return Mockito.mock(AssignmentValidator.class); }
 
     @Bean
     public LtiLaunch ltiLaunch() {

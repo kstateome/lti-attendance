@@ -26,6 +26,9 @@ public class AttendanceSection implements Serializable {
     @Column(name = "section_name")
     private String name;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, mappedBy = "attendanceSection")
+    private AttendanceAssignment attendanceAssignment;
+
     public AttendanceSection() {
 
     }
@@ -62,6 +65,16 @@ public class AttendanceSection implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public AttendanceAssignment getAttendanceAssignment() {
+        return attendanceAssignment;
+    }
+
+
+    public void setAttendanceAssignment(AttendanceAssignment attendanceAssignment) {
+        this.attendanceAssignment = attendanceAssignment;
+    }
+
 
     @Override
     public String toString() {
