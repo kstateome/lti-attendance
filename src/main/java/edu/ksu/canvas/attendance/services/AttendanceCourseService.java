@@ -52,7 +52,7 @@ public class AttendanceCourseService {
         AttendanceCourse attendanceCourse = attendanceCourseRepository.findByCanvasCourseId(courseId);
         
         if(attendanceCourse == null) {
-            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existant course");
+            RuntimeException e = new IllegalArgumentException("Cannot load data into courseForm for non-existent course");
             throw new ContextedRuntimeException(e).addContextValue("courseId", courseId);
         }
 
@@ -60,6 +60,10 @@ public class AttendanceCourseService {
         courseForm.setDefaultMinutesPerSession(attendanceCourse.getDefaultMinutesPerSession());
         courseForm.setSimpleAttendance(attendanceCourse.getAttendanceType().equals(AttendanceType.SIMPLE));
         courseForm.setShowNotesToStudents(attendanceCourse.getShowNotesToStudents());
+    }
+
+    public AttendanceCourse findByCanvasCourseId(Long courseId) {
+        return attendanceCourseRepository.findByCanvasCourseId(courseId);
     }
 
 }

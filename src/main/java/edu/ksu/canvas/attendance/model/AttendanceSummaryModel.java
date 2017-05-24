@@ -18,6 +18,7 @@ public class AttendanceSummaryModel {
         private final long courseId;
         private final long sectionId;
         private final long studentId;
+        private final String SisUserId;
         private final String studentName;
         private final int sumMinutesMadeup;
         private final int remainingMinutesMadeup;
@@ -27,15 +28,17 @@ public class AttendanceSummaryModel {
         private final int totalClassesMissed;
         private final int totalClassesExcused;
         private final int totalClassesTardy;
+        private final int totalClassesPresent;
 
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
+                     String SisUserId, String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
                      int sumMinutesMissed, double percentCourseMissed) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
+            this.SisUserId = SisUserId;
             this.studentName = studentName;
             this.dropped = dropped;
             this.sumMinutesMadeup = sumMinutesMadeup;
@@ -45,14 +48,16 @@ public class AttendanceSummaryModel {
             this.totalClassesExcused = -1;
             this.totalClassesMissed = -1;
             this.totalClassesTardy = -1;
+            this.totalClassesPresent = -1;
         }
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused) {
+                     String SisUserId, String studentName, boolean dropped, int totalClassesTardy, int totalClassesMissed, int totalClassesExcused, int totalClassesPresent) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
+            this.SisUserId = SisUserId;
             this.studentName = studentName;
             this.dropped = dropped;
             this.totalClassesExcused = totalClassesExcused;
@@ -62,6 +67,7 @@ public class AttendanceSummaryModel {
             this.percentCourseMissed = -1;
             this.totalClassesMissed = totalClassesMissed;
             this.totalClassesTardy = totalClassesTardy;
+            this.totalClassesPresent = totalClassesPresent;
         }
 
 
@@ -121,6 +127,13 @@ public class AttendanceSummaryModel {
         }
 
 
+        public int getTotalClassesPresent() {
+            return totalClassesPresent;
+        }
+
+        public String getSisUserId() {
+            return SisUserId;
+        }
     }
 
 
