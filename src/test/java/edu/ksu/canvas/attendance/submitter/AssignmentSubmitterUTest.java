@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.IOException;
 import java.util.*;
 
 import static org.mockito.Matchers.any;
@@ -202,12 +201,12 @@ public class AssignmentSubmitterUTest {
     }
 
     @Test
-    public void submitCourseAttendancesHappyPath() throws IOException, AttendanceAssignmentException {
+    public void submitCourseAttendancesHappyPath() throws Exception {
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
         when(assignmentService.findBySection(section2)).thenReturn(attendanceAssignment2);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
@@ -224,12 +223,12 @@ public class AssignmentSubmitterUTest {
     }
 
     @Test
-    public void submitCourseAttendancesFailCanvasGradingError() throws IOException, AttendanceAssignmentException {
+    public void submitCourseAttendancesFailCanvasGradingError() throws Exception {
         progressOptional.get().setWorkflowState("failed");
 
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);

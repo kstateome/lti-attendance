@@ -53,9 +53,6 @@ public class AttendanceAssignment implements Serializable {
         CANVAS_AND_DB_DISCREPANCY
     }
 
-    public AttendanceAssignment() {
-
-    }
 
     public Long getAssignmentId() {
         return assignmentId;

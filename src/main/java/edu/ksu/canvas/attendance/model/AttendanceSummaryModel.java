@@ -32,13 +32,13 @@ public class AttendanceSummaryModel {
 
 
         public Entry(long courseId, long sectionId, long studentId,
-                     String SisUserId, String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
+                     String sisUserId, String studentName, boolean dropped, int sumMinutesMadeup, int remainingMinutesMadeup,
                      int sumMinutesMissed, double percentCourseMissed) {
 
             this.courseId = courseId;
             this.sectionId = sectionId;
             this.studentId = studentId;
-            this.SisUserId = SisUserId;
+            this.SisUserId = sisUserId;
             this.studentName = studentName;
             this.dropped = dropped;
             this.sumMinutesMadeup = sumMinutesMadeup;
