@@ -26,7 +26,7 @@ public class AttendanceSection implements Serializable {
     @Column(name = "section_name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true, mappedBy = "attendanceSection")
     private AttendanceAssignment attendanceAssignment;
 
     public AttendanceSection() {
