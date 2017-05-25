@@ -26,7 +26,6 @@ public class AttendanceSection implements Serializable {
     @Column(name = "section_name")
     private String name;
 
-
     public AttendanceSection() {
 
     }
@@ -64,11 +63,10 @@ public class AttendanceSection implements Serializable {
         this.name = name;
     }
 
-
     @Override
     public String toString() {
         return "AttendanceSection [sectionId=" + sectionId + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId="
-                + canvasSectionId + ", name=" + name + "]";
+                + canvasSectionId + ", name=" + name +"]";
     }
 
 }

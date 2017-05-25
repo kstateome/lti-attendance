@@ -1,11 +1,9 @@
 package edu.ksu.canvas.attendance.services;
 
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
+import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,26 +11,37 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
-import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class AttendanceSectionServiceUTest {
 
+    private static final long CANVAS_COURSE_ID = 1000L;
+    private static final String SECTION_NAME = "SECTION NAME";
+    private static final long CANVAS_SECTION_ID = 1010L;
+    private static final long SECTION_ID = 1111L;
+    private static final String ASSIGNMENT_NAME = "ASSIGNMENT NAME";
     private AttendanceSectionService sectionService;
     
     @Mock
     private AttendanceSectionRepository mockSectionRepository;
+
+    @Mock
+    private AttendanceAssignmentRepository mockAssignmentRepository;
     
     
     @Before
     public void setup() {
         sectionService = new AttendanceSectionService();
         Whitebox.setInternalState(sectionService, mockSectionRepository);
+        Whitebox.setInternalState(sectionService, mockAssignmentRepository);
     }
     
     
@@ -87,6 +96,29 @@ public class AttendanceSectionServiceUTest {
         List<AttendanceSection> actualSections = sectionService.getSectionsByCourse(canvasCourseId);
         
         assertThat(actualSections, contains(firstSection, secondSection));
+    }
+
+    @Test
+    public void resetAttendanceAssignment_HappyPath() {
+        AttendanceSection attendanceSection = new AttendanceSection();
+        attendanceSection.setCanvasCourseId(CANVAS_COURSE_ID);
+        attendanceSection.setName(SECTION_NAME);
+        attendanceSection.setCanvasSectionId(CANVAS_SECTION_ID);
+        attendanceSection.setSectionId(SECTION_ID);
+
+        List<AttendanceSection> sectionList = new ArrayList<>();
+        sectionList.add(attendanceSection);
+
+        AttendanceAssignment attendanceAssignment = new AttendanceAssignment();
+        attendanceAssignment.setGradingOn(true);
+        attendanceAssignment.setAssignmentName(ASSIGNMENT_NAME);
+
+        when(mockSectionRepository.findByCanvasCourseId(CANVAS_COURSE_ID)).thenReturn(sectionList);
+        when(mockAssignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
+
+        sectionService.resetAttendanceAssignmentsForCourse(CANVAS_COURSE_ID);
+        assertEquals(null, attendanceAssignment.getAssignmentName());
+        assertEquals(false, attendanceAssignment.getGradingOn());
     }
     
 }
