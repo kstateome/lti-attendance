@@ -150,7 +150,7 @@
             </div>
             <div class="col-md-7 col-md-offset-0">
                 <h5><i>Attendance Weights: </i></h5>
-                <p>"Present", "Tardy", and both types of "Absences" are possible options for attendance status.
+                <p>"Present", "Tardy", and "Excused" are possible options for attendance status.
                     Please enter the percentage of the "Total Points" that each type of status should receive.</p>
 
                 <div class="col-md-2 col-md-offset-0">
