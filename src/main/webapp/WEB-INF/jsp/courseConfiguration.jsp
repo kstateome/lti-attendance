@@ -56,7 +56,7 @@
     </c:forEach>
     <c:if test="${pushingSuccessful}">
         <div class="alert alert-success" id="pushingSuccessful">
-            <p>Pushing attendance grades to Canvas successful.</p>
+            <p>Pushing attendance grades to Canvas successful.  Please allow a few minutes for Canvas to update the gradebook.</p>
         </div>
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
