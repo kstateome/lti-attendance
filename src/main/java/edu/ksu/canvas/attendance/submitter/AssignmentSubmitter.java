@@ -73,21 +73,21 @@ public class AssignmentSubmitter {
     private void gradePushingValidation(Long courseId, OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup,
                                         AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
-            attendanceAssignment = assignmentValidator.validateConfigurationSetupExistence(model, attendanceAssignment);
+        AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(model, attendanceAssignment);
 
-        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
-            attendanceAssignment = assignmentValidator.validateAttendanceAssignment(courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            validatingAssignment = assignmentValidator.validateAttendanceAssignment(courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
-        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
-            attendanceAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
+        if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            validatingAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
-        if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY){
-            canvasAssignmentAssistant.editAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
+        if (validatingAssignment.getStatus() == AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY){
+            canvasAssignmentAssistant.editAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
-        else if (attendanceAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
-            canvasAssignmentAssistant.createAssignmentInCanvas(courseId, attendanceAssignment, oauthToken);
+        else if (validatingAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
+            canvasAssignmentAssistant.createAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
-        attendanceAssignment.setStatus(AttendanceAssignment.Status.OKAY);
+        validatingAssignment.setStatus(AttendanceAssignment.Status.OKAY);
 
     }
 
