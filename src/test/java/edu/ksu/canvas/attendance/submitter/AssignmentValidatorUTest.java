@@ -86,7 +86,7 @@ public class AssignmentValidatorUTest {
 
     @Test
     public void validateAttendanceAssignmentHappyPath() throws IOException, AttendanceAssignmentException {
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
         assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertNotEquals(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS, attendanceAssignment.getStatus());
         Assert.assertNotEquals(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY, attendanceAssignment.getStatus());
@@ -94,7 +94,7 @@ public class AssignmentValidatorUTest {
 
     @Test
     public void validateCanvasAssignmentHappyPath() throws IOException, AttendanceAssignmentException {
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertNotEquals(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS, attendanceAssignment.getStatus());
@@ -102,9 +102,9 @@ public class AssignmentValidatorUTest {
     }
 
     @Test
-    public void validateAttendanceAssignmentEmptyOptionalIdValidationError() throws IOException, AttendanceAssignmentException {
+    public void validateAttendanceAssignmentEmptyOptionalIdValidationError() throws Exception {
         assignmentOptional = Optional.empty();
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertEquals(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS, attendanceAssignment.getStatus());
@@ -112,9 +112,9 @@ public class AssignmentValidatorUTest {
 
 
     @Test
-    public void validateAttendanceAssignmentNullCanvasIDError() throws IOException, AttendanceAssignmentException {
+    public void validateAttendanceAssignmentNullCanvasIDError() throws Exception {
         attendanceAssignment.setCanvasAssignmentId(null);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertEquals(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS, attendanceAssignment.getStatus());
@@ -122,10 +122,10 @@ public class AssignmentValidatorUTest {
 
 
     @Test
-    public void validateCanvasAssignmentDBMismatchValidationError() throws IOException, AttendanceAssignmentException {
+    public void validateCanvasAssignmentDBMismatchValidationError() throws Exception {
         assignmentConfigurationFromSetup.setAssignmentPoints(120.0);
 
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         try {
             assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
@@ -136,10 +136,10 @@ public class AssignmentValidatorUTest {
     }
 
     @Test
-    public void validateCanvasAssignmentEmptyAssignmentValidationError() throws IOException, AttendanceAssignmentException {
+    public void validateCanvasAssignmentEmptyAssignmentValidationError() throws Exception {
         assignmentOptional = Optional.empty();
 
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID + "")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment, canvasApiWrapperService, oauthToken);
         Assert.assertEquals(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS, attendanceAssignment.getStatus());
