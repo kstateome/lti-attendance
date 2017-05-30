@@ -56,7 +56,7 @@
     </c:forEach>
     <c:if test="${pushingSuccessful}">
         <div class="alert alert-success" id="pushingSuccessful">
-            <p>Pushing attendance grades to Canvas successful.</p>
+            <p>Pushing attendance grades to Canvas successful.  Please allow a few minutes for Canvas to update the gradebook.</p>
         </div>
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
@@ -150,7 +150,7 @@
             </div>
             <div class="col-md-7 col-md-offset-0">
                 <h5><i>Attendance Weights: </i></h5>
-                <p>"Present", "Tardy", and both types of "Absences" are possible options for attendance status.
+                <p>"Present", "Tardy", and "Excused" are possible options for attendance status.
                     Please enter the percentage of the "Total Points" that each type of status should receive.</p>
 
                 <div class="col-md-2 col-md-offset-0">
@@ -168,17 +168,17 @@
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
+                    <label>Absent: </label>
+                    <br/>
+                    <label for="absentPoints">
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
                     <label>Excused: </label>
                     <br/>
                     <label for="excusedPoints">
                         <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
-                    </label>
-                </div>
-                <div class="col-md-2 col-md-offset-0">
-                    <label>Unexcused: </label>
-                    <br/>
-                    <label for="absentPoints">
-                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
                     </label>
                 </div>
             </div>

@@ -1,14 +1,11 @@
 package edu.ksu.canvas.attendance.form;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
 public class CourseConfigurationValidator implements Validator {
-
-    private static final Logger LOG = Logger.getLogger(CourseConfigurationValidator.class);
 
     @Override
     public boolean supports(Class<?> clazz) {

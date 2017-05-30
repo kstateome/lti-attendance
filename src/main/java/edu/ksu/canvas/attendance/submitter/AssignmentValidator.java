@@ -82,6 +82,7 @@ public class AssignmentValidator {
             LOG.info("There is no Attendance Assignment associated to section " + model.getSectionId());
             throw new AttendanceAssignmentException(Error.NOT_SAVED);
         }
+        attendanceAssignment.setStatus(AttendanceAssignment.Status.UNKNOWN);
         return attendanceAssignment;
     }
 

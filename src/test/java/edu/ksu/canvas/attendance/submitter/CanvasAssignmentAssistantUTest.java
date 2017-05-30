@@ -80,10 +80,10 @@ public class CanvasAssignmentAssistantUTest {
         attendanceAssignment.setPresentPoints(100.0);
 
         assignment = new Assignment();
-        assignment.setId(ASSIGNMENT_ID+"");
+        assignment.setId(Long.toString(ASSIGNMENT_ID));
         assignment.setName(attendanceAssignment.getAssignmentName());
         assignment.setPointsPossible(Double.valueOf(attendanceAssignment.getAssignmentPoints()));
-        assignment.setCourseId(COURSE_ID + "");
+        assignment.setCourseId(Long.toString(COURSE_ID));
         assignment.setDescription(ASSIGNMENT_DESCRIPTION);
         assignment.setPublished(true);
         assignment.setUnpublishable(false);
@@ -115,7 +115,7 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void createAssignmentInCanvasNullReturnError() throws IOException, AttendanceAssignmentException {
+    public void createAssignmentInCanvasNullReturnError() throws Exception {
         assignmentOptional = Optional.empty();
 
         when(canvasApiWrapperService.createAssignment(any(), any(), any())).thenReturn(assignmentOptional);
@@ -129,18 +129,18 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void editAssignmentInCanvasHappyPath() throws IOException, AttendanceAssignmentException {
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+    public void editAssignmentInCanvasHappyPath() throws Exception {
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         verify(canvasApiWrapperService, times(1)).editAssignment(COURSE_ID.toString(), assignment, oauthToken);
     }
 
     @Test
-    public void editAssignmentInCanvasCanvasAssignmentNotFound() throws IOException, AttendanceAssignmentException {
+    public void editAssignmentInCanvasCanvasAssignmentNotFound() throws Exception {
         assignmentOptional = Optional.empty();
 
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID+"")).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 
         try {
             canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
@@ -150,7 +150,7 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void deleteAssignmentInCanvasHappyPath() throws IOException, AttendanceAssignmentException {
+    public void deleteAssignmentInCanvasHappyPath() throws Exception {
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
         when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
 
@@ -159,7 +159,7 @@ public class CanvasAssignmentAssistantUTest {
     }
 
     @Test
-    public void deleteAssignmentInCanvasAssignmentNotFoundError() throws IOException, AttendanceAssignmentException {
+    public void deleteAssignmentInCanvasAssignmentNotFoundError() throws Exception {
         attendanceAssignment = null;
 
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
