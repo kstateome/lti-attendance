@@ -168,17 +168,17 @@
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
+                    <label>Absent: </label>
+                    <br/>
+                    <label for="absentPoints">
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
                     <label>Excused: </label>
                     <br/>
                     <label for="excusedPoints">
                         <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
-                    </label>
-                </div>
-                <div class="col-md-2 col-md-offset-0">
-                    <label>Unexcused: </label>
-                    <br/>
-                    <label for="absentPoints">
-                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
                     </label>
                 </div>
             </div>
