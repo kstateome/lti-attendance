@@ -58,6 +58,12 @@
         <div class="alert alert-success" id="pushingSuccessful">
             <p>Pushing attendance grades to Canvas successful.</p>
         </div>
+
+
+
+
+
+
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
     <c:if test="${updateSuccessful}">
@@ -91,6 +97,27 @@
     <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
            class="hovering-purple-button" type="submit"/>
     <br/>
+
+
+    <div class="confirmation-modal modal fade" id = "pushConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close">&times;</button>
+                    <h4 class="modal-title">Push Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    Please allow a few minutes for Canvas to update the gradebook.
+                </div>
+                <div class="modal-footer">
+                    <button class="confirm btn btn-primary" type="button">
+                        OK
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <h3>Setup</h3>
     <br/>
@@ -209,9 +236,7 @@
         });
 
         $('#pushGradesToCanvas').click(function(){
-            pushingAlert('Please allow a few minutes for Canvas to update the gradebook', 'Push Confirmation');
-            form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/save"/>";
-            form.submit();
+            $('#pushConfirmation').modal('show');
         });
 
 
@@ -238,14 +263,6 @@
                 cancel: function(){
                     location.reload();
                 }
-            });
-        }
-
-        function pushingAlert(msg, title){
-            $.alert({
-                text: msg,
-                title: title,
-                confirmButton: "OK"
             });
         }
 
