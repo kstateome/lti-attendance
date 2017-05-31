@@ -144,4 +144,87 @@
         cancelButtonClass: "btn-default",
         dialogClass: "modal-dialog"
     }
+
+    $.alert = function (options, e) {
+        // Do nothing when active confirm modal.
+        if ($('.confirmation-modal').length > 0)
+            return;
+
+        // Parse options defined with "data-" attributes
+        var dataOptions = {};
+        if (options.button) {
+            var dataOptionsMapping = {
+                'title': 'title',
+                'text': 'text',
+                'confirm-button': 'confirmButton',
+
+                'confirm-button-class': 'confirmButtonClass',
+
+                'dialog-class': 'dialogClass'
+            };
+            $.each(dataOptionsMapping, function(attributeName, optionName) {
+                var value = options.button.data(attributeName);
+                if (value) {
+                    dataOptions[optionName] = value;
+                }
+            });
+        }
+
+        // Default options
+        var settings = $.extend({}, $.confirm.options, {
+            confirm: function () {
+                var url = e && (('string' === typeof e && e) || (e.currentTarget && e.currentTarget.attributes['href'].value));
+                if (url) {
+                    if (options.post) {
+                        var form = $('<form method="post" class="hide" action="' + url + '"></form>');
+                        $("body").append(form);
+                        form.submit();
+                    } else {
+                        window.location = url;
+                    }
+                }
+            },
+            button: null
+        }, dataOptions, options);
+
+        // Modal
+        var modalHeader = '';
+        if (settings.title !== '') {
+            modalHeader =
+                '<div class="modal-header">' +
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                '<h4 class="modal-title">' + settings.title+'</h4>' +
+                '</div>';
+        }
+        var modalHTML =
+            '<div class="confirmation-modal modal fade" tabindex="-1" role="dialog">' +
+            '<div class="'+ settings.dialogClass +'">' +
+            '<div class="modal-content">' +
+            modalHeader +
+            '<div class="modal-body">' + settings.text + '</div>' +
+            '<div class="modal-footer">' +
+            '<button class="confirm btn ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
+            settings.confirmButton +
+            '</button>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+
+        var modal = $(modalHTML);
+
+        modal.on('shown.bs.modal', function () {
+            modal.find(".btn-primary:first").focus();
+        });
+        modal.on('hidden.bs.modal', function () {
+            modal.remove();
+        });
+        modal.find(".confirm").click(function () {
+            settings.confirm(settings.button);
+        });
+
+        // Show the modal
+        $("body").append(modal);
+        modal.modal('show');
+    };
 })(jQuery);

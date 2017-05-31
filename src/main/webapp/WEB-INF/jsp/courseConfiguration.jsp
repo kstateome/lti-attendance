@@ -56,7 +56,7 @@
     </c:forEach>
     <c:if test="${pushingSuccessful}">
         <div class="alert alert-success" id="pushingSuccessful">
-            <p>Pushing attendance grades to Canvas successful.  Please allow a few minutes for Canvas to update the gradebook.</p>
+            <p>Pushing attendance grades to Canvas successful.</p>
         </div>
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
@@ -192,6 +192,7 @@
     <br/><br/>
     <script>
         var errorMessage = "There was an error communicating with the server.";
+        var form = document.getElementById('sectionSelect');
         $('#conversionConfirm').change(function(){
             if (this.checked) {
                 $('#conversionConfig').removeClass('hidden');
@@ -199,13 +200,27 @@
                 $('#conversionConfig').addClass('hidden');
                 if(hasAssignmentConfiguration() == true) {
                     confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
-                        var form = document.getElementById('sectionSelect');
+
                         form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
                         form.submit();
                     });
                 }
             }
         });
+
+        $('#pushGradesToCanvas').click(function(){
+
+            $.alert({
+                text: 'Please allow a few minutes for Canvas to update the gradebook.',
+                title: 'Push Confirmation',
+                confirmButton: "OK",
+                confirm: function() {
+                    form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/save"/>";
+                    form.submit();
+                }
+            });
+        });
+
 
         $('#simpleAttendance').change(function(){
             if (this.checked) {
@@ -232,6 +247,8 @@
                 }
             });
         }
+
+
 
         function hasAssignmentConfiguration() {
             if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
