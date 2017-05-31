@@ -14,6 +14,7 @@
     <c:set var="context" value="${pageContext.request.contextPath}"/>
 
 
+
     <!-- LOAD BOOTSTRAP -->
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${context}/bootstrap/css/bootstrap-theme.css"/>
@@ -25,6 +26,8 @@
     <%--This needs to be here..--%>
     <script src="${context}/js/jquery.2.1.3.min.js"></script>
     <script src="${context}/js/jquery-ui.min.js"></script>
+    <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
+    <script src="${context}/js/jquery.confirm.js"></script>
     <script src="${context}/js/scripts.js"></script>
 
     <title>Class Setup</title>
@@ -46,12 +49,17 @@
 </nav>
 <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
-    <c:if test="${not empty error}">
-        <div class="alert alert-info">
-            <p>${error}</p>
+    <c:forEach items="${error}" var="oneError">
+        <div class="alert alert-danger">
+            <p>${oneError}</p>
+        </div>
+    </c:forEach>
+    <c:if test="${pushingSuccessful}">
+        <div class="alert alert-success" id="pushingSuccessful">
+            <p>Pushing attendance grades to Canvas successful.</p>
         </div>
     </c:if>
-
+<!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
     <c:if test="${updateSuccessful}">
         <div class="alert alert-success">
             <p>Course Setup successfully updated.</p>
@@ -64,6 +72,13 @@
         </div>
     </c:if>
 
+    <c:if test="${deleteSuccessful}">
+        <div class="alert alert-success" id="deleteSuccessful">
+            <p>Assignment has been deleted from canvas.</p>
+        </div>
+    </c:if>
+
+
     <h3>Synchronization</h3>
 
     <p>
@@ -75,7 +90,7 @@
 
     <input value="Synchronize with Canvas" id="synchronizeWithCanvas" name="synchronizeWithCanvas"
            class="hovering-purple-button" type="submit"/>
-    <br/><br/>
+    <br/>
 
     <h3>Setup</h3>
     <br/>
@@ -111,14 +126,87 @@
             <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
         </label>
         <br/>
+            <label>
+                <form:checkbox  path ="gradingOn" id="conversionConfirm"/> Convert Attendance to Assignment
+            </label>
+        <br/>
+
+        <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
+            <br/>
+            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published. Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+            </label>
+            <br/>
+            <div class="col-md-2 col-md-offset-0">
+                <label for="assignmentName">
+                    <h5><i>Assignment Name: </i></h5>
+                    <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15"/>
+                </label>
+                <br/>
+                <label for="assignmentPoints">
+                    <h5><i>Total Points: </i></h5>
+                    <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5"/>
+                </label>
+                <br/>
+            </div>
+            <div class="col-md-7 col-md-offset-0">
+                <h5><i>Attendance Weights: </i></h5>
+                <p>Present, Tardy, Absent, and Excused are possible options for attendance status.
+                    Please enter the percentage of the "Total Points" that each type of status should receive.</p>
+
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Present: </label>
+                    <br/>
+                    <label for="presentPoints">
+                        <form:input type = "text" path ="presentPoints" id = "presentPoints" placeholder="100" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Tardy: </label>
+                    <br/>
+                    <label for="tardyPoints">
+                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Excused: </label>
+                    <br/>
+                    <label for="excusedPoints">
+                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+                <div class="col-md-2 col-md-offset-0">
+                    <label>Unexcused: </label>
+                    <br/>
+                    <label for="absentPoints">
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
+                    </label>
+                </div>
+            </div>
+        </div>
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
+        <input value="Push Assignment to Canvas" id="pushGradesToCanvas" name="pushGradesToCanvas"
+               class="hovering-purple-button pull-right buffer-top" type="submit"/>
     </div>
-
     <hr/>
     <br/><br/>
-
     <script>
+        var errorMessage = "There was an error communicating with the server.";
+        $('#conversionConfirm').change(function(){
+            if (this.checked) {
+                $('#conversionConfig').removeClass('hidden');
+            } else {
+                $('#conversionConfig').addClass('hidden');
+                if(hasAssignmentConfiguration() == true) {
+                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
+                        var form = document.getElementById('sectionSelect');
+                        form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
+                        form.submit();
+                    });
+                }
+            }
+        });
+
         $('#simpleAttendance').change(function(){
             if (this.checked) {
                 $('#aviationTimeConfig').addClass('hidden');
@@ -129,6 +217,31 @@
                 $('#aviationTimeConfig').removeClass('hidden');
             }
         });
+
+        function confirmChoice(msg, button, callback) {
+            $.confirm({
+                text: msg,
+                title: button,
+                cancelButton: "No",
+                confirm: function() {
+                    callback();
+                },
+
+                cancel: function(){
+                    location.reload();
+                }
+            });
+        }
+
+        function hasAssignmentConfiguration() {
+            if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+
     </script>
 
 </form:form>
