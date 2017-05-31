@@ -209,7 +209,7 @@
         });
 
         $('#pushGradesToCanvas').click(function(){
-            pushingAlert('After the push is completed, please allow a few minutes for the Canvas gradebook to be updated', 'Push Confirmation');
+            pushingAlert('Please allow a few minutes for Canvas to update the gradebook', 'Push Confirmation');
             form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/save"/>";
             form.submit();
         });
