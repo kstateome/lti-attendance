@@ -156,10 +156,6 @@
             var dataOptionsMapping = {
                 'title': 'title',
                 'text': 'text',
-                'confirm-button': 'confirmButton',
-
-                'confirm-button-class': 'confirmButtonClass',
-
                 'dialog-class': 'dialogClass'
             };
             $.each(dataOptionsMapping, function(attributeName, optionName) {
@@ -202,11 +198,6 @@
             '<div class="modal-content">' +
             modalHeader +
             '<div class="modal-body">' + settings.text + '</div>' +
-            '<div class="modal-footer">' +
-            '<button class="confirm btn ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
-            settings.confirmButton +
-            '</button>' +
-            '</div>' +
             '</div>' +
             '</div>' +
             '</div>';
@@ -218,9 +209,6 @@
         });
         modal.on('hidden.bs.modal', function () {
             modal.remove();
-        });
-        modal.find(".confirm").click(function () {
-            settings.confirm(settings.button);
         });
 
         // Show the modal

@@ -209,16 +209,9 @@
         });
 
         $('#pushGradesToCanvas').click(function(){
-
-            $.alert({
-                text: 'Please allow a few minutes for Canvas to update the gradebook.',
-                title: 'Push Confirmation',
-                confirmButton: "OK",
-                confirm: function() {
-                    form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/save"/>";
-                    form.submit();
-                }
-            });
+            pushingAlert('After the push is completed, please allow a few minutes for the Canvas gradebook to be updated', 'Push Confirmation');
+            form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/save"/>";
+            form.submit();
         });
 
 
@@ -248,7 +241,13 @@
             });
         }
 
-
+        function pushingAlert(msg, title){
+            $.alert({
+                text: msg,
+                title: title,
+                confirmButton: "OK"
+            });
+        }
 
         function hasAssignmentConfiguration() {
             if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
