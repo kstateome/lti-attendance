@@ -257,6 +257,9 @@
                     var form = document.getElementById('sectionSelect');
                     form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
                     form.submit();
+                },
+                cancel: function(){
+                   location.reload();
                 }
             });
         }

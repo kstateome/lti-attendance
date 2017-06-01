@@ -53,7 +53,9 @@
                 'text': 'text',
                 'confirm-button': 'confirmButton',
                 'cancel-button': 'cancelButton',
-                'confirm-button-class': 'confirmButtonClass'
+                'confirm-button-class': 'confirmButtonClass',
+                'cancel-button-class': 'cancelButtonClass',
+                'dialog-class': 'dialogClass'
             };
             $.each(dataOptionsMapping, function(attributeName, optionName) {
                 var value = options.button.data(attributeName);
@@ -138,6 +140,8 @@
         confirmButton: "Yes",
         cancelButton: "Cancel",
         post: false,
-        confirmButtonClass: "btn-primary"
+        confirmButtonClass: "btn-primary",
+        cancelButtonClass: "btn-default",
+        dialogClass: "modal-dialog"
     }
 })(jQuery);
