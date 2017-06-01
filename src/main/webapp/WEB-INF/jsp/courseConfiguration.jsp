@@ -238,7 +238,7 @@
             } else {
                 $('#pushGradesToCanvas').addClass('hidden');
                 $('#conversionConfig').addClass('hidden');
-                if(hasAssignmentConfiguration() == true) {
+                if(hasAssignmentConfiguration()) {
                     confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation');
                 }
             }

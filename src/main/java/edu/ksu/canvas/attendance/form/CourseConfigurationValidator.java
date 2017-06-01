@@ -24,7 +24,7 @@ public class CourseConfigurationValidator implements Validator {
                 errors.rejectValue("assignmentName", "Assignment Name is required.");
             }
 
-            if (courseConfigurationForm.getAssignmentPoints() == null || courseConfigurationForm.getAssignmentPoints() <= 0) {
+            if (courseConfigurationForm.getAssignmentPoints() == null || courseConfigurationForm.getAssignmentPoints() <= 0 ) {
                 errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
             }
 
