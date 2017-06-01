@@ -112,8 +112,6 @@
            class="hovering-purple-button" type="submit"/>
     <br/>
 
-
-
     <h3>Setup</h3>
     <br/>
     <div class="col-lg-3">
@@ -208,7 +206,7 @@
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
         <input value="Push Assignment to Canvas" id="pushGradesToCanvas" name="pushGradesToCanvas"
-               class="hovering-purple-button pull-right buffer-top" type="submit" />
+               class="hovering-purple-button pull-right buffer-top" type="submit"/>
     </div>
     <hr/>
     <br/><br/>
@@ -217,10 +215,6 @@
         $(document).ready(function(){
             $('#pushConfirmation').modal('show');
         });
-
-        function hidePushingAlert (){
-            $('#pushConfirmation').modal('hide');
-        }
 
         var errorMessage = "There was an error communicating with the server.";
 
@@ -249,6 +243,10 @@
                 }
             }
         });
+
+        function hidePushingAlert (){
+            $('#pushConfirmation').modal('hide');
+        }
 
         function confirmChoice(msg, button, callback) {
             $.confirm({

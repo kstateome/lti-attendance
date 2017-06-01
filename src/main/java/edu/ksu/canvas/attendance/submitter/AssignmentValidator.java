@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.submitter;
 
 
-import edu.ksu.canvas.attendance.entity.Attendance;
+
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
