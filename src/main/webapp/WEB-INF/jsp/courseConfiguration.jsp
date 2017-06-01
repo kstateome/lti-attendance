@@ -225,7 +225,7 @@
                 $('#aviationTimeConfig').addClass('hidden');
             }
         });
-        $('#aviationAttendance').cha(function(){
+        $('#aviationAttendance').change(function(){
             if (this.checked) {
                 $('#aviationTimeConfig').removeClass('hidden');
             }
