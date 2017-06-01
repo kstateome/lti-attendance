@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="edu.ksu.canvas.attendance.enums.Status" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -201,12 +200,15 @@
                         <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
                     </label>
                 </div>
+
             </div>
+
         </div>
+
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
         <input value="Push Assignment to Canvas" id="pushGradesToCanvas" name="pushGradesToCanvas"
-               class="hovering-purple-button pull-right buffer-top" type="submit"/>
+               class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="submit"/>
     </div>
     <hr/>
     <br/><br/>
@@ -223,7 +225,7 @@
                 $('#aviationTimeConfig').addClass('hidden');
             }
         });
-        $('#aviationAttendance').change(function(){
+        $('#aviationAttendance').cha(function(){
             if (this.checked) {
                 $('#aviationTimeConfig').removeClass('hidden');
             }
@@ -231,15 +233,13 @@
 
         $('#conversionConfirm').change(function(){
             if (this.checked) {
+                $('#pushGradesToCanvas').removeClass('hidden');
                 $('#conversionConfig').removeClass('hidden');
             } else {
+                $('#pushGradesToCanvas').addClass('hidden');
                 $('#conversionConfig').addClass('hidden');
                 if(hasAssignmentConfiguration() == true) {
-                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
-                        var form = document.getElementById('sectionSelect');
-                        form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
-                        form.submit();
-                    });
+                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation');
                 }
             }
         });
@@ -248,17 +248,15 @@
             $('#pushConfirmation').modal('hide');
         }
 
-        function confirmChoice(msg, button, callback) {
+        function confirmChoice(msg, title) {
             $.confirm({
                 text: msg,
-                title: button,
+                title: title,
                 cancelButton: "No",
                 confirm: function() {
-                    callback();
-                },
-
-                cancel: function(){
-                    location.reload();
+                    var form = document.getElementById('sectionSelect');
+                    form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
+                    form.submit();
                 }
             });
         }

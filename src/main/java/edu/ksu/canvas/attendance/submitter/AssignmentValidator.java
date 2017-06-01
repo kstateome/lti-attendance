@@ -66,10 +66,8 @@ public class AssignmentValidator {
         if (canvasAssignment.getName() != dbAssignment.getAssignmentName()){
             return false;
         }
-        if (canvasAssignment.getPointsPossible() != dbAssignment.getAssignmentPoints()){
-            return false;
-        }
-        return true;
+        return canvasAssignment.getPointsPossible() == dbAssignment.getAssignmentPoints();
+
     }
 
     /**
