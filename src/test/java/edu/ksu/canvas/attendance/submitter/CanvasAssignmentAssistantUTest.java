@@ -38,7 +38,10 @@ public class CanvasAssignmentAssistantUTest {
     private static final Long CANVAS_ASSIGNMENT_ID = 514514514L;
     private static final Long SECTION_ID = 111111111111L;
     private static final String SECTION_NAME = "SECTION NAME";
-    private static final String ASSIGNMENT_DESCRIPTION = "This result of this assignment is based on attendances of each student. Detailed and individual information in the grading comments.";
+    private static final String ASSIGNMENT_DESCRIPTION ="This assignment is based on attendance recorded in the K-State " +
+                                                        "Attendance tool. Do not make changes to attendance here; changes need to be made in the K-State Attendance " +
+                                                        "tool. Information about the number of classes in which a student was present, tardy, absent, and excused is " +
+                                                        "identified in the comments area of the student's grade.";
 
     private CanvasAssignmentAssistant canvasAssignmentAssistant;
 

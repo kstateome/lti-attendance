@@ -254,7 +254,7 @@
                 title: title,
                 cancelButton: "No",
                 confirm: function() {
-                    var form = document.getElementById('sectionSelect');
+                    var form = $('sectionSelect');
                     form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
                     form.submit();
                 },

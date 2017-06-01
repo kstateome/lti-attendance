@@ -25,7 +25,10 @@ import java.util.Optional;
 public class CanvasAssignmentAssistant {
 
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistant.class);
-    private static final String ASSIGNMENT_DESCRIPTION = "This result of this assignment is based on attendances of each student. Detailed and individual information in the grading comments.";
+    private static final String ASSIGNMENT_DESCRIPTION ="This assignment is based on attendance recorded in the K-State " +
+                                                        "Attendance tool. Do not make changes to attendance here; changes need to be made in the K-State Attendance tool. " +
+                                                        "Information about the number of classes in which a student was present, tardy, absent, and excused is " +
+                                                        "identified in the comments area of the student's grade.";
 
     @Autowired
     private AttendanceAssignmentService assignmentService;
