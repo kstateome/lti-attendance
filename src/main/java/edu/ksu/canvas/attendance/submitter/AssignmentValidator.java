@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.submitter;
 
 
+import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
@@ -30,7 +31,6 @@ public class AssignmentValidator {
 
         // Looks for the linked assignment in canvas
         Optional<Assignment> assignmentOptional = lookForAssignmentInCanvas(courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
-
         // We will create a new assignment for the instructor based on what's left in the database
         if (!assignmentOptional.isPresent()) {
             LOG.info("No Canvas assignment linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
@@ -54,12 +54,22 @@ public class AssignmentValidator {
         Optional<Assignment> assignmentOptional = lookForAssignmentInCanvas(courseId,attendanceAssignment,canvasApiWrapperService,oauthToken);
 
         //Looks for discrepancy between the assignment in canvas and in database
-        if (assignmentOptional.get().getPointsPossible().doubleValue() != assignmentConfigurationFormSetup.getAssignmentPoints().doubleValue()) {
+        if (anyDiscrepancy(assignmentOptional.get(), assignmentConfigurationFormSetup)){
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible() +
                       " and point value of Database assignment is :" + attendanceAssignment.getAssignmentPoints());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY);
         }
         return attendanceAssignment;
+    }
+
+    public Boolean anyDiscrepancy(Assignment canvasAssignment, AttendanceAssignment dbAssignment){
+        if (canvasAssignment.getName() != dbAssignment.getAssignmentName()){
+            return false;
+        }
+        if (canvasAssignment.getPointsPossible() != dbAssignment.getAssignmentPoints()){
+            return false;
+        }
+        return true;
     }
 
     /**

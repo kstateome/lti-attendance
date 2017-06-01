@@ -59,10 +59,24 @@
             <p>Pushing attendance grades to Canvas successful.</p>
         </div>
 
-
-
-
-
+        <div class="confirmation-modal modal fade" id = "pushConfirmation">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" onclick="hidePushingAlert()">&times;</button>
+                        <h4 class="modal-title">Push Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        Please allow a few minutes for Canvas to update the gradebook.
+                    </div>
+                    <div class="modal-footer">
+                        <button class="confirm btn btn-primary" type="button" onclick="hidePushingAlert()">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
@@ -99,25 +113,6 @@
     <br/>
 
 
-    <div class="confirmation-modal modal fade" id = "pushConfirmation">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close">&times;</button>
-                    <h4 class="modal-title">Push Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    Please allow a few minutes for Canvas to update the gradebook.
-                </div>
-                <div class="modal-footer">
-                    <button class="confirm btn btn-primary" type="button">
-                        OK
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <h3>Setup</h3>
     <br/>
@@ -213,32 +208,21 @@
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
         <input value="Push Assignment to Canvas" id="pushGradesToCanvas" name="pushGradesToCanvas"
-               class="hovering-purple-button pull-right buffer-top" type="submit"/>
+               class="hovering-purple-button pull-right buffer-top" type="submit" />
     </div>
     <hr/>
     <br/><br/>
     <script>
-        var errorMessage = "There was an error communicating with the server.";
-        var form = document.getElementById('sectionSelect');
-        $('#conversionConfirm').change(function(){
-            if (this.checked) {
-                $('#conversionConfig').removeClass('hidden');
-            } else {
-                $('#conversionConfig').addClass('hidden');
-                if(hasAssignmentConfiguration() == true) {
-                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
 
-                        form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
-                        form.submit();
-                    });
-                }
-            }
-        });
-
-        $('#pushGradesToCanvas').click(function(){
+        $(document).ready(function(){
             $('#pushConfirmation').modal('show');
         });
 
+        function hidePushingAlert (){
+            $('#pushConfirmation').modal('hide');
+        }
+
+        var errorMessage = "There was an error communicating with the server.";
 
         $('#simpleAttendance').change(function(){
             if (this.checked) {
@@ -248,6 +232,21 @@
         $('#aviationAttendance').change(function(){
             if (this.checked) {
                 $('#aviationTimeConfig').removeClass('hidden');
+            }
+        });
+
+        $('#conversionConfirm').change(function(){
+            if (this.checked) {
+                $('#conversionConfig').removeClass('hidden');
+            } else {
+                $('#conversionConfig').addClass('hidden');
+                if(hasAssignmentConfiguration() == true) {
+                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
+                        var form = document.getElementById('sectionSelect');
+                        form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
+                        form.submit();
+                    });
+                }
             }
         });
 

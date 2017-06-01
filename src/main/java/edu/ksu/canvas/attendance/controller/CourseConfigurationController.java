@@ -157,13 +157,13 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     private AttendanceAssignment generateAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
         AttendanceAssignment assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         assignmentConfigurationFromSetup.setAssignmentPoints(classSetupForm.getAssignmentPoints());
         assignmentConfigurationFromSetup.setGradingOn(true);
         assignmentConfigurationFromSetup.setPresentPoints(classSetupForm.getPresentPoints());
         assignmentConfigurationFromSetup.setTardyPoints(classSetupForm.getTardyPoints());
         assignmentConfigurationFromSetup.setExcusedPoints(classSetupForm.getExcusedPoints());
         assignmentConfigurationFromSetup.setAbsentPoints(classSetupForm.getAbsentPoints());
-        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         return assignmentConfigurationFromSetup;
     }
 
