@@ -68,7 +68,8 @@
         // Default options
         var settings = $.extend({}, $.confirm.options, {
             confirm: function () {
-                var url = e && (('string' === typeof e && e) || (e.currentTarget && e.currentTarget.attributes['href'].value));
+                var currentTargetTemp = (e.currentTarget && e.currentTarget.attributes['href'].value);
+                var url = e && (('string' === typeof e && e) || currentTargetTemp);
                 if (url) {
                     if (options.post) {
                         var form = $('<form method="post" class="hide" action="' + url + '"></form>');
@@ -79,8 +80,6 @@
                     }
                 }
             },
-            cancel: function (o) {
-            },
             button: null
         }, dataOptions, options);
 
@@ -88,28 +87,28 @@
         var modalHeader = '';
         if (settings.title !== '') {
             modalHeader =
-                '<div class="modal-header">' +
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                    '<h4 class="modal-title">' + settings.title+'</h4>' +
+                '<div class=modal-header>' +
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                '<h4 class="modal-title">' + settings.title+'</h4>' +
                 '</div>';
         }
         var modalHTML =
-                '<div class="confirmation-modal modal fade" tabindex="-1" role="dialog">' +
-                    '<div class="'+ settings.dialogClass +'">' +
-                        '<div class="modal-content">' +
-                            modalHeader +
-                            '<div class="modal-body">' + settings.text + '</div>' +
-                            '<div class="modal-footer">' +
-                                '<button class="confirm btn ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
-                                    settings.confirmButton +
-                                '</button>' +
-                                '<button class="cancel btn ' + settings.cancelButtonClass + '" type="button" data-dismiss="modal">' +
-                                    settings.cancelButton +
-                                '</button>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+            '<div class="confirmation-modal modal fade" tabindex="-1" role="dialog">' +
+            '<div class="modal-dialog">' +
+            '<div class="modal-content">' +
+            modalHeader +
+            '<div class="modal-body">' + settings.text + '</div>' +
+            '<div class="modal-footer">' +
+            '<button class="confirm btn ' + settings.confirmButtonClass + '" type="button" data-dismiss="modal">' +
+            settings.confirmButton +
+            '</button>' +
+            '<button class="cancel btn btn-default" type="button" data-dismiss="modal">' +
+            settings.cancelButton +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
 
         var modal = $(modalHTML);
 

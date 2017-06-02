@@ -23,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,6 +145,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
                 page.addObject("pushingSuccessful", true);
             }
             catch (AttendanceAssignmentException e){
+                LOG.warn("The following error occurred when submitting the Assignment: " + e);
                 page.addObject("error", e.getMessage());
             }
 
@@ -157,13 +157,13 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     private AttendanceAssignment generateAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
         AttendanceAssignment assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         assignmentConfigurationFromSetup.setAssignmentPoints(classSetupForm.getAssignmentPoints());
         assignmentConfigurationFromSetup.setGradingOn(true);
         assignmentConfigurationFromSetup.setPresentPoints(classSetupForm.getPresentPoints());
         assignmentConfigurationFromSetup.setTardyPoints(classSetupForm.getTardyPoints());
         assignmentConfigurationFromSetup.setExcusedPoints(classSetupForm.getExcusedPoints());
         assignmentConfigurationFromSetup.setAbsentPoints(classSetupForm.getAbsentPoints());
-        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         return assignmentConfigurationFromSetup;
     }
 
@@ -176,6 +176,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
+            LOG.warn("The following error occurred when deleting the Assignment: " + exception);
             page.addObject("error", exception.getMessage());
             return page;
         }
