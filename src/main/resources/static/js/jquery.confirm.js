@@ -68,7 +68,8 @@
         // Default options
         var settings = $.extend({}, $.confirm.options, {
             confirm: function () {
-                var url = e && (('string' === typeof e && e) || (e.currentTarget && e.currentTarget.attributes['href'].value));
+                var currentTargetTemp = (e.currentTarget && e.currentTarget.attributes['href'].value);
+                var url = e && (('string' === typeof e && e) || currentTargetTemp);
                 if (url) {
                     if (options.post) {
                         var form = $('<form method="post" class="hide" action="' + url + '"></form>');

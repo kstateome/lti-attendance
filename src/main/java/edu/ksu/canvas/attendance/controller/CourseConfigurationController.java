@@ -19,12 +19,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +88,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
 
-
-
-
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
@@ -150,7 +145,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
                 page.addObject("pushingSuccessful", true);
             }
             catch (AttendanceAssignmentException e){
-                LOG.warn("The following error occurred when submitting the Assignment: " + e.getMessage());
+                LOG.warn("The following error occurred when submitting the Assignment: " + e);
                 page.addObject("error", e.getMessage());
             }
 
@@ -181,7 +176,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
-            LOG.warn("The following error occurred when deleting the Assignment: " + exception.getMessage());
+            LOG.warn("The following error occurred when deleting the Assignment: " + exception);
             page.addObject("error", exception.getMessage());
             return page;
         }
