@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
@@ -86,12 +87,33 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return page;
     }
 
+    private ModelAndView validateInputAsDouble(String sectionId, CourseConfigurationForm classSetupForm) {
+
+        if (classSetupForm.getGradingOn()){
+            boolean typeValidation = classSetupForm.getAssignmentPoints() instanceof Double && classSetupForm.getPresentPoints() instanceof Double && classSetupForm.getExcusedPoints() instanceof Double && classSetupForm.getAbsentPoints() instanceof Double && classSetupForm.getTardyPoints() instanceof Double;
+
+            if(!typeValidation){
+                ModelAndView page = new ModelAndView("/courseConfiguration");
+                page.addObject("error", "Fields contained incorrect values. Please try entering the information in again.");
+                page.addObject("selectedSectionId", sectionId);
+                return  page;
+            }
+        }
+
+        return null;
+    }
+
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
 
+        ModelAndView page = this.validateInputAsDouble(sectionId, classSetupForm);
+        if (page != null) {
+            return  page;
+        }
+
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            ModelAndView page = new ModelAndView("/courseConfiguration");
+            page = new ModelAndView("/courseConfiguration");
             List<String> errors = new ArrayList<>();
             bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
             page.addObject("error", errors);
@@ -120,10 +142,16 @@ public class CourseConfigurationController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
-    public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+    public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+
+        ModelAndView page = this.validateInputAsDouble(sectionId, classSetupForm);
+        if (page != null) {
+            return  page;
+        }
+
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            ModelAndView page = new ModelAndView("/courseConfiguration");
+            page = new ModelAndView("/courseConfiguration");
             List<String> errors = new ArrayList<>();
             bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
             page.addObject("error", errors);
@@ -131,14 +159,14 @@ public class CourseConfigurationController extends AttendanceBaseController {
             return page;
         } else {
             LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
-            ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+            page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
             Long courseId = Long.valueOf(canvasService.getCourseId());
 
             boolean isSimpleAttendance = classSetupForm.getSimpleAttendance();
             List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
-                    reportService.getSimpleAttendanceSummaryReport(sectionId) :
-                    reportService.getAviationAttendanceSummaryReport(sectionId);
+                    reportService.getSimpleAttendanceSummaryReport(Long.parseLong(sectionId)) :
+                    reportService.getAviationAttendanceSummaryReport(Long.parseLong(sectionId));
 
             AttendanceAssignment assignmentConfigurationFromSetup = generateAssignmentFromClassSetupForm(classSetupForm);
             try {
@@ -148,8 +176,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
             catch (AttendanceAssignmentException e){
                 page.addObject("error", e.getMessage());
             }
-
-
 
             return page;
         }
