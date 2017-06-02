@@ -74,11 +74,12 @@ public class AssignmentValidator {
      * Returns true if configuration in the form and in the db is the same
      */
     private boolean isAssignmentConfigurationSaved(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
-        return assignmentConfigurationFromSetup.getAssignmentPoints().longValue() == attendanceAssignmentSaved.getAssignmentPoints().longValue()
-                && assignmentConfigurationFromSetup.getExcusedPoints().longValue() == attendanceAssignmentSaved.getExcusedPoints().longValue()
-                && assignmentConfigurationFromSetup.getAbsentPoints().longValue() == attendanceAssignmentSaved.getAbsentPoints().longValue()
-                && assignmentConfigurationFromSetup.getTardyPoints().longValue() == attendanceAssignmentSaved.getTardyPoints().longValue()
-                && assignmentConfigurationFromSetup.getPresentPoints().longValue() == attendanceAssignmentSaved.getPresentPoints().longValue();
+        Boolean isSaved = assignmentConfigurationFromSetup.getAssignmentPoints().longValue() == attendanceAssignmentSaved.getAssignmentPoints().longValue();
+        isSaved = isSaved && (assignmentConfigurationFromSetup.getExcusedPoints().longValue() == attendanceAssignmentSaved.getExcusedPoints().longValue());
+        isSaved = isSaved && (assignmentConfigurationFromSetup.getAbsentPoints().longValue() == attendanceAssignmentSaved.getAbsentPoints().longValue());
+        isSaved = isSaved && (assignmentConfigurationFromSetup.getTardyPoints().longValue() == attendanceAssignmentSaved.getTardyPoints().longValue());
+        isSaved = isSaved && (assignmentConfigurationFromSetup.getPresentPoints().longValue() == attendanceAssignmentSaved.getPresentPoints().longValue());
+        return isSaved;
     }
 
     /**

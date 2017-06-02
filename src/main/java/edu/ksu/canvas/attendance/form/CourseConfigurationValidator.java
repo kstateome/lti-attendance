@@ -34,11 +34,19 @@ public class CourseConfigurationValidator implements Validator {
                 return;
             }
 
-            if ((courseConfigurationForm.getPresentPoints() > 100 || courseConfigurationForm.getPresentPoints() < 0) || (courseConfigurationForm.getTardyPoints() > 100 || courseConfigurationForm.getTardyPoints() < 0)
-                    || (courseConfigurationForm.getExcusedPoints() > 100 || courseConfigurationForm.getExcusedPoints() < 0) || (courseConfigurationForm.getAbsentPoints() > 100 || courseConfigurationForm.getAbsentPoints() < 0)) {
+            if (statusValidation(courseConfigurationForm)) {
                 errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
             }
         }
     }
+
+    private Boolean statusValidation(CourseConfigurationForm courseConfigurationForm){
+        Boolean isValid = (courseConfigurationForm.getPresentPoints() > 100 || courseConfigurationForm.getPresentPoints() < 0);
+        isValid = isValid || (courseConfigurationForm.getTardyPoints() > 100 || courseConfigurationForm.getTardyPoints() < 0);
+        isValid = isValid || (courseConfigurationForm.getExcusedPoints() > 100 || courseConfigurationForm.getExcusedPoints() < 0);
+        isValid = isValid || (courseConfigurationForm.getAbsentPoints() > 100 || courseConfigurationForm.getAbsentPoints() < 0);
+        return isValid;
+    }
+
 
 }
