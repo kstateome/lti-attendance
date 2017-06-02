@@ -32,6 +32,7 @@ public class AttendanceAssignmentException extends Exception{
 
     }
 
+    @Override
     public String getMessage(){
         return error.getDescription();
     }

@@ -129,7 +129,7 @@ public class CanvasAssignmentAssistantUTest {
             canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
             Assert.fail("Expected AttendanceAssignmentException");
         } catch (AttendanceAssignmentException e) {
-            LOG.warn("The following exception has been thrown: " + e);
+            LOG.warn("There was an error in creating the Assignment. The following exception has been thrown: " + e);
             Assert.assertEquals(AttendanceAssignmentException.Error.CREATION_ERROR, e.error);
         }
     }
@@ -151,7 +151,7 @@ public class CanvasAssignmentAssistantUTest {
         try {
             canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         } catch(AttendanceAssignmentException exception ) {
-            LOG.warn("The following exception has been thrown: " + exception);
+            LOG.warn("There was an error when editing the Assignment. The following exception has been thrown: " + exception);
             Assert.assertEquals(AttendanceAssignmentException.Error.NO_ASSIGNMENT_FOUND, exception.error);
         }
     }
@@ -175,7 +175,7 @@ public class CanvasAssignmentAssistantUTest {
         try {
             canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
         } catch (AttendanceAssignmentException exception) {
-            LOG.warn("The following exception has been thrown: " + exception);
+            LOG.warn("There was an error when deleting the Assignment. The following exception has been thrown: " + exception);
             Assert.assertEquals(AttendanceAssignmentException.Error.DELETION_ERROR, exception.error);
         }
     }
