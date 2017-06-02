@@ -1,7 +1,5 @@
 package edu.ksu.canvas.attendance.exception;
 
-import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
-
 public class AttendanceAssignmentException extends Exception{
     public enum Error{
         NOT_SAVED(0, "Assignment configuration needs to be saved before pushing to Canvas."),

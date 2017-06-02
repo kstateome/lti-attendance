@@ -28,24 +28,31 @@ public class CourseConfigurationValidator implements Validator {
                 errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
             }
 
-            if (courseConfigurationForm.getPresentPoints() == null || courseConfigurationForm.getTardyPoints() == null || courseConfigurationForm.getExcusedPoints() == null
-                    || courseConfigurationForm.getAbsentPoints() == null) {
+            if (statusEmptyBoxes(courseConfigurationForm)) {
                 errors.rejectValue("presentPoints", "All status point fields are required.");
                 return;
             }
 
-            if (statusValidation(courseConfigurationForm)) {
+            if (statusWithinRange(courseConfigurationForm)) {
                 errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
             }
         }
     }
 
-    private Boolean statusValidation(CourseConfigurationForm courseConfigurationForm){
+    private Boolean statusWithinRange(CourseConfigurationForm courseConfigurationForm){
         Boolean isValid = (courseConfigurationForm.getPresentPoints() > 100 || courseConfigurationForm.getPresentPoints() < 0);
         isValid = isValid || (courseConfigurationForm.getTardyPoints() > 100 || courseConfigurationForm.getTardyPoints() < 0);
         isValid = isValid || (courseConfigurationForm.getExcusedPoints() > 100 || courseConfigurationForm.getExcusedPoints() < 0);
         isValid = isValid || (courseConfigurationForm.getAbsentPoints() > 100 || courseConfigurationForm.getAbsentPoints() < 0);
         return isValid;
+    }
+
+    private Boolean statusEmptyBoxes(CourseConfigurationForm courseConfigurationForm){
+        Boolean isEmpty = courseConfigurationForm.getPresentPoints() == null;
+        isEmpty = isEmpty || courseConfigurationForm.getTardyPoints() == null;
+        isEmpty = isEmpty || courseConfigurationForm.getExcusedPoints() == null;
+        isEmpty = isEmpty || courseConfigurationForm.getAbsentPoints() == null;
+        return isEmpty;
     }
 
 
