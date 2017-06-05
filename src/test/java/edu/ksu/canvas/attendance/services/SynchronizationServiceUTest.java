@@ -75,6 +75,10 @@ public class SynchronizationServiceUTest {
 
     public static final String SYNC_STUDENTS_TO_DB = "synchronizeStudentsFromCanvasToDb";
 
+    public static final String SYNC_COURSE_TO_DB = "synchronizeCourseFromCanvasToDb";
+
+    public static final String SYNC_SECTIONS_TO_DB = "synchronizeSectionsFromCanvasToDb";
+
     @Before
     public void setup() {
         synchronizationService = new SynchronizationService();
@@ -149,7 +153,7 @@ public class SynchronizationServiceUTest {
         AttendanceCourse expectedDbCourse = new AttendanceCourse();
 
         when(mockCourseRepository.save(any(AttendanceCourse.class))).thenReturn(expectedDbCourse);
-        AttendanceCourse actualCourse = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeCourseFromCanvasToDb", expectedCanvasCourseId);
+        AttendanceCourse actualCourse = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_COURSE_TO_DB, expectedCanvasCourseId);
 
         verify(mockCourseRepository, atLeastOnce()).save(capturedCourse.capture());
         assertEquals(expectedCanvasCourseId, capturedCourse.getValue().getCanvasCourseId());
@@ -174,7 +178,7 @@ public class SynchronizationServiceUTest {
         ArgumentCaptor<AttendanceSection> capturedSection = ArgumentCaptor.forClass(AttendanceSection.class);
 
         when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
-        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
+        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(capturedSection.capture());
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));
@@ -206,7 +210,7 @@ public class SynchronizationServiceUTest {
 
         when(mockSectionRepository.findByCanvasSectionId(expectedCanvasSectionId)).thenReturn(expectedDbSection);
         when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
-        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeSectionsFromCanvasToDb", sections);
+        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(expectedDbSection);
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));
@@ -287,7 +291,7 @@ public class SynchronizationServiceUTest {
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
 
-        when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
+        when(mockStudentRepository.findByCanvasSectionIdOrderByNameAsc(expectedCanvasSectionId)).thenReturn(studentsInDbForCourse);
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
         List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, canvasSectionMap, anyBoolean());
 
@@ -301,54 +305,6 @@ public class SynchronizationServiceUTest {
         assertEquals(expectedDeleted, expectedStudentInDb.getDeleted());
     }
 
-    @Test
-    public void synchronizeStudentsFromCanvasToDb_UpdateDeletedStudentInCourse_StayDeleted() throws Exception {
-        Long previousCanvasSectionId = 350L;
-        Long previousCanvasCourseId = 350L;
-        String previousSisUserId = "uniqueSisId";
-        String previousName = "Doe, Jane";
-        AttendanceStudent expectedStudentInDb = new AttendanceStudent();
-        expectedStudentInDb.setCanvasCourseId(previousCanvasCourseId);
-        expectedStudentInDb.setCanvasSectionId(previousCanvasSectionId);
-        expectedStudentInDb.setSisUserId(previousSisUserId);
-        expectedStudentInDb.setName(previousName);
-        expectedStudentInDb.setDeleted(Boolean.TRUE);
-        List<AttendanceStudent> studentsInDbForCourse = new ArrayList<>();
-        studentsInDbForCourse.add(expectedStudentInDb);
-
-        Long expectedCanvasSectionId = 250L;
-        Long expectedCanvasCourseId = 550L;
-        String expectedSisUserId = "uniqueSisId";
-        String expectedName = "Smith, John";
-        Integer expectedStudentsSavedToDb = 1;
-        Boolean expectedDeleted = Boolean.TRUE;
-
-        User user = new User();
-        user.setSisUserId(expectedSisUserId);
-        user.setSortableName(expectedName);
-        Enrollment enrollment = new Enrollment();
-        enrollment.setUser(user);
-        List<Enrollment> enrollments = new ArrayList<>();
-        enrollments.add(enrollment);
-        Section section = new Section();
-        section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
-        Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
-        canvasSectionMap.put(section, enrollments);
-
-        when(mockStudentRepository.findByCanvasCourseId(expectedCanvasCourseId)).thenReturn(studentsInDbForCourse);
-        when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, "synchronizeStudentsFromCanvasToDb", canvasSectionMap, anyBoolean());
-
-        verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
-        assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
-        assertSame(expectedStudentInDb, actualStudents.get(0));
-        assertEquals(expectedCanvasSectionId, expectedStudentInDb.getCanvasSectionId());
-        assertEquals(expectedCanvasCourseId, expectedStudentInDb.getCanvasCourseId());
-        assertEquals(expectedSisUserId, expectedStudentInDb.getSisUserId());
-        assertEquals(expectedName, expectedStudentInDb.getName());
-        assertEquals(expectedDeleted, expectedStudentInDb.getDeleted());
-    }
 
     @Test
     public void synchronizeStudentsFromCanvasToDb_DroppedStudent() throws Exception {
@@ -364,7 +320,7 @@ public class SynchronizationServiceUTest {
         AttendanceStudent expectedStudentSavedToDb = new AttendanceStudent();
 
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentSavedToDb);
-        when(mockStudentRepository.findByCanvasCourseId(anyLong())).thenReturn(Collections.singletonList(expectedStudentSavedToDb));
+        when(mockStudentRepository.findByCanvasSectionIdOrderByNameAsc(anyLong())).thenReturn(Collections.singletonList(expectedStudentSavedToDb));
         AttendanceStudent droppedStudent = new AttendanceStudent();
         droppedStudent.setDeleted(true);
         when(mockStudentRepository.save(
