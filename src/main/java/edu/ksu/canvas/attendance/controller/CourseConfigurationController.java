@@ -167,7 +167,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return assignmentConfigurationFromSetup;
     }
 
-    @RequestMapping(value = "/{sectionId}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/{sectionId}/save", params = "deleteAssignment", method = RequestMethod.POST)
     public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
