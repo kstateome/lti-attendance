@@ -57,11 +57,11 @@ public class CourseConfigurationValidatorUTest {
     public void validate_rejectWrongPoints() {
         courseConfigurationForm.setAssignmentName("Attendance Assignment");
         courseConfigurationForm.setGradingOn(true);
-        courseConfigurationForm.setAssignmentPoints(100.0);
-        courseConfigurationForm.setPresentPoints(100.0);
-        courseConfigurationForm.setAbsentPoints(120.0);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        courseConfigurationForm.setAssignmentPoints("100.0");
+        courseConfigurationForm.setPresentPoints("100.0");
+        courseConfigurationForm.setAbsentPoints("120.0");
+        courseConfigurationForm.setExcusedPoints("0.0");
+        courseConfigurationForm.setTardyPoints("0.0");
 
         ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
@@ -77,11 +77,11 @@ public class CourseConfigurationValidatorUTest {
     public void validate_rejectNullName() {
         courseConfigurationForm.setAssignmentName(null);
         courseConfigurationForm.setGradingOn(true);
-        courseConfigurationForm.setAssignmentPoints(100.0);
-        courseConfigurationForm.setPresentPoints(100.0);
-        courseConfigurationForm.setAbsentPoints(100.0);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        courseConfigurationForm.setAssignmentPoints("100.0");
+        courseConfigurationForm.setPresentPoints("100.0");
+        courseConfigurationForm.setAbsentPoints("100.0");
+        courseConfigurationForm.setExcusedPoints("0.0");
+        courseConfigurationForm.setTardyPoints("0.0");
 
         ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
@@ -97,11 +97,11 @@ public class CourseConfigurationValidatorUTest {
     public void validate_rejectBadAssignmentPoints() {
         courseConfigurationForm.setAssignmentName("Attendance Assignment");
         courseConfigurationForm.setGradingOn(true);
-        courseConfigurationForm.setAssignmentPoints(-100.0);
-        courseConfigurationForm.setPresentPoints(100.0);
-        courseConfigurationForm.setAbsentPoints(100.0);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        courseConfigurationForm.setAssignmentPoints("-100.0");
+        courseConfigurationForm.setPresentPoints("100.0");
+        courseConfigurationForm.setAbsentPoints("100.0");
+        courseConfigurationForm.setExcusedPoints("0.0");
+        courseConfigurationForm.setTardyPoints("0.0");
 
         ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
@@ -117,11 +117,11 @@ public class CourseConfigurationValidatorUTest {
     public void validate_rejectNullPoints() {
         courseConfigurationForm.setAssignmentName("Attendance Assignment");
         courseConfigurationForm.setGradingOn(true);
-        courseConfigurationForm.setAssignmentPoints(100.0);
-        courseConfigurationForm.setPresentPoints(100.0);
+        courseConfigurationForm.setAssignmentPoints("100.0");
+        courseConfigurationForm.setPresentPoints("100.0");
         courseConfigurationForm.setAbsentPoints(null);
-        courseConfigurationForm.setExcusedPoints(0.0);
-        courseConfigurationForm.setTardyPoints(0.0);
+        courseConfigurationForm.setExcusedPoints("0.0");
+        courseConfigurationForm.setTardyPoints("0.0");
 
         ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);

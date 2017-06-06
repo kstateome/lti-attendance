@@ -73,11 +73,11 @@ public class CanvasAssignmentAssistantUTest {
         attendanceAssignment.setAssignmentName(ASSIGNMENT_NAME);
         attendanceAssignment.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
         attendanceAssignment.setGradingOn(true);
-        attendanceAssignment.setAssignmentPoints(ASSIGNMENT_POINTS);
-        attendanceAssignment.setAbsentPoints(0.0);
-        attendanceAssignment.setExcusedPoints(0.0);
-        attendanceAssignment.setTardyPoints(0.0);
-        attendanceAssignment.setPresentPoints(100.0);
+        attendanceAssignment.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        attendanceAssignment.setAbsentPoints("0.0");
+        attendanceAssignment.setExcusedPoints("0.0");
+        attendanceAssignment.setTardyPoints("0.0");
+        attendanceAssignment.setPresentPoints("100.0");
 
         assignment = new Assignment();
         assignment.setId(Long.toString(ASSIGNMENT_ID));

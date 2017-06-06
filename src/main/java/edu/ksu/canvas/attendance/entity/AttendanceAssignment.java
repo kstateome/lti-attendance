@@ -23,19 +23,19 @@ public class AttendanceAssignment implements Serializable {
     private Long canvasAssignmentId;
 
     @Column(name = "assignment_points")
-    private Double assignmentPoints;
+    private String assignmentPoints;
 
     @Column(name = "present_points")
-    private Double presentPoints;
+    private String presentPoints;
 
     @Column(name = "tardy_points")
-    private Double tardyPoints;
+    private String tardyPoints;
 
     @Column(name = "excused_points")
-    private Double excusedPoints;
+    private String excusedPoints;
 
     @Column(name = "absent_points")
-    private Double absentPoints;
+    private String absentPoints;
 
     @Column(name = "grading_on", nullable = false)
     private boolean gradingOn = false;
@@ -78,43 +78,43 @@ public class AttendanceAssignment implements Serializable {
         this.canvasAssignmentId = canvasAssignmentId;
     }
 
-    public Double getAssignmentPoints() {
+    public String getAssignmentPoints() {
         return assignmentPoints;
     }
 
-    public void setAssignmentPoints(Double assignmentPoints) {
+    public void setAssignmentPoints(String assignmentPoints) {
         this.assignmentPoints = assignmentPoints;
     }
 
-    public Double getPresentPoints() {
+    public String getPresentPoints() {
         return presentPoints;
     }
 
-    public void setPresentPoints(Double presentPoints) {
+    public void setPresentPoints(String presentPoints) {
         this.presentPoints = presentPoints;
     }
 
-    public Double getTardyPoints() {
+    public String getTardyPoints() {
         return tardyPoints;
     }
 
-    public void setTardyPoints(Double tardyPoints) {
+    public void setTardyPoints(String tardyPoints) {
         this.tardyPoints = tardyPoints;
     }
 
-    public Double getExcusedPoints() {
+    public String getExcusedPoints() {
         return excusedPoints;
     }
 
-    public void setExcusedPoints(Double excusedPoints) {
+    public void setExcusedPoints(String excusedPoints) {
         this.excusedPoints = excusedPoints;
     }
 
-    public Double getAbsentPoints() {
+    public String getAbsentPoints() {
         return absentPoints;
     }
 
-    public void setAbsentPoints(Double absentPoints) {
+    public void setAbsentPoints(String absentPoints) {
         this.absentPoints = absentPoints;
     }
 

@@ -125,11 +125,11 @@ public class AttendanceSectionService {
             attendanceAssignment = new AttendanceAssignment();
         }
 
-        courseForm.setAssignmentPoints(attendanceAssignment.getAssignmentPoints() == null ? 100 : attendanceAssignment.getAssignmentPoints());
-        courseForm.setPresentPoints(attendanceAssignment.getPresentPoints() == null ? 100 : attendanceAssignment.getPresentPoints());
-        courseForm.setExcusedPoints(attendanceAssignment.getExcusedPoints() == null ? 0 : attendanceAssignment.getExcusedPoints());
-        courseForm.setTardyPoints(attendanceAssignment.getTardyPoints() == null ? 0 : attendanceAssignment.getTardyPoints());
-        courseForm.setAbsentPoints(attendanceAssignment.getAbsentPoints() == null ? 0 : attendanceAssignment.getAbsentPoints());
+        courseForm.setAssignmentPoints(String.valueOf(attendanceAssignment.getAssignmentPoints() == null ? 100 : attendanceAssignment.getAssignmentPoints()));
+        courseForm.setPresentPoints(String.valueOf(attendanceAssignment.getPresentPoints() == null ? 100 : attendanceAssignment.getPresentPoints()));
+        courseForm.setExcusedPoints(String.valueOf(attendanceAssignment.getExcusedPoints() == null ? 0 : attendanceAssignment.getExcusedPoints()));
+        courseForm.setTardyPoints(String.valueOf(attendanceAssignment.getTardyPoints() == null ? 0 : attendanceAssignment.getTardyPoints()));
+        courseForm.setAbsentPoints(String.valueOf(attendanceAssignment.getAbsentPoints() == null ? 0 : attendanceAssignment.getAbsentPoints()));
         courseForm.setGradingOn(attendanceAssignment.getGradingOn());
         courseForm.setAssignmentName(attendanceAssignment.getAssignmentName());
     }

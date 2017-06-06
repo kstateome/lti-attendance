@@ -1,7 +1,5 @@
 package edu.ksu.canvas.attendance.controller;
 
-
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
@@ -20,11 +18,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,16 +85,42 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return page;
     }
 
-    private ModelAndView validateInputAsDouble(String sectionId, CourseConfigurationForm classSetupForm) {
-
+    private ModelAndView validateInputType(String sectionId, CourseConfigurationForm classSetupForm) {
         if (classSetupForm.getGradingOn()){
-            boolean typeValidation = classSetupForm.getAssignmentPoints() instanceof Double && classSetupForm.getPresentPoints() instanceof Double && classSetupForm.getExcusedPoints() instanceof Double && classSetupForm.getAbsentPoints() instanceof Double && classSetupForm.getTardyPoints() instanceof Double;
+            boolean typeValid = (classSetupForm.getAssignmentPoints().matches("[0-9.]+") || classSetupForm.getAssignmentPoints() == null)
+                    && (classSetupForm.getPresentPoints().matches("[0-9.]+") || classSetupForm.getPresentPoints() == null)
+                    && (classSetupForm.getExcusedPoints().matches("[0-9.]+") || classSetupForm.getExcusedPoints() == null)
+                    && (classSetupForm.getAbsentPoints().matches("[0-9.]+") || classSetupForm.getAbsentPoints() == null)
+                    && (classSetupForm.getTardyPoints().matches("[0-9.]+") || classSetupForm.getTardyPoints() == null);
 
-            if(!typeValidation){
-                ModelAndView page = new ModelAndView("/courseConfiguration");
-                page.addObject("error", "Fields contained incorrect values. Please try entering the information in again.");
-                page.addObject("selectedSectionId", sectionId);
-                return  page;
+            if(!typeValid){
+                if(!classSetupForm.getAssignmentPoints().matches("[0-9.]+") || classSetupForm.getAssignmentPoints() != null) {
+                    ModelAndView page = new ModelAndView("/courseConfiguration");
+                    page.addObject("error", "The Total Points field contained an incorrect value. Please enter a valid number.");
+                    page.addObject("selectedSectionId", sectionId);
+                    return  page;
+                } else if (!classSetupForm.getPresentPoints().matches("[0-9.]+") || classSetupForm.getPresentPoints() != null) {
+                    ModelAndView page = new ModelAndView("/courseConfiguration");
+                    page.addObject("error", "The Present field contained an incorrect value. Please enter a valid number.");
+                    page.addObject("selectedSectionId", sectionId);
+                    return  page;
+                } else if (!classSetupForm.getTardyPoints().matches("[0-9.]+") || classSetupForm.getTardyPoints() != null) {
+                    ModelAndView page = new ModelAndView("/courseConfiguration");
+                    page.addObject("error", "The Tardy field contained an incorrect value. Please enter a valid number.");
+                    page.addObject("selectedSectionId", sectionId);
+                    return  page;
+                } else if (!classSetupForm.getAbsentPoints().matches("[0-9.]+") || classSetupForm.getAbsentPoints() != null) {
+                    ModelAndView page = new ModelAndView("/courseConfiguration");
+                    page.addObject("error", "The Absent field contained an incorrect value. Please enter a valid number.");
+                    page.addObject("selectedSectionId", sectionId);
+                    return  page;
+                } else if (!classSetupForm.getExcusedPoints().matches("[0-9.]+") || classSetupForm.getExcusedPoints() != null) {
+                    ModelAndView page = new ModelAndView("/courseConfiguration");
+                    page.addObject("error", "The Excused field contained an incorrect value. Please enter a valid number.");
+                    page.addObject("selectedSectionId", sectionId);
+                    return  page;
+                }
+
             }
         }
 
@@ -106,7 +130,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
 
-        ModelAndView page = this.validateInputAsDouble(sectionId, classSetupForm);
+        ModelAndView page = this.validateInputType(sectionId, classSetupForm);
         if (page != null) {
             return  page;
         }
@@ -144,7 +168,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
     public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
 
-        ModelAndView page = this.validateInputAsDouble(sectionId, classSetupForm);
+        ModelAndView page = this.validateInputType(sectionId, classSetupForm);
         if (page != null) {
             return  page;
         }

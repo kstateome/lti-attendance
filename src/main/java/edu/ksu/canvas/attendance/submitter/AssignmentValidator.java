@@ -54,7 +54,7 @@ public class AssignmentValidator {
         Optional<Assignment> assignmentOptional = lookForAssignmentInCanvas(courseId,attendanceAssignment,canvasApiWrapperService,oauthToken);
 
         //Looks for discrepancy between the assignment in canvas and in database
-        if (assignmentOptional.get().getPointsPossible().doubleValue() != assignmentConfigurationFormSetup.getAssignmentPoints().doubleValue()) {
+        if (assignmentOptional.get().getPointsPossible().doubleValue() != Double.parseDouble(assignmentConfigurationFormSetup.getAssignmentPoints())) {
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible() +
                       " and point value of Database assignment is :" + attendanceAssignment.getAssignmentPoints());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY);
@@ -66,11 +66,11 @@ public class AssignmentValidator {
      * Returns true if configuration in the form and in the db is the same
      */
     private boolean isAssignmentConfigurationSaved(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
-        return assignmentConfigurationFromSetup.getAssignmentPoints().doubleValue() == attendanceAssignmentSaved.getAssignmentPoints().doubleValue()
-                && assignmentConfigurationFromSetup.getExcusedPoints().doubleValue() == attendanceAssignmentSaved.getExcusedPoints().doubleValue()
-                && assignmentConfigurationFromSetup.getAbsentPoints().doubleValue() == attendanceAssignmentSaved.getAbsentPoints().doubleValue()
-                && assignmentConfigurationFromSetup.getTardyPoints().doubleValue() == attendanceAssignmentSaved.getTardyPoints().doubleValue()
-                && assignmentConfigurationFromSetup.getPresentPoints().doubleValue() == attendanceAssignmentSaved.getPresentPoints().doubleValue();
+        return Double.parseDouble(assignmentConfigurationFromSetup.getAssignmentPoints()) == Double.parseDouble(attendanceAssignmentSaved.getAssignmentPoints())
+                && Double.parseDouble(assignmentConfigurationFromSetup.getExcusedPoints()) == Double.parseDouble(attendanceAssignmentSaved.getExcusedPoints())
+                && Double.parseDouble(assignmentConfigurationFromSetup.getAbsentPoints()) == Double.parseDouble(attendanceAssignmentSaved.getAbsentPoints())
+                && Double.parseDouble(assignmentConfigurationFromSetup.getTardyPoints()) == Double.parseDouble(attendanceAssignmentSaved.getTardyPoints())
+                && Double.parseDouble(assignmentConfigurationFromSetup.getPresentPoints()) == Double.parseDouble(attendanceAssignmentSaved.getPresentPoints());
     }
 
     /**
