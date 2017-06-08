@@ -14,7 +14,18 @@ public class CourseConfigurationValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+
         CourseConfigurationForm courseConfigurationForm = (CourseConfigurationForm) target;
+
+        String assignmentPoints = courseConfigurationForm.getAssignmentPoints();
+        String presentPoints = courseConfigurationForm.getPresentPoints();
+        String tardyPoints = courseConfigurationForm.getTardyPoints();
+        String absentPoints = courseConfigurationForm.getAbsentPoints();
+        String excusedPoints = courseConfigurationForm.getExcusedPoints();
+        Double maxValue = 100.0;
+        Double minValue = 0.0;
+        Double epsilon = 0.0000001;
+
         if (courseConfigurationForm.getTotalClassMinutes() < courseConfigurationForm.getDefaultMinutesPerSession() && !errors.hasFieldErrors("totalClassMinutes")) {
             errors.rejectValue("defaultMinutesPerSession", "ExceedTotal.courseConfigurationForm.defaultMinutesPerSession");
         }
@@ -22,20 +33,23 @@ public class CourseConfigurationValidator implements Validator {
         if(courseConfigurationForm.getGradingOn()) {
             if (courseConfigurationForm.getAssignmentName() == null || courseConfigurationForm.getAssignmentName().length() <= 1 || courseConfigurationForm.getAssignmentName().trim().isEmpty()) {
                 errors.rejectValue("assignmentName", "Assignment Name is required.");
+                return;
             }
 
-            if (courseConfigurationForm.getAssignmentPoints() == null || Double.parseDouble(courseConfigurationForm.getAssignmentPoints()) <= 0) {
+            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) - epsilon) < minValue) {
                 errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
+                return;
             }
 
-            if (courseConfigurationForm.getPresentPoints() == null || courseConfigurationForm.getTardyPoints() == null || courseConfigurationForm.getExcusedPoints() == null
-                    || courseConfigurationForm.getAbsentPoints() == null) {
+            if (presentPoints == null || tardyPoints == null || absentPoints == null || excusedPoints == null) {
                 errors.rejectValue("presentPoints", "All status point fields are required.");
                 return;
             }
 
-            if ((Double.parseDouble(courseConfigurationForm.getPresentPoints()) > 100 || Double.parseDouble(courseConfigurationForm.getPresentPoints()) < 0) || (Double.parseDouble(courseConfigurationForm.getTardyPoints()) > 100 || Double.parseDouble(courseConfigurationForm.getTardyPoints()) < 0)
-                    || (Double.parseDouble(courseConfigurationForm.getExcusedPoints()) > 100 || Double.parseDouble(courseConfigurationForm.getExcusedPoints()) < 0) || (Double.parseDouble(courseConfigurationForm.getAbsentPoints()) > 100 || Double.parseDouble(courseConfigurationForm.getAbsentPoints()) < 0)) {
+            if ((((Double.parseDouble(presentPoints) - maxValue) > epsilon || (Double.parseDouble(presentPoints) + epsilon) < epsilon)
+                    || ((Double.parseDouble(tardyPoints) - maxValue) > epsilon || (Double.parseDouble(tardyPoints) + epsilon) < epsilon)
+                    || ((Double.parseDouble(absentPoints) - maxValue) > epsilon || (Double.parseDouble(absentPoints) + epsilon) < epsilon)
+                    || ((Double.parseDouble(excusedPoints) - maxValue) > epsilon || (Double.parseDouble(excusedPoints) + epsilon) < epsilon))) {
                 errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
             }
         }

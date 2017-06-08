@@ -5,6 +5,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
+import edu.ksu.canvas.attendance.form.InputValidator;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
@@ -18,7 +19,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 @Controller
@@ -43,6 +44,9 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @Autowired
     private CourseConfigurationValidator validator;
+
+    @Autowired
+    private InputValidator inputValidator;
 
     @Autowired
     private AttendanceSectionService sectionService;
@@ -85,59 +89,22 @@ public class CourseConfigurationController extends AttendanceBaseController {
         return page;
     }
 
-    private ModelAndView validateInputType(String sectionId, CourseConfigurationForm classSetupForm) {
-        if (classSetupForm.getGradingOn()){
-            boolean typeValid = (classSetupForm.getAssignmentPoints().matches("[0-9.]+") || classSetupForm.getAssignmentPoints() == null)
-                    && (classSetupForm.getPresentPoints().matches("[0-9.]+") || classSetupForm.getPresentPoints() == null)
-                    && (classSetupForm.getExcusedPoints().matches("[0-9.]+") || classSetupForm.getExcusedPoints() == null)
-                    && (classSetupForm.getAbsentPoints().matches("[0-9.]+") || classSetupForm.getAbsentPoints() == null)
-                    && (classSetupForm.getTardyPoints().matches("[0-9.]+") || classSetupForm.getTardyPoints() == null);
-
-            if(!typeValid){
-                if(!classSetupForm.getAssignmentPoints().matches("[0-9.]+") || classSetupForm.getAssignmentPoints() != null) {
-                    ModelAndView page = new ModelAndView("/courseConfiguration");
-                    page.addObject("error", "The Total Points field contained an incorrect value. Please enter a valid number.");
-                    page.addObject("selectedSectionId", sectionId);
-                    return  page;
-                } else if (!classSetupForm.getPresentPoints().matches("[0-9.]+") || classSetupForm.getPresentPoints() != null) {
-                    ModelAndView page = new ModelAndView("/courseConfiguration");
-                    page.addObject("error", "The Present field contained an incorrect value. Please enter a valid number.");
-                    page.addObject("selectedSectionId", sectionId);
-                    return  page;
-                } else if (!classSetupForm.getTardyPoints().matches("[0-9.]+") || classSetupForm.getTardyPoints() != null) {
-                    ModelAndView page = new ModelAndView("/courseConfiguration");
-                    page.addObject("error", "The Tardy field contained an incorrect value. Please enter a valid number.");
-                    page.addObject("selectedSectionId", sectionId);
-                    return  page;
-                } else if (!classSetupForm.getAbsentPoints().matches("[0-9.]+") || classSetupForm.getAbsentPoints() != null) {
-                    ModelAndView page = new ModelAndView("/courseConfiguration");
-                    page.addObject("error", "The Absent field contained an incorrect value. Please enter a valid number.");
-                    page.addObject("selectedSectionId", sectionId);
-                    return  page;
-                } else if (!classSetupForm.getExcusedPoints().matches("[0-9.]+") || classSetupForm.getExcusedPoints() != null) {
-                    ModelAndView page = new ModelAndView("/courseConfiguration");
-                    page.addObject("error", "The Excused field contained an incorrect value. Please enter a valid number.");
-                    page.addObject("selectedSectionId", sectionId);
-                    return  page;
-                }
-
-            }
-        }
-
-        return null;
-    }
-
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
 
-        ModelAndView page = this.validateInputType(sectionId, classSetupForm);
-        if (page != null) {
-            return  page;
+        inputValidator.validate(classSetupForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/courseConfiguration");
+            List<String> errors = new ArrayList<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
+            page.addObject("selectedSectionId", sectionId);
+            return page;
         }
 
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            page = new ModelAndView("/courseConfiguration");
+            ModelAndView page = new ModelAndView("/courseConfiguration");
             List<String> errors = new ArrayList<>();
             bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
             page.addObject("error", errors);
@@ -168,14 +135,19 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
     public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
 
-        ModelAndView page = this.validateInputType(sectionId, classSetupForm);
-        if (page != null) {
-            return  page;
+        inputValidator.validate(classSetupForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/courseConfiguration");
+            List<String> errors = new ArrayList<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
+            page.addObject("selectedSectionId", sectionId);
+            return page;
         }
 
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            page = new ModelAndView("/courseConfiguration");
+            ModelAndView page = new ModelAndView("/courseConfiguration");
             List<String> errors = new ArrayList<>();
             bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
             page.addObject("error", errors);
@@ -183,7 +155,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
             return page;
         } else {
             LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
-            page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
+            ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
             Long courseId = Long.valueOf(canvasService.getCourseId());
 

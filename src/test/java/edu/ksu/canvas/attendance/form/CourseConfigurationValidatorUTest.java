@@ -133,4 +133,28 @@ public class CourseConfigurationValidatorUTest {
         assertEquals("All status point fields are required.", capturedErrorCode.getValue());
     }
 
+    @Test
+    public void validate_rejectInvalidInput() {
+        InputValidator inputValidator;
+
+        inputValidator = new InputValidator();
+
+        courseConfigurationForm.setAssignmentName("Attendance Assignment");
+        courseConfigurationForm.setGradingOn(true);
+        courseConfigurationForm.setAssignmentPoints("100.0");
+        courseConfigurationForm.setPresentPoints("100.0");
+        courseConfigurationForm.setAbsentPoints("abcd");
+        courseConfigurationForm.setExcusedPoints("0.0");
+        courseConfigurationForm.setTardyPoints("0.0");
+
+        ArgumentCaptor<String> capturedField = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> capturedErrorCode = ArgumentCaptor.forClass(String.class);
+
+        inputValidator.validate(courseConfigurationForm,errors);
+
+        verify(errors, times(1)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
+        assertEquals(1, capturedErrorCode.getAllValues().size());
+        assertEquals("The Absent field contained an incorrect value. Please enter a valid number between 0 and 100.", capturedErrorCode.getValue());
+    }
+
 }
