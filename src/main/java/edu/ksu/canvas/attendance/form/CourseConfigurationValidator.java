@@ -22,9 +22,7 @@ public class CourseConfigurationValidator implements Validator {
         String tardyPoints = courseConfigurationForm.getTardyPoints();
         String absentPoints = courseConfigurationForm.getAbsentPoints();
         String excusedPoints = courseConfigurationForm.getExcusedPoints();
-        Double maxValue = 100.0;
-        Double minValue = 0.0;
-        Double epsilon = 0.0000001;
+
 
         if (courseConfigurationForm.getTotalClassMinutes() < courseConfigurationForm.getDefaultMinutesPerSession() && !errors.hasFieldErrors("totalClassMinutes")) {
             errors.rejectValue("defaultMinutesPerSession", "ExceedTotal.courseConfigurationForm.defaultMinutesPerSession");
@@ -36,7 +34,7 @@ public class CourseConfigurationValidator implements Validator {
                 return;
             }
 
-            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) - epsilon) < minValue) {
+            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) < 0)) {
                 errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
                 return;
             }
@@ -46,10 +44,10 @@ public class CourseConfigurationValidator implements Validator {
                 return;
             }
 
-            if ((((Double.parseDouble(presentPoints) - maxValue) > epsilon || (Double.parseDouble(presentPoints) + epsilon) < epsilon)
-                    || ((Double.parseDouble(tardyPoints) - maxValue) > epsilon || (Double.parseDouble(tardyPoints) + epsilon) < epsilon)
-                    || ((Double.parseDouble(absentPoints) - maxValue) > epsilon || (Double.parseDouble(absentPoints) + epsilon) < epsilon)
-                    || ((Double.parseDouble(excusedPoints) - maxValue) > epsilon || (Double.parseDouble(excusedPoints) + epsilon) < epsilon))) {
+            if ((Double.parseDouble(presentPoints) > 100) || (Double.parseDouble(presentPoints) < 0)
+                    || (Double.parseDouble(tardyPoints) > 100) || (Double.parseDouble(tardyPoints) < 0)
+                    || (Double.parseDouble(absentPoints) > 100) || (Double.parseDouble(absentPoints) < 0)
+                    || (Double.parseDouble(excusedPoints) > 100) || (Double.parseDouble(excusedPoints) < 0)) {
                 errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
             }
         }
