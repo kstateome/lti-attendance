@@ -24,25 +24,24 @@ public class InputValidator implements Validator {
         String excusedPoints = classSetupForm.getExcusedPoints();
 
         if (classSetupForm.getGradingOn()){
-            boolean typeValid = (assignmentPoints == null || assignmentPoints.matches("[0-9.]+"))
-                    && (presentPoints == null || presentPoints.matches("[0-9.]+"))
-                    && (tardyPoints == null || tardyPoints.matches("[0-9.]+"))
-                    && (absentPoints == null || absentPoints.matches("[0-9.]+"))
-                    && (excusedPoints == null || excusedPoints.matches("[0-9.]+"));
+            boolean typeValid = isInputValid(assignmentPoints) && isInputValid(presentPoints) && isInputValid(tardyPoints) && isInputValid(absentPoints) && isInputValid(excusedPoints);
 
             if(!typeValid){
-                if(assignmentPoints != null && !assignmentPoints.matches("[0-9.]+")) {
+                if(!isInputValid(assignmentPoints)) {
                     errors.rejectValue("assignmentPoints", "The Total Points field contained an incorrect value. Please enter a valid number.");
-                } else if (presentPoints != null && !presentPoints.matches("[0-9.]+")) {
+                } else if (!isInputValid(presentPoints)) {
                     errors.rejectValue("presentPoints", "The Present field contained an incorrect value. Please enter a valid number between 0 and 100.");
-                } else if (tardyPoints != null && !tardyPoints.matches("[0-9.]+")) {
+                } else if (!isInputValid(tardyPoints)) {
                     errors.rejectValue("tardyPoints", "The Tardy field contained an incorrect value. Please enter a valid number between 0 and 100.");
-                } else if (absentPoints != null && !absentPoints.matches("[0-9.]+")) {
+                } else if (!isInputValid(absentPoints)) {
                     errors.rejectValue("absentPoints", "The Absent field contained an incorrect value. Please enter a valid number between 0 and 100.");
-                } else if (excusedPoints != null && !excusedPoints.matches("[0-9.]+")) {
+                } else if (!isInputValid(excusedPoints)) {
                     errors.rejectValue("excusedPoints", "The Excused field contained an incorrect value. Please enter a valid number between 0 and 100.");
               }
             }
         }
+    }
+    private boolean isInputValid(String val) {
+        return val == null || val.matches("[0-9.]+");
     }
 }

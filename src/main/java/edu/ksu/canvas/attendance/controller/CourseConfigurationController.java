@@ -133,7 +133,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
-    public ModelAndView pushGradesToCanvas(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+    public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
 
         inputValidator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -161,8 +161,8 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
             boolean isSimpleAttendance = classSetupForm.getSimpleAttendance();
             List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
-                    reportService.getSimpleAttendanceSummaryReport(Long.parseLong(sectionId)) :
-                    reportService.getAviationAttendanceSummaryReport(Long.parseLong(sectionId));
+                    reportService.getSimpleAttendanceSummaryReport(sectionId) :
+                    reportService.getAviationAttendanceSummaryReport(sectionId);
 
             AttendanceAssignment assignmentConfigurationFromSetup = generateAssignmentFromClassSetupForm(classSetupForm);
             try {

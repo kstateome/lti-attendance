@@ -44,13 +44,14 @@ public class CourseConfigurationValidator implements Validator {
                 return;
             }
 
-            if ((Double.parseDouble(presentPoints) > 100) || (Double.parseDouble(presentPoints) < 0)
-                    || (Double.parseDouble(tardyPoints) > 100) || (Double.parseDouble(tardyPoints) < 0)
-                    || (Double.parseDouble(absentPoints) > 100) || (Double.parseDouble(absentPoints) < 0)
-                    || (Double.parseDouble(excusedPoints) > 100) || (Double.parseDouble(excusedPoints) < 0)) {
+            if (isValueOutOfBounds(presentPoints) || isValueOutOfBounds(tardyPoints) || isValueOutOfBounds(absentPoints) || isValueOutOfBounds(excusedPoints)) {
                 errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
             }
         }
+    }
+    private boolean isValueOutOfBounds(String value) {
+        Double val = Double.parseDouble(value);
+        return val > 100 || val < 0;
     }
 
 }
