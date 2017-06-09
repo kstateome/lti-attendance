@@ -18,15 +18,15 @@ public class CourseConfigurationForm {
 
     private Boolean showNotesToStudents;
 
-    private Double assignmentPoints;
+    private String assignmentPoints;
 
-    private Double presentPoints;
+    private String presentPoints;
 
-    private Double tardyPoints;
+    private String tardyPoints;
 
-    private Double excusedPoints;
+    private String excusedPoints;
 
-    private Double absentPoints;
+    private String absentPoints;
 
     private Boolean gradingOn;
 
@@ -69,45 +69,43 @@ public class CourseConfigurationForm {
         this.simpleAttendance = simpleAttendance;
     }
 
-    public Double getAssignmentPoints() {
+    public String getAssignmentPoints() {
         return assignmentPoints;
     }
 
-    public void setAssignmentPoints(Double assignmentPoints) {
+    public void setAssignmentPoints(String assignmentPoints) {
         this.assignmentPoints = assignmentPoints;
     }
 
-    public Double getPresentPoints() {
+    public String getPresentPoints() {
         return presentPoints;
     }
 
-    public void setPresentPoints(Double presentPoints) {
+    public void setPresentPoints(String presentPoints) {
         this.presentPoints = presentPoints;
     }
 
-    public Double getTardyPoints() {
+    public String getTardyPoints() {
         return tardyPoints;
     }
 
-    public void setTardyPoints(Double tardyPoints) {
+    public void setTardyPoints(String tardyPoints) {
         this.tardyPoints = tardyPoints;
     }
 
-    public Double getExcusedPoints() {
+    public String getExcusedPoints() {
         return excusedPoints;
     }
 
-    public void setExcusedPoints(Double excusedPoints) {
+    public void setExcusedPoints(String excusedPoints) {
         this.excusedPoints = excusedPoints;
     }
 
-    public Double getAbsentPoints() {
+    public String getAbsentPoints() {
         return absentPoints;
     }
 
-    public void setAbsentPoints(Double absentPoints) {
-        this.absentPoints = absentPoints;
-    }
+    public void setAbsentPoints(String absentPoints) { this.absentPoints = absentPoints; }
 
     public Boolean getGradingOn() {
         return gradingOn;

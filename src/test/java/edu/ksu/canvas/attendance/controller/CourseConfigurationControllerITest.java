@@ -63,10 +63,10 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
 
     @Test
-    public void classSetup_nonExistantSectionId() throws Exception {
-        Long nonExistantSectionId = 2000L;
+    public void classSetup_nonExistentSectionId() throws Exception {
+        Long nonExistentSectionId = 2000L;
         
-        mockMvc.perform(get("/courseConfiguration/"+nonExistantSectionId))
+        mockMvc.perform(get("/courseConfiguration/"+nonExistentSectionId))
             .andExpect(status().isOk())
             .andExpect(view().name("forward:roster"));
     }
@@ -92,19 +92,19 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     
     @Test
     public void saveCourseConfiguration_HappyPath() throws Exception {
-        Long irrlevantSectionId = 3000L;
+        Long irrelevantSectionId = 3000L;
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
-        
-        mockMvc.perform(post("/courseConfiguration/"+irrlevantSectionId+"/save")
+
+        mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes))
                 .param("simpleAttendance", String.valueOf(expectedSimpleAttendanceValue))
                 .param("gradingOn", String.valueOf(false)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId + "?updateSuccessful=true"));
+                .andExpect(view().name("forward:/courseConfiguration/" + irrelevantSectionId + "?updateSuccessful=true"));
         
         AttendanceCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
@@ -114,31 +114,31 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     @Test
     public void saveCourseConfiguration_PushingParameters_HappyPath() throws Exception {
-        Long irrlevantSectionId = 3000L;
+        Long irrelevantSectionId = 3000L;
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
         String expectedAssignmentName = "Assignment Name";
-        Double expectedAssignmentPoints = 120.0;
-        Double expectedPresentPoints = 100.0;
-        Double expectedTardyPoints = 0.0;
-        Double expectedExcusedPoints = 0.0;
-        Double expectedAbsentPoints = 0.0;
+        String expectedAssignmentPoints = "120.0";
+        String expectedPresentPoints = "100.0";
+        String expectedTardyPoints = "0.0";
+        String expectedExcusedPoints = "0.0";
+        String expectedAbsentPoints = "0.0";
 
-        mockMvc.perform(post("/courseConfiguration/"+irrlevantSectionId+"/save")
+        mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes))
                 .param("simpleAttendance", String.valueOf(expectedSimpleAttendanceValue))
                 .param("gradingOn", String.valueOf(true))
                 .param("assignmentName", expectedAssignmentName)
-                .param("assignmentPoints", String.valueOf(expectedAssignmentPoints))
-                .param("presentPoints", String.valueOf(expectedPresentPoints))
-                .param("tardyPoints", String.valueOf(expectedTardyPoints))
-                .param("excusedPoints", String.valueOf(expectedExcusedPoints))
-                .param("absentPoints", String.valueOf(expectedAbsentPoints)) )
+                .param("assignmentPoints", expectedAssignmentPoints)
+                .param("presentPoints", expectedPresentPoints)
+                .param("tardyPoints", expectedTardyPoints)
+                .param("excusedPoints", expectedExcusedPoints)
+                .param("absentPoints", expectedAbsentPoints) )
                 .andExpect(status().isOk())
-                .andExpect(view().name("forward:/courseConfiguration/" + irrlevantSectionId + "?updateSuccessful=true"));
+                .andExpect(view().name("forward:/courseConfiguration/" + irrelevantSectionId + "?updateSuccessful=true"));
 
         AttendanceCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
@@ -158,18 +158,18 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
 
     @Test
     public void saveCourseConfiguration_MinuteBasedAttendance() throws Exception {
-        Long irrlevantSectionId = 3000L;
+        Long irrelevantSectionId = 3000L;
         Integer expectedDefaultMinutesPerSession = 100;
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
 
-        mockMvc.perform(post("/courseConfiguration/" + irrlevantSectionId + "/save")
+        mockMvc.perform(post("/courseConfiguration/" + irrelevantSectionId + "/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(expectedDefaultMinutesPerSession))
                 .param("gradingOn", "false")
                 .param("totalClassMinutes", String.valueOf(expectedTotalClassMinutes)))
                 .andExpect(status().isOk())
-                .andExpect(view().name("forward:/courseConfiguration/"+irrlevantSectionId+"?updateSuccessful=true"));
+                .andExpect(view().name("forward:/courseConfiguration/"+irrelevantSectionId+"?updateSuccessful=true"));
 
         AttendanceCourse course = courseRepository.findByCourseId(existingCourse.getCourseId());
         assertEquals(expectedDefaultMinutesPerSession, course.getDefaultMinutesPerSession());
@@ -179,11 +179,11 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     
     @Test
     public void saveCourseConfiguration_BadFormData() throws Exception {
-        Long irrlevantSectionId = 3000L;
+        Long irrelevantSectionId = 3000L;
         Integer invalidDefaultMinutesPerSession = -1;
         Integer invalidTotalClassMinutes = -1;
         
-        String postPageURL = "/courseConfiguration/"+irrlevantSectionId+"/save";
+        String postPageURL = "/courseConfiguration/"+irrelevantSectionId+"/save";
         mockMvc.perform(post(postPageURL)
                 .param("saveCourseConfiguration", "Save Course Configuration")
                 .param("defaultMinutesPerSession", String.valueOf(invalidDefaultMinutesPerSession))
@@ -191,7 +191,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
                 .param("totalClassMinutes", String.valueOf(invalidTotalClassMinutes)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/courseConfiguration"))
-                .andExpect(model().attribute("selectedSectionId", is(String.valueOf(irrlevantSectionId))))
+                .andExpect(model().attribute("selectedSectionId", is(String.valueOf(irrelevantSectionId))))
                 .andExpect(model().attribute("error", notNullValue()));
     }
     

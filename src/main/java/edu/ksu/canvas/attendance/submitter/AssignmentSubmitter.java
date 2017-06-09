@@ -172,17 +172,25 @@ public class AssignmentSubmitter {
      * Calculates the grade of one student.
      */
     private double calculateStudentGrade(AttendanceAssignment attendanceAssignment, AttendanceSummaryModel.Entry entry, boolean isSimpleAttendance) {
+        String presentPoints = attendanceAssignment.getPresentPoints();
+        String tardyPoints = attendanceAssignment.getTardyPoints();
+        String excusedPoints = attendanceAssignment.getExcusedPoints();
+        String absentPoints = attendanceAssignment.getAbsentPoints();
+
         if (isSimpleAttendance) {
             int totalClasses = getTotalSimpleClasses(entry);
             totalClasses = totalClasses == 0? 1 : totalClasses;
-            return ((entry.getTotalClassesPresent() * (attendanceAssignment.getPresentPoints() / 100) +
-                    entry.getTotalClassesTardy() * (attendanceAssignment.getTardyPoints() / 100) +
-                    entry.getTotalClassesExcused() * (attendanceAssignment.getExcusedPoints() / 100) +
-                    entry.getTotalClassesMissed() * (attendanceAssignment.getAbsentPoints() / 100)) / totalClasses) * attendanceAssignment.getAssignmentPoints();
+            return ((entry.getTotalClassesPresent() * (calculation(presentPoints)) +
+                    entry.getTotalClassesTardy() * (calculation(tardyPoints)) +
+                    entry.getTotalClassesExcused() * (calculation(excusedPoints)) +
+                    entry.getTotalClassesMissed() * (calculation(absentPoints)) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
         } else {
 
-            return ((100 - entry.getPercentCourseMissed()) / 100) * attendanceAssignment.getAssignmentPoints();
+            return ((100 - entry.getPercentCourseMissed()) / 100) * Double.parseDouble(attendanceAssignment.getAssignmentPoints());
         }
+    }
+    private double calculation(String value) {
+        return Double.parseDouble(value)/100;
     }
 
     private int getTotalSimpleClasses(AttendanceSummaryModel.Entry entry) {

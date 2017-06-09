@@ -54,12 +54,11 @@ public class AssignmentValidatorUTest {
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
 
         assignmentConfigurationFromSetup = new AttendanceAssignment();
-        assignmentConfigurationFromSetup.setAssignmentName(ASSIGNMENT_NAME);
-        assignmentConfigurationFromSetup.setAbsentPoints(0.0);
-        assignmentConfigurationFromSetup.setAssignmentPoints(ASSIGNMENT_POINTS);
-        assignmentConfigurationFromSetup.setExcusedPoints(0.0);
-        assignmentConfigurationFromSetup.setPresentPoints(100.0);
-        assignmentConfigurationFromSetup.setTardyPoints(0.0);
+        assignmentConfigurationFromSetup.setAbsentPoints("0.0");
+        assignmentConfigurationFromSetup.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        assignmentConfigurationFromSetup.setExcusedPoints("0.0");
+        assignmentConfigurationFromSetup.setPresentPoints("100.0");
+        assignmentConfigurationFromSetup.setTardyPoints("0.0");
 
         attendanceSection = new AttendanceSection();
         attendanceSection.setName(SECTION_NAME);
@@ -72,11 +71,11 @@ public class AssignmentValidatorUTest {
         attendanceAssignment.setAssignmentName(ASSIGNMENT_NAME);
         attendanceAssignment.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
         attendanceAssignment.setGradingOn(true);
-        attendanceAssignment.setAssignmentPoints(ASSIGNMENT_POINTS);
-        attendanceAssignment.setAbsentPoints(0.0);
-        attendanceAssignment.setExcusedPoints(0.0);
-        attendanceAssignment.setTardyPoints(0.0);
-        attendanceAssignment.setPresentPoints(100.0);
+        attendanceAssignment.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        attendanceAssignment.setAbsentPoints("0.0");
+        attendanceAssignment.setExcusedPoints("0.0");
+        attendanceAssignment.setTardyPoints("0.0");
+        attendanceAssignment.setPresentPoints("100.0");
         attendanceAssignment.setAttendanceSection(attendanceSection);
         attendanceAssignment.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
@@ -126,7 +125,7 @@ public class AssignmentValidatorUTest {
 
     @Test
     public void validateCanvasAssignmentDBMismatchValidationError() throws Exception {
-        assignmentConfigurationFromSetup.setAssignmentPoints(120.0);
+        assignmentConfigurationFromSetup.setAssignmentPoints("120.0");
 
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
 

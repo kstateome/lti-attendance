@@ -1,11 +1,11 @@
 package edu.ksu.canvas.attendance.controller;
 
-
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
+import edu.ksu.canvas.attendance.form.InputValidator;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @Controller
 @Scope("session")
 @RequestMapping("/courseConfiguration")
@@ -43,6 +44,9 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @Autowired
     private CourseConfigurationValidator validator;
+
+    @Autowired
+    private InputValidator inputValidator;
 
     @Autowired
     private AttendanceSectionService sectionService;
@@ -88,6 +92,16 @@ public class CourseConfigurationController extends AttendanceBaseController {
     @RequestMapping(value = "/{sectionId}/save", params = "saveCourseConfiguration", method = RequestMethod.POST)
     public ModelAndView saveCourseConfiguration(@PathVariable String sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException {
 
+        inputValidator.validate(classSetupForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/courseConfiguration");
+            List<String> errors = new ArrayList<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
+            page.addObject("selectedSectionId", sectionId);
+            return page;
+        }
+
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
@@ -120,6 +134,17 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "pushGradesToCanvas", method = RequestMethod.POST)
     public ModelAndView pushGradesToCanvas(@PathVariable Long sectionId, @ModelAttribute("courseConfigurationForm") @Valid CourseConfigurationForm classSetupForm, BindingResult bindingResult) throws NoLtiSessionException{
+
+        inputValidator.validate(classSetupForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            ModelAndView page = new ModelAndView("/courseConfiguration");
+            List<String> errors = new ArrayList<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.add(error.getCode()));
+            page.addObject("error", errors);
+            page.addObject("selectedSectionId", sectionId);
+            return page;
+        }
+
         validator.validate(classSetupForm, bindingResult);
         if (bindingResult.hasErrors()) {
             ModelAndView page = new ModelAndView("/courseConfiguration");
@@ -148,8 +173,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
                 LOG.warn("The following error occurred when submitting the Assignment: " + e);
                 page.addObject("error", e.getMessage());
             }
-
-
 
             return page;
         }
