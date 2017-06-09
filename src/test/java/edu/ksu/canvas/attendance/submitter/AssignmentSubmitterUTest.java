@@ -123,22 +123,22 @@ public class AssignmentSubmitterUTest {
         attendanceSummaryModelList.add(attendanceSummaryModel2);
 
         assignmentConfigurationFromSetup = new AttendanceAssignment();
-        assignmentConfigurationFromSetup.setAbsentPoints(0.0);
-        assignmentConfigurationFromSetup.setAssignmentPoints(ASSIGNMENT_POINTS);
-        assignmentConfigurationFromSetup.setExcusedPoints(0.0);
-        assignmentConfigurationFromSetup.setPresentPoints(100.0);
-        assignmentConfigurationFromSetup.setTardyPoints(0.0);
+        assignmentConfigurationFromSetup.setAbsentPoints("0.0");
+        assignmentConfigurationFromSetup.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        assignmentConfigurationFromSetup.setExcusedPoints("0.0");
+        assignmentConfigurationFromSetup.setPresentPoints("100.0");
+        assignmentConfigurationFromSetup.setTardyPoints("0.0");
 
         attendanceAssignment1 = new AttendanceAssignment();
         attendanceAssignment1.setAssignmentId(ASSIGNMENT_ID);
         attendanceAssignment1.setAssignmentName(ASSIGNMENT_NAME);
         attendanceAssignment1.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
         attendanceAssignment1.setGradingOn(true);
-        attendanceAssignment1.setAssignmentPoints(ASSIGNMENT_POINTS);
-        attendanceAssignment1.setAbsentPoints(0.0);
-        attendanceAssignment1.setExcusedPoints(0.0);
-        attendanceAssignment1.setTardyPoints(0.0);
-        attendanceAssignment1.setPresentPoints(100.0);
+        attendanceAssignment1.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        attendanceAssignment1.setAbsentPoints("0.0");
+        attendanceAssignment1.setExcusedPoints("0.0");
+        attendanceAssignment1.setTardyPoints("0.0");
+        attendanceAssignment1.setPresentPoints("100.0");
         attendanceAssignment1.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
         attendanceAssignment2 = new AttendanceAssignment();
@@ -146,11 +146,11 @@ public class AssignmentSubmitterUTest {
         attendanceAssignment2.setAssignmentName(ASSIGNMENT_NAME_2);
         attendanceAssignment2.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
         attendanceAssignment2.setGradingOn(true);
-        attendanceAssignment2.setAssignmentPoints(ASSIGNMENT_POINTS);
-        attendanceAssignment2.setAbsentPoints(0.0);
-        attendanceAssignment2.setExcusedPoints(0.0);
-        attendanceAssignment2.setTardyPoints(0.0);
-        attendanceAssignment2.setPresentPoints(100.0);
+        attendanceAssignment2.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
+        attendanceAssignment2.setAbsentPoints("0.0");
+        attendanceAssignment2.setExcusedPoints("0.0");
+        attendanceAssignment2.setTardyPoints("0.0");
+        attendanceAssignment2.setPresentPoints("100.0");
         attendanceAssignment2.setStatus(AttendanceAssignment.Status.UNKNOWN);
 
         assignment = new Assignment();

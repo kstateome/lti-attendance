@@ -14,50 +14,44 @@ public class CourseConfigurationValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+
         CourseConfigurationForm courseConfigurationForm = (CourseConfigurationForm) target;
+
+        String assignmentPoints = courseConfigurationForm.getAssignmentPoints();
+        String presentPoints = courseConfigurationForm.getPresentPoints();
+        String tardyPoints = courseConfigurationForm.getTardyPoints();
+        String absentPoints = courseConfigurationForm.getAbsentPoints();
+        String excusedPoints = courseConfigurationForm.getExcusedPoints();
+
+
         if (courseConfigurationForm.getTotalClassMinutes() < courseConfigurationForm.getDefaultMinutesPerSession() && !errors.hasFieldErrors("totalClassMinutes")) {
             errors.rejectValue("defaultMinutesPerSession", "ExceedTotal.courseConfigurationForm.defaultMinutesPerSession");
         }
 
         if(courseConfigurationForm.getGradingOn()) {
-            formValidation(courseConfigurationForm, errors);
+            if (courseConfigurationForm.getAssignmentName() == null || courseConfigurationForm.getAssignmentName().length() <= 1 || courseConfigurationForm.getAssignmentName().trim().isEmpty()) {
+                errors.rejectValue("assignmentName", "Assignment Name is required.");
+                return;
+            }
+
+            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) < 0)) {
+                errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
+                return;
+            }
+
+            if (presentPoints == null || tardyPoints == null || absentPoints == null || excusedPoints == null) {
+                errors.rejectValue("presentPoints", "All status point fields are required.");
+                return;
+            }
+
+            if (isValueOutOfBounds(presentPoints) || isValueOutOfBounds(tardyPoints) || isValueOutOfBounds(absentPoints) || isValueOutOfBounds(excusedPoints)) {
+                errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
+            }
         }
     }
-
-    private void formValidation(CourseConfigurationForm courseConfigurationForm, Errors errors){
-        if (courseConfigurationForm.getAssignmentName() == null || courseConfigurationForm.getAssignmentName().length() <= 1 || courseConfigurationForm.getAssignmentName().trim().isEmpty()) {
-            errors.rejectValue("assignmentName", "Assignment Name is required.");
-        }
-
-        if (courseConfigurationForm.getAssignmentPoints() == null || courseConfigurationForm.getAssignmentPoints() <= 0 ) {
-            errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
-        }
-
-        if (statusEmptyBoxes(courseConfigurationForm)) {
-            errors.rejectValue("presentPoints", "All status point fields are required.");
-            return;
-        }
-
-        if (statusWithinRange(courseConfigurationForm)) {
-            errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
-        }
+    private boolean isValueOutOfBounds(String value) {
+        Double val = Double.parseDouble(value);
+        return val > 100 || val < 0;
     }
-
-    private Boolean statusWithinRange(CourseConfigurationForm courseConfigurationForm){
-        Boolean isValid = (courseConfigurationForm.getPresentPoints() > 100 || courseConfigurationForm.getPresentPoints() < 0);
-        isValid = isValid || (courseConfigurationForm.getTardyPoints() > 100 || courseConfigurationForm.getTardyPoints() < 0);
-        isValid = isValid || (courseConfigurationForm.getExcusedPoints() > 100 || courseConfigurationForm.getExcusedPoints() < 0);
-        isValid = isValid || (courseConfigurationForm.getAbsentPoints() > 100 || courseConfigurationForm.getAbsentPoints() < 0);
-        return isValid;
-    }
-
-    private Boolean statusEmptyBoxes(CourseConfigurationForm courseConfigurationForm){
-        Boolean isEmpty = courseConfigurationForm.getPresentPoints() == null;
-        isEmpty = isEmpty || courseConfigurationForm.getTardyPoints() == null;
-        isEmpty = isEmpty || courseConfigurationForm.getExcusedPoints() == null;
-        isEmpty = isEmpty || courseConfigurationForm.getAbsentPoints() == null;
-        return isEmpty;
-    }
-
 
 }
