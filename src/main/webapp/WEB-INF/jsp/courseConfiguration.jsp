@@ -134,7 +134,7 @@
             <br/>
             <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published.
                 Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
-                Click the "Conver Attendance to Assignment" checkbox again to remove the assignment.
+                Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
             </label>
             <br/>
             <div class="col-md-2 col-md-offset-0">
@@ -152,7 +152,7 @@
             <div class="col-md-7 col-md-offset-0">
                 <h5><i>Attendance Weights: </i></h5>
                 <p>Present, Tardy, Absent, and Excused are possible options for attendance status.
-                    Please enter the percentage of the attendance point that each type of status should receive.</p>
+                   Please enter the percentage of the attendance points that each type of status should receive.</p>
 
                 <div class="col-md-2 col-md-offset-0">
                     <label>Present: </label>
