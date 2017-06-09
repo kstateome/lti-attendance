@@ -45,7 +45,7 @@ public class CourseConfigurationValidator implements Validator {
             }
 
             if (isValueOutOfBounds(presentPoints) || isValueOutOfBounds(tardyPoints) || isValueOutOfBounds(absentPoints) || isValueOutOfBounds(excusedPoints)) {
-                errors.rejectValue("presentPoints", "Point values must be set between 0 and 100.");
+                errors.rejectValue("presentPoints", "Status percentages must be set between 0 and 100.");
             }
         }
     }
