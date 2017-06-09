@@ -28,15 +28,15 @@ public class InputValidator implements Validator {
 
             if(!typeValid){
                 if(!isInputValid(assignmentPoints)) {
-                    errors.rejectValue("assignmentPoints", "The Total Points field contained an incorrect value. Please enter a valid number.");
+                    errors.rejectValue("assignmentPoints", "The Total Points field contains an incorrect value. Please enter a valid number.");
                 } else if (!isInputValid(presentPoints)) {
-                    errors.rejectValue("presentPoints", "The Present field contained an incorrect value. Please enter a valid number between 0 and 100.");
+                    errors.rejectValue("presentPoints", "The Present field contains an incorrect value. Please enter a valid number between 0 and 100.");
                 } else if (!isInputValid(tardyPoints)) {
-                    errors.rejectValue("tardyPoints", "The Tardy field contained an incorrect value. Please enter a valid number between 0 and 100.");
+                    errors.rejectValue("tardyPoints", "The Tardy field contains an incorrect value. Please enter a valid number between 0 and 100.");
                 } else if (!isInputValid(absentPoints)) {
-                    errors.rejectValue("absentPoints", "The Absent field contained an incorrect value. Please enter a valid number between 0 and 100.");
+                    errors.rejectValue("absentPoints", "The Absent field contains an incorrect value. Please enter a valid number between 0 and 100.");
                 } else if (!isInputValid(excusedPoints)) {
-                    errors.rejectValue("excusedPoints", "The Excused field contained an incorrect value. Please enter a valid number between 0 and 100.");
+                    errors.rejectValue("excusedPoints", "The Excused field contains an incorrect value. Please enter a valid number between 0 and 100.");
               }
             }
         }
