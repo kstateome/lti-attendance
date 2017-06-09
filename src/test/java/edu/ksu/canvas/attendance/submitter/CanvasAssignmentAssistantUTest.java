@@ -9,6 +9,7 @@ import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CanvasAssignmentAssistantUTest {
 
+    private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistantUTest.class);
     private static final Long COURSE_ID = 2121212121L;
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
     private static final Long ASSIGNMENT_ID = 8484848484L;
@@ -38,7 +40,10 @@ public class CanvasAssignmentAssistantUTest {
     private static final Long CANVAS_ASSIGNMENT_ID = 514514514L;
     private static final Long SECTION_ID = 111111111111L;
     private static final String SECTION_NAME = "SECTION NAME";
-    private static final String ASSIGNMENT_DESCRIPTION = "This result of this assignment is based on attendances of each student. Detailed and individual information in the grading comments.";
+    private static final String ASSIGNMENT_DESCRIPTION ="This assignment is based on attendance recorded in the K-State " +
+                                                        "Attendance tool. Do not make changes to attendance here; changes need to be made in the K-State Attendance " +
+                                                        "tool. Information about the number of classes in which a student was present, tardy, absent, and excused is " +
+                                                        "identified in the comments area of the student's grade.";
 
     private CanvasAssignmentAssistant canvasAssignmentAssistant;
 
@@ -124,6 +129,7 @@ public class CanvasAssignmentAssistantUTest {
             canvasAssignmentAssistant.createAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
             Assert.fail("Expected AttendanceAssignmentException");
         } catch (AttendanceAssignmentException e) {
+            LOG.warn("There was an error in creating the Assignment. The following exception has been thrown: " + e);
             Assert.assertEquals(AttendanceAssignmentException.Error.CREATION_ERROR, e.error);
         }
     }
@@ -145,6 +151,7 @@ public class CanvasAssignmentAssistantUTest {
         try {
             canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         } catch(AttendanceAssignmentException exception ) {
+            LOG.warn("There was an error when editing the Assignment. The following exception has been thrown: " + exception);
             Assert.assertEquals(AttendanceAssignmentException.Error.NO_ASSIGNMENT_FOUND, exception.error);
         }
     }
@@ -168,6 +175,7 @@ public class CanvasAssignmentAssistantUTest {
         try {
             canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
         } catch (AttendanceAssignmentException exception) {
+            LOG.warn("There was an error when deleting the Assignment. The following exception has been thrown: " + exception);
             Assert.assertEquals(AttendanceAssignmentException.Error.DELETION_ERROR, exception.error);
         }
     }

@@ -170,6 +170,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
                 page.addObject("pushingSuccessful", true);
             }
             catch (AttendanceAssignmentException e){
+                LOG.warn("The following error occurred when submitting the Assignment: " + e);
                 page.addObject("error", e.getMessage());
             }
 
@@ -179,17 +180,17 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     private AttendanceAssignment generateAssignmentFromClassSetupForm(CourseConfigurationForm classSetupForm) {
         AttendanceAssignment assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         assignmentConfigurationFromSetup.setAssignmentPoints(classSetupForm.getAssignmentPoints());
         assignmentConfigurationFromSetup.setGradingOn(true);
         assignmentConfigurationFromSetup.setPresentPoints(classSetupForm.getPresentPoints());
         assignmentConfigurationFromSetup.setTardyPoints(classSetupForm.getTardyPoints());
         assignmentConfigurationFromSetup.setExcusedPoints(classSetupForm.getExcusedPoints());
         assignmentConfigurationFromSetup.setAbsentPoints(classSetupForm.getAbsentPoints());
-        assignmentConfigurationFromSetup.setAssignmentName(classSetupForm.getAssignmentName());
         return assignmentConfigurationFromSetup;
     }
 
-    @RequestMapping(value = "/{sectionId}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/{sectionId}/save", params = "deleteAssignment", method = RequestMethod.POST)
     public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
@@ -198,6 +199,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
+            LOG.warn("The following error occurred when deleting the Assignment: " + exception);
             page.addObject("error", exception.getMessage());
             return page;
         }

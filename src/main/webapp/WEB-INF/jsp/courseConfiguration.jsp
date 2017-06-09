@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="edu.ksu.canvas.attendance.enums.Status" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -56,7 +55,7 @@
     </c:forEach>
     <c:if test="${pushingSuccessful}">
         <div class="alert alert-success" id="pushingSuccessful">
-            <p>Pushing attendance grades to Canvas successful.  Please allow a few minutes for Canvas to update the gradebook.</p>
+            <p>Pushing attendance grades to Canvas successful.</p>
         </div>
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
@@ -133,7 +132,9 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published. Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published.
+                Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+                Click the "Conver Attendance to Assignment" checkbox again to remove the assignment.
             </label>
             <br/>
             <div class="col-md-2 col-md-offset-0">
@@ -181,31 +182,62 @@
                         <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
                     </label>
                 </div>
+
             </div>
+
         </div>
+
+
         <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
                class="hovering-purple-button pull-left buffer-top" type="submit"/>
-        <input value="Push Assignment to Canvas" id="pushGradesToCanvas" name="pushGradesToCanvas"
-               class="hovering-purple-button pull-right buffer-top" type="submit"/>
+        <input value="Push Assignment to Canvas" id="pushConfirmation" name="pushConfirmation"
+               class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')"/>
     </div>
     <hr/>
+
+    <div class="confirmation-modal modal fade in" id = "deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="$('#deleteModal').modal('hide')">&times;</button>
+                    <h4 class="modal-title">Deletion Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?
+                </div>
+                <div class="modal-footer">
+                    <input value="Yes" id="deleteAssignment" name="deleteAssignment" class="confirm btn btn-primary" type="submit">
+                    </input>
+                    <button class="confirm btn btn-default" type="button" onclick="$('#deleteModal').modal('hide')">
+                        No
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirmation-modal modal fade in" id = "pushModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" onclick="$('#pushModal').hide()">&times;</button>
+                    <h4 class="modal-title">Push Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    Please allow a few minutes for Canvas to update the gradebook.
+                </div>
+                <div class="modal-footer">
+                    <input value="OK" id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="submit">
+                    </input>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <br/><br/>
     <script>
+
         var errorMessage = "There was an error communicating with the server.";
-        $('#conversionConfirm').change(function(){
-            if (this.checked) {
-                $('#conversionConfig').removeClass('hidden');
-            } else {
-                $('#conversionConfig').addClass('hidden');
-                if(hasAssignmentConfiguration() == true) {
-                    confirmChoice('Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?', 'Delete Assignment Confirmation', function () {
-                        var form = document.getElementById('sectionSelect');
-                        form.action = "<c:url value="/courseConfiguration/${selectedSectionId}/delete"/>";
-                        form.submit();
-                    });
-                }
-            }
-        });
 
         $('#simpleAttendance').change(function(){
             if (this.checked) {
@@ -218,20 +250,18 @@
             }
         });
 
-        function confirmChoice(msg, button, callback) {
-            $.confirm({
-                text: msg,
-                title: button,
-                cancelButton: "No",
-                confirm: function() {
-                    callback();
-                },
-
-                cancel: function(){
-                    location.reload();
+        $('#conversionConfirm').change(function(){
+            if (this.checked) {
+                $('#pushConfirmation').removeClass('hidden');
+                $('#conversionConfig').removeClass('hidden');
+            } else {
+                $('#pushConfirmation').addClass('hidden');
+                $('#conversionConfig').addClass('hidden');
+                if(hasAssignmentConfiguration()) {
+                    $('#deleteModal').modal('show');
                 }
-            });
-        }
+            }
+        });
 
         function hasAssignmentConfiguration() {
             if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {

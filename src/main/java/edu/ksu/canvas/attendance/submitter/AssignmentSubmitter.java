@@ -62,6 +62,7 @@ public class AssignmentSubmitter {
             gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, sectionSummary, attendanceAssignment);
 
             submitSectionAttendances(isSimpleAttendance, sectionSummary, attendanceAssignment, courseId, oauthToken);
+
         }
     }
 

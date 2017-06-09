@@ -210,7 +210,8 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     public void deleteAttendanceAssignment_HappyPath() throws Exception {
         Long irrelevantSectionId = 3000L;
 
-        mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/delete"))
+        mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/save")
+                .param("deleteAssignment", "Yes"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("deleteSuccessful", is(true)))
                 .andExpect(view().name("forward:/courseConfiguration/" + irrelevantSectionId));
