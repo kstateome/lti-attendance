@@ -54,8 +54,15 @@ public class AssignmentValidator {
         //Look for the canvas assignment in canvas
         Optional<Assignment> assignmentOptional = lookForAssignmentInCanvas(courseId,attendanceAssignment,canvasApiWrapperService,oauthToken);
 
+        //Looks for discrepancy between the assignment name in canvas the database.
+        if (!assignmentConfigurationFormSetup.getAssignmentName().equals(assignmentOptional.get().getName())) {
+            LOG.debug("Discrepancy between Canvas and DB assignment. Name of Canvas assignment is: " + assignmentOptional.get().getName() +
+                    " and point value of Database assignment is :" + attendanceAssignment.getAssignmentName());
+            attendanceAssignment.setStatus(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY);
+        }
+
         //Looks for discrepancy between the assignment in canvas and in database
-        if (!(assignmentOptional.get().getPointsPossible() - Double.parseDouble(assignmentConfigurationFormSetup.getAssignmentPoints()) < epsilon)) {
+        if (!(Math.abs(assignmentOptional.get().getPointsPossible() - Double.parseDouble(assignmentConfigurationFormSetup.getAssignmentPoints())) < epsilon)) {
             LOG.debug("Discrepancy between Canvas and DB assignment. Point value of Canvas assignment is: " + assignmentOptional.get().getPointsPossible() +
                       " and point value of Database assignment is :" + attendanceAssignment.getAssignmentPoints());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY);
@@ -68,7 +75,8 @@ public class AssignmentValidator {
      */
     private boolean isAssignmentConfigurationSaved(AttendanceAssignment assignmentConfigurationFromSetup, AttendanceAssignment attendanceAssignmentSaved) {
 
-        return assignmentConfigurationFromSetup.getAssignmentPoints().equals(attendanceAssignmentSaved.getAssignmentPoints())
+        return assignmentConfigurationFromSetup.getAssignmentName().equals(attendanceAssignmentSaved.getAssignmentName())
+                && assignmentConfigurationFromSetup.getAssignmentPoints().equals(attendanceAssignmentSaved.getAssignmentPoints())
                 && assignmentConfigurationFromSetup.getExcusedPoints().equals(attendanceAssignmentSaved.getExcusedPoints())
                 && assignmentConfigurationFromSetup.getAbsentPoints().equals(attendanceAssignmentSaved.getAbsentPoints())
                 && assignmentConfigurationFromSetup.getTardyPoints().equals(attendanceAssignmentSaved.getTardyPoints())

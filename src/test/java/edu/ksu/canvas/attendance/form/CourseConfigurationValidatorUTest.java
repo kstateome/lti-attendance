@@ -70,7 +70,7 @@ public class CourseConfigurationValidatorUTest {
 
         verify(errors, times(1)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
         assertEquals(1, capturedErrorCode.getAllValues().size());
-        assertEquals("Point values must be set between 0 and 100.", capturedErrorCode.getValue());
+        assertEquals("Status percentages must be set between 0 and 100.", capturedErrorCode.getValue());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class CourseConfigurationValidatorUTest {
 
         verify(errors, times(1)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
         assertEquals(1, capturedErrorCode.getAllValues().size());
-        assertEquals("The Absent field contained an incorrect value. Please enter a valid number between 0 and 100.", capturedErrorCode.getValue());
+        assertEquals("The Absent field contains an incorrect value. Please enter a valid number between 0 and 100.", capturedErrorCode.getValue());
     }
 
 }
