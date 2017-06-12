@@ -188,27 +188,31 @@
         </div>
 
 
-        <input value="Save Setup" id="saveCourseConfiguration" name="saveCourseConfiguration"
-               class="hovering-purple-button pull-left buffer-top" type="submit"/>
-        <input value="Push Assignment to Canvas" id="pushConfirmation" name="pushConfirmation"
-               class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')"/>
+        <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" onclick="submitSaveForm()">
+            Save Setup
+        </button>
+
+        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show');">
+            Push Assignment to Canvas
+        </button>
     </div>
     <hr/>
+
 
     <div class="confirmation-modal modal fade in" id = "deleteModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" onclick="$('#deleteModal').modal('hide')">&times;</button>
                     <h4 class="modal-title">Deletion Confirmation</h4>
                 </div>
                 <div class="modal-body">
                     Turning off the grading feature will delete the Attendance Assignment from Canvas. Do you want to continue?
                 </div>
                 <div class="modal-footer">
-                    <input value="Yes" id="deleteAssignment" name="deleteAssignment" class="confirm btn btn-primary" type="submit">
-                    </input>
-                    <button class="confirm btn btn-default" type="button" onclick="$('#deleteModal').modal('hide')">
+                    <button id="deleteAssignment" name="deleteAssignment" class="confirm btn btn-primary" onclick="submitDeleteForm()">
+                        Yes
+                    </button>
+                    <button id="cancelDelete" name="cancelDelete" class="confirm btn btn-default" type="button" onclick="$('#deleteModal').modal('hide')">
                         No
                     </button>
                 </div>
@@ -220,15 +224,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" onclick="$('#pushModal').hide()">&times;</button>
                     <h4 class="modal-title">Push Confirmation</h4>
                 </div>
                 <div class="modal-body">
                     Please allow a few minutes for Canvas to update the gradebook.
                 </div>
                 <div class="modal-footer">
-                    <input value="OK" id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="submit">
-                    </input>
+                    <button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" onclick="submitPushForm()">
+                        OK
+                    </button>
                 </div>
             </div>
         </div>
@@ -237,6 +241,7 @@
     <br/><br/>
     <script>
 
+        var submissionType = "";
         var errorMessage = "There was an error communicating with the server.";
 
         $('#simpleAttendance').change(function(){
@@ -262,6 +267,45 @@
                 }
             }
         });
+
+
+        function submitPushForm()
+        {
+            $('<input />')
+                    .attr('type', 'hidden')
+                    .attr('name', 'pushGradesToCanvas')
+                    .attr('value', 'pushGradesToCanvas')
+                    .appendTo('#sectionSelect');
+            $('#sectionSelect').submit();
+            $('#pushGradesToCanvas').attr('disabled', 'disabled');
+
+            return true;
+        }
+
+        function submitSaveForm()
+        {
+            $('<input />')
+                    .attr('type', 'hidden')
+                    .attr('name', 'saveCourseConfiguration')
+                    .attr('value', 'saveCourseConfiguration')
+                    .appendTo('#sectionSelect');
+            $('#sectionSelect').submit();
+            $('#saveCourseConfiguration').attr('disabled', 'disabled');
+            return true;
+        }
+
+        function submitDeleteForm()
+        {
+            $('<input />')
+                    .attr('type', 'hidden')
+                    .attr('name', 'deleteAssignment')
+                    .attr('value', 'deleteAssignment')
+                    .appendTo('#sectionSelect');
+            $('#sectionSelect').submit();
+            $('#deleteAssignment').attr('disabled', 'disabled');
+            $('#cancelDelete').attr('disabled', 'disabled');
+            return true;
+        }
 
         function hasAssignmentConfiguration() {
             if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
