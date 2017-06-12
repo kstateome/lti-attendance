@@ -180,10 +180,10 @@ public class AssignmentSubmitter {
         if (isSimpleAttendance) {
             int totalClasses = getTotalSimpleClasses(entry);
             totalClasses = totalClasses == 0? 1 : totalClasses;
-            return ((entry.getTotalClassesPresent() * (calculation(presentPoints)) +
-                    entry.getTotalClassesTardy() * (calculation(tardyPoints)) +
-                    entry.getTotalClassesExcused() * (calculation(excusedPoints)) +
-                    entry.getTotalClassesMissed() * (calculation(absentPoints)) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
+            return ((((entry.getTotalClassesPresent() * (calculation(presentPoints))) +
+                    (entry.getTotalClassesTardy() * (calculation(tardyPoints))) +
+                    (entry.getTotalClassesExcused() * (calculation(excusedPoints))) +
+                    (entry.getTotalClassesMissed() * (calculation(absentPoints)))) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
         } else {
 
             return ((100 - entry.getPercentCourseMissed()) / 100) * Double.parseDouble(attendanceAssignment.getAssignmentPoints());
