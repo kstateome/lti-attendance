@@ -54,6 +54,7 @@ public class AssignmentValidatorUTest {
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
 
         assignmentConfigurationFromSetup = new AttendanceAssignment();
+        assignmentConfigurationFromSetup.setAssignmentName(ASSIGNMENT_NAME);
         assignmentConfigurationFromSetup.setAbsentPoints("0.0");
         assignmentConfigurationFromSetup.setAssignmentPoints(String.valueOf(ASSIGNMENT_POINTS));
         assignmentConfigurationFromSetup.setExcusedPoints("0.0");
@@ -81,6 +82,7 @@ public class AssignmentValidatorUTest {
 
 
         assignment = new Assignment();
+        assignment.setName(ASSIGNMENT_NAME);
         assignment.setPointsPossible(ASSIGNMENT_POINTS);
         assignmentOptional = Optional.of(assignment);
 
