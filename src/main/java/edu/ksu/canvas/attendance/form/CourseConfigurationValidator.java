@@ -34,8 +34,8 @@ public class CourseConfigurationValidator implements Validator {
                 return;
             }
 
-            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) < 0)) {
-                errors.rejectValue("assignmentPoints", "Total Points is a required field and must be greater than 0.");
+            if (assignmentPoints == null || (Double.parseDouble(assignmentPoints) < 0) || (Double.parseDouble(assignmentPoints)) >= 1000) {
+                errors.rejectValue("assignmentPoints", "Total Points is a required field and must be between 0 and 1000.");
                 return;
             }
 
