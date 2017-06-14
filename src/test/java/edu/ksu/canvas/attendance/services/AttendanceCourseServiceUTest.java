@@ -43,7 +43,7 @@ public class AttendanceCourseServiceUTest {
         course.setTotalMinutes(expectedTotalMinutes);
         course.setDefaultMinutesPerSession(expectedDefaultMinutesPerSession);
         CourseConfigurationForm courseForm = new CourseConfigurationForm();
-        
+
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(course);
         courseService.loadIntoForm(courseForm, canvasCourseId);
         
