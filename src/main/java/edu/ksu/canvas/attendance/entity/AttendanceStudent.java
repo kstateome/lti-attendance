@@ -40,7 +40,6 @@ public class AttendanceStudent implements Serializable {
     @OneToMany(mappedBy = "attendanceStudent")
     private List<Attendance> attendances;
 
-
     @Transient
     private Double percentageOfCourseMissed;
 
@@ -115,9 +114,9 @@ public class AttendanceStudent implements Serializable {
 
     @Override
     public String toString() {
-        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId + ", name=" + name + ", canvasCourseId="
-                + canvasCourseId + ", canvasSectionId=" + canvasSectionId + ", percentageOfCourseMissed="
-                + percentageOfCourseMissed + ", deleted=" + deleted + "]";
+        return "Student [studentId=" + studentId + ", sisUserId=" + sisUserId
+                + ", name=" + name + ", canvasCourseId=" + canvasCourseId + ", canvasSectionId=" + canvasSectionId +
+                ", percentageOfCourseMissed=" + percentageOfCourseMissed + ", deleted=" + deleted + "]";
     }
 
     @Override

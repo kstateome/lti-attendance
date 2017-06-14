@@ -151,4 +151,8 @@ public class AttendanceService {
         return sectionHasAttendancesForDate;
     }
 
+    public Map<Long,String> getAttendanceCommentsBySectionId(long sectionId) {
+        return attendanceRepository.getAttendanceCommentsBySectionId(sectionId);
+    }
+
 }

@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -99,7 +98,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingStudent.setSisUserId("1001");
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setCanvasSectionId(existingSectionId);
-        existingStudent.setName("Zoglmann, Kurt");
+        existingStudent.setName("Smith, John");
         existingStudent.setDeleted(false);
         existingStudent = studentRepository.save(existingStudent);
         
@@ -141,7 +140,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         existingStudent.setSisUserId("1001");
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
         existingStudent.setCanvasSectionId(existingSectionId);
-        existingStudent.setName("Zoglmann, Kurt");
+        existingStudent.setName("Smith, John");
         existingStudent.setDeleted(false);
         existingStudent = studentRepository.save(existingStudent);
 

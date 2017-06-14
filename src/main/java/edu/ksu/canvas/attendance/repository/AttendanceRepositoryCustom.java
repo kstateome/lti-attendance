@@ -4,6 +4,7 @@ import edu.ksu.canvas.attendance.entity.Attendance;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 public interface AttendanceRepositoryCustom {
@@ -14,5 +15,7 @@ public interface AttendanceRepositoryCustom {
     void saveInBatches(List<Attendance> attendances);
 
     void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass);
+
+    Map<Long, String> getAttendanceCommentsBySectionId(long sectionId);
 
 }
