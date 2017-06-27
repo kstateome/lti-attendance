@@ -110,7 +110,7 @@ public class CourseConfigurationValidatorUTest {
 
         verify(errors, times(1)).rejectValue(capturedField.capture(), capturedErrorCode.capture());
         assertEquals(1, capturedErrorCode.getAllValues().size());
-        assertEquals("Total Points is a required field and must be greater than 0.", capturedErrorCode.getValue());
+        assertEquals("Total Points is a required field and must be between 0 and 1000.", capturedErrorCode.getValue());
     }
 
     @Test
