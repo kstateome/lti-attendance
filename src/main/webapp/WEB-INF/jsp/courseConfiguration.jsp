@@ -132,10 +132,10 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published.
-                Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+            <p> <strong>NOTE:</strong> When this assignment is pushed to the gradebook, it will immediately be published.
+                <strong>Please DO NOT alter the assignment in the gradebook, but instead use this tool to update the assignment as needed.</strong>
                 Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
-            </label>
+            </p>
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
