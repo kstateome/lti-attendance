@@ -26,9 +26,9 @@ public class CanvasAssignmentAssistant {
 
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistant.class);
     private static final String ASSIGNMENT_DESCRIPTION ="This is a single Assignment that reflects the attendance records with an Assignment Score. " +
-                                                        "Any changes to the Attendance Assignment Name, Attendance Weights, or Total Points will be updated in the single assignment when you select Push Assignment to Canvas. " +
+                                                        "Any changes to the Attendance Assignment Name, Attendance Weights, or Total Points will be updated in the single assignment when you select Push Assignment to Canvas from the K-State Attendance tool. " +
                                                         "<strong>DO NOT edit the Attendance Assignment Name or Total Points in the Assignment tool.</strong> " +
-                                                        "Instructors can edit the Attendance Assignment Name or Total Points in the Assignment Group or publish state.";
+                                                        "<p>Instructors who wish to edit the Assignment Group, ‘Assign to’, and the publish state on an assignment can do so in the Assignment tool. These changes cannot be made in the K-State Attendance tool.</p>";
 
     @Autowired
     private AttendanceAssignmentService assignmentService;
