@@ -140,12 +140,12 @@
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
                     <h5><i>Assignment Name: </i></h5>
-                    <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15" onkeyup="toggleButton()"/>
+                    <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15"/>
                 </label>
                 <br/>
                 <label for="assignmentPoints">
                     <h5><i>Total Points: </i></h5>
-                    <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5" onkeyup="toggleButton()"/>
+                    <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5"/>
                 </label>
                 <br/>
             </div>
@@ -158,28 +158,28 @@
                     <label>Present: </label>
                     <br/>
                     <label for="presentPoints">
-                        <form:input type = "text" path ="presentPoints" id = "presentPoints" size="7" onkeyup="toggleButton()"/>
+                        <form:input type = "text" path ="presentPoints" id = "presentPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Tardy: </label>
                     <br/>
                     <label for="tardyPoints">
-                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" size="7" onkeyup="toggleButton()"/>
+                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Absent: </label>
                     <br/>
                     <label for="absentPoints">
-                        <form:input type = "text" path ="absentPoints" id = "absentPoints" size="7" onkeyup="toggleButton()"/>
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Excused: </label>
                     <br/>
                     <label for="excusedPoints">
-                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" size="7" onkeyup="toggleButton()"/>
+                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" size="7"/>
                     </label>
                 </div>
 
@@ -265,6 +265,10 @@
                     $('#deleteModal').modal('show');
                 }
             }
+        });
+
+        $("#assignmentName, #assignmentPoints, #presentPoints, #tardyPoints, #absentPoints, #excusedPoints").keyup(function () {
+            disablePushConfirmation();
         });
 
         function submitPushForm(){

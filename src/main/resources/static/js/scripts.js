@@ -10,7 +10,7 @@ function toggleSection(val, contextPath) {
     $("#sectionSelect").attr("action", contextPath + "/roster/" + val + "/save");
 }
 
-function toggleButton(){
+function disablePushConfirmation(){
     $('#pushConfirmation')
         .attr("disabled", "disabled")
         .removeClass("hovering-purple-button pull-right buffer-top")
