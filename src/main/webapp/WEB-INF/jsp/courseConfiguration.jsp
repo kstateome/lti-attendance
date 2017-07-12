@@ -132,7 +132,7 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <p> <strong>NOTE:</strong> When this assignment is pushed to the gradebook, it will immediately be published.
+            <p> <strong>NOTE:</strong> Select “Save Setup” every time changes are made. When this assignment is pushed to the gradebook, it will immediately be published.
                 <strong>Please DO NOT alter the assignment in the gradebook, but instead use this tool to update the assignment as needed.</strong>
                 Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
             </p>
@@ -140,12 +140,12 @@
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
                     <h5><i>Assignment Name: </i></h5>
-                    <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15"/>
+                    <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15" onkeyup="toggleButton()"/>
                 </label>
                 <br/>
                 <label for="assignmentPoints">
                     <h5><i>Total Points: </i></h5>
-                    <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5"/>
+                    <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5" onkeyup="toggleButton()"/>
                 </label>
                 <br/>
             </div>
@@ -158,28 +158,28 @@
                     <label>Present: </label>
                     <br/>
                     <label for="presentPoints">
-                        <form:input type = "text" path ="presentPoints" id = "presentPoints" placeholder="100" size="7"/>
+                        <form:input type = "text" path ="presentPoints" id = "presentPoints" size="7" onkeyup="toggleButton()"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Tardy: </label>
                     <br/>
                     <label for="tardyPoints">
-                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" size="7" onkeyup="toggleButton()"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Absent: </label>
                     <br/>
                     <label for="absentPoints">
-                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" size="7" onkeyup="toggleButton()"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Excused: </label>
                     <br/>
                     <label for="excusedPoints">
-                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" size="7" onkeyup="toggleButton()"/>
                     </label>
                 </div>
 
@@ -254,7 +254,9 @@
 
         $('#conversionConfirm').change(function(){
             if (this.checked) {
-                $('#pushConfirmation').removeClass('hidden');
+                $('#pushConfirmation').removeClass('hidden hovering-purple-button pull-right buffer-top')
+                                      .attr('disabled', 'disabled')
+                                      .addClass('button_disabled pull-right buffer-top');
                 $('#conversionConfig').removeClass('hidden');
             } else {
                 $('#pushConfirmation').addClass('hidden');

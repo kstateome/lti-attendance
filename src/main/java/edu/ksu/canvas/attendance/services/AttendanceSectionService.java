@@ -125,6 +125,7 @@ public class AttendanceSectionService {
             attendanceAssignment = new AttendanceAssignment();
         }
 
+        courseForm.setAssignmentName(attendanceAssignment.getAssignmentName().isEmpty() ? "Attendance" : attendanceAssignment.getAssignmentName());
         courseForm.setAssignmentPoints(String.valueOf(attendanceAssignment.getAssignmentPoints() == null ? 100 : attendanceAssignment.getAssignmentPoints()));
         courseForm.setPresentPoints(String.valueOf(attendanceAssignment.getPresentPoints() == null ? 100 : attendanceAssignment.getPresentPoints()));
         courseForm.setExcusedPoints(String.valueOf(attendanceAssignment.getExcusedPoints() == null ? 0 : attendanceAssignment.getExcusedPoints()));
