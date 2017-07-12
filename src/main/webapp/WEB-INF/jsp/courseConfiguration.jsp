@@ -192,7 +192,7 @@
             Save Setup
         </button>
         <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')">
-            Push Assignment to Canvas
+            Push Assignment to Gradebook
         </button>
     </div>
     <hr/>
