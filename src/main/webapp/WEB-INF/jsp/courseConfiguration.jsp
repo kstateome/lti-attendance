@@ -132,10 +132,10 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <label> NOTE: When this assignment is pushed to the gradebook, it will immediately be published.
-                Please do not alter the assignment in the gradebook, but instead use this application to update the assignment as needed.
+            <p> <strong>NOTE:</strong> Select “Save Setup” every time changes are made. When this assignment is pushed to the gradebook, it will immediately be published.
+                <strong>Please DO NOT alter the assignment in the gradebook, but instead use this tool to update the assignment as needed.</strong>
                 Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
-            </label>
+            </p>
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
@@ -158,28 +158,28 @@
                     <label>Present: </label>
                     <br/>
                     <label for="presentPoints">
-                        <form:input type = "text" path ="presentPoints" id = "presentPoints" placeholder="100" size="7"/>
+                        <form:input type = "text" path ="presentPoints" id = "presentPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Tardy: </label>
                     <br/>
                     <label for="tardyPoints">
-                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="tardyPoints" id = "tardyPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Absent: </label>
                     <br/>
                     <label for="absentPoints">
-                        <form:input type = "text" path ="absentPoints" id = "absentPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="absentPoints" id = "absentPoints" size="7"/>
                     </label>
                 </div>
                 <div class="col-md-2 col-md-offset-0">
                     <label>Excused: </label>
                     <br/>
                     <label for="excusedPoints">
-                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" placeholder="0" size="7"/>
+                        <form:input type = "text" path ="excusedPoints" id = "excusedPoints" size="7"/>
                     </label>
                 </div>
 
@@ -192,7 +192,7 @@
             Save Setup
         </button>
         <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')">
-            Push Assignment to Canvas
+            Push Attendance to Gradebook
         </button>
     </div>
     <hr/>
@@ -254,7 +254,9 @@
 
         $('#conversionConfirm').change(function(){
             if (this.checked) {
-                $('#pushConfirmation').removeClass('hidden');
+                $('#pushConfirmation').removeClass('hidden hovering-purple-button pull-right buffer-top')
+                                      .attr('disabled', 'disabled')
+                                      .addClass('button_disabled pull-right buffer-top');
                 $('#conversionConfig').removeClass('hidden');
             } else {
                 $('#pushConfirmation').addClass('hidden');
@@ -263,6 +265,10 @@
                     $('#deleteModal').modal('show');
                 }
             }
+        });
+
+        $("#assignmentName, #assignmentPoints, #presentPoints, #tardyPoints, #absentPoints, #excusedPoints").keyup(function () {
+            disablePushConfirmation();
         });
 
         function submitPushForm(){
