@@ -49,7 +49,6 @@ public class ReportRepositoryITest {
     private ReportRepository reportRepository;
     
     private AttendanceCourse existingCourse;
-    private AttendanceSection existingSection;
     private AttendanceStudent existingStudent;
     private List<Attendance> existingAttendances;
     private List<Makeup> existingMakeups;
