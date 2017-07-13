@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import edu.ksu.canvas.attendance.entity.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.ksu.canvas.attendance.config.TestDatabaseConfig;
-import edu.ksu.canvas.attendance.entity.Attendance;
-import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.entity.Makeup;
 import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.SynchronizationService;
@@ -44,6 +41,9 @@ public class ReportRepositoryITest {
     
     @Autowired
     private AttendanceCourseRepository courseRepository;
+
+    @Autowired
+    private AttendanceSectionRepository sectionRepository;
     
     @Autowired
     private ReportRepository reportRepository;
@@ -74,7 +74,13 @@ public class ReportRepositoryITest {
         course.setDefaultMinutesPerSession(courseTotalMinutes);
         course.setTotalMinutes(SynchronizationService.DEFAULT_TOTAL_CLASS_MINUTES);
         existingCourse = courseRepository.save(course);
-        
+
+        AttendanceSection section = new AttendanceSection();
+        section.setCanvasCourseId(existingCourse.getCanvasCourseId());
+        section.setCanvasSectionId(expectedSectionId);
+        section.setName("Section");
+        existingSection = sectionRepository.save(section);
+
         AttendanceStudent student = new AttendanceStudent();
         student.setSisUserId("1001");
         student.setCanvasCourseId(existingCourse.getCanvasCourseId());
