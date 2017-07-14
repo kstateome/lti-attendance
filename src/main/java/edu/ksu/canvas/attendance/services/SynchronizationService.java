@@ -117,8 +117,7 @@ public class SynchronizationService {
 
         for(Section section: canvasSectionMap.keySet()) {
             Set<AttendanceStudent> droppedStudents = new HashSet<>();
-            List<AttendanceStudent> existingStudentsInDb;
-            existingStudentsInDb = studentRepository.findByCanvasSectionIdOrderByNameAsc(section.getId());
+            List<AttendanceStudent> existingStudentsInDb = studentRepository.findByCanvasSectionIdOrderByNameAsc(section.getId());
             droppedStudents.addAll(existingStudentsInDb);
 
             for(Enrollment enrollment: canvasSectionMap.get(section)) {
@@ -133,7 +132,7 @@ public class SynchronizationService {
                     droppedStudents.remove(foundUser.get());
                     foundUser.get().setDeleted(Boolean.FALSE);
                 }
-                AttendanceStudent student = foundUser.isPresent() ? foundUser.get() : new AttendanceStudent();
+                AttendanceStudent student = foundUser.orElse(new AttendanceStudent());
                 student = setStudentInfo(student, enrollment, section);
 
                 if (student.getAttendances() == null) {
