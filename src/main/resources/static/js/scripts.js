@@ -9,3 +9,10 @@ function toggleSection(val, contextPath) {
     $("#classSetupLink").attr("href", contextPath + "/courseConfiguration/" + val);
     $("#sectionSelect").attr("action", contextPath + "/roster/" + val + "/save");
 }
+
+function disablePushConfirmation(){
+    $('#pushConfirmation')
+        .attr("disabled", "disabled")
+        .removeClass("hovering-purple-button pull-right buffer-top")
+        .addClass("button_disabled pull-right buffer-top")
+}
