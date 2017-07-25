@@ -139,7 +139,7 @@ public class SummaryController extends AttendanceBaseController {
                         case ABSENT:
                             totalMissed++;
                             break;
-                        default:
+                        case PRESENT:
                             break;
 
                     }
