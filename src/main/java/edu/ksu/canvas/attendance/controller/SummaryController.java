@@ -3,7 +3,6 @@ package edu.ksu.canvas.attendance.controller;
 import edu.ksu.canvas.attendance.entity.Attendance;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
-import edu.ksu.canvas.attendance.enums.Status;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
@@ -140,6 +139,8 @@ public class SummaryController extends AttendanceBaseController {
                         case ABSENT:
                             totalMissed++;
                             break;
+                        default:
+                            break;
 
                     }
                 }
@@ -157,15 +158,6 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("dropDownList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId));
 
         return page;
-    }
-
-    public void getAttendanceTotals(AttendanceStudent entry, int totalTardy, int totalExcused, int totalMissed){
-        LOG.warn("ayy");
-
-        LOG.error(totalTardy);
-        LOG.error(totalExcused);
-        LOG.error(totalMissed);
-
     }
 
 }
