@@ -52,8 +52,8 @@ public class ReportRepository {
                 "  where course.course_id IN " +
                 "  ( " +
                 "    select distinct course.course_id " +
-                "    from attendance_student student, attendance_course course " +
-                "    where student.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
+                "    from attendance_section sect, attendance_course course " +
+                "    where sect.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
                 "  ) " +
                 ") " +
                 "order by course_id, canvas_section_id, student_name";
@@ -141,8 +141,8 @@ public class ReportRepository {
                         "  where course.course_id IN " +
                         "  ( " +
                         "    select distinct course.course_id " +
-                        "    from attendance_student student, attendance_course course " +
-                        "    where student.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
+                        "    from attendance_section sect, attendance_course course " +
+                        "    where sect.canvas_course_id = course.canvas_course_id and canvas_section_id = :canvas_section_id " +
                         "  ) " +
                         ") " +
                         "order by course_id, canvas_section_id, student_name";
