@@ -100,15 +100,6 @@ public class SummaryController extends AttendanceBaseController {
             sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
         }
 
-        List<AttendanceSummaryModel> summaryForSections = new ArrayList<>();
-        summaryForSections.stream()
-                .flatMap(summary -> summary.getEntries().stream())
-                .filter(entry -> entry.getStudentId() == validatedStudentId);
-
-        summaryForSections.addAll(isSimpleAttendance ?
-                reportService.getSimpleAttendanceSummaryReport(student.getCanvasSectionId()) :
-                reportService.getAviationAttendanceSummaryReport(student.getCanvasSectionId()));
-
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
         institutionRoles.stream()
