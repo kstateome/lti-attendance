@@ -44,9 +44,6 @@ public class SummaryController extends AttendanceBaseController {
     private AttendanceStudentService studentService;
 
     @Autowired
-    private ReportService reportService;
-
-    @Autowired
     private AttendanceCourseService courseService;
 
     @InitBinder
