@@ -47,13 +47,7 @@ public class SummaryController extends AttendanceBaseController {
     private ReportService reportService;
 
     @Autowired
-    protected CanvasApiWrapperService canvasService;
-
-    @Autowired
     private AttendanceCourseService courseService;
-
-    @Autowired
-    private AttendanceSectionService sectionService;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {

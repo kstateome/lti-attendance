@@ -37,9 +37,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
 
     @Autowired
-    private SynchronizationService synchronizationService;
-
-    @Autowired
     private AttendanceCourseService courseService;
 
     @Autowired
@@ -47,9 +44,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @Autowired
     private InputValidator inputValidator;
-
-    @Autowired
-    private AttendanceSectionService sectionService;
 
     @Autowired
     private AssignmentSubmitter assignmentSubmitter;

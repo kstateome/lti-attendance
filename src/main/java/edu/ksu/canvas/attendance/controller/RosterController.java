@@ -45,9 +45,6 @@ public class RosterController extends AttendanceBaseController {
     private AttendanceCourseService courseService;
 
     @Autowired
-    private AttendanceSectionService sectionService;
-
-    @Autowired
     private RosterFormValidator validator;
 
 
