@@ -102,8 +102,8 @@ public class SummaryController extends AttendanceBaseController {
         List<AttendanceStudent> studentAttendanceList = studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedCourseId);
 
         List<AttendanceSection> sectionList = new ArrayList<>();
-        for (int i = 0; i < studentAttendanceList.size(); i++) {
-            sectionList.add(sectionService.getSection(studentAttendanceList.get(i).getCanvasSectionId()));
+        for (AttendanceStudent attendanceStudent: studentAttendanceList) {
+            sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
         }
 
         List<AttendanceSummaryModel> summaryForSections = new ArrayList<>();
@@ -124,28 +124,25 @@ public class SummaryController extends AttendanceBaseController {
 
         int totalTardy = 0, totalExcused = 0, totalMissed = 0;
 
-        if (!studentAttendanceList.isEmpty()) {
-            for (int i = 0; i < studentAttendanceList.size(); i++) {
-                AttendanceStudent current = studentAttendanceList.get(i);
+        for (AttendanceStudent attendanceStudent: studentAttendanceList) {
+            for (Attendance attendance: attendanceStudent.getAttendances()) {
+                switch (attendance.getStatus()) {
+                    case TARDY:
+                        totalTardy++;
+                        break;
+                    case EXCUSED:
+                        totalExcused++;
+                        break;
+                    case ABSENT:
+                        totalMissed++;
+                        break;
+                    case PRESENT:
+                        break;
 
-                for (int index = 0; index < current.getAttendances().size(); index++) {
-                    switch (current.getAttendances().get(index).getStatus()) {
-                        case TARDY:
-                            totalTardy++;
-                            break;
-                        case EXCUSED:
-                            totalExcused++;
-                            break;
-                        case ABSENT:
-                            totalMissed++;
-                            break;
-                        case PRESENT:
-                            break;
-
-                    }
                 }
             }
         }
+
 
         page.addObject("totalTardy", totalTardy);
         page.addObject("totalExcused", totalExcused);
