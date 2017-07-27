@@ -139,18 +139,18 @@
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
-                    <h5><i>Assignment Name: </i></h5>
+                    <h5><em>Assignment Name: </em></h5>
                     <form:input type = "text" path ="assignmentName" id = "assignmentName" size = "15"/>
                 </label>
                 <br/>
                 <label for="assignmentPoints">
-                    <h5><i>Total Points: </i></h5>
+                    <h5><em>Total Points: </em></h5>
                     <form:input type = "text" path ="assignmentPoints" id = "assignmentPoints" size = "5"/>
                 </label>
                 <br/>
             </div>
             <div class="col-md-7 col-md-offset-0">
-                <h5><i>Attendance Weights: </i></h5>
+                <h5><em>Attendance Weights: </em></h5>
                 <p>Present, Tardy, Absent, and Excused are possible options for attendance status.
                    Please enter the percentage of the attendance points that each type of status should receive.</p>
 
@@ -226,7 +226,7 @@
                 </div>
                 <div class="modal-body">
                         <c:forEach items="${courseConfigurationForm.allSections}" var="section">
-                            <hr width="0" size="0">
+                            <hr>
                             <form:checkbox path="sectionsToGrade" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
                         </c:forEach>
                 </div>
