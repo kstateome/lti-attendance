@@ -1,10 +1,8 @@
 package edu.ksu.canvas.attendance.controller;
 
-import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
-import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
+import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.lti.launch.exception.OauthTokenRequiredException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
