@@ -46,7 +46,7 @@ public class AttendanceCourseServiceUTest {
 
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(course);
         courseService.loadIntoForm(courseForm, canvasCourseId);
-        
+
         assertEquals(expectedDefaultMinutesPerSession, courseForm.getDefaultMinutesPerSession());
         assertEquals(expectedTotalMinutes, courseForm.getTotalClassMinutes());
         assertTrue(courseForm.getSimpleAttendance());

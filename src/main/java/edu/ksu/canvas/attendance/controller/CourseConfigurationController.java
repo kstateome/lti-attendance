@@ -82,6 +82,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+        courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
         sectionService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
@@ -125,7 +126,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException {
         LOG.info("eid: " + canvasService.getEid() + " is forcing a synchronization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
         synchronizationService.synchronize(canvasService.getCourseId());
-        
+
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
         page.addObject("synchronizationSuccessful", true);
 
