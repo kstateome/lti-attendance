@@ -198,7 +198,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
     @Test
     public void synchronizeWithCanvas_HappyPath() throws Exception {
         Long irrelevantSectionId = 3000L;
-        
+
         mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/save")
                 .param("synchronizeWithCanvas", "Synchronize With Canvas"))
                 .andExpect(status().isOk())
