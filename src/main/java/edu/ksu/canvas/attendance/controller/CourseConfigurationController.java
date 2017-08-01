@@ -8,9 +8,7 @@ import edu.ksu.canvas.attendance.form.CourseConfigurationValidator;
 import edu.ksu.canvas.attendance.form.InputValidator;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
-import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.ReportService;
-import edu.ksu.canvas.attendance.services.SynchronizationService;
 import edu.ksu.canvas.attendance.submitter.AssignmentSubmitter;
 import edu.ksu.canvas.attendance.submitter.CanvasAssignmentAssistant;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
@@ -37,9 +35,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
     private static final Logger LOG = Logger.getLogger(CourseConfigurationController.class);
 
     @Autowired
-    private SynchronizationService synchronizationService;
-
-    @Autowired
     private AttendanceCourseService courseService;
 
     @Autowired
@@ -47,9 +42,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @Autowired
     private InputValidator inputValidator;
-
-    @Autowired
-    private AttendanceSectionService sectionService;
 
     @Autowired
     private AssignmentSubmitter assignmentSubmitter;
