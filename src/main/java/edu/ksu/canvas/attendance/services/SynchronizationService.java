@@ -114,29 +114,26 @@ public class SynchronizationService {
 
     private List<AttendanceStudent> synchronizeStudentsFromCanvasToDb(Map<Section, List<Enrollment>> canvasSectionMap, boolean hasOneAuthorityRole) {
         List<AttendanceStudent> ret = new ArrayList<>();
-        List<AttendanceStudent> existingStudentsInDb = null;
-        Set<AttendanceStudent> droppedStudents = new HashSet<>();
 
         for(Section section: canvasSectionMap.keySet()) {
-
-            if(existingStudentsInDb == null) {
-                existingStudentsInDb = studentRepository.findByCanvasCourseId(section.getCourseId());
-                droppedStudents.addAll(existingStudentsInDb);
-            }
+            Set<AttendanceStudent> droppedStudents = new HashSet<>();
+            List<AttendanceStudent> existingStudentsInDb = studentRepository.findByCanvasSectionIdOrderByNameAsc(section.getId());
+            droppedStudents.addAll(existingStudentsInDb);
 
             for(Enrollment enrollment: canvasSectionMap.get(section)) {
 
                 Optional<AttendanceStudent> foundUser =
                         existingStudentsInDb.stream()
                                         .filter(u -> u.getSisUserId().equals(enrollment.getUser().getSisUserId()))
+                                        .limit(1)
                                         .findFirst();
 
                 if (foundUser.isPresent()){
                     droppedStudents.remove(foundUser.get());
+                    foundUser.get().setDeleted(Boolean.FALSE);
                 }
-                AttendanceStudent student = foundUser.isPresent() ? foundUser.get() : new AttendanceStudent();
+                AttendanceStudent student = foundUser.orElse(new AttendanceStudent());
                 student = setStudentInfo(student, enrollment, section);
-                student.setDeleted(foundUser.isPresent() ? foundUser.get().getDeleted() : Boolean.FALSE);
 
                 if (student.getAttendances() == null) {
                     List<Attendance> attendances = new ArrayList<>();
@@ -151,9 +148,10 @@ public class SynchronizationService {
                 }
 
             }
-
+            droppedStudents.forEach(c -> c.setDeleted(Boolean.TRUE));
+            addDroppedStudents(ret, droppedStudents);
         }
-        addDroppedStudents(ret, droppedStudents);
+
 
         return ret;
     }
