@@ -68,6 +68,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
+        existingStudent.setStudentId(2000L);
         existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
