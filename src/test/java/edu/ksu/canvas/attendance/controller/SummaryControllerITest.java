@@ -70,6 +70,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         existingStudent = new AttendanceStudent();
         existingStudent.setCanvasCourseId(existingCourse.getCanvasCourseId());
+        existingStudent.setStudentId(2000L);
         existingStudent.setName("Smith, John");
         existingStudent.setCanvasSectionId(existingSection.getSectionId());
         existingStudent.setSisUserId("SisId");
@@ -152,7 +153,7 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
                             .andExpect(model().attribute("student",
                                             allOf(
-                                                    hasProperty("studentId",is(existingStudent.getStudentId())),
+                                                    hasProperty("studentId",is(studentId)),
                                                     hasProperty("attendances", hasSize(1)),
                                                     hasProperty("attendances",
                                                             containsInAnyOrder(
@@ -213,7 +214,7 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
                             .andExpect(model().attribute("student",
                                     allOf(
-                                            hasProperty("studentId",is(existingStudent.getStudentId())),
+                                            hasProperty("studentId",is(studentId)),
                                             hasProperty("attendances", hasSize(1)),
                                             hasProperty("attendances",
                                                     containsInAnyOrder(
