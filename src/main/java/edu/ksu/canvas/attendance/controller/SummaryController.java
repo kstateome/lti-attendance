@@ -84,7 +84,9 @@ public class SummaryController extends AttendanceBaseController {
         long selectedCourseId = 0;
         if (selectedSection != null) {
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
             selectedCourseId = selectedSection.getCanvasCourseId();
+
         }
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
