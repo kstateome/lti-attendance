@@ -129,7 +129,7 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("totalTardy", totalTardy);
         page.addObject("totalExcused", totalExcused);
         page.addObject("totalMissed", totalMissed);
-        page.addObject("selectedSectionId", sectionId);
+        page.addObject("sectionId", sectionId);
         page.addObject("sectionList", sectionList);
         page.addObject("student", student);
         page.addObject("studentList", studentAttendanceList);
