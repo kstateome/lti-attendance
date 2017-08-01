@@ -4,12 +4,10 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.form.RosterFormValidator;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
-import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
-import edu.ksu.canvas.attendance.services.AttendanceSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
-
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +41,6 @@ public class RosterController extends AttendanceBaseController {
 
     @Autowired
     private AttendanceCourseService courseService;
-
-    @Autowired
-    private AttendanceSectionService sectionService;
 
     @Autowired
     private RosterFormValidator validator;
@@ -88,6 +83,7 @@ public class RosterController extends AttendanceBaseController {
         rosterForm.setSectionId(selectedSection.getSectionId());
         rosterForm.setSectionModels(sectionModelFactory.createSectionModels(sections));
         courseService.loadIntoForm(rosterForm, selectedSection.getCanvasCourseId());
+        rosterForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
         attendanceService.loadIntoForm(rosterForm, date);
 
         ModelAndView page = new ModelAndView("roster");

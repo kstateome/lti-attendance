@@ -4,9 +4,8 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
-import edu.ksu.canvas.attendance.services.AttendanceSectionService;
-import edu.ksu.canvas.attendance.services.ReportService;
 import edu.ksu.canvas.attendance.services.AttendanceSummaryCSVService;
+import edu.ksu.canvas.attendance.services.ReportService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -23,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 
 @Controller
@@ -35,9 +36,6 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
     @Autowired
     private ReportService reportService;
-
-    @Autowired
-    private AttendanceSectionService sectionService;
 
     @Autowired
     private AttendanceCourseService courseService;
@@ -67,6 +65,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
         boolean isSimpleAttendance = false;
         if (selectedSection != null){
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
             isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
         }
 
