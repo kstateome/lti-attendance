@@ -200,7 +200,7 @@ public class SummaryControllerITest extends BaseControllerITest {
 
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
-                if(entry.getStudentId() == existingStudent.getStudentId()) {
+                if(entry.getStudentId() == studentId) {
                     AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId, sisUserId, existingStudent.getName(), existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getSumMinutesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
@@ -208,7 +208,7 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
                             .andExpect(model().attribute("student",
                                     allOf(
-                                            hasProperty("studentId",is(existingStudent.getStudentId())),
+                                            hasProperty("studentId",is(studentId)),
                                             hasProperty("attendances", hasSize(1)),
                                             hasProperty("attendances",
                                                     containsInAnyOrder(
