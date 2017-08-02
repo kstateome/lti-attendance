@@ -89,6 +89,7 @@
     <br>
 
 
+
     <div class="section-dropdown row col-sm-4 form-group ">
                 <label for="sectionId">Section</label>
                 <form:select class="form-control" id="sectionId" path="sectionId" items="${dropDownList}"
@@ -135,6 +136,7 @@
         console.log('value in body - ' + val);
         toggleSection(val, contextPath);
     });
+
 </script>
 <script src="${context}/js/moment.js"></script>
 <!-- Load Bootstrap JS -->

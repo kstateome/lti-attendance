@@ -9,7 +9,6 @@ import edu.ksu.canvas.attendance.form.MakeupForm;
 
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
-
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.commons.validator.routines.LongValidator;
@@ -84,12 +83,14 @@ public class SummaryController extends AttendanceBaseController {
         //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-
         long selectedCourseId = 0;
-        if (selectedSection != null){
+        if (selectedSection != null) {
+
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
-            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
+
             selectedCourseId = selectedSection.getCanvasCourseId();
+
+            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
         }
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
@@ -123,19 +124,21 @@ public class SummaryController extends AttendanceBaseController {
                         totalMissed++;
                         break;
                     case PRESENT:
-                       break;
+                        break;
+
                 }
             }
         }
 
-        page.addObject("sectionId", sectionId);
-        page.addObject("student", student);
-        page.addObject("summaryForm", makeupForm);
+
         page.addObject("totalTardy", totalTardy);
         page.addObject("totalExcused", totalExcused);
         page.addObject("totalMissed", totalMissed);
+        page.addObject("sectionId", sectionId);
         page.addObject("sectionList", sectionList);
+        page.addObject("student", student);
         page.addObject("studentList", studentAttendanceList);
+        page.addObject("summaryForm", makeupForm);
         page.addObject("dropDownList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId));
 
         return page;

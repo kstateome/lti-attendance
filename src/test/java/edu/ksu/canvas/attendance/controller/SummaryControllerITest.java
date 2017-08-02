@@ -152,7 +152,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
                             .andExpect(model().attribute("student",
                                             allOf(
-                                                    hasProperty("studentId",is(existingStudent.getStudentId())),
                                                     hasProperty("attendances", hasSize(1)),
                                                     hasProperty("attendances",
                                                             containsInAnyOrder(
@@ -206,7 +205,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                             .andExpect(model().attribute("sectionId", is(sectionId.toString())))
                             .andExpect(model().attribute("student",
                                     allOf(
-                                            hasProperty("studentId",is(existingStudent.getStudentId())),
                                             hasProperty("attendances", hasSize(1)),
                                             hasProperty("attendances",
                                                     containsInAnyOrder(
