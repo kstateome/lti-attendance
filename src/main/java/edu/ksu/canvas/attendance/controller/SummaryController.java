@@ -6,10 +6,10 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
-import edu.ksu.canvas.attendance.services.AttendanceCourseService;
-import edu.ksu.canvas.attendance.services.AttendanceStudentService;
-import edu.ksu.canvas.attendance.services.MakeupService;
+
+import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
+
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.commons.validator.routines.LongValidator;
@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import edu.ksu.canvas.attendance.util.DropDownOrganizer;
+import java.util.ArrayList;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,9 +84,11 @@ public class SummaryController extends AttendanceBaseController {
         //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
+
         long selectedCourseId = 0;
-        if (selectedSection != null) {
+        if (selectedSection != null){
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
+            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
             selectedCourseId = selectedSection.getCanvasCourseId();
         }
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
@@ -92,14 +97,12 @@ public class SummaryController extends AttendanceBaseController {
                 new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
 
         List<AttendanceStudent> studentAttendanceList = studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedCourseId);
-
         List<AttendanceSection> sectionList = new ArrayList<>();
         for (AttendanceStudent attendanceStudent: studentAttendanceList) {
             sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
         }
 
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
-
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
@@ -120,21 +123,19 @@ public class SummaryController extends AttendanceBaseController {
                         totalMissed++;
                         break;
                     case PRESENT:
-                        break;
-
+                       break;
                 }
             }
         }
 
-
+        page.addObject("sectionId", sectionId);
+        page.addObject("student", student);
+        page.addObject("summaryForm", makeupForm);
         page.addObject("totalTardy", totalTardy);
         page.addObject("totalExcused", totalExcused);
         page.addObject("totalMissed", totalMissed);
-        page.addObject("selectedSectionId", sectionId);
         page.addObject("sectionList", sectionList);
-        page.addObject("student", student);
         page.addObject("studentList", studentAttendanceList);
-        page.addObject("summaryForm", makeupForm);
         page.addObject("dropDownList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId));
 
         return page;
