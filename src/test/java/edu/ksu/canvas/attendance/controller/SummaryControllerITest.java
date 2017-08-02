@@ -163,13 +163,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                                                                     )
                                                              ))
                                                     )))
-                                    .andExpect(model().attribute("attendanceSummaryEntry",
-                                            allOf(
-                                                    hasProperty("sumMinutesMissed", is(studentSummary.getSumMinutesMissed())),
-                                                    hasProperty("sumMinutesMadeup", is(studentSummary.getSumMinutesMadeup())),
-                                                    hasProperty("remainingMinutesMadeup", is(studentSummary.getRemainingMinutesMadeup())),
-                                                    hasProperty("percentCourseMissed", is(studentSummary.getPercentCourseMissed()))
-                                            )))
                                     .andExpect(model().attribute("summaryForm",
                                             allOf(
                                                     hasProperty("sectionId", is(sectionId)),
@@ -223,11 +216,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                                                                     hasProperty("dateOfClass", is(existingAttendance.getDateOfClass()))
                                                             )
                                                     ))
-                                    )))
-                            .andExpect(model().attribute("attendanceSummaryEntry",
-                                    allOf(
-                                            hasProperty("totalClassesMissed", is(studentSummary.getTotalClassesMissed())),
-                                            hasProperty("totalClassesTardy", is(studentSummary.getTotalClassesTardy()))
                                     )))
                             .andExpect(model().attribute("summaryForm",
                                     allOf(
