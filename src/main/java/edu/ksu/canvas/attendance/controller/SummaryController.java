@@ -6,7 +6,7 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
-import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
+
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import edu.ksu.canvas.attendance.util.DropDownOrganizer;
+import java.util.ArrayList;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,6 +85,7 @@ public class SummaryController extends AttendanceBaseController {
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         long selectedCourseId = 0;
         if (selectedSection != null) {
+
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
 
             selectedCourseId = selectedSection.getCanvasCourseId();
@@ -94,14 +98,12 @@ public class SummaryController extends AttendanceBaseController {
                 new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
 
         List<AttendanceStudent> studentAttendanceList = studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedCourseId);
-
         List<AttendanceSection> sectionList = new ArrayList<>();
         for (AttendanceStudent attendanceStudent: studentAttendanceList) {
             sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
         }
 
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
-
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
