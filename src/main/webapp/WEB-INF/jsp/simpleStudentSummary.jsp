@@ -78,6 +78,16 @@
     </table>
     <br>
     <h3>Attendance Logs</h3>
+    <div class="section-dropdown row col-sm-4 form-group ">
+        <label for="sectionId">Section</label>
+        <form:select class="form-control" id="sectionId" path="sectionId" items="${dropDownList}"
+                itemValue="canvasSectionId" itemLabel="name"
+                onchange="toggleSection(value, '${context}');"/>
+    </div>
+    <br>
+    <br>
+    <br>
+
 
     <div class="section-dropdown row col-sm-4 form-group ">
                 <label for="sectionId">Section</label>
@@ -126,7 +136,6 @@
         toggleSection(val, contextPath);
     });
 </script>
-
 <script src="${context}/js/moment.js"></script>
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>

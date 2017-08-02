@@ -4,7 +4,6 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.form.MakeupForm;
 import edu.ksu.canvas.attendance.form.MakeupValidator;
-import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
@@ -33,9 +32,6 @@ public class MakeupController extends AttendanceBaseController {
     private MakeupService makeupService;
 
     @Autowired
-    private AttendanceStudentService studentService;
-
-    @Autowired
     private MakeupValidator validator;
 
 
@@ -61,12 +57,12 @@ public class MakeupController extends AttendanceBaseController {
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-        AttendanceStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
+        AttendanceStudent selectedStudent = validatedStudentId == null ? null : attendanceStudentService.getStudent(validatedStudentId);
         if(validatedStudentId == null || selectedStudent == null) {
             return new ModelAndView("forward:roster/"+validatedSectionId);
         }
 
-        AttendanceStudent student = studentService.getStudent(new Long(studentId));
+        AttendanceStudent student = attendanceStudentService.getStudent(new Long(studentId));
         MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
 
         ModelAndView page = new ModelAndView("studentMakeup");
@@ -95,7 +91,7 @@ public class MakeupController extends AttendanceBaseController {
             String errorMessage = "Please correct user input and try saving again.";
 
             ModelAndView page = new ModelAndView("studentMakeup");
-            AttendanceStudent student = studentService.getStudent(makeupForm.getStudentId());
+            AttendanceStudent student = attendanceStudentService.getStudent(makeupForm.getStudentId());
             page.addObject("sectionId", String.valueOf(makeupForm.getSectionId()));
             page.addObject("student", student);
             page.addObject("makeupForm", makeupForm);

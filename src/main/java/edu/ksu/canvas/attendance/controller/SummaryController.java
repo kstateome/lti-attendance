@@ -6,7 +6,10 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
+
 import edu.ksu.canvas.attendance.services.*;
+import edu.ksu.canvas.attendance.util.DropDownOrganizer;
+
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.commons.validator.routines.LongValidator;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +49,6 @@ public class SummaryController extends AttendanceBaseController {
 
     @Autowired
     private AttendanceCourseService courseService;
-
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -86,6 +89,7 @@ public class SummaryController extends AttendanceBaseController {
         if (selectedSection != null){
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
             courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
+            selectedCourseId = selectedSection.getCanvasCourseId();
         }
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
