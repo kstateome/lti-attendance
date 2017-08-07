@@ -46,7 +46,7 @@
         </ul>
     </div>
 </nav>
-<form:form id="setupForm" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
+<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:forEach items="${error}" var="oneError">
         <div class="alert alert-danger">
@@ -191,7 +191,7 @@
         <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="button" onclick="submitSaveForm()">
             Save Setup
         </button>
-        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#sectionSelect').modal('show')">
+        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')">
             Push Attendance to Gradebook
         </button>
     </div>
@@ -239,7 +239,6 @@
         </div>
     </div>
 
-
     <div class="confirmation-modal modal fade in" id = "pushAlert">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -259,7 +258,7 @@
     </div>
 
     <br/><br/>
-    <script type="text/javascript">
+    <script>
 
         var errorMessage = "There was an error communicating with the server.";
 
@@ -298,8 +297,8 @@
                     .attr("type", "hidden")
                     .attr("name", "pushGradesToCanvas")
                     .attr("value", "pushGradesToCanvas")
-                    .appendTo("#setupForm");
-            $('#setupForm').submit();
+                    .appendTo("#sectionSelect");
+            $('#sectionSelect').submit();
             $('#pushGradesToCanvas').attr("disabled", "disabled");
 
         }
@@ -308,8 +307,8 @@
                     .attr("type", "hidden")
                     .attr("name", "saveCourseConfiguration")
                     .attr("value", "saveCourseConfiguration")
-                    .appendTo("#setupForm");
-            $('#setupForm').submit();
+                    .appendTo("#sectionSelect");
+            $('#sectionSelect').submit();
             $('#saveCourseConfiguration').attr("disabled", "disabled");
         }
         function submitDeleteForm(){
@@ -317,14 +316,18 @@
                     .attr("type", "hidden")
                     .attr("name", "deleteAssignment")
                     .attr("value", "deleteAssignment")
-                    .appendTo("#setupForm");
-            $('#setupForm').submit();
+                    .appendTo("#sectionSelect");
+            $('#sectionSelect').submit();
             $('#deleteAssignment').attr("disabled", "disabled");
             $('#cancelDelete').attr("disabled", "disabled");
         }
 
         function hasAssignmentConfiguration() {
-            return ($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 );
+            if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
 

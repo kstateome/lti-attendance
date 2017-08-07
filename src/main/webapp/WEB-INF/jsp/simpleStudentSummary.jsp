@@ -71,37 +71,62 @@
         <tr>
             <td>${student.name}</td>
             <td>${student.sisUserId}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesMissed}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesExcused}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
+            <td class="text-center">${totalMissed}</td>
+            <td class="text-center">${totalExcused}</td>
+            <td class="text-center">${totalTardy}</td>
         </tr>
     </table>
-
+    <br>
     <h3>Attendance Logs</h3>
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th class="col-md-1">Class Date</th>
-            <th class="col-md-1">Status</th>
-            <th class="col-md-2">Notes</th>
-        </tr>
-        </thead>
+    <div class="section-dropdown row col-sm-4 form-group ">
+                <label for="sectionId">Section</label>
+                <form:select class="form-control" id="sectionId" path="sectionId" items="${dropDownList}"
+                itemValue="canvasSectionId" itemLabel="name"
+                        onchange="toggleSection(value, '${context}');"/>
+            </div>
+        <br>
+        <br>
+        <br>
 
-        <tbody id="summaryTableBody">
-        <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
-            <tr>
-                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
-                <td>${attendance.status}</td>
-                <td>${attendance.notes}</td>
-            </tr>
+        <c:forEach items="${sectionList}" var="section" varStatus="sectionLoop">
+            <table class="table table-bordered sectionTable" style="display:none" id="${section.canvasSectionId}">
+                <thead>
+                <tr>
+                    <th class="col-md-1">Class Date</th>
+                    <th class="col-md-1">Status</th>
+                    <th class="col-md-2">Notes</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <c:forEach items="${studentList}" var="current" varStatus="studentLoop">
+                        <c:forEach items="${current.attendances}" var="attendance" varStatus="attendanceLoop">
+                            <c:if test="${(current.canvasSectionId == section.canvasSectionId) && (attendance.status != 'PRESENT')}">
+                                <tr>
+                                    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
+                                    <td>${attendance.status}</td>
+                                    <td>${attendance.notes}</td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
+                    </c:forEach>
+                </tbody>
+            </table>
         </c:forEach>
 
-        </tbody>
-
-    </table>
 
 </form:form>
+<script type="text/javascript">
+    $(function () {
+        // Update the selected section information
+        val = ${dropDownList.get(0).canvasSectionId};
+        contextPath = '${context}';
+        console.log('value in body - ' + val);
+        toggleSection(val, contextPath);
+    });
+</script>
+
 <script src="${context}/js/moment.js"></script>
 <!-- Load Bootstrap JS -->
 <script src="${context}/bootstrap/js/bootstrap.min.js"></script>
