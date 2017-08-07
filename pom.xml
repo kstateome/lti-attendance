@@ -9,15 +9,15 @@
 	</parent>
 
 	<groupId>edu.ksu.ome.lti</groupId>
+
     <artifactId>lti-attendance</artifactId>
-    <version>1.1.9</version>
+    <version>1.2.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <scm>
         <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
         <url>https://github.com/kstateome/aviation-reporting</url>
-      <tag>1.1.9</tag>
   </scm>
 
     <distributionManagement>

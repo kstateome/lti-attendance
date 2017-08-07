@@ -218,7 +218,28 @@
         </div>
     </div>
 
-    <div class="confirmation-modal modal fade in" id = "pushModal">
+    <div class="confirmation-modal modal fade in" id = "sectionSelect">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select which Sections will have assignments:</h4>
+                </div>
+                <div class="modal-body">
+                        <c:forEach items="${courseConfigurationForm.allSections}" var="section">
+                            <br>
+                            <form:checkbox path="sectionsToGrade" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
+                        </c:forEach>
+                </div>
+                <div class="modal-footer">
+                    <button id="sectionSubmit" name="sectionSubmit" class="confirm btn btn-primary" type="button" onclick="$('#sectionSelect').modal('hide');$('#pushAlert').modal('show');">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirmation-modal modal fade in" id = "pushAlert">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
