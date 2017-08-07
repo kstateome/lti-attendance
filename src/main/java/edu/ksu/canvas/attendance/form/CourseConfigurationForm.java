@@ -1,7 +1,11 @@
 package edu.ksu.canvas.attendance.form;
 
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CourseConfigurationForm {
@@ -31,6 +35,10 @@ public class CourseConfigurationForm {
     private Boolean gradingOn;
 
     private String assignmentName;
+
+    private List<AttendanceSection> allSections;
+
+    private List<Long> sectionsToGrade = new ArrayList<>();
 
 
     public int getTotalClassMinutes() {
@@ -121,5 +129,21 @@ public class CourseConfigurationForm {
 
     public void setAssignmentName(String assignmentName) {
         this.assignmentName = assignmentName;
+    }
+
+    public List<AttendanceSection> getAllSections() {
+        return allSections;
+    }
+
+    public void setAllSections(List<AttendanceSection> allSections) {
+        this.allSections = allSections;
+    }
+
+    public List<Long> getSectionsToGrade() {
+        return sectionsToGrade;
+    }
+
+    public void setSectionsToGrade(List<Long> sectionsToGrade) {
+        this.sectionsToGrade = sectionsToGrade;
     }
 }
