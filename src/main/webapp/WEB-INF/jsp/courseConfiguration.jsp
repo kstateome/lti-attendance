@@ -46,7 +46,7 @@
         </ul>
     </div>
 </nav>
-<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
+<form:form id="setupForm" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:forEach items="${error}" var="oneError">
         <div class="alert alert-danger">
@@ -191,7 +191,7 @@
         <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="button" onclick="submitSaveForm()">
             Save Setup
         </button>
-        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')">
+        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#sectionSelect').modal('show')">
             Push Attendance to Gradebook
         </button>
     </div>
@@ -218,7 +218,29 @@
         </div>
     </div>
 
-    <div class="confirmation-modal modal fade in" id = "pushModal">
+    <div class="confirmation-modal modal fade in" id = "sectionSelect">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select which Sections will have assignments:</h4>
+                </div>
+                <div class="modal-body">
+                        <c:forEach items="${courseConfigurationForm.allSections}" var="section">
+                            <br>
+                            <form:checkbox path="sectionsToGrade" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
+                        </c:forEach>
+                </div>
+                <div class="modal-footer">
+                    <button id="sectionSubmit" name="sectionSubmit" class="confirm btn btn-primary" type="button" onclick="$('#sectionSelect').modal('hide');$('#pushAlert').modal('show');">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="confirmation-modal modal fade in" id = "pushAlert">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -237,7 +259,7 @@
     </div>
 
     <br/><br/>
-    <script>
+    <script type="text/javascript">
 
         var errorMessage = "There was an error communicating with the server.";
 
@@ -276,8 +298,8 @@
                     .attr("type", "hidden")
                     .attr("name", "pushGradesToCanvas")
                     .attr("value", "pushGradesToCanvas")
-                    .appendTo("#sectionSelect");
-            $('#sectionSelect').submit();
+                    .appendTo("#setupForm");
+            $('#setupForm').submit();
             $('#pushGradesToCanvas').attr("disabled", "disabled");
 
         }
@@ -286,8 +308,8 @@
                     .attr("type", "hidden")
                     .attr("name", "saveCourseConfiguration")
                     .attr("value", "saveCourseConfiguration")
-                    .appendTo("#sectionSelect");
-            $('#sectionSelect').submit();
+                    .appendTo("#setupForm");
+            $('#setupForm').submit();
             $('#saveCourseConfiguration').attr("disabled", "disabled");
         }
         function submitDeleteForm(){
@@ -295,18 +317,14 @@
                     .attr("type", "hidden")
                     .attr("name", "deleteAssignment")
                     .attr("value", "deleteAssignment")
-                    .appendTo("#sectionSelect");
-            $('#sectionSelect').submit();
+                    .appendTo("#setupForm");
+            $('#setupForm').submit();
             $('#deleteAssignment').attr("disabled", "disabled");
             $('#cancelDelete').attr("disabled", "disabled");
         }
 
         function hasAssignmentConfiguration() {
-            if($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 ) {
-                return false;
-            } else {
-                return true;
-            }
+            return ($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 );
         }
 
 
