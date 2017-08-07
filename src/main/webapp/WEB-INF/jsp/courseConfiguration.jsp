@@ -226,7 +226,7 @@
                 </div>
                 <div class="modal-body">
                         <c:forEach items="${courseConfigurationForm.allSections}" var="section">
-                            <hr width="0" size="0">
+                            <br>
                             <form:checkbox path="sectionsToGrade" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
                         </c:forEach>
                 </div>

@@ -6,7 +6,6 @@ import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.form.MakeupForm;
-import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
@@ -45,12 +44,6 @@ public class SummaryController extends AttendanceBaseController {
     private AttendanceStudentService studentService;
 
     @Autowired
-    private ReportService reportService;
-
-    @Autowired
-    protected CanvasApiWrapperService canvasService;
-
-    @Autowired
     private AttendanceCourseService courseService;
 
 
@@ -81,45 +74,70 @@ public class SummaryController extends AttendanceBaseController {
         if(student == null) {
             throw new IllegalArgumentException("Student does not exist in database.");
         }
+        student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
 
         MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
 
         //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        boolean isSimpleAttendance = false;
+        LOG.warn(selectedSection + "============================================");
+        long selectedCourseId = 0;
         if (selectedSection != null){
+            selectedCourseId = selectedSection.getCanvasCourseId();
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
-            isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
+            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
         }
+        final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
                 new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
+        LOG.warn(selectedCourseId);
 
-        List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
-                reportService.getSimpleAttendanceSummaryReport(validatedSectionId) :
-                reportService.getAviationAttendanceSummaryReport(validatedSectionId);
+        List<AttendanceStudent> studentAttendanceList = studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedCourseId);
+        List<AttendanceSection> sectionList = new ArrayList<>();
+        for (AttendanceStudent attendanceStudent: studentAttendanceList) {
+            sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
+        }
+
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
-
-        student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
-
-        summaryForSections.stream()
-                .flatMap(summary -> summary.getEntries().stream())
-                .filter(entry -> entry.getStudentId() == validatedStudentId)
-                .findFirst()
-                .ifPresent(entry ->  page.addObject("attendanceSummaryEntry", courseConfigurationForm.getSimpleAttendance() ?
-                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent())
-                          : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
-
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
 
+        int totalTardy = 0, totalExcused = 0, totalMissed = 0;
+
+        for (AttendanceStudent attendanceStudent: studentAttendanceList) {
+            for (Attendance attendance: attendanceStudent.getAttendances()) {
+                switch (attendance.getStatus()) {
+                    case TARDY:
+                        totalTardy++;
+                        break;
+                    case EXCUSED:
+                        totalExcused++;
+                        break;
+                    case ABSENT:
+                        totalMissed++;
+                        break;
+                    case PRESENT:
+                        break;
+                }
+            }
+        }
 
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("summaryForm", makeupForm);
+        page.addObject("totalTardy", totalTardy);
+        page.addObject("totalExcused", totalExcused);
+        page.addObject("totalMissed", totalMissed);
+        page.addObject("sectionList", sectionList);
+        page.addObject("studentList", studentAttendanceList);
+        page.addObject("dropDownList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId));
+        LOG.warn(DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId) + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=");
+        LOG.warn(studentAttendanceList);
+        LOG.warn(sectionList);
 
         return page;
     }
