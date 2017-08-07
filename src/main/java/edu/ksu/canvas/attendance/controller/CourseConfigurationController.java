@@ -82,7 +82,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
-        courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
         sectionService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         page.addObject("courseConfigurationForm", courseConfigurationForm);
         page.addObject("selectedSectionId", selectedSection.getCanvasSectionId());
