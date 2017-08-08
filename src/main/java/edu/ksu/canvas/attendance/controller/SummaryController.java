@@ -80,17 +80,12 @@ public class SummaryController extends AttendanceBaseController {
         MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
 
         //Checking if Attendance Summary is Simple or Aviation
-
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         long selectedCourseId = student.getCanvasCourseId();
 
-        LOG.warn(selectedCourseId);
         courseService.loadIntoForm(courseConfigurationForm, selectedCourseId);
         List<AttendanceSection> sectionList = sectionService.getSectionByCanvasCourseId(selectedCourseId);
-        LOG.warn(sectionList);
         courseConfigurationForm.setAllSections(sectionList);
-
-
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
@@ -106,7 +101,6 @@ public class SummaryController extends AttendanceBaseController {
         int totalTardy = 0, totalExcused = 0, totalMissed = 0;
 
         for (AttendanceStudent attendanceStudent: studentAttendanceList) {
-
             for (Attendance attendance: attendanceStudent.getAttendances()) {
                 switch (attendance.getStatus()) {
                     case TARDY:
