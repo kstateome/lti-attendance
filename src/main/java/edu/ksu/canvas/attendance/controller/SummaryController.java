@@ -19,6 +19,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class SummaryController extends AttendanceBaseController {
     }
 
 
-    @RequestMapping("/{sectionId}/{studentId}")
+    @RequestMapping(value = "/{sectionId}/{studentId}", method = RequestMethod.GET)
     public ModelAndView studentSummary(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
         return studentSummary(sectionId, studentId, false);
     }
@@ -79,27 +80,23 @@ public class SummaryController extends AttendanceBaseController {
         MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
 
         //Checking if Attendance Summary is Simple or Aviation
-        AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        LOG.warn(selectedSection + "============================================");
-        long selectedCourseId = 0;
-        if (selectedSection != null){
-            selectedCourseId = selectedSection.getCanvasCourseId();
-            courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
-            courseConfigurationForm.setAllSections(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
-        }
+        long selectedCourseId = student.getCanvasCourseId();
+
+        LOG.warn(selectedCourseId);
+        courseService.loadIntoForm(courseConfigurationForm, selectedCourseId);
+        List<AttendanceSection> sectionList = sectionService.getSectionByCanvasCourseId(selectedCourseId);
+        LOG.warn(sectionList);
+        courseConfigurationForm.setAllSections(sectionList);
+
+
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
                 new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
-        LOG.warn(selectedCourseId);
 
         List<AttendanceStudent> studentAttendanceList = studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedCourseId);
-        List<AttendanceSection> sectionList = new ArrayList<>();
-        for (AttendanceStudent attendanceStudent: studentAttendanceList) {
-            sectionList.add(sectionService.getSection(attendanceStudent.getCanvasSectionId()));
-        }
-
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
@@ -109,6 +106,7 @@ public class SummaryController extends AttendanceBaseController {
         int totalTardy = 0, totalExcused = 0, totalMissed = 0;
 
         for (AttendanceStudent attendanceStudent: studentAttendanceList) {
+
             for (Attendance attendance: attendanceStudent.getAttendances()) {
                 switch (attendance.getStatus()) {
                     case TARDY:
@@ -125,7 +123,6 @@ public class SummaryController extends AttendanceBaseController {
                 }
             }
         }
-
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("summaryForm", makeupForm);
@@ -135,9 +132,6 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("sectionList", sectionList);
         page.addObject("studentList", studentAttendanceList);
         page.addObject("dropDownList", DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId));
-        LOG.warn(DropDownOrganizer.sortWithSelectedSectionFirst(sectionList, sectionId) + "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=");
-        LOG.warn(studentAttendanceList);
-        LOG.warn(sectionList);
 
         return page;
     }
