@@ -102,7 +102,7 @@
             <tbody>
             <c:forEach items="${studentList}" var="current" varStatus="studentLoop">
                 <c:forEach items="${current.attendances}" var="attendance" varStatus="attendanceLoop">
-                    <c:if test="${(current.canvasSectionId == section.canvasSectionId) && (attendance.status != 'PRESENT')}">
+                    <c:if test="${(current.canvasSectionId == section.canvasSectionId)}">
                         <tr>
                             <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
                             <td>${attendance.status}</td>

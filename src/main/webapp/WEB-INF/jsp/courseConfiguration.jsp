@@ -201,6 +201,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Deletion Confirmation</h4>
                 </div>
                 <div class="modal-body">
@@ -222,16 +223,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Select which Sections will have assignments:</h4>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-warning"><p>Please allow a few minutes for Canvas to update the gradebook.</p>
+                    </div>
                         <c:forEach items="${courseConfigurationForm.allSections}" var="section">
                             <br>
                             <form:checkbox path="sectionsToGrade" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
                         </c:forEach>
                 </div>
                 <div class="modal-footer">
-                    <button id="sectionSubmit" name="sectionSubmit" class="confirm btn btn-primary" type="button" onclick="$('#sectionSelect').modal('hide');$('#pushAlert').modal('show');">
+                    <button id="sectionSubmit" name="sectionSubmit" class="confirm btn btn-primary" type="button" onclick="submitPushForm();">
                         OK
                     </button>
                 </div>
@@ -240,23 +244,24 @@
     </div>
 
 
-    <div class="confirmation-modal modal fade in" id = "pushAlert">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Push Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    Please allow a few minutes for Canvas to update the gradebook.
-                </div>
-                <div class="modal-footer">
-                    <button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="button" onclick="submitPushForm()">
-                        OK
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <%--<div class="confirmation-modal modal fade in" id = "pushAlert">--%>
+        <%--<div class="modal-dialog">--%>
+            <%--<div class="modal-content">--%>
+                <%--<div class="modal-header">--%>
+                    <%--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--%>
+                    <%--<h4 class="modal-title">Push Confirmation</h4>--%>
+                <%--</div>--%>
+                <%--<div class="modal-body">--%>
+                    <%--Please allow a few minutes for Canvas to update the gradebook.--%>
+                <%--</div>--%>
+                <%--<div class="modal-footer">--%>
+                    <%--<button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="button" onclick="submitPushForm()">--%>
+                        <%--OK--%>
+                    <%--</button>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <br/><br/>
     <script type="text/javascript">
@@ -283,9 +288,7 @@
             } else {
                 $('#pushConfirmation').addClass('hidden');
                 $('#conversionConfig').addClass('hidden');
-                if(hasAssignmentConfiguration()) {
-                    $('#deleteModal').modal('show');
-                }
+                $('#deleteModal').modal('show');
             }
         });
 
@@ -300,7 +303,11 @@
                     .attr("value", "pushGradesToCanvas")
                     .appendTo("#setupForm");
             $('#setupForm').submit();
-            $('#pushGradesToCanvas').attr("disabled", "disabled");
+            $('#sectionSubmit').attr("disabled", "disabled");
+            $("input:checkbox").each(function(){
+                console.log("ayy")
+                this.disabled = true;
+            });
 
         }
         function submitSaveForm(){
@@ -321,10 +328,6 @@
             $('#setupForm').submit();
             $('#deleteAssignment').attr("disabled", "disabled");
             $('#cancelDelete').attr("disabled", "disabled");
-        }
-
-        function hasAssignmentConfiguration() {
-            return ($('#assignmentName').length == 0 || $('#assignmentPoints').length == 0 );
         }
 
 
