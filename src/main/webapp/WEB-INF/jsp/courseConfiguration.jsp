@@ -285,7 +285,6 @@
             $('#setupForm').submit();
             $('#sectionSubmit').attr("disabled", "disabled");
             $("input:checkbox").each(function(){
-                console.log("ayy")
                 this.disabled = true;
             });
 
