@@ -7,6 +7,7 @@ import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
+import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
 import org.apache.log4j.Logger;
@@ -86,7 +87,9 @@ public class AssignmentSubmitter {
             canvasAssignmentAssistant.editAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
         else if (validatingAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
-            canvasAssignmentAssistant.createAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
+            Assignment assignment = canvasAssignmentAssistant.createAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
+            canvasApiWrapperService.createAssignmentOverride(oauthToken, Integer.valueOf(assignment.getId()), (int)model.getSectionId(), courseId.toString());
+            canvasApiWrapperService.setAssignmentOnlyVisibleToOverrides(oauthToken, courseId.toString(), assignment);
         }
         validatingAssignment.setStatus(AttendanceAssignment.Status.OKAY);
 

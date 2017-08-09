@@ -42,7 +42,7 @@ public class CanvasAssignmentAssistant {
     @Autowired
     private CanvasApiWrapperService canvasApiWrapperService;
 
-    public void createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws AttendanceAssignmentException {
+    public Assignment createAssignmentInCanvas(Long courseId, AttendanceAssignment attendanceAssignment, OauthToken oauthToken) throws AttendanceAssignmentException {
         Optional<Assignment> canvasAssignmentOptional;
         Assignment assignment = generateCanvasAssignment(courseId, attendanceAssignment);
         try {
@@ -59,6 +59,7 @@ public class CanvasAssignmentAssistant {
 
         LOG.info("Created canvas assignment: " + canvasAssignmentOptional.get().getId());
         saveCanvasAssignmentId(courseId, canvasAssignmentOptional.get());
+        return canvasAssignmentOptional.get();
     }
 
     private Assignment generateCanvasAssignment(Long courseId, AttendanceAssignment attendanceAssignment) {
