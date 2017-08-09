@@ -243,26 +243,6 @@
         </div>
     </div>
 
-
-    <%--<div class="confirmation-modal modal fade in" id = "pushAlert">--%>
-        <%--<div class="modal-dialog">--%>
-            <%--<div class="modal-content">--%>
-                <%--<div class="modal-header">--%>
-                    <%--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--%>
-                    <%--<h4 class="modal-title">Push Confirmation</h4>--%>
-                <%--</div>--%>
-                <%--<div class="modal-body">--%>
-                    <%--Please allow a few minutes for Canvas to update the gradebook.--%>
-                <%--</div>--%>
-                <%--<div class="modal-footer">--%>
-                    <%--<button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="button" onclick="submitPushForm()">--%>
-                        <%--OK--%>
-                    <%--</button>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-
     <br/><br/>
     <script type="text/javascript">
 
