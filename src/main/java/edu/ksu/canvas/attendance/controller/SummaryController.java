@@ -98,7 +98,7 @@ public class SummaryController extends AttendanceBaseController {
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
 
-        int totalTardy = 0, totalExcused = 0, totalMissed = 0;
+        int totalTardy = 0, totalExcused = 0, totalMissed = 0, totalPresent=0;
 
         for (AttendanceStudent attendanceStudent: studentAttendanceList) {
             for (Attendance attendance: attendanceStudent.getAttendances()) {
@@ -113,13 +113,14 @@ public class SummaryController extends AttendanceBaseController {
                         totalMissed++;
                         break;
                     case PRESENT:
-                        break;
+                        totalPresent++;
                 }
             }
         }
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("summaryForm", makeupForm);
+        page.addObject("totalPresent", totalPresent);
         page.addObject("totalTardy", totalTardy);
         page.addObject("totalExcused", totalExcused);
         page.addObject("totalMissed", totalMissed);

@@ -62,6 +62,7 @@
         <tr>
             <th class="col-md-3">Name</th>
             <th class="col-md-3">WID</th>
+            <th class="col-md-4">Total Classes Present</th>
             <th class="col-md-4">Total Classes Absent</th>
             <th class="col-md-4">Total Classes Excused</th>
             <th class="col-md-4">Total Classes Tardy</th>
@@ -71,6 +72,7 @@
         <tr>
             <td>${student.name}</td>
             <td>${student.sisUserId}</td>
+            <td class="text-center">${totalPresent}</td>
             <td class="text-center">${totalMissed}</td>
             <td class="text-center">${totalExcused}</td>
             <td class="text-center">${totalTardy}</td>
