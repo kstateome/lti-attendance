@@ -56,10 +56,10 @@ public class CanvasAssignmentAssistant {
             LOG.error("Error while creating canvas assignment for section: " +  attendanceAssignment.getAttendanceSection().getSectionId());
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.CREATION_ERROR);
         }
-
-        LOG.info("Created canvas assignment: " + canvasAssignmentOptional.get().getId());
-        saveCanvasAssignmentId(courseId, canvasAssignmentOptional.get());
-        return canvasAssignmentOptional.get();
+        Assignment canvasAssignment = canvasAssignmentOptional.get();
+        LOG.info("Created canvas assignment: " + canvasAssignment.getId());
+        saveCanvasAssignmentId(courseId, canvasAssignment);
+        return canvasAssignment;
     }
 
     private Assignment generateCanvasAssignment(Long courseId, AttendanceAssignment attendanceAssignment) {

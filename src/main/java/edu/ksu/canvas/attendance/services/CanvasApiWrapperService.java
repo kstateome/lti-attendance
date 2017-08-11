@@ -179,9 +179,8 @@ public class CanvasApiWrapperService {
         override.setCourseSectionId(sectionId);
         try {
             Optional<AssignmentOverride> opt = writer.createAssignmentOverride(courseId, override);
-            if(opt.isPresent()) {
-                return opt.get();
-            }
+            LOG.warn(opt + "=========================================================================");
+            return opt.orElse(null);
         } catch (IOException | CanvasException e) {
             LOG.error("Error while creating assignment override for assignment " + assignmentId, e);
         }

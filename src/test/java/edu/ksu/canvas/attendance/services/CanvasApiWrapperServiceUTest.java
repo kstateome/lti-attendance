@@ -1,14 +1,19 @@
 package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.interfaces.AssignmentOverrideWriter;
 import edu.ksu.canvas.interfaces.EnrollmentReader;
 import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Section;
+import edu.ksu.canvas.model.assignment.Assignment;
+import edu.ksu.canvas.model.assignment.AssignmentOverride;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.lti.launch.service.LtiSessionService;
+import org.apache.log4j.Logger;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,21 +22,22 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 import org.powermock.reflect.internal.WhiteboxImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CanvasApiWrapperServiceUTest {
+
+    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
+
 
     private CanvasApiWrapperService canvasService;
 
@@ -102,6 +108,27 @@ public class CanvasApiWrapperServiceUTest {
         assertThat(actualMap.keySet(), containsInAnyOrder(firstSection, secondSection));
         assertThat(actualMap.get(firstSection), containsInAnyOrder(firstEnrollmentOfFirstSection, secondEnrollmentOfFirstSection));
         assertThat(actualMap.get(secondSection), containsInAnyOrder(firstEnrollmentOfSecondSection));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void createAssignmentOverride_HappyPath() throws Exception{
+        Integer sectionId = 1010101;
+        Integer assignmentId = 10101010;
+        String courseId = "irrelevantCourseId";
+        AssignmentOverrideWriter mockWriter = mock(AssignmentOverrideWriter.class);
+
+        AssignmentOverride override = new AssignmentOverride();
+        override.setCourseSectionId(sectionId);
+        override.setAssignmentId(assignmentId);
+        Optional<AssignmentOverride> optionalOverride = Optional.of(override);
+
+        when(mockCanvasApiFactory.getWriter(eq(AssignmentOverrideWriter.class), any(OauthToken.class))).thenReturn(mockWriter);
+        when(mockWriter.createAssignmentOverride(courseId, override)).thenReturn(optionalOverride);
+        AssignmentOverride returnOverride = WhiteboxImpl.invokeMethod(canvasService,"createAssignmentOverride", mockLtiSession.getOauthToken(), sectionId, assignmentId, courseId);
+
+        assertEquals(returnOverride.getCourseSectionId(), override.getCourseSectionId());
+        assertEquals(returnOverride.getAssignmentId(), override.getAssignmentId());
     }
 
 
