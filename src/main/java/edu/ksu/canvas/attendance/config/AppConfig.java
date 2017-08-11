@@ -8,6 +8,7 @@ import edu.ksu.canvas.repository.ConfigRepository;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.*;
@@ -34,7 +35,8 @@ public class AppConfig {
     @Autowired
     private ConfigRepository configRepo;
 
-
+    @Value("${canvas_domain}")
+    private String canvasDomain;
 
     @Bean
     public UrlBasedViewResolver setupViewResolver() {

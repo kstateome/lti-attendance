@@ -2,6 +2,7 @@ package edu.ksu.canvas.attendance.services;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.enums.SectionIncludes;
+import edu.ksu.canvas.exception.CanvasException;
 import edu.ksu.canvas.exception.InvalidOauthTokenException;
 import edu.ksu.canvas.interfaces.*;
 import edu.ksu.canvas.model.Course;
@@ -9,6 +10,7 @@ import edu.ksu.canvas.model.Enrollment;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.Section;
 import edu.ksu.canvas.model.assignment.Assignment;
+import edu.ksu.canvas.model.assignment.AssignmentOverride;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.GetEnrollmentOptions;
 import edu.ksu.canvas.requestOptions.GetSingleAssignmentOptions;
@@ -19,6 +21,7 @@ import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.lti.launch.oauth.LtiLaunch;
 import edu.ksu.lti.launch.service.LtiSessionService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,6 +34,8 @@ import java.util.*;
 @Scope(value="session")
 public class CanvasApiWrapperService {
 
+    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
+
     @Autowired
     protected LtiLaunch ltiLaunch;
 
@@ -39,6 +44,9 @@ public class CanvasApiWrapperService {
 
     @Autowired
     private CanvasApiFactory canvasApiFactory;
+
+    @Autowired
+    private String canvasDomain;
 
     private EnrollmentOptionsFactory enrollmentOptionsFactory = new EnrollmentOptionsFactory();
 
@@ -161,6 +169,38 @@ public class CanvasApiWrapperService {
     public void deleteAssignment(String courseId, String canvasAssignmentId, OauthToken oauthToken) throws IOException {
         AssignmentWriter assignmentWriter = canvasApiFactory.getWriter(AssignmentWriter.class, oauthToken);
         assignmentWriter.deleteAssignment(courseId, canvasAssignmentId);
+    }
+
+    public AssignmentOverride createAssignmentOverride(OauthToken oauthToken, Integer assignmentId,
+                                                       Integer sectionId, String courseId) {
+        AssignmentOverrideWriter writer = getApiFactory().getWriter(AssignmentOverrideWriter.class, oauthToken);
+        AssignmentOverride override = new AssignmentOverride();
+        override.setAssignmentId(assignmentId);
+        override.setCourseSectionId(sectionId);
+        try {
+            return writer.createAssignmentOverride(courseId, override).orElse(null);
+        } catch (IOException | CanvasException e) {
+            LOG.error("Error while creating assignment override for assignment " + assignmentId, e);
+        }
+        return null;
+    }
+
+    private CanvasApiFactory getApiFactory() {
+        if(canvasApiFactory == null) {
+            LOG.debug("Creating new API factory for Canvas domain " + canvasDomain);
+            canvasApiFactory = new CanvasApiFactory("https://" + canvasDomain);
+        }
+        return canvasApiFactory;
+    }
+
+    public void setAssignmentOnlyVisibleToOverrides(OauthToken oauthToken, String courseId, Assignment assignment) {
+        assignment.setOnlyVisibleToOverrides(true);
+        AssignmentWriter writer = getApiFactory().getWriter(AssignmentWriter.class, oauthToken);
+        try {
+            writer.editAssignment(courseId, assignment);
+        } catch(IOException | CanvasException e) {
+            LOG.error("Error setting visible to overrides", e);
+        }
     }
 
     class EnrollmentOptionsFactory {
