@@ -120,26 +120,20 @@ public class CanvasApiWrapperServiceUTest {
     public void createAssignmentOverride_ReturnCorrectOverride() throws Exception{
         Integer correctSectionId = 1010101;
         Integer correctAssignmentId = 10101010;
-        Integer incorrectSectionId = 1000;
-        Integer incorrectAssignmentId = 2000;
         String courseId = "irrelevantCourseId";
         AssignmentOverrideWriter mockWriter = mock(AssignmentOverrideWriter.class);
-
-        AssignmentOverride incorrectOverride = new AssignmentOverride();
-        incorrectOverride.setCourseSectionId(incorrectSectionId);
-        incorrectOverride.setAssignmentId(incorrectAssignmentId);
-        Optional<AssignmentOverride> incorrectOptional = Optional.of(incorrectOverride);
 
         AssignmentOverride correctOverride = new AssignmentOverride();
         correctOverride.setCourseSectionId(correctSectionId);
         correctOverride.setAssignmentId(correctAssignmentId);
+        Optional<AssignmentOverride> correctOptional = Optional.of(correctOverride);
 
         when(mockCanvasApiFactory.getWriter(eq(AssignmentOverrideWriter.class), any(OauthToken.class))).thenReturn(mockWriter);
-        when(mockWriter.createAssignmentOverride(eq(courseId), any(AssignmentOverride.class))).thenReturn(incorrectOptional);
-        AssignmentOverride returnOverride = canvasService.createAssignmentOverride(mockOauthToken, incorrectSectionId, incorrectAssignmentId, courseId);
+        when(mockWriter.createAssignmentOverride(eq(courseId), any(AssignmentOverride.class))).thenReturn(correctOptional);
+        AssignmentOverride returnOverride = canvasService.createAssignmentOverride(mockOauthToken, correctSectionId, correctAssignmentId, courseId);
 
-        assertNotEquals(returnOverride.getAssignmentId(), correctOverride.getAssignmentId());
-        assertNotEquals(returnOverride.getCourseSectionId(), correctOverride.getCourseSectionId());
+        assertEquals(correctOverride.getAssignmentId(), returnOverride.getAssignmentId());
+        assertEquals(correctOverride.getCourseSectionId(), returnOverride.getCourseSectionId());
     }
 
 
