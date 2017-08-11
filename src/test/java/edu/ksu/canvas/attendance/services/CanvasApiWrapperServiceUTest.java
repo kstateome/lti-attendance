@@ -27,6 +27,7 @@ import java.util.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
@@ -53,6 +54,9 @@ public class CanvasApiWrapperServiceUTest {
     @Mock
     private CanvasApiWrapperService.EnrollmentOptionsFactory enrollmentOptionsFactory;
 
+    @Mock
+    private OauthToken mockOauthToken;
+
 
     @Before
     public void setup() throws NoLtiSessionException {
@@ -62,6 +66,7 @@ public class CanvasApiWrapperServiceUTest {
         canvasService.setEnrollmentOptionsFactory(enrollmentOptionsFactory);
         
         when(mockLtiSessionService.getLtiSession()).thenReturn(mockLtiSession);
+        when(mockLtiSession.getOauthToken()).thenReturn(mockOauthToken);
     }
 
 
@@ -112,23 +117,29 @@ public class CanvasApiWrapperServiceUTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void createAssignmentOverride_HappyPath() throws Exception{
-        Integer sectionId = 1010101;
-        Integer assignmentId = 10101010;
+    public void createAssignmentOverride_ReturnCorrectOverride() throws Exception{
+        Integer correctSectionId = 1010101;
+        Integer correctAssignmentId = 10101010;
+        Integer incorrectSectionId = 1000;
+        Integer incorrectAssignmentId = 2000;
         String courseId = "irrelevantCourseId";
         AssignmentOverrideWriter mockWriter = mock(AssignmentOverrideWriter.class);
 
-        AssignmentOverride override = new AssignmentOverride();
-        override.setCourseSectionId(sectionId);
-        override.setAssignmentId(assignmentId);
-        Optional<AssignmentOverride> optionalOverride = Optional.of(override);
+        AssignmentOverride incorrectOverride = new AssignmentOverride();
+        incorrectOverride.setCourseSectionId(incorrectSectionId);
+        incorrectOverride.setAssignmentId(incorrectAssignmentId);
+        Optional<AssignmentOverride> incorrectOptional = Optional.of(incorrectOverride);
+
+        AssignmentOverride correctOverride = new AssignmentOverride();
+        correctOverride.setCourseSectionId(correctSectionId);
+        correctOverride.setAssignmentId(correctAssignmentId);
 
         when(mockCanvasApiFactory.getWriter(eq(AssignmentOverrideWriter.class), any(OauthToken.class))).thenReturn(mockWriter);
-        when(mockWriter.createAssignmentOverride(courseId, override)).thenReturn(optionalOverride);
-        AssignmentOverride returnOverride = WhiteboxImpl.invokeMethod(canvasService,"createAssignmentOverride", mockLtiSession.getOauthToken(), sectionId, assignmentId, courseId);
+        when(mockWriter.createAssignmentOverride(eq(courseId), any(AssignmentOverride.class))).thenReturn(incorrectOptional);
+        AssignmentOverride returnOverride = canvasService.createAssignmentOverride(mockOauthToken, incorrectSectionId, incorrectAssignmentId, courseId);
 
-        assertEquals(returnOverride.getCourseSectionId(), override.getCourseSectionId());
-        assertEquals(returnOverride.getAssignmentId(), override.getAssignmentId());
+        assertNotEquals(returnOverride.getAssignmentId(), correctOverride.getAssignmentId());
+        assertNotEquals(returnOverride.getCourseSectionId(), correctOverride.getCourseSectionId());
     }
 
 
