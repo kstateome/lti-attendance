@@ -40,6 +40,7 @@ public class CourseConfigurationForm {
 
     private List<Long> sectionsToGrade = new ArrayList<>();
 
+    private List<Long> sectionsToSave = new ArrayList<>();
 
     public int getTotalClassMinutes() {
         return totalClassMinutes;
@@ -146,4 +147,10 @@ public class CourseConfigurationForm {
     public void setSectionsToGrade(List<Long> sectionsToGrade) {
         this.sectionsToGrade = sectionsToGrade;
     }
+
+
+    public List<Long> getSectionsToSave() { return sectionsToSave; }
+
+    public void setSectionsToSave(List<Long> sectionsToSave) { this.sectionsToSave = sectionsToSave; }
+
 }

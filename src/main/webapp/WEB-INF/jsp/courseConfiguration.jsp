@@ -188,7 +188,7 @@
         </div>
 
 
-        <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="button" onclick="submitSaveForm()">
+        <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="button" onclick="$('#sectionSelectForSave').modal('show')">
             Save Setup
         </button>
         <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#sectionSelect').modal('show')">
@@ -236,6 +236,30 @@
                 </div>
                 <div class="modal-footer">
                     <button id="sectionSubmit" name="sectionSubmit" class="confirm btn btn-primary" type="button" onclick="submitPushForm();">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirmation-modal modal fade in" id = "sectionSelectForSave">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Select which Sections this setup needs to be saved for:</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning"><p>Please allow a few minutes for Canvas to update the gradebook.</p>
+                    </div>
+                    <c:forEach items="${courseConfigurationForm.allSections}" var="section">
+                        <br>
+                        <form:checkbox path="sectionsToSave" id="${section.canvasSectionId}" value="${section.canvasSectionId}"/> ${section.name}
+                    </c:forEach>
+                </div>
+                <div class="modal-footer">
+                    <button id="sectionSave" name="sectionSave" class="confirm btn btn-primary" type="button" onclick="submitSaveForm();">
                         OK
                     </button>
                 </div>
