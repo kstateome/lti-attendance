@@ -3,7 +3,6 @@ package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/help")
 public class AttendanceHelpController extends AttendanceBaseController{
 
-    private static final Logger LOG = Logger.getLogger(AttendanceHelpController.class);
 
     @RequestMapping()
     public ModelAndView attendanceHelp() throws NoLtiSessionException {
