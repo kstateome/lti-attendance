@@ -46,7 +46,7 @@
         </ul>
     </div>
 </nav>
-<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
+<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown form-div" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:forEach items="${error}" var="oneError">
         <div class="alert alert-danger">
@@ -80,7 +80,7 @@
 
     <h3>Synchronization</h3>
 
-    <p>
+    <p class="synch-width">
         For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
         students, sections,
         or other problems, please click the button below to rectify the problem. It may take several seconds for this
@@ -93,7 +93,7 @@
 
     <h3>Setup</h3>
     <br/>
-    <div class="col-lg-3">
+    <div class="container-fluid">
         <label for="simpleAttendance">
             <form:radiobutton path="simpleAttendance" id="simpleAttendance" value="true"/> Use Simple Attendance (non-minute based)
         </label>
