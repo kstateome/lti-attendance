@@ -43,6 +43,7 @@
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
                 Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
+            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
         </ul>
     </div>
 </nav>
