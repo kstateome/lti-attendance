@@ -43,6 +43,7 @@
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
                 Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
+            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
         </ul>
     </div>
 </nav>
@@ -132,10 +133,8 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <p> <strong>NOTE:</strong> Select “Save Setup” every time changes are made. When this assignment is pushed to the gradebook, it will immediately be published.
-                <strong>Please DO NOT alter the assignment in the gradebook, but instead use this tool to update the assignment as needed.</strong>
-                Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
-            </p>
+            <p> Check out our new <a id="helpLink2" href="${context}/help/${selectedSectionId}">help section</a> for a
+            quick guide on how to get the best out of Attendance.</p>
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
