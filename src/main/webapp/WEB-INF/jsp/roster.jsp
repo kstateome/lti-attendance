@@ -40,7 +40,6 @@
             <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
-            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
         </ul>
     </div>
 </nav>
