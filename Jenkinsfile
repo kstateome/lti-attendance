@@ -82,7 +82,7 @@ pipeline {
 
         stage("Arquillian Tests") {
             steps {
-                sh 'mvn verify -Parquillian'
+                sh 'mvn verify -Parquillian -Darquillian.startup.timeout=180'
             }
             post {
                 always {
