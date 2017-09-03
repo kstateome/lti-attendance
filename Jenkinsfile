@@ -16,6 +16,18 @@ pipeline {
             steps {
                 sh 'mvn clean package -DskipTests'
             }
+            post {
+                failure {
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance did *not compile* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+                changed {
+                    script {
+                        if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
+                            rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                        }
+                    }
+                }
+            }
         }
 
         stage('Unit Tests') {
