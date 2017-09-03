@@ -84,8 +84,10 @@ pipeline {
             steps {
                 sh 'mvn verify -Parquillian'
             }
-            always {
-                junit '**/target/surefire-reports/*.xml'
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
             }
         }
 
