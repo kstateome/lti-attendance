@@ -80,6 +80,15 @@ pipeline {
             }
         }
 
+        stage("Arquillian Tests") {
+            steps {
+                sh 'mvn verify -Parquillian'
+            }
+            always {
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+
 
     }
 }
