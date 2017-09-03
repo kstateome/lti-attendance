@@ -296,6 +296,7 @@
 							<systemPropertyVariables>
 		                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 								<jboss.home>${jboss.home}</jboss.home>
+                                <jboss.port.offset>${jboss.port.offset}</jboss.port.offset>
 								<arquillian.debug>false</arquillian.debug>
 							</systemPropertyVariables>
 							<includes>
