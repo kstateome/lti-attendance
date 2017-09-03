@@ -153,7 +153,21 @@
           </build>
         </profile>
 
-        <profile>
+		<profile>
+			<id>integration</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
             <!-- Do a sonar run with 1) mvn clean install -Pdefault -Psonar; mvn sonar:sonar -->
 			<id>sonar</id>
 			<properties>
