@@ -57,7 +57,7 @@
         </div>
         <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
             <div class="panel-body">
-                <img src="${context}/img/Setup.png" border="5">
+                <img src="${context}/img/Setup.png">
                 <hr>
                 <p>Before you can push a section's attendance to the Canvas gradebook, a Setup must be associated with
                 the section. The Setup consists of the three fields that open up when the "Convert Attendance to
@@ -79,7 +79,7 @@
         </div>
         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
             <div class="panel-body">
-                <img src="${context}/img/PushModal.png" border="5">
+                <img src="${context}/img/PushModal.png">
                 <p>Once you've saved a Setup, the next step is to push your Attendance records to Canvas and convert
                 them into an assignment.</p>
                 <p>After you click "OK", you will be redirected back to the Course Setup page. Depending on the size of
