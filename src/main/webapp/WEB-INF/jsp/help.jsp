@@ -45,7 +45,7 @@
 <h1>Start Up Guide for K-State Attendance</h1>
 <hr>
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel-group form-div" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
             <h4 class="panel-title">
@@ -63,12 +63,6 @@
                 the section. The Setup consists of the three fields that open up when the "Convert Attendance to
                 Assignment" box is checked: the <em>Assignment Name </em>, the <em>Total Points</em>, and the
                 <em>Attendance Weights</em> (pictured above).</p>
-                <p>Each Setup is assigned to a section or a list of sections that you choose from your course. For
-                example, an instructor has 2 recitations and a lab in his course. He'd like to grade his students based
-                on their attendance in both of the recitations, but not in the lecture. After filling out the
-                required fields on the Course Setup page, he can hit the "Save Setup" button and select his two
-                recitations. The courses have now been properly set up and the instructor can now push his Attendance
-                records to Canvas to create an Attendance Assignment.</p>
                 <p><strong>NOTE:</strong> If you change any of the required fields on the Setup page, you will need to
                 save the setup again before pushing to the Canvas Gradebook.</p>
             </div>
@@ -88,13 +82,10 @@
                 <img src="${context}/img/PushModal.png" border="5">
                 <p>Once you've saved a Setup, the next step is to push your Attendance records to Canvas and convert
                 them into an assignment.</p>
-                <p>When clicked, the "Push Attendance to Gradebook" button will show a popup (pictured above) asking
-                which of the sections from your course you'd like to create assignments for. If a section is grayed out,
-                that means you've not yet saved a Setup for that section. This <strong>MUST</strong> be done before you
-                can convert any of your records to an assignment.</p>
                 <p>After you click "OK", you will be redirected back to the Course Setup page. Depending on the size of
-                your class, it may take upwards of 30 minutes before Canvas has received all of your information. Please
-                keep this in mind if information in the "Grades" and "Assignments" tabs in Canvas is not completely
+                your class, it may take upwards of 30 minutes before Canvas has received all of your information. You
+                may close your browser or visit other websites without compromising the grades you're pushing. Please
+                keep this delay in mind if information in the "Grades" and "Assignments" tabs in Canvas is not completely
                 up to date.</p>
             </div>
         </div>
@@ -110,7 +101,7 @@
         </div>
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
             <div class="panel-body">
-                <p><strong>DO NOT EDIT THE ATTENDANCE ASSIGNMENT FROM THE ASSIGNMENTS TAB IN CANVAS.</strong> </p>
+                <p><strong>DO NOT EDIT OR DELETE THE ATTENDANCE ASSIGNMENT FROM THE ASSIGNMENTS TAB IN CANVAS.</strong> </p>
                 <br>
                 <h4>Editing: </h4>
                 <p>If you'd like to change the assignment name, the total points, or the weight of any particular
@@ -119,11 +110,10 @@
                 section.</p>
                 <br>
                 <h4>Deleting: </h4>
-                <p>Deleting an attendance assignment is done through the Assignments tab in Canvas just like any other
-                assignment. However, if you'd like to delete all of the attendance assignments you've created, simply
-                uncheck the "Convert Attendance to Assignment" checkbox. The dialog pictured below will pop up and answering
-                "Yes" will remove all saved Setups and all attendance assignments. This will <strong>NOT</strong> have
-                any affect on the attendance records you have saved in the course.</p>
+                <p>Deleting an attendance assignment is done by un-checking the "Convert Attendance to Assignment" checkbox.
+                The dialog pictured below will pop up and answering "Yes" will remove all saved Setups and all attendance
+                assignments. Please do not delete the assignment through the Canvas Assignments tab, instead using this tool.
+                This will <strong>NOT</strong> have any affect on the attendance records you have saved in the course.</p>
                 <br>
                 <p><strong>NOTE:</strong> If you receive an error after recently editing or deleting an assignment, please send us an email including the
                 URL of the error page in the body of the email.</p>
@@ -173,10 +163,8 @@
         </div>
         <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
             <div class="panel-body">
-                <p>After pushing grades out to Canvas you will have one assignment for every section you selected when pushing
-                the grades. Each assignment will automatically be assigned to its associated section and automatically published.
-                To help with visibility and organization, the Attendance tool will automatically pin the name of the
-                associated section to the Assignment name. Though they are viewable in the Assignments tab, <strong>DO
+                <p>After pushing grades out to Canvas you will have one Attendance Assignment. By default, this assignment
+                is muted and assigned to every student.Though it is viewable in the Assignments tab, <strong>DO
                 NOT</strong> edit the assignments within the Assignments tab, instead using the Attendance tool.</p>
                 <p>The Grades tab in Canvas will display all attendance assignments as regular assignments that have been
                 assigned only to their relative sections.
