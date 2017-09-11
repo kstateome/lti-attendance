@@ -231,12 +231,10 @@
 			<properties>
 			    <browser>phantomjs</browser>
 		        <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
-		        <version.org.wildfly.core.full>9.0.2.Final</version.org.wildfly.core.full>
-		        <provisioning.config.dir>${project.parent.basedir}</provisioning.config.dir>
+		        <org.wildfly.version>8.2.0.Final</org.wildfly.version>
 		        <org.wildfly.groupId>org.wildfly</org.wildfly.groupId>
 		        <org.wildfly.artifactId>wildfly-servlet-feature-pack</org.wildfly.artifactId>
-		        <org.wildfly.version>${version.org.wildfly.core.full}</org.wildfly.version>
-		        <org.wildfly.dist-name>wildfly</org.wildfly.dist-name>
+		        <org.wildfly.dist-name>wildfly-${org.wildfly.version}</org.wildfly.dist-name>
 		        <jboss.home>${basedir}/target/${org.wildfly.dist-name}</jboss.home>
 		        <version.org.wildfly.build-tools>1.1.2.Final</version.org.wildfly.build-tools>
 			</properties>
@@ -253,47 +251,41 @@
 					</testResource>
 				</testResources>
 
-			    <pluginManagement>
-			        <plugins>
-		                <plugin>
-		                    <groupId>org.wildfly.build</groupId>
-		                    <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
-		                    <version>${version.org.wildfly.build-tools}</version>
-		                    <executions>
-		                        <execution>
-		                            <id>server-provisioning</id>
-		                            <goals>
-		                                <goal>build</goal>
-		                            </goals>
-		                            <phase>process-test-resources</phase>
-		                            <configuration>
-		                                <config-dir>${provisioning.config.dir}</config-dir>
-		                                <config-file>server-provisioning.xml</config-file>
-		                                <server-name>${org.wildfly.dist-name}</server-name>
-		                            </configuration>
-		                        </execution>
-		                    </executions>
-		                </plugin>
-		                <plugin>
-		                    <groupId>org.wildfly.plugins</groupId>
-		                    <artifactId>wildfly-maven-plugin</artifactId>
-		                    <version>${version.org.wildfly.plugins.wildfly-maven-plugin}</version>
-		                </plugin>
-			        </plugins>
-			    </pluginManagement>
-
 			    <plugins>
-					<plugin>
-						<groupId>org.wildfly.build</groupId>
-						<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
-					</plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.8</version>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.wildfly</groupId>
+                                            <artifactId>wildfly-dist</artifactId>
+                                            <version>8.2.0.Final</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<inherited>false</inherited>
 						<configuration>
 							<systemPropertyVariables>
-		                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                                <arquillian.launch>jboss-managed</arquillian.launch>
+                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 								<jboss.home>${jboss.home}</jboss.home>
 								<arquillian.debug>false</arquillian.debug>
 							</systemPropertyVariables>
@@ -308,18 +300,17 @@
     </profiles>
 
 	<dependencyManagement>
+
 		<dependencies>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-dist</artifactId>
+                <version>8.2.0.Final</version>
+            </dependency>
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
 				<version>1.1.11.Final</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.arquillian.extension</groupId>
-				<artifactId>arquillian-warp-bom</artifactId>
-				<version>1.0.0.Alpha7</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -335,28 +326,6 @@
 
     <dependencies>
         <!-- Arquillian related dependencies for compilation -->
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-warp-spring</artifactId>
-			<version>1.1.0.Alpha1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-warp</artifactId>
-			<type>pom</type>
-			<exclusions>
-				<exclusion>
-					<groupId>javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>test</scope>
-		</dependency>
         <dependency>
             <groupId>org.jboss.arquillian.graphene</groupId>
             <artifactId>graphene-webdriver</artifactId>
@@ -392,7 +361,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>22.0</version>
-            <scope>test</scope>
         </dependency>
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
@@ -427,24 +395,12 @@
 			<version>1.1.0.Alpha1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.wildfly.arquillian</groupId>
-			<artifactId>wildfly-arquillian-common</artifactId>
-			<version>2.0.0.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.arquillian</groupId>
-			<artifactId>wildfly-arquillian-container-managed</artifactId>
-			<version>2.0.0.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.core</groupId>
-			<artifactId>wildfly-embedded</artifactId>
-			<version>2.0.10.Final</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>8.2.0.Final</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.jboss.logging</groupId>
 			<artifactId>jboss-logging</artifactId>
@@ -452,15 +408,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.wildfly.core</groupId>
+			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-protocol</artifactId>
-			<version>2.0.10.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly.arquillian</groupId>
-			<artifactId>wildfly-arquillian-protocol-jmx</artifactId>
-			<version>2.0.0.Final</version>
+			<version>8.2.0.Final</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- End of Arquillian related dependencies for running the tests -->

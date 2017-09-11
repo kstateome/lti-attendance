@@ -2,7 +2,6 @@ package edu.ksu.canvas.attendance.controller.arquillian;
 
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.warp.WarpTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -13,7 +12,6 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@WarpTest
 @RunAsClient
 @RunWith(Arquillian.class)
 public class MakeupControllerArquillianTest extends BaseArquillianTest{
