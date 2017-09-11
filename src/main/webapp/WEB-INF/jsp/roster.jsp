@@ -68,7 +68,7 @@
         <div class="container-fluid ">
             <div class="row">
                 <div class='col-sm-4'>
-                    <div class="form-group">
+                    <div id="sectionSelectFormGroup" class="form-group">
                         <label for="sectionId">Section</label>
                         <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}"
                                      itemValue="canvasSectionId" itemLabel="name"
@@ -83,7 +83,7 @@
                 the future.
             </div>
 
-            <table>
+            <table id="dateTable">
                 <tr>
                     <th><label>Day of Attendance</label></th>
                 </tr>
@@ -160,17 +160,17 @@
                         <tbody>
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
-                                <td class="${attendance.dropped ? 'dropped' : ''}">
+                                <td class="studentName ${attendance.dropped ? 'dropped' : ''}">
                                     <form:input type="hidden" id="attendanceId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
                                     <form:input type="hidden" id="attendanceStudentId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceStudentId"/>
                                         ${attendance.attendanceStudentName}
                                 </td>
-                                <td>
+                                <td class="studentSisUserId">
                                         ${attendance.attendanceStudentSisUserId}
                                 </td>
-                                <td>
+                                <td class="studentStatus">
                                     <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy"
                                                     var="attendanceDate"/>
                                     <label>
@@ -192,7 +192,7 @@
                                     <form:errors cssClass="error"
                                                  path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
                                 </td>
-                                <td>
+                                <td class="studentNotes">
                                 <c:choose>
                                     <c:when test="${rosterForm.simpleAttendance}">
                                         <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
