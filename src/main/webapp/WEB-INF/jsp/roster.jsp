@@ -72,8 +72,7 @@
                     <div class="form-group">
                         <label for="sectionId">Section</label>
                         <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}"
-                                     itemValue="canvasSectionId" itemLabel="name"
-                                     onchange="toggleSection(value, '${context}');"/>
+                                     itemValue="canvasSectionId" itemLabel="name"/>
                     </div>
                 </div>
             </div>
@@ -91,7 +90,7 @@
                 <tr>
                     <td>
                         <div class="row">
-                            <div class='col-md-5 keep-element-above'>
+                            <div class='col-md-3 keep-element-above'>
                                 <div class="form-group">
                                     <div class="input-group date" id="datePicker">
                                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
@@ -122,10 +121,13 @@
                                 <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
                                        value="Save Attendance"/>
                             </div>
-                            <div class="col-md-4 deleteAttendanceButton">
+                            <div class="col-md-3 deleteAttendanceButton">
                                 <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
                                     <button  class="hovering-purple-button" type="button">Delete Attendance</button>
                                 </a>
+                            </div>
+                            <div class="col-md-3 saveAttendanceButton">
+                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveAttendance" value="Save Section As Present"/>
                             </div>
                         </div>
                     </td>
@@ -133,15 +135,16 @@
             </table>
         </div>
 
+
+
         <div class="container">
             <div id="waitLoading" class="text-center" style="display: none">
                 <img id="loading-image" src="${context}/img/ajax-loader.gif"
                      alt="Please wait for content to finish loading"/>
             </div>
             <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
-                <c:if test="${not empty sectionModel.attendances}">
-                    <table class="table table-bordered sectionTable" style="display:none"
-                           id="${sectionModel.canvasSectionId}">
+                <c:if test="${sectionModel.canvasSectionId == selectedSectionId}">
+                    <table class="table table-bordered sectionTable" id="${sectionModel.canvasSectionId}">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -178,10 +181,10 @@
                                         <form:select id="attendanceStatus-${attendance.attendanceStudentId}"
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding changing-width">
+                                            <form:option id="default-${attendance.attendanceStudentId}"
+                                                         value="<%=Status.NA%>" title="test2" label="---"/>
                                             <form:option id="present-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.NA%>">---</form:option>
-                                            <form:option id="present-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.PRESENT%>">Present</form:option>
+                                                         value="<%=Status.PRESENT%>" title="test3" label="Present"/>
                                             <form:option id="tardy-${attendance.attendanceStudentId}"
                                                          value="<%=Status.TARDY%>">Tardy</form:option>
                                             <form:option id="absent-${attendance.attendanceStudentId}"
@@ -293,6 +296,21 @@
     $('#deleteAttendance').click(function () {
         return confirm('Do you want to delete this Attendance?');
     });
+
+    $('#sectionId').change(function () {
+        window.location = '${context}/roster/' + this.value;
+    });
+
+    function saveAsPresent(){
+        var statuses = $("option[title='test2']");
+            for (var i = 0; i < statuses.length; i++){
+                console.log("ayy");
+                console.log(statuses[i]);
+                statuses[i].value = "<%=Status.PRESENT%>";
+                statuses[i].label = "Present";
+            }
+        $('#sectionSelect').submit();
+    }
 </script>
 </body>
 </html>
