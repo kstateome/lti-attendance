@@ -92,11 +92,14 @@
 
         <tbody id="summaryTableBody">
         <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
-            <tr>
-                <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
-                <td>${attendance.status}</td>
-                <td>${attendance.notes}</td>
-            </tr>
+            <c:if test="${attendance.status != 'NA'}">
+                <tr>
+                    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
+                    <td>${attendance.status}</td>
+                    <td>${attendance.notes}</td>
+                </tr>
+            </c:if>
+
         </c:forEach>
 
         </tbody>
