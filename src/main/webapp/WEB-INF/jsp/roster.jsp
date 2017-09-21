@@ -127,7 +127,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 saveAttendanceButton">
-                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveAsPresent" value="Save Section As Present"/>
+                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveAttendance" value="Save Section As Present"/>
                             </div>
                         </div>
                     </td>
@@ -182,16 +182,16 @@
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding changing-width">
                                             <form:option id="default-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.NA%>" title="test2" label="---"/>
+                                                         value="<%=Status.NA%>" title="default" label="---"/>
                                             <form:option id="present-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.PRESENT%>" title="test3" label="Present"/>
+                                                         value="<%=Status.PRESENT%>" label="Present"/>
                                             <form:option id="tardy-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.TARDY%>">Tardy</form:option>
+                                                         value="<%=Status.TARDY%>" label="Tardy"/>
                                             <form:option id="absent-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.ABSENT%>">Absent</form:option>
+                                                         value="<%=Status.ABSENT%>" label="Absent"/>
                                             <c:if test="${rosterForm.simpleAttendance}">
                                                 <form:option id="absentExcused-${attendance.attendanceStudentId}"
-                                                             value="<%=Status.EXCUSED%>">Excused</form:option>
+                                                             value="<%=Status.EXCUSED%>" label="Excused"/>
                                             </c:if>
                                         </form:select>
                                     </label>
@@ -302,10 +302,8 @@
     });
 
     function saveAsPresent(){
-        var statuses = $("option[title='test2']");
+        var statuses = $("option[title='default']");
             for (var i = 0; i < statuses.length; i++){
-                console.log("ayy");
-                console.log(statuses[i]);
                 statuses[i].value = "<%=Status.PRESENT%>";
                 statuses[i].label = "Present";
             }
