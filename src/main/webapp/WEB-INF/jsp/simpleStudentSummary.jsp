@@ -80,6 +80,96 @@
         </tr>
     </table>
 
+    <c:if test="${presentPoints != null}">
+        <div class="panel-group form-div" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                           aria-expanded="false" aria-controls="collapseOne">
+                            Understanding how your attendance grade is calculated
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <img src="${context}/img/Setup.png" border="5">
+                        <hr>
+                        <p>Your instructor has created an assignment based on your attendance in this class. Below is an
+                            explanation of how your attendance grade is calculated. This page is adaptive and will always reflect
+                            your current attendance grade in this course. If there is a discrepancy between the grade in the
+                            gradebook and what is on this page, please inform your instructor.</p>
+                        <br>
+                        <p>(${attendanceSummaryEntry.totalClassesPresent} days "Present") * (<strong>${presentPoints}%</strong> of ${assignmentPoints} possible points)
+                            = ${attendanceSummaryEntry.totalClassesPresent} * (<strong>${presentPoints / 100}</strong> * ${assignmentPoints}) =
+                                ${attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100)} * ${assignmentPoints} =
+                                ${attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100) * assignmentPoints}</p>
+
+                        <p>(${attendanceSummaryEntry.totalClassesTardy} days "Tardy") * (<strong>${tardyPoints}%</strong> of ${assignmentPoints} possible points)
+                            = ${attendanceSummaryEntry.totalClassesTardy} * (<strong>${tardyPoints / 100}</strong> * ${assignmentPoints}) =
+                                ${attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100)} * ${assignmentPoints} =
+                                ${attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100) * assignmentPoints}</p>
+
+                        <p>(${attendanceSummaryEntry.totalClassesMissed} days "Absent") * (<strong>${absentPoints}%</strong> of ${assignmentPoints} possible points)
+                            = ${attendanceSummaryEntry.totalClassesMissed} * (<strong>${absentPoints / 100}</strong> * ${assignmentPoints}) =
+                                ${attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100)} * ${assignmentPoints} =
+                                ${attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100) * assignmentPoints}</p>
+
+                        <p>(${attendanceSummaryEntry.totalClassesExcused} days "Excused") * (<strong>${excusedPoints}%</strong> of ${assignmentPoints} possible points)
+                            = ${attendanceSummaryEntry.totalClassesExcused} * (<strong>${excusedPoints / 100}</strong> * ${assignmentPoints}) =
+                                ${attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100)} * ${assignmentPoints} =
+                                ${attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100) * assignmentPoints}</p>
+
+                        <br>
+                        <p>${attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100) * assignmentPoints} +
+                                ${attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100) * assignmentPoints} +
+                                ${attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100) * assignmentPoints} +
+                                ${attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100) * assignmentPoints} =
+
+                                ${(attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100) * assignmentPoints) +
+                                        (attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100) * assignmentPoints) +
+                                        (attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100) * assignmentPoints) +
+                                        (attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100) * assignmentPoints)}
+
+                            total points earned over the course of
+
+                                ${attendanceSummaryEntry.totalClassesPresent +
+                                        attendanceSummaryEntry.totalClassesTardy +
+                                        attendanceSummaryEntry.totalClassesMissed +
+                                        attendanceSummaryEntry.totalClassesExcused}
+
+                            total days </p>
+
+                        <p>${(attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100) * assignmentPoints) +
+                                (attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100) * assignmentPoints) +
+                                (attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100) * assignmentPoints) +
+                                (attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100) * assignmentPoints)} /
+
+                                ${attendanceSummaryEntry.totalClassesPresent +
+                                        attendanceSummaryEntry.totalClassesTardy +
+                                        attendanceSummaryEntry.totalClassesMissed +
+                                        attendanceSummaryEntry.totalClassesExcused} =
+
+                            <em><strong>
+
+                                    ${((attendanceSummaryEntry.totalClassesPresent * (presentPoints / 100) * assignmentPoints) +
+                                            (attendanceSummaryEntry.totalClassesTardy * (tardyPoints / 100) * assignmentPoints) +
+                                            (attendanceSummaryEntry.totalClassesMissed * (absentPoints / 100) * assignmentPoints) +
+                                            (attendanceSummaryEntry.totalClassesExcused * (excusedPoints / 100) * assignmentPoints)) /
+                                            (attendanceSummaryEntry.totalClassesPresent +
+                                                    attendanceSummaryEntry.totalClassesTardy +
+                                                    attendanceSummaryEntry.totalClassesMissed +
+                                                    attendanceSummaryEntry.totalClassesExcused)}
+
+                            </strong></em>
+                        </p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
+
     <h3>Attendance Logs</h3>
 
     <table class="table table-bordered">

@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
@@ -50,6 +51,9 @@ public class SummaryController extends AttendanceBaseController {
     @Autowired
     private AttendanceCourseService courseService;
 
+    @Autowired
+    private AttendanceAssignmentService assignmentService;
+
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -83,6 +87,7 @@ public class SummaryController extends AttendanceBaseController {
 
         //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+        AttendanceAssignment assignment = assignmentService.findBySection(selectedSection);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
         boolean isSimpleAttendance = false;
         if (selectedSection != null){
@@ -117,6 +122,14 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("summaryForm", makeupForm);
+        if (assignment != null){
+            page.addObject("presentPoints", assignment.getPresentPoints());
+            page.addObject("tardyPoints", assignment.getTardyPoints());
+            page.addObject("absentPoints", assignment.getAbsentPoints());
+            page.addObject("excusedPoints", assignment.getExcusedPoints());
+            page.addObject("assignmentPoints", assignment.getAssignmentPoints());
+        }
+
 
         return page;
     }
