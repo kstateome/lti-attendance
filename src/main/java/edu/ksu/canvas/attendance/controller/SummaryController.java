@@ -1,6 +1,7 @@
 package edu.ksu.canvas.attendance.controller;
 
 import edu.ksu.canvas.attendance.entity.Attendance;
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.MissingSisIdException;
@@ -50,6 +51,9 @@ public class SummaryController extends AttendanceBaseController {
     @Autowired
     private AttendanceCourseService courseService;
 
+    @Autowired
+    private AttendanceAssignmentService assignmentService;
+
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -83,12 +87,12 @@ public class SummaryController extends AttendanceBaseController {
 
         //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
+        AttendanceAssignment assignment = assignmentService.findBySection(selectedSection);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
-        boolean isSimpleAttendance = false;
-        if (selectedSection != null){
+        if (selectedSection != null) {
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
-            isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
         }
+        final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
                 new ModelAndView("simpleStudentSummary") : new ModelAndView("studentSummary");
@@ -104,21 +108,80 @@ public class SummaryController extends AttendanceBaseController {
                 .flatMap(summary -> summary.getEntries().stream())
                 .filter(entry -> entry.getStudentId() == validatedStudentId)
                 .findFirst()
-                .ifPresent(entry ->  page.addObject("attendanceSummaryEntry", courseConfigurationForm.getSimpleAttendance() ?
-                            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent())
-                          : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed())));
-
+                .ifPresent(entry ->  addAssignmentSummaryToPage(page, entry, isSimpleAttendance, student, assignment));
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
 
-
         page.addObject("sectionId", sectionId);
         page.addObject("student", student);
         page.addObject("summaryForm", makeupForm);
-
         return page;
     }
 
+    private void addAssignmentSummaryToPage(ModelAndView page, AttendanceSummaryModel.Entry entry, boolean isSimpleAttendance, AttendanceStudent student, AttendanceAssignment assignment) {
+        page.addObject("attendanceSummaryEntry", isSimpleAttendance ?
+            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent())
+            : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed()));
+
+        int totalPresentDays = entry.getTotalClassesPresent();
+        int totalTardyDays  = entry.getTotalClassesTardy();
+        int totalAbsentDays = entry.getTotalClassesMissed();
+        int totalExcusedDays = entry.getTotalClassesExcused();
+        int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
+
+        page.addObject("totalPresentDays", totalPresentDays);
+        page.addObject("totalTardyDays", totalTardyDays);
+        page.addObject("totalAbsentDays", totalAbsentDays);
+        page.addObject("totalExcusedDays", totalExcusedDays);
+        page.addObject("totalDays", totalDays);
+
+        if (assignment != null) {
+            Long presentWeight = Long.valueOf(assignment.getPresentPoints());
+            Long tardyWeight = Long.valueOf(assignment.getTardyPoints());
+            Long absentWeight = Long.valueOf(assignment.getAbsentPoints());
+            Long excusedWeight = Long.valueOf(assignment.getExcusedPoints());
+            Long assignmentPoints = Long.valueOf(assignment.getAssignmentPoints());
+
+            Long presentMultiplier = presentWeight / 100;
+            Long tardyMultiplier = tardyWeight / 100;
+            Long absentMultiplier = absentWeight / 100;
+            Long excusedMultiplier = excusedWeight / 100;
+
+            Long presentDaysTimesMultiplier = totalPresentDays * presentMultiplier;
+            Long tardyDaysTimesMultiplier = totalTardyDays * tardyMultiplier;
+            Long absentDaysTimesMultiplier = totalAbsentDays * absentMultiplier;
+            Long excusedDaysTimesMultiplier = totalExcusedDays * excusedMultiplier;
+
+            Long totalPresentPoints = presentDaysTimesMultiplier * assignmentPoints;
+            Long totalTardyPoints = tardyDaysTimesMultiplier * assignmentPoints;
+            Long totalAbsentPoints = absentDaysTimesMultiplier * assignmentPoints;
+            Long totalExcusedPoints = excusedDaysTimesMultiplier * assignmentPoints;
+
+            Long sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
+
+            Long studentFinalGrade = sumStudentsPoints / totalDays;
+
+            page.addObject("presentWeight", presentWeight);
+            page.addObject("tardyWeight", tardyWeight);
+            page.addObject("absentWeight", absentWeight);
+            page.addObject("excusedWeight", excusedWeight);
+            page.addObject("assignmentPoints", assignmentPoints);
+            page.addObject("presentMultiplier", presentMultiplier);
+            page.addObject("tardyMultiplier", tardyMultiplier);
+            page.addObject("absentMultiplier", absentMultiplier);
+            page.addObject("excusedMultiplier", excusedMultiplier);
+            page.addObject("presentDaysTimesMultiplier", presentDaysTimesMultiplier);
+            page.addObject("tardyDaysTimesMultiplier", tardyDaysTimesMultiplier);
+            page.addObject("absentDaysTimesMultiplier", absentDaysTimesMultiplier);
+            page.addObject("excusedDaysTimesMultiplier", excusedDaysTimesMultiplier);
+            page.addObject("totalPresentPoints", totalPresentPoints);
+            page.addObject("totalTardyPoints", totalTardyPoints);
+            page.addObject("totalAbsentPoints", totalAbsentPoints);
+            page.addObject("totalExcusedPoints", totalExcusedPoints);
+            page.addObject("sumStudentsPoints", sumStudentsPoints);
+            page.addObject("studentFinalGrade", studentFinalGrade);
+        }
+    }
 }

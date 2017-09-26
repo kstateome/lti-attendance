@@ -79,6 +79,55 @@
         </tr>
     </table>
 
+    <c:if test="${presentWeight != null}">
+        <div class="panel-group form-div" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                           aria-expanded="false" aria-controls="collapseOne">
+                            Understanding how your attendance grade is calculated
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <hr>
+                        <p>Your instructor has created an assignment based on your attendance in this class. Below is an
+                            explanation of how your attendance grade is calculated. This page is adaptive and will always reflect
+                            your current attendance grade in this course. If there is a discrepancy between the grade in the
+                            gradebook and what is on this page, please inform your instructor.</p>
+                        <br>
+                        <p>(${totalPresentDays} day(s) "Present") * (${presentWeight}% of ${assignmentPoints} possible points)
+                            = ${totalPresentDays} * (${presentMultiplier} * ${assignmentPoints}) = ${presentDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalPresentPoints}</p>
+
+                        <p>(${totalTardyDays} day(s) "Tardy") * (${tardyWeight}% of ${assignmentPoints} possible points)
+                            = ${totalTardyDays} * (${tardyMultiplier} * ${assignmentPoints}) = ${tardyDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalTardyPoints}</p>
+
+                        <p>(${totalAbsentDays} day(s) "Absent") * (${absentWeight}% of ${assignmentPoints} possible points)
+                            = ${totalAbsentDays} * (${absentMultiplier} * ${assignmentPoints}) = ${absentDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalAbsentPoints}</p>
+
+                        <p>(${totalExcusedDays} day(s) "Excused") * (${excusedWeight}% of ${assignmentPoints} possible points)
+                            = ${totalExcusedDays} * (${excusedMultiplier} * ${assignmentPoints}) = ${excusedDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalExcusedPoints}</p>
+
+                        <br>
+                        <p>${totalPresentPoints} + ${totalTardyPoints} + ${totalAbsentPoints} + ${totalExcusedPoints} =
+                            ${sumStudentsPoints} total points earned over the course of ${totalDays} total day(s) </p>
+
+                        <p>${sumStudentsPoints} / ${totalDays} = <em> ${studentFinalGrade} </em></p>
+                        <br>
+                        <p>Your final attendance grade is <strong> ${studentFinalGrade} / ${assignmentPoints} </strong></p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
+
     <h3>Attendance Logs</h3>
 
     <table class="table table-bordered">
