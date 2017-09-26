@@ -137,7 +137,7 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("totalExcusedDays", totalExcusedDays);
         page.addObject("totalDays", totalDays);
 
-        if (assignment != null) {
+        if (assignment != null && totalDays != 0) {
             Long presentWeight = Long.valueOf(assignment.getPresentPoints());
             Long tardyWeight = Long.valueOf(assignment.getTardyPoints());
             Long absentWeight = Long.valueOf(assignment.getAbsentPoints());
