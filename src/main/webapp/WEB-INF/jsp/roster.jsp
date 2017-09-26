@@ -127,7 +127,7 @@
                                 </a>
                             </div>
                             <div class="col-md-3 saveAttendanceButton">
-                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveAttendance" value="Save Section As Present"/>
+                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveAttendance" value="Set Unassigned to Present"/>
                             </div>
                         </div>
                     </td>
