@@ -111,6 +111,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
         query.setParameter("courseId", courseId);
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
         query.setParameter("sectionId", sectionId);
+        query.executeUpdate();
     }
 
 }
