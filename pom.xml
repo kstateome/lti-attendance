@@ -454,11 +454,6 @@
         </dependency>
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
-			<artifactId>lti-persist</artifactId>
-			<version>1.2.18</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.ksu.ome.lti</groupId>
 			<artifactId>lti-launch</artifactId>
 			<version>1.4.0</version>
 		</dependency>
@@ -482,6 +477,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

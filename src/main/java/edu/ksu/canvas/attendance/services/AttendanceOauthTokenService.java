@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.services;
 
-import edu.ksu.canvas.entity.lti.OauthToken;
-import edu.ksu.canvas.repository.OauthTokenRepository;
+import edu.ksu.canvas.attendance.entity.lti.OauthToken;
+import edu.ksu.canvas.attendance.repository.OauthTokenRepository;
 import edu.ksu.lti.launch.service.OauthTokenService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
