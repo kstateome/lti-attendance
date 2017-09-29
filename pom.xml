@@ -539,17 +539,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>OME</groupId>
-            <artifactId>ome-ldap-config</artifactId>
-            <version>1.14.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>jboss</groupId>
-                    <artifactId>jboss-system</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <scope>test</scope>
