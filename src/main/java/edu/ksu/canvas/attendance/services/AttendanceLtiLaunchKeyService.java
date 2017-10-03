@@ -1,7 +1,7 @@
 package edu.ksu.canvas.attendance.services;
 
 
-import edu.ksu.canvas.repository.LtiKeyRepository;
+import edu.ksu.canvas.attendance.repository.LtiKeyRepository;
 import edu.ksu.lti.launch.service.LtiLaunchKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
