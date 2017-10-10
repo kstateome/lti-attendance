@@ -119,7 +119,7 @@
                                     });
                                 });
                             </script>
-                            <div class="col-md-4 saveAttendanceButton">
+                            <div class="col-md-3 saveAttendanceButton">
                                 <button id="saveAttendanceOnTop" class="hovering-purple-button" type="button" name="saveAttendance" onclick="submitRoster()">
                                     Save Attendance</button>
                             </div>
@@ -129,7 +129,8 @@
                                 </a>
                             </div>
                             <div class="col-md-3 saveAttendanceButton">
-                                <input class="hovering-purple-button" onclick="saveAsPresent()" name="saveUnassignedAsPresent" value="Set Unassigned to Present"/>
+                                <input id="saveUnassignedAsPresent" type="button" class="hovering-purple-button" onclick="saveAsPresent()"
+                                        name="saveUnassignedAsPresent" value="Set Unassigned to Present"/>
                             </div>
                         </div>
                     </td>
@@ -304,13 +305,20 @@
         window.location = '${context}/roster/' + this.value;
     });
 
-    function saveAsPresent(){
+    function saveAsPresent() {
         var statuses = $("option[title='default']");
-            for (var i = 0; i < statuses.length; i++){
-                statuses[i].value = "<%=Status.PRESENT%>";
-                statuses[i].label = "Present";
-            }
+        for (var i = 0; i < statuses.length; i++) {
+            statuses[i].value = "<%=Status.PRESENT%>";
+            statuses[i].label = "Present";
+        }
+        $("<input />")
+                .attr("type", "hidden")
+                .attr("name", "saveAttendance")
+                .attr("value", "saveAttendance")
+                .appendTo("#sectionSelect");
         $('#sectionSelect').submit();
+        $('#saveUnassignedAsPresent').attr("disabled", "disabled");
+    }
 
     function submitRoster(){
         $("<input />")
@@ -321,7 +329,6 @@
         $('#sectionSelect').submit();
         $('#saveAttendanceOnTop').attr("disabled", "disabled");
         $('#saveAttendanceOnBottom').attr("disabled", "disabled");
-
     }
 </script>
 </body>
