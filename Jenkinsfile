@@ -80,6 +80,32 @@ pipeline {
             }
         }
 
+        stage("Arquillian Tests") {
+            steps {
+                sh 'mvn verify -Parquillian -Djboss.port.offset=100 -Djboss.port.management=10090'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+                changed {
+                    script {
+                        if (currentBuild.currentResult == 'SUCCESS') {
+                            if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
+                                rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance now has passing Arquillian tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                            }
+                        }
+                    }
+                }
+                failure {
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+                unstable {
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/}ce7853c9/images/headshot.png', message: "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+            }
+        }
+
 
     }
 }

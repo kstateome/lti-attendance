@@ -61,7 +61,7 @@
     </c:if>
 <!--There needs to be a message that returns a list of sections that did not successfully push grades to Canvas. It should be grouped with the following success messages. -->
     <c:if test="${updateSuccessful}">
-        <div class="alert alert-success">
+        <div id="updateSucessMessage" class="alert alert-success">
             <p>Course Setup successfully updated.</p>
         </div>
     </c:if>
