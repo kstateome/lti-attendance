@@ -86,7 +86,7 @@
                     <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
                            aria-expanded="false" aria-controls="collapseOne">
-                            Understanding how your attendance grade is calculated
+                            Click here to see the calculation behind your Attendance grade
                         </a>
                     </h4>
                 </div>
