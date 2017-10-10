@@ -90,7 +90,7 @@
                 <tr>
                     <td>
                         <div class="row">
-                            <div class='col-md-5 keep-element-above'>
+                            <div class='col-md-4 keep-element-above'>
                                 <div class="form-group">
                                     <div class="input-group date" id="datePicker">
                                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
@@ -117,9 +117,9 @@
                                     });
                                 });
                             </script>
-                            <div class="col-md-3 saveAttendanceButton">
-                                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
-                                       value="Save Attendance"/>
+                            <div class="col-md-4 saveAttendanceButton">
+                                <button id="saveAttendanceOnTop" class="hovering-purple-button" type="button" name="saveAttendance" onclick="submitRoster()">
+                                    Save Attendance</button>
                             </div>
                             <div class="col-md-4 deleteAttendanceButton">
                                 <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
@@ -224,7 +224,7 @@
             </c:forEach>
 
             <div>
-                <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+                <button id="saveAttendanceOnBottom" class="hovering-purple-button" type="button" onclick="submitRoster()" name="saveAttendance">Save Attendance</button>
             </div>
         </div>
     </form:form>
@@ -290,6 +290,17 @@
     $('#deleteAttendance').click(function () {
         return confirm('Do you want to delete this Attendance?');
     });
+
+    function submitRoster(){
+        $("<input />")
+                .attr("type", "hidden")
+                .attr("name", "saveAttendance")
+                .attr("value", "saveAttendance")
+                .appendTo("#sectionSelect");
+        $('#sectionSelect').submit();
+        $('#saveAttendanceOnTop').attr("disabled", "disabled");
+        $('#saveAttendanceOnBottom').attr("disabled", "disabled");
+    }
 </script>
 </body>
 </html>
