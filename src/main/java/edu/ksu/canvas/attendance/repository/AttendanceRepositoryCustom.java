@@ -14,7 +14,7 @@ public interface AttendanceRepositoryCustom {
 
     void saveInBatches(List<Attendance> attendances);
 
-    void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass);
+    void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass, long sectionId);
 
     Map<Long, String> getAttendanceCommentsBySectionId(long sectionId);
 

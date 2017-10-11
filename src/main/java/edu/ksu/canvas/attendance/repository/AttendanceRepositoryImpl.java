@@ -97,7 +97,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     }
 
     @Override
-    public void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass) {
+    public void deleteAttendanceByCourseAndDayOfClass(long courseId, Date dateOfClass, long sectionId) {
         Validate.notNull(dateOfClass, "The dateOfClass parameter must not be null");
 
         String jpql = "DELETE FROM Attendance WHERE attendanceId IN (" +
@@ -105,12 +105,13 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 "FROM Attendance a " +
                 "WHERE a.attendanceStudent.canvasCourseId = :courseId " +
                 "AND trunc(a.dateOfClass) = trunc(:dateOfClass)" +
-                ")";
+                "AND a.attendanceStudent.canvasSectionId = :sectionId)";
 
         javax.persistence.Query query = entityManager.createQuery(jpql);
         query.setParameter("courseId", courseId);
         query.setParameter("dateOfClass", dateOfClass, TemporalType.DATE);
-        int result = query.executeUpdate();
+        query.setParameter("sectionId", sectionId);
+        query.executeUpdate();
     }
 
 }

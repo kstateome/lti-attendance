@@ -112,7 +112,7 @@ public class AttendanceService {
             for (AttendanceStudent student : attendanceStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if (foundAttendance == null) {
-                    Status status = student.getDeleted() ? Status.ABSENT : Status.PRESENT;
+                    Status status = student.getDeleted() ? Status.ABSENT : Status.NA;
                     sectionAttendances.add(new AttendanceModel(student, status, date));
                 } else {
                     sectionAttendances.add(new AttendanceModel(foundAttendance));
@@ -145,7 +145,7 @@ public class AttendanceService {
             attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
             if (!attendancesInDBForCourse.isEmpty()) {
                 sectionHasAttendancesForDate = true;
-                attendanceRepository.deleteAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+                attendanceRepository.deleteAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate(), rosterForm.getSectionId());
             }
         }
         return sectionHasAttendancesForDate;
