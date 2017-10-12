@@ -154,10 +154,10 @@ public class SummaryController extends AttendanceBaseController {
             double absentDaysTimesMultiplier = totalAbsentDays * absentMultiplier;
             double excusedDaysTimesMultiplier = totalExcusedDays * excusedMultiplier;
 
-            double totalPresentPoints = presentDaysTimesMultiplier * assignmentPoints;
-            double totalTardyPoints = tardyDaysTimesMultiplier * assignmentPoints;
-            double totalAbsentPoints = absentDaysTimesMultiplier * assignmentPoints;
-            double totalExcusedPoints = excusedDaysTimesMultiplier * assignmentPoints;
+            double totalPresentPoints =  Math.round(presentDaysTimesMultiplier * assignmentPoints);
+            double totalTardyPoints = Math.round(tardyDaysTimesMultiplier * assignmentPoints);
+            double totalAbsentPoints = Math.round(absentDaysTimesMultiplier * assignmentPoints);
+            double totalExcusedPoints = Math.round(excusedDaysTimesMultiplier * assignmentPoints);
 
             double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
 
