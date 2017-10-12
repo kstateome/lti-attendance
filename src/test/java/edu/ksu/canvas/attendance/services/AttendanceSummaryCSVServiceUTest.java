@@ -72,9 +72,9 @@ public class AttendanceSummaryCSVServiceUTest {
         boolean isSimpleAttendance = true;
 
         StringBuilder shouldGetThis = new StringBuilder();
-        shouldGetThis.append("\"Name\",\"Total Classes Present\",\"Total Classes Absent\",\"Total Classes Tardy\",\"Total Classes Excused\"\n");
-        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_1 +"\",\""+ARBITRARY_STUDENT_PRESENT_1+"\",\""+ARBITRARY_STUDENT_MISSED_1+"\",\""+ARBITRARY_STUDENT_TARDY_1+"\",\""+ ARBITRARY_STUDENT_EXCUSED_1 +"\"\n");
-        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_2 +"\",\""+ARBITRARY_STUDENT_PRESENT_2+"\",\""+ARBITRARY_STUDENT_MISSED_2+"\",\""+ARBITRARY_STUDENT_TARDY_2+"\",\""+ ARBITRARY_STUDENT_EXCUSED_2 +"\"\n");
+        shouldGetThis.append("\"Name\",\"Total Classes Present\",\"Total Classes Tardy\",\"Total Classes Absent\",\"Total Classes Excused\"\n");
+        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_1 +"\",\""+ARBITRARY_STUDENT_PRESENT_1+"\",\""+ARBITRARY_STUDENT_TARDY_1+"\",\""+ARBITRARY_STUDENT_MISSED_1+"\",\""+ ARBITRARY_STUDENT_EXCUSED_1 +"\"\n");
+        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_2 +"\",\""+ARBITRARY_STUDENT_PRESENT_2+"\",\""+ARBITRARY_STUDENT_TARDY_2+"\",\""+ARBITRARY_STUDENT_MISSED_2+"\",\""+ ARBITRARY_STUDENT_EXCUSED_2 +"\"\n");
 
         StringBuilder returned = attendanceSummaryCSVService.createAttendanceSummaryCsv(isSimpleAttendance, attendanceSummaryModelList);
         assertEquals(shouldGetThis.toString(), returned.toString());
