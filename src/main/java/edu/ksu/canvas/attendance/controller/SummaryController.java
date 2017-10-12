@@ -138,30 +138,30 @@ public class SummaryController extends AttendanceBaseController {
         page.addObject("totalDays", totalDays);
 
         if (assignment != null && totalDays != 0) {
-            Long presentWeight = Long.valueOf(assignment.getPresentPoints());
-            Long tardyWeight = Long.valueOf(assignment.getTardyPoints());
-            Long absentWeight = Long.valueOf(assignment.getAbsentPoints());
-            Long excusedWeight = Long.valueOf(assignment.getExcusedPoints());
-            Long assignmentPoints = Long.valueOf(assignment.getAssignmentPoints());
+            double presentWeight = Long.valueOf(assignment.getPresentPoints());
+            double tardyWeight = Long.valueOf(assignment.getTardyPoints());
+            double absentWeight = Long.valueOf(assignment.getAbsentPoints());
+            double excusedWeight = Long.valueOf(assignment.getExcusedPoints());
+            double assignmentPoints = Long.valueOf(assignment.getAssignmentPoints());
 
-            Long presentMultiplier = presentWeight / 100;
-            Long tardyMultiplier = tardyWeight / 100;
-            Long absentMultiplier = absentWeight / 100;
-            Long excusedMultiplier = excusedWeight / 100;
+            double presentMultiplier = presentWeight / 100;
+            double tardyMultiplier = tardyWeight / 100;
+            double absentMultiplier = absentWeight / 100;
+            double excusedMultiplier = excusedWeight / 100;
 
-            Long presentDaysTimesMultiplier = totalPresentDays * presentMultiplier;
-            Long tardyDaysTimesMultiplier = totalTardyDays * tardyMultiplier;
-            Long absentDaysTimesMultiplier = totalAbsentDays * absentMultiplier;
-            Long excusedDaysTimesMultiplier = totalExcusedDays * excusedMultiplier;
+            double presentDaysTimesMultiplier = totalPresentDays * presentMultiplier;
+            double tardyDaysTimesMultiplier = totalTardyDays * tardyMultiplier;
+            double absentDaysTimesMultiplier = totalAbsentDays * absentMultiplier;
+            double excusedDaysTimesMultiplier = totalExcusedDays * excusedMultiplier;
 
-            Long totalPresentPoints = presentDaysTimesMultiplier * assignmentPoints;
-            Long totalTardyPoints = tardyDaysTimesMultiplier * assignmentPoints;
-            Long totalAbsentPoints = absentDaysTimesMultiplier * assignmentPoints;
-            Long totalExcusedPoints = excusedDaysTimesMultiplier * assignmentPoints;
+            double totalPresentPoints = presentDaysTimesMultiplier * assignmentPoints;
+            double totalTardyPoints = tardyDaysTimesMultiplier * assignmentPoints;
+            double totalAbsentPoints = absentDaysTimesMultiplier * assignmentPoints;
+            double totalExcusedPoints = excusedDaysTimesMultiplier * assignmentPoints;
 
-            Long sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
+            double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
 
-            Long studentFinalGrade = sumStudentsPoints / totalDays;
+            double studentFinalGrade = sumStudentsPoints / totalDays;
 
             page.addObject("presentWeight", presentWeight);
             page.addObject("tardyWeight", tardyWeight);
