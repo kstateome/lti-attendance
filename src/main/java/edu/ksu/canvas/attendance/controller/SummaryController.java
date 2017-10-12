@@ -161,7 +161,7 @@ public class SummaryController extends AttendanceBaseController {
 
             double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
 
-            double studentFinalGrade = sumStudentsPoints / totalDays;
+            double studentFinalGrade = Math.round(sumStudentsPoints / totalDays);
 
             page.addObject("presentWeight", presentWeight);
             page.addObject("tardyWeight", tardyWeight);
