@@ -98,19 +98,19 @@
                             your current attendance grade in this course. If there is a discrepancy between the grade in the
                             gradebook and what is on this page, please inform your instructor.</p>
                         <br>
-                        <p>(${totalPresentDays} day(s) "Present") * (${presentWeight}% of ${assignmentPoints} possible points)
+                        <p>(${totalPresentDays} day(s) Present) * (${presentWeight}% of ${assignmentPoints} possible points)
                             = ${totalPresentDays} * (${presentMultiplier} * ${assignmentPoints}) = ${presentDaysTimesMultiplier} * ${assignmentPoints} =
                                 ${totalPresentPoints}</p>
 
-                        <p>(${totalTardyDays} day(s) "Tardy") * (${tardyWeight}% of ${assignmentPoints} possible points)
+                        <p>(${totalTardyDays} day(s) Tardy) * (${tardyWeight}% of ${assignmentPoints} possible points)
                             = ${totalTardyDays} * (${tardyMultiplier} * ${assignmentPoints}) = ${tardyDaysTimesMultiplier} * ${assignmentPoints} =
                                 ${totalTardyPoints}</p>
 
-                        <p>(${totalAbsentDays} day(s) "Absent") * (${absentWeight}% of ${assignmentPoints} possible points)
+                        <p>(${totalAbsentDays} day(s) Absent) * (${absentWeight}% of ${assignmentPoints} possible points)
                             = ${totalAbsentDays} * (${absentMultiplier} * ${assignmentPoints}) = ${absentDaysTimesMultiplier} * ${assignmentPoints} =
                                 ${totalAbsentPoints}</p>
 
-                        <p>(${totalExcusedDays} day(s) "Excused") * (${excusedWeight}% of ${assignmentPoints} possible points)
+                        <p>(${totalExcusedDays} day(s) Excused) * (${excusedWeight}% of ${assignmentPoints} possible points)
                             = ${totalExcusedDays} * (${excusedMultiplier} * ${assignmentPoints}) = ${excusedDaysTimesMultiplier} * ${assignmentPoints} =
                                 ${totalExcusedPoints}</p>
 
