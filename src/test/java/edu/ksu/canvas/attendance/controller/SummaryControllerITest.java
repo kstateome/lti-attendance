@@ -138,14 +138,10 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.MINUTES);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
-        String sisUserId = existingStudent.getSisUserId();
-
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getAviationAttendanceSummary(sectionId);
-
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId,sisUserId,existingStudent.getName(), existingStudent.getDeleted(),entry.getSumMinutesMadeup(),entry.getRemainingMinutesMadeup(),entry.getSumMinutesMissed(),entry.getPercentCourseMissed());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("studentSummary"))
@@ -163,13 +159,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                                                                     )
                                                              ))
                                                     )))
-                                    .andExpect(model().attribute("attendanceSummaryEntry",
-                                            allOf(
-                                                    hasProperty("sumMinutesMissed", is(studentSummary.getSumMinutesMissed())),
-                                                    hasProperty("sumMinutesMadeup", is(studentSummary.getSumMinutesMadeup())),
-                                                    hasProperty("remainingMinutesMadeup", is(studentSummary.getRemainingMinutesMadeup())),
-                                                    hasProperty("percentCourseMissed", is(studentSummary.getPercentCourseMissed()))
-                                            )))
                                     .andExpect(model().attribute("summaryForm",
                                             allOf(
                                                     hasProperty("sectionId", is(sectionId)),
@@ -199,14 +188,10 @@ public class SummaryControllerITest extends BaseControllerITest {
         existingCourse.setAttendanceType(AttendanceType.SIMPLE);
         Long sectionId = existingSection.getCanvasSectionId();
         Long studentId = existingStudent.getStudentId();
-        String sisUserId = existingStudent.getSisUserId();
-
         List<AttendanceSummaryModel> attendanceSummaryModelList = reportRepository.getSimpleAttendanceSummary(sectionId);
-
         for(AttendanceSummaryModel attendanceSummaryModel: attendanceSummaryModelList) {
             for(AttendanceSummaryModel.Entry entry : attendanceSummaryModel.getEntries()) {
                 if(entry.getStudentId() == existingStudent.getStudentId()) {
-                    AttendanceSummaryModel.Entry studentSummary = new AttendanceSummaryModel.Entry(existingCourse.getCourseId(),existingSection.getSectionId(),studentId, sisUserId, existingStudent.getName(), existingStudent.getDeleted(),entry.getTotalClassesTardy(),entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent());
                     mockMvc.perform(get("/studentSummary/"+sectionId+"/"+studentId))
                             .andExpect(status().isOk())
                             .andExpect(view().name("simpleStudentSummary"))
@@ -223,11 +208,6 @@ public class SummaryControllerITest extends BaseControllerITest {
                                                                     hasProperty("dateOfClass", is(existingAttendance.getDateOfClass()))
                                                             )
                                                     ))
-                                    )))
-                            .andExpect(model().attribute("attendanceSummaryEntry",
-                                    allOf(
-                                            hasProperty("totalClassesMissed", is(studentSummary.getTotalClassesMissed())),
-                                            hasProperty("totalClassesTardy", is(studentSummary.getTotalClassesTardy()))
                                     )))
                             .andExpect(model().attribute("summaryForm",
                                     allOf(
