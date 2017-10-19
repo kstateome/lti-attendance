@@ -68,7 +68,7 @@
         <div class="container-fluid ">
             <div class="row">
                 <div class='col-sm-4'>
-                    <div class="form-group">
+                    <div id="sectionSelectFormGroup" class="form-group">
                         <label for="sectionId">Section</label>
                         <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}"
                                      itemValue="canvasSectionId" itemLabel="name"
@@ -83,14 +83,14 @@
                 the future.
             </div>
 
-            <table>
+            <table id="dateTable">
                 <tr>
                     <th><label>Day of Attendance</label></th>
                 </tr>
                 <tr>
                     <td>
                         <div class="row">
-                            <div class='col-md-5 keep-element-above'>
+                            <div class='col-md-4 keep-element-above'>
                                 <div class="form-group">
                                     <div class="input-group date" id="datePicker">
                                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
@@ -117,9 +117,9 @@
                                     });
                                 });
                             </script>
-                            <div class="col-md-3 saveAttendanceButton">
-                                <input id="saveAttendanceOnTop" class="hovering-purple-button" type="submit" name="saveAttendance"
-                                       value="Save Attendance"/>
+                            <div class="col-md-4 saveAttendanceButton">
+                                <button id="saveAttendanceOnTop" class="hovering-purple-button" type="button" name="saveAttendance" onclick="submitRoster()">
+                                    Save Attendance</button>
                             </div>
                             <div class="col-md-4 deleteAttendanceButton">
                                 <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
@@ -160,17 +160,17 @@
                         <tbody>
                         <c:forEach items="${sectionModel.attendances}" var="attendance" varStatus="attendanceLoop">
                             <tr>
-                                <td class="${attendance.dropped ? 'dropped' : ''}">
+                                <td class="studentName ${attendance.dropped ? 'dropped' : ''}">
                                     <form:input type="hidden" id="attendanceId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceId"/>
                                     <form:input type="hidden" id="attendanceStudentId-${attendance.attendanceStudentId}"
                                                 path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].attendanceStudentId"/>
                                         ${attendance.attendanceStudentName}
                                 </td>
-                                <td>
+                                <td class="studentSisUserId">
                                         ${attendance.attendanceStudentSisUserId}
                                 </td>
-                                <td>
+                                <td class="studentStatus">
                                     <fmt:formatDate value="${attendance.dateOfClass}" pattern="MM/dd/yyyy"
                                                     var="attendanceDate"/>
                                     <label>
@@ -194,7 +194,7 @@
                                     <form:errors cssClass="error"
                                                  path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"/>
                                 </td>
-                                <td>
+                                <td class="studentNotes">
                                 <c:choose>
                                     <c:when test="${rosterForm.simpleAttendance}">
                                         <form:input id="notes${attendance.attendanceStudentId}" cssClass="form-control" path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].notes"/>
@@ -226,7 +226,7 @@
             </c:forEach>
 
             <div>
-                <input class="hovering-purple-button" type="submit" name="saveAttendance" value="Save Attendance"/>
+                <button id="saveAttendanceOnBottom" class="hovering-purple-button" type="button" onclick="submitRoster()" name="saveAttendance">Save Attendance</button>
             </div>
         </div>
     </form:form>
@@ -292,6 +292,17 @@
     $('#deleteAttendance').click(function () {
         return confirm('Do you want to delete this Attendance?');
     });
+
+    function submitRoster(){
+        $("<input />")
+                .attr("type", "hidden")
+                .attr("name", "saveAttendance")
+                .attr("value", "saveAttendance")
+                .appendTo("#sectionSelect");
+        $('#sectionSelect').submit();
+        $('#saveAttendanceOnTop').attr("disabled", "disabled");
+        $('#saveAttendanceOnBottom').attr("disabled", "disabled");
+    }
 </script>
 </body>
 </html>

@@ -1,101 +1,46 @@
 package edu.ksu.canvas.attendance.controller.arquillian;
 
-import edu.ksu.canvas.attendance.form.RosterForm;
+import edu.ksu.canvas.attendance.controller.arquillian.page.RosterPage;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.graphene.page.InitialPage;
+import org.jboss.arquillian.graphene.page.Page;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.warp.Activity;
-import org.jboss.arquillian.warp.Inspection;
-import org.jboss.arquillian.warp.Warp;
-import org.jboss.arquillian.warp.WarpTest;
-import org.jboss.arquillian.warp.client.filter.http.HttpFilters;
-import org.jboss.arquillian.warp.client.filter.http.HttpMethod;
-import org.jboss.arquillian.warp.servlet.AfterServlet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@WarpTest
 @RunAsClient
 @RunWith(Arquillian.class)
 public class RosterControllerArquillianTest extends BaseArquillianTest {
 
     private static final String page = "roster";
 
+    @Page
+    private RosterPage rosterPage;
+
     @Test
-    public void shouldBeAbleToSave() throws Exception {
-        System.out.println("Testing Roster page.. using driver: "+driver+"  .. fetching this url: " + baseUrl + page);
+    public void shouldBeAbleToSave(@InitialPage RosterPage rosterPage) throws Exception {
+        rosterPage.clickSaveButtonOnTop();
 
-        driver.navigate().to(baseUrl + page);
-
-        Warp.initiate(new Activity() {
-
-            @Override
-            public void perform() {
-                System.err.println("Submitting roster form");
-                driver.findElement(By.id("saveAttendanceOnTop")).click();
-            }
-        }).observe(HttpFilters.request().uri().contains(page))
-                .inspect(new Inspection() {
-                    private static final long serialVersionUID = 1L;
-
-                    @ArquillianResource
-                    private ModelAndView modelAndView;
-
-                    @AfterServlet
-                    public void testAfterServlet() {
-
-                        Boolean saveSuccessExpected = Boolean.TRUE;
-                        Boolean saveSuccessActual = (Boolean) modelAndView.getModel().get("saveSuccess");
-                        assertEquals(saveSuccessExpected, saveSuccessActual);
-                    }
-                });
+        assertTrue("Expected save success mesage to be displayed after saving attendence", driver.findElement(By.id("saveSuccessMessage")).isDisplayed());
     }
 
     @Test
-    public void shouldBeAbleToChangeDate() throws Exception {
+    public void shouldBeAbleToChangeDate(@InitialPage RosterPage rosterPage) throws Exception {
         final String arbitraryDate = "12/1/2016";
-        driver.navigate().to(baseUrl + page);
+        rosterPage.changeDate(arbitraryDate);
 
-        Warp.initiate(new Activity() {
-            @Override
-            public void perform() {
-                WebElement element = driver.findElement(By.id("currentDate"));
-                for (int i = 0; i < 20; i++) {
-                    element.sendKeys(Keys.BACK_SPACE);
-                }
-                element.sendKeys(arbitraryDate);
-                element.sendKeys(Keys.ENTER);
-                driver.findElement(By.id("sectionSelect")).click();
-            }
-        }).observe(HttpFilters.request().method().equal(HttpMethod.POST))
-                .inspect(new Inspection() {
-                    private static final long serialVersionUID = 1L;
+        WebElement changedDate = rosterPage.getCurrentDate();
+        String changedDateValue = changedDate.getAttribute("value");
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 
-                    @ArquillianResource
-                    private ModelAndView modelAndView;
-
-                    @AfterServlet
-                    public void testAfterServlet() throws ParseException {
-                        RosterForm form = (RosterForm) modelAndView.getModel().get("rosterForm");
-                        DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-                        Date date = format.parse(arbitraryDate);
-                        assertTrue("Form should have the correct date.", org.apache.commons.lang3.time.DateUtils.isSameDay(date, form.getCurrentDate()));
-                    }
-                });
-
-
-
+        assertTrue("Date should be what was entered by the user", org.apache.commons.lang3.time.DateUtils.isSameDay(format.parse(arbitraryDate), format.parse(changedDateValue)));
     }
+
 }

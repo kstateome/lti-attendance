@@ -2,24 +2,14 @@ package edu.ksu.canvas.attendance.controller.arquillian;
 
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.jboss.arquillian.warp.Activity;
-import org.jboss.arquillian.warp.Inspection;
-import org.jboss.arquillian.warp.Warp;
-import org.jboss.arquillian.warp.WarpTest;
-import org.jboss.arquillian.warp.client.filter.http.HttpFilters;
-import org.jboss.arquillian.warp.client.filter.http.HttpMethod;
-import org.jboss.arquillian.warp.servlet.AfterServlet;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.springframework.web.servlet.ModelAndView;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-@WarpTest
 @RunAsClient
 @RunWith(Arquillian.class)
 public class CourseConfigurationControllerArquillianTest extends BaseArquillianTest{
@@ -30,26 +20,9 @@ public class CourseConfigurationControllerArquillianTest extends BaseArquillianT
 
         driver.navigate().to(baseUrl + "courseConfiguration");
         driver.findElement(By.id("classSetupLink")).click();
+        driver.findElement(By.id("saveCourseConfiguration")).click();
 
-        Warp.initiate(new Activity() {
-            @Override
-            public void perform() {
-                System.err.println("Saving configuration");
-                driver.findElement(By.id("saveCourseConfiguration")).click();
-            }
-        }).observe(HttpFilters.request().method().equal(HttpMethod.POST))
-                .inspect(new Inspection() {
-                    private static final long serialVersionUID = 2L;
-
-                    @ArquillianResource
-                    private ModelAndView modelAndView;
-
-                    @AfterServlet
-                    public void testAfterServlet() {
-                        Boolean updateSuccessful = (Boolean) modelAndView.getModel().get("updateSuccessful");
-                        assertEquals(true, updateSuccessful);
-                    }
-                });
+        Assert.assertTrue("Expected updated success message to be displayed after save", driver.findElement(By.id("updateSucessMessage")).isDisplayed());
     }
 
     @Test
