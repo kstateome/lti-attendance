@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -70,11 +71,13 @@ public class SummaryController extends AttendanceBaseController {
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+
         if(validatedSectionId == null) {
             throw new IllegalArgumentException("Invalid section id.");
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+
         if(validatedStudentId == null || validatedStudentId < 0) {
             throw new MissingSisIdException("Invalid student id", false);
         }
@@ -97,6 +100,7 @@ public class SummaryController extends AttendanceBaseController {
             studentList.addAll(studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedSection.getCanvasCourseId()));
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         }
+
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
@@ -109,23 +113,22 @@ public class SummaryController extends AttendanceBaseController {
         student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
 
         List<AttendanceSummaryModel.Entry> entries = new ArrayList<>();
+
         if (student.getSisUserId() != null) {
-            for (AttendanceSummaryModel model : summaryForSections) {
-                for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
-                    if (student.getSisUserId().equals(entry.getSisUserId())) {
-                        entries.add(entry);
-                    }
-                }
-            }
+            entries = summaryForSections.stream().flatMap(model -> model.getEntries().stream()).filter(entry -> student.getSisUserId().equals(entry.getSisUserId())).collect(Collectors.toList());
         }
+
         int totalPresentDays = 0, totalTardyDays  = 0, totalAbsentDays = 0, totalExcusedDays = 0;
-        for (AttendanceSummaryModel.Entry entry : entries){
+
+        for (AttendanceSummaryModel.Entry entry : entries) {
             totalPresentDays += entry.getTotalClassesPresent();
             totalAbsentDays += entry.getTotalClassesMissed();
             totalTardyDays += entry.getTotalClassesTardy();
             totalExcusedDays += entry.getTotalClassesExcused();
         }
+
         int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
+        
         addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
 
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
