@@ -29,6 +29,15 @@ pipeline {
                 }
             }
         }
+        
+        stage('sonar') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh "mvn sonar:sonar -P sonar -Dsonar.branch=${env.branch_name}"
+            }
+        }
 
         stage('Unit Tests') {
             steps {
