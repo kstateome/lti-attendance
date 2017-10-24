@@ -157,6 +157,7 @@
                 </tr>
                 </c:if>
             </c:forEach>
+
         </c:forEach>
 
         </tbody>
