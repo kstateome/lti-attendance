@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -69,11 +71,13 @@ public class SummaryController extends AttendanceBaseController {
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+
         if(validatedSectionId == null) {
             throw new IllegalArgumentException("Invalid section id.");
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+
         if(validatedStudentId == null || validatedStudentId < 0) {
             throw new MissingSisIdException("Invalid student id", false);
         }
@@ -89,9 +93,14 @@ public class SummaryController extends AttendanceBaseController {
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         AttendanceAssignment assignment = assignmentService.findBySection(selectedSection);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
+        List<AttendanceStudent> studentList = new ArrayList<>();
+        List<AttendanceSection> sectionList = new ArrayList<>();
         if (selectedSection != null) {
+            sectionList.addAll(sectionService.getSectionByCanvasCourseId(selectedSection.getCanvasCourseId()));
+            studentList.addAll(studentService.getStudentByCourseAndSisId(student.getSisUserId(), selectedSection.getCanvasCourseId()));
             courseService.loadIntoForm(courseConfigurationForm, selectedSection.getCanvasCourseId());
         }
+
         final boolean isSimpleAttendance = courseConfigurationForm.getSimpleAttendance();
 
         ModelAndView page = isSimpleAttendance ?
@@ -100,42 +109,52 @@ public class SummaryController extends AttendanceBaseController {
         List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
                 reportService.getSimpleAttendanceSummaryReport(validatedSectionId) :
                 reportService.getAviationAttendanceSummaryReport(validatedSectionId);
-        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
 
         student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
 
-        summaryForSections.stream()
-                .flatMap(summary -> summary.getEntries().stream())
-                .filter(entry -> entry.getStudentId() == validatedStudentId)
-                .findFirst()
-                .ifPresent(entry ->  addAssignmentSummaryToPage(page, entry, isSimpleAttendance, student, assignment));
+        List<AttendanceSummaryModel.Entry> entries = new ArrayList<>();
+
+        if (student.getSisUserId() != null) {
+            entries = summaryForSections.stream()
+                    .flatMap(model -> model.getEntries().stream())
+                    .filter(entry -> student.getSisUserId().equals(entry.getSisUserId()))
+                    .collect(Collectors.toList());
+        }
+
+        int totalPresentDays = 0, totalTardyDays  = 0, totalAbsentDays = 0, totalExcusedDays = 0;
+
+        for (AttendanceSummaryModel.Entry entry : entries) {
+            totalPresentDays += entry.getTotalClassesPresent();
+            totalAbsentDays += entry.getTotalClassesMissed();
+            totalTardyDays += entry.getTotalClassesTardy();
+            totalExcusedDays += entry.getTotalClassesExcused();
+        }
+
+        int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
+        
+        addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
+
+        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
         institutionRoles.stream()
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
-
-        page.addObject("sectionId", sectionId);
-        page.addObject("student", student);
-        page.addObject("summaryForm", makeupForm);
-        return page;
-    }
-
-    private void addAssignmentSummaryToPage(ModelAndView page, AttendanceSummaryModel.Entry entry, boolean isSimpleAttendance, AttendanceStudent student, AttendanceAssignment assignment) {
-        page.addObject("attendanceSummaryEntry", isSimpleAttendance ?
-            new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getTotalClassesTardy(), entry.getTotalClassesMissed(), entry.getTotalClassesExcused(), entry.getTotalClassesPresent())
-            : new AttendanceSummaryModel.Entry(entry.getCourseId(), entry.getSectionId(), entry.getStudentId(), entry.getSisUserId(), entry.getStudentName(), student.getDeleted(), entry.getSumMinutesMadeup(), entry.getRemainingMinutesMadeup(), entry.getSumMinutesMissed(), entry.getPercentCourseMissed()));
-
-        int totalPresentDays = entry.getTotalClassesPresent();
-        int totalTardyDays  = entry.getTotalClassesTardy();
-        int totalAbsentDays = entry.getTotalClassesMissed();
-        int totalExcusedDays = entry.getTotalClassesExcused();
-        int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
 
         page.addObject("totalPresentDays", totalPresentDays);
         page.addObject("totalTardyDays", totalTardyDays);
         page.addObject("totalAbsentDays", totalAbsentDays);
         page.addObject("totalExcusedDays", totalExcusedDays);
         page.addObject("totalDays", totalDays);
+        page.addObject("student", student);
+        page.addObject("sectionId", sectionId);
+        page.addObject("studentList", studentList);
+        page.addObject("sectionList", sectionList);
+        page.addObject("summaryForm", makeupForm);
+        page.addObject("entryList", entries);
+        return page;
+    }
+
+    private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {
 
         if (assignment != null && totalDays != 0) {
             double presentWeight = Long.valueOf(assignment.getPresentPoints());
