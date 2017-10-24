@@ -214,7 +214,13 @@ public class SummaryControllerITest extends BaseControllerITest {
                                             hasProperty("sectionId", is(sectionId)),
                                             hasProperty("studentId", is(studentId)),
                                             hasProperty("entries", hasSize(1))
-                                            )));
+                                            )))
+                            .andExpect(model().attribute("studentList", hasSize(1)))
+                            .andExpect(model().attribute("sectionList", hasSize(1)))
+                            .andExpect(model().attribute("totalPresentDays", is(entry.getTotalClassesPresent())))
+                            .andExpect(model().attribute("totalTardyDays", is(entry.getTotalClassesTardy())))
+                            .andExpect(model().attribute("totalAbsentDays", is(entry.getTotalClassesMissed())))
+                            .andExpect(model().attribute("totalExcusedDays", is(entry.getTotalClassesExcused())));
                 }
             }
         }
