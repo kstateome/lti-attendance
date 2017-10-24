@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "attendance")
-@Check(constraints = "minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED', 'NA')")
+@Check(constraints = "minutes_missed >= 0 and status IN ('PRESENT', 'TARDY', 'ABSENT', 'EXCUSED')")
 public class Attendance implements Serializable {
 
     private static final long serialVersionUID = 1L;
