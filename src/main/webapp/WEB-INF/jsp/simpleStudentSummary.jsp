@@ -155,6 +155,7 @@
                     </c:forEach>
                     <td>${attendance.notes}</td>
                 </tr>
+                </c:if>
             </c:forEach>
 
         <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
@@ -164,7 +165,7 @@
                     <td>${attendance.status}</td>
                     <td>${attendance.notes}</td>
                 </tr>
-            </c:if>
+
         </c:forEach>
 
         </tbody>
