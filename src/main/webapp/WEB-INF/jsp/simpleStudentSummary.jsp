@@ -72,10 +72,11 @@
         <tr>
             <td>${student.name}</td>
             <td>${student.sisUserId}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesPresent}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesMissed}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesExcused}</td>
+            <td class="text-center">${totalPresentDays}</td>
+            <td class="text-center">${totalAbsentDays}</td>
+            <td class="text-center">${totalExcusedDays}</td>
+            <td class="text-center">${totalTardyDays}</td>
+
         </tr>
     </table>
 
@@ -86,7 +87,7 @@
                     <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
                            aria-expanded="false" aria-controls="collapseOne">
-                            Click here to see the calculation behind your Attendance grade
+                            Click here to see the calculation behind your attendance grade
                         </a>
                     </h4>
                 </div>
@@ -135,20 +136,35 @@
         <tr>
             <th class="col-md-1">Class Date</th>
             <th class="col-md-1">Status</th>
+            <th class="col-md-1">Section</th>
             <th class="col-md-2">Notes</th>
         </tr>
         </thead>
 
         <tbody id="summaryTableBody">
+        <c:forEach items="${studentList}" var="student" varStatus="studentLoop">
+            <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
+              <c:if test="${attendance.status != 'NA'}">  
+              <tr>
+                    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
+                    <td>${attendance.status}</td>
+                    <c:forEach items="${sectionList}" var="section" varStatus="sectionLoop">
+                        <c:if test="${section.canvasSectionId == student.canvasSectionId}">
+                            <td>${section.name}</td>
+                        </c:if>
+                    </c:forEach>
+                    <td>${attendance.notes}</td>
+                </tr>
+            </c:forEach>
+
         <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
-            <c:if test="${attendance.status != 'NA'}">
+            
                 <tr>
                     <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
                     <td>${attendance.status}</td>
                     <td>${attendance.notes}</td>
                 </tr>
             </c:if>
-
         </c:forEach>
 
         </tbody>
