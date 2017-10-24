@@ -115,7 +115,10 @@ public class SummaryController extends AttendanceBaseController {
         List<AttendanceSummaryModel.Entry> entries = new ArrayList<>();
 
         if (student.getSisUserId() != null) {
-            entries = summaryForSections.stream().flatMap(model -> model.getEntries().stream()).filter(entry -> student.getSisUserId().equals(entry.getSisUserId())).collect(Collectors.toList());
+            entries = summaryForSections.stream()
+                    .flatMap(model -> model.getEntries().stream())
+                    .filter(entry -> student.getSisUserId().equals(entry.getSisUserId()))
+                    .collect(Collectors.toList());
         }
 
         int totalPresentDays = 0, totalTardyDays  = 0, totalAbsentDays = 0, totalExcusedDays = 0;
