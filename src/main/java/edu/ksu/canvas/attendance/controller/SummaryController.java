@@ -11,6 +11,7 @@ import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +157,7 @@ public class SummaryController extends AttendanceBaseController {
 
     private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {
 
-        if (assignment != null && totalDays != 0 && assignment.getPresentPoints() != null) {
+        if (assignment != null && totalDays != 0 && !StringUtils.isBlank(assignment.getPresentPoints())) {
             double presentWeight = Long.valueOf(assignment.getPresentPoints());
             double tardyWeight = Long.valueOf(assignment.getTardyPoints());
             double absentWeight = Long.valueOf(assignment.getAbsentPoints());
