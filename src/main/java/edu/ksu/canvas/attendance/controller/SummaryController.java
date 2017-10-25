@@ -156,7 +156,7 @@ public class SummaryController extends AttendanceBaseController {
 
     private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {
 
-        if (assignment != null && totalDays != 0) {
+        if (assignment != null && totalDays != 0 && assignment.getPresentPoints() != null) {
             double presentWeight = Long.valueOf(assignment.getPresentPoints());
             double tardyWeight = Long.valueOf(assignment.getTardyPoints());
             double absentWeight = Long.valueOf(assignment.getAbsentPoints());
