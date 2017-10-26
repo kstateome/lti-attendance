@@ -73,9 +73,9 @@
             <td>${student.name}</td>
             <td>${student.sisUserId}</td>
             <td class="text-center">${totalPresentDays}</td>
+            <td class="text-center">${totalTardyDays}</td>
             <td class="text-center">${totalAbsentDays}</td>
             <td class="text-center">${totalExcusedDays}</td>
-            <td class="text-center">${totalTardyDays}</td>
 
         </tr>
     </table>
