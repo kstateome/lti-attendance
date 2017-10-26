@@ -119,11 +119,11 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         Integer expectedTotalClassMinutes = 1000;
         Boolean expectedSimpleAttendanceValue = true;
         String expectedAssignmentName = "Assignment Name";
-        String expectedAssignmentPoints = "120.0";
-        String expectedPresentPoints = "100.0";
-        String expectedTardyPoints = "0.0";
-        String expectedExcusedPoints = "0.0";
-        String expectedAbsentPoints = "0.0";
+        String expectedAssignmentPoints = "120";
+        String expectedPresentPoints = "100";
+        String expectedTardyPoints = "0";
+        String expectedExcusedPoints = "0";
+        String expectedAbsentPoints = "0";
 
         mockMvc.perform(post("/courseConfiguration/"+irrelevantSectionId+"/save")
                 .param("saveCourseConfiguration", "Save Course Configuration")

@@ -40,6 +40,7 @@
             <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance Summary</a></li>
             <li class="active"><a id="rosterLink" href="#">Class Roster</a></li>
+            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
         </ul>
     </div>
 </nav>
@@ -71,8 +72,7 @@
                     <div id="sectionSelectFormGroup" class="form-group">
                         <label for="sectionId">Section</label>
                         <form:select id="sectionId" class="form-control" path="sectionId" items="${sectionList}"
-                                     itemValue="canvasSectionId" itemLabel="name"
-                                     onchange="toggleSection(value, '${context}');"/>
+                                     itemValue="canvasSectionId" itemLabel="name"/>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,9 @@
                 <tr>
                     <td>
                         <div class="row">
-                            <div class='col-md-4 keep-element-above'>
+
+                            <div class='col-md-3 keep-element-above'>
+
                                 <div class="form-group">
                                     <div class="input-group date" id="datePicker">
                                         <form:input id="currentDate" path="currentDate" cssClass="form-control"/>
@@ -117,14 +119,18 @@
                                     });
                                 });
                             </script>
-                            <div class="col-md-4 saveAttendanceButton">
+                            <div class="col-md-3 saveAttendanceButton">
                                 <button id="saveAttendanceOnTop" class="hovering-purple-button" type="button" name="saveAttendance" onclick="submitRoster()">
                                     Save Attendance</button>
                             </div>
-                            <div class="col-md-4 deleteAttendanceButton">
+                            <div class="col-md-3 deleteAttendanceButton">
                                 <a id="deleteAttendance" href="${context}/roster/${selectedSectionId}/delete" name="deleteAttendance" style="text-decoration: none" >
                                     <button  class="hovering-purple-button" type="button">Delete Attendance</button>
                                 </a>
+                            </div>
+                            <div class="col-md-3 saveAttendanceButton">
+                                <input id="saveUnassignedAsPresent" type="button" class="hovering-purple-button" onclick="saveAsPresent()"
+                                        name="saveUnassignedAsPresent" value="Set Unassigned to Present"/>
                             </div>
                         </div>
                     </td>
@@ -132,15 +138,16 @@
             </table>
         </div>
 
+
+
         <div class="container">
             <div id="waitLoading" class="text-center" style="display: none">
                 <img id="loading-image" src="${context}/img/ajax-loader.gif"
                      alt="Please wait for content to finish loading"/>
             </div>
             <c:forEach items="${rosterForm.sectionModels}" var="sectionModel" varStatus="sectionLoop">
-                <c:if test="${not empty sectionModel.attendances}">
-                    <table class="table table-bordered sectionTable" style="display:none"
-                           id="${sectionModel.canvasSectionId}">
+                <c:if test="${sectionModel.canvasSectionId == selectedSectionId}">
+                    <table class="table table-bordered sectionTable" id="${sectionModel.canvasSectionId}">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -177,17 +184,17 @@
                                         <form:select id="attendanceStatus-${attendance.attendanceStudentId}"
                                                      path="sectionModels[${sectionLoop.index}].attendances[${attendanceLoop.index}].status"
                                                      cssClass="attendanceStatus form-control no-padding changing-width">
+                                            <form:option id="default-${attendance.attendanceStudentId}"
+                                                         value="<%=Status.NA%>" title="default" label="---"/>
                                             <form:option id="present-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.NA%>">---</form:option>
-                                            <form:option id="present-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.PRESENT%>">Present</form:option>
+                                                         value="<%=Status.PRESENT%>" label="Present"/>
                                             <form:option id="tardy-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.TARDY%>">Tardy</form:option>
+                                                         value="<%=Status.TARDY%>" label="Tardy"/>
                                             <form:option id="absent-${attendance.attendanceStudentId}"
-                                                         value="<%=Status.ABSENT%>">Absent</form:option>
+                                                         value="<%=Status.ABSENT%>" label="Absent"/>
                                             <c:if test="${rosterForm.simpleAttendance}">
                                                 <form:option id="absentExcused-${attendance.attendanceStudentId}"
-                                                             value="<%=Status.EXCUSED%>">Excused</form:option>
+                                                             value="<%=Status.EXCUSED%>" label="Excused"/>
                                             </c:if>
                                         </form:select>
                                     </label>
@@ -292,6 +299,26 @@
     $('#deleteAttendance').click(function () {
         return confirm('Do you want to delete this Attendance?');
     });
+
+
+    $('#sectionId').change(function () {
+        window.location = '${context}/roster/' + this.value;
+    });
+
+    function saveAsPresent() {
+        var statuses = $("option[title='default']");
+        for (var i = 0; i < statuses.length; i++) {
+            statuses[i].value = "<%=Status.PRESENT%>";
+            statuses[i].label = "Present";
+        }
+        $("<input />")
+                .attr("type", "hidden")
+                .attr("name", "saveAttendance")
+                .attr("value", "saveAttendance")
+                .appendTo("#sectionSelect");
+        $('#sectionSelect').submit();
+        $('#saveUnassignedAsPresent').attr("disabled", "disabled");
+    }
 
     function submitRoster(){
         $("<input />")

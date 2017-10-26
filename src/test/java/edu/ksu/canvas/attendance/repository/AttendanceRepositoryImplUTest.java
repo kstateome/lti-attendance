@@ -42,8 +42,9 @@ public class AttendanceRepositoryImplUTest {
     public void deleteAttendanceByCourseAndDayOfClass_NullDateOfClass() {
         int irrelevantCourseId = 2;
         Date nullDateOfClass = null;
+        long irrelevantSectionId = 2;
 
-        attendanceRepository.deleteAttendanceByCourseAndDayOfClass(irrelevantCourseId, nullDateOfClass);
+        attendanceRepository.deleteAttendanceByCourseAndDayOfClass(irrelevantCourseId, nullDateOfClass, irrelevantSectionId);
     }
 
 }

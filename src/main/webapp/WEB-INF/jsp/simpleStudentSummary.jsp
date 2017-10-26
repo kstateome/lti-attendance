@@ -63,21 +63,71 @@
             <th class="col-md-3">Name</th>
             <th class="col-md-3">WID</th>
             <th class="col-md-4">Total Classes Present</th>
+            <th class="col-md-4">Total Classes Tardy</th>
             <th class="col-md-4">Total Classes Absent</th>
             <th class="col-md-4">Total Classes Excused</th>
-            <th class="col-md-4">Total Classes Tardy</th>
 
         </tr>
         </thead>
         <tr>
             <td>${student.name}</td>
             <td>${student.sisUserId}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesPresent}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesMissed}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesExcused}</td>
-            <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
+            <td class="text-center">${totalPresentDays}</td>
+            <td class="text-center">${totalAbsentDays}</td>
+            <td class="text-center">${totalExcusedDays}</td>
+            <td class="text-center">${totalTardyDays}</td>
+
         </tr>
     </table>
+
+    <c:if test="${presentWeight != null}">
+        <div class="panel-group form-div" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                           aria-expanded="false" aria-controls="collapseOne">
+                            Click here to see the calculation behind your attendance grade
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <hr>
+                        <p>Your instructor has created an assignment based on your attendance in this class. Below is an
+                            explanation of how your attendance grade is calculated. This page is adaptive and will always reflect
+                            your current attendance grade in this course. If there is a discrepancy between the grade in the
+                            gradebook and what is on this page, please inform your instructor.</p>
+                        <br>
+                        <p>(${totalPresentDays} day(s) Present) * (${presentWeight}% of ${assignmentPoints} possible points)
+                            = ${totalPresentDays} * (${presentMultiplier} * ${assignmentPoints}) = ${presentDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalPresentPoints}</p>
+
+                        <p>(${totalTardyDays} day(s) Tardy) * (${tardyWeight}% of ${assignmentPoints} possible points)
+                            = ${totalTardyDays} * (${tardyMultiplier} * ${assignmentPoints}) = ${tardyDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalTardyPoints}</p>
+
+                        <p>(${totalAbsentDays} day(s) Absent) * (${absentWeight}% of ${assignmentPoints} possible points)
+                            = ${totalAbsentDays} * (${absentMultiplier} * ${assignmentPoints}) = ${absentDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalAbsentPoints}</p>
+
+                        <p>(${totalExcusedDays} day(s) Excused) * (${excusedWeight}% of ${assignmentPoints} possible points)
+                            = ${totalExcusedDays} * (${excusedMultiplier} * ${assignmentPoints}) = ${excusedDaysTimesMultiplier} * ${assignmentPoints} =
+                                ${totalExcusedPoints}</p>
+
+                        <br>
+                        <p>${totalPresentPoints} + ${totalTardyPoints} + ${totalAbsentPoints} + ${totalExcusedPoints} =
+                            ${sumStudentsPoints} total points earned over the course of ${totalDays} total day(s) </p>
+
+                        <p>${sumStudentsPoints} / ${totalDays} = <em> ${studentFinalGrade} </em></p>
+                        <br>
+                        <p>Your final attendance grade is <strong> ${studentFinalGrade} / ${assignmentPoints} </strong></p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
 
     <h3>Attendance Logs</h3>
 
@@ -86,19 +136,27 @@
         <tr>
             <th class="col-md-1">Class Date</th>
             <th class="col-md-1">Status</th>
+            <th class="col-md-1">Section</th>
             <th class="col-md-2">Notes</th>
         </tr>
         </thead>
 
         <tbody id="summaryTableBody">
-        <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
-            <c:if test="${attendance.status != 'NA'}">
-                <tr>
+        <c:forEach items="${studentList}" var="student" varStatus="studentLoop">
+            <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
+              <c:if test="${attendance.status != 'NA'}">  
+              <tr>
                     <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
                     <td>${attendance.status}</td>
+                    <c:forEach items="${sectionList}" var="section" varStatus="sectionLoop">
+                        <c:if test="${section.canvasSectionId == student.canvasSectionId}">
+                            <td>${section.name}</td>
+                        </c:if>
+                    </c:forEach>
                     <td>${attendance.notes}</td>
                 </tr>
-            </c:if>
+                </c:if>
+            </c:forEach>
 
         </c:forEach>
 
