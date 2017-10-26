@@ -78,6 +78,9 @@ pipeline {
             steps {
                 sh 'mvn verify -Pintegration '
             }
+            always {
+                junit '**/target/failsafe-reports/*.xml'
+            }
         }
 
         stage("Arquillian Tests") {
@@ -86,7 +89,7 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml'
+                    junit '**/target/failsafe-reports/*.xml'
                 }
                 changed {
                     script {
