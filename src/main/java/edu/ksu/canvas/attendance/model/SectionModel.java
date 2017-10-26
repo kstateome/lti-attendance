@@ -10,6 +10,7 @@ public class SectionModel {
     private long canvasSectionId;
     private String sectionName;
     private Long canvasCourseId;
+    private Long sectionId;
     private List<AttendanceModel> attendances;
 
 
@@ -66,4 +67,11 @@ public class SectionModel {
                 '}';
     }
 
+    public Long getSectionId() {
+        return sectionId;
+    }
+
+    public void setSectionId(Long sectionId) {
+        this.sectionId = sectionId;
+    }
 }
