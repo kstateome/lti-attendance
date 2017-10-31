@@ -215,12 +215,14 @@ public class AssignmentSubmitter {
                 }
             }
             if (totalClasses == 0){
-                totalClasses = 1;
+                return 0.0;
             }
-            return ((((totalClassesPresent * presentPoints) +
+            else {
+                return ((((totalClassesPresent * presentPoints) +
                     (totalClassesTardy * tardyPoints) +
                     (totalClassesExcused * excusedPoints) +
                     (totalClassesMissed * absentPoints)) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
+            }
         } else {
 
             for (AttendanceSummaryModel model : summaryForSections) {
