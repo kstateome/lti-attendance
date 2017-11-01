@@ -41,41 +41,42 @@ public class AttendanceService {
         List<Attendance> attendancesInDBForCourse = null;
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceStudent> attendanceStudents = null;
+            if (sectionModel.getCanvasSectionId() == rosterForm.getSectionId()) {
+                for (AttendanceModel attendanceModel : sectionModel.getAttendances()) {
+                    if (attendanceModel.getAttendanceId() == null) {
+                        if (attendanceStudents == null) {
+                            long beginLoad = System.currentTimeMillis();
+                            attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
+                            long endLoad = System.currentTimeMillis();
+                            LOG.debug("loaded " + attendanceStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
+                        }
 
-            for (AttendanceModel attendanceModel : sectionModel.getAttendances()) {
-                if (attendanceModel.getAttendanceId() == null) {
-                    if (attendanceStudents == null) {
-                        long beginLoad = System.currentTimeMillis();
-                        attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
-                        long endLoad = System.currentTimeMillis();
-                        LOG.debug("loaded " + attendanceStudents.size() + " students by section in " + (endLoad - beginLoad) + " millis..");
+                        Attendance attendance = new Attendance();
+                        AttendanceStudent attendanceStudent = attendanceStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAttendanceStudentId())).findFirst().get();
+                        attendance.setAttendanceStudent(attendanceStudent);
+                        attendance.setDateOfClass(attendanceModel.getDateOfClass());
+                        attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                        attendance.setStatus(attendanceModel.getStatus());
+                        attendance.setNotes(attendanceModel.getNotes());
+                        adjustMinutesMissedBasedOnAttendanceStatus(attendance);
+
+                        saveToDb.add(attendance);
+                    } else {
+                        if (attendancesInDBForCourse == null) {
+                            long beginLoad = System.currentTimeMillis();
+                            attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+                            long endLoad = System.currentTimeMillis();
+                            LOG.debug("loaded " + attendancesInDBForCourse.size() + " attendance entries for course in " + (endLoad - beginLoad) + " millis..");
+                        }
+
+                        Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
+                        attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
+                        attendance.setStatus(attendanceModel.getStatus());
+                        attendance.setNotes(attendanceModel.getNotes());
+                        adjustMinutesMissedBasedOnAttendanceStatus(attendance);
+
+                        saveToDb.add(attendance);
                     }
-
-                    Attendance attendance = new Attendance();
-                    AttendanceStudent attendanceStudent = attendanceStudents.stream().filter(s -> s.getStudentId().equals(attendanceModel.getAttendanceStudentId())).findFirst().get();
-                    attendance.setAttendanceStudent(attendanceStudent);
-                    attendance.setDateOfClass(attendanceModel.getDateOfClass());
-                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
-                    attendance.setStatus(attendanceModel.getStatus());
-                    attendance.setNotes(attendanceModel.getNotes());
-                    adjustMinutesMissedBasedOnAttendanceStatus(attendance);
-
-                    saveToDb.add(attendance);
-                } else {
-                    if (attendancesInDBForCourse == null) {
-                        long beginLoad = System.currentTimeMillis();
-                        attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
-                        long endLoad = System.currentTimeMillis();
-                        LOG.debug("loaded " + attendancesInDBForCourse.size() + " attendance entries for course in " + (endLoad - beginLoad) + " millis..");
-                    }
-
-                    Attendance attendance = attendancesInDBForCourse.stream().filter(a -> a.getAttendanceId().equals(attendanceModel.getAttendanceId())).findFirst().get();
-                    attendance.setMinutesMissed(attendanceModel.getMinutesMissed());
-                    attendance.setStatus(attendanceModel.getStatus());
-                    attendance.setNotes(attendanceModel.getNotes());
-                    adjustMinutesMissedBasedOnAttendanceStatus(attendance);
-
-                    saveToDb.add(attendance);
                 }
             }
         }
@@ -142,10 +143,12 @@ public class AttendanceService {
         List<Attendance> attendancesInDBForCourse = null;
         boolean sectionHasAttendancesForDate = false;
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
-            attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
-            if (!attendancesInDBForCourse.isEmpty()) {
-                sectionHasAttendancesForDate = true;
-                attendanceRepository.deleteAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate(), rosterForm.getSectionId());
+            if (sectionModel.getSectionId() != null && sectionModel.getSectionId().equals(rosterForm.getSectionId())) {
+                attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
+                if (!attendancesInDBForCourse.isEmpty()) {
+                    sectionHasAttendancesForDate = true;
+                    attendanceRepository.deleteAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate(), rosterForm.getSectionId());
+                }
             }
         }
         return sectionHasAttendancesForDate;
