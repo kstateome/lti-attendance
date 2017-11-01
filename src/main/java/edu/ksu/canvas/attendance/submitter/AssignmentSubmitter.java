@@ -3,8 +3,10 @@ package edu.ksu.canvas.attendance.submitter;
 
 import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
 import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.oauth.OauthToken;
@@ -14,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @Scope(value="session")
@@ -45,6 +44,11 @@ public class AssignmentSubmitter {
     @Autowired
     private CanvasAssignmentAssistant canvasAssignmentAssistant;
 
+    @Autowired
+    private AttendanceStudentService studentService;
+
+    @Autowired
+    private AttendanceStudentRepository studentRepository;
 
     /**
      * This function takes the summary for sections and one by one validates the attendance assignment and
@@ -55,15 +59,27 @@ public class AssignmentSubmitter {
     public void submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId,
                                         OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws AttendanceAssignmentException{
 
-        for (AttendanceSummaryModel sectionSummary : summaryForSections) {
+        AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
 
-            AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getSectionInListById(courseId, sectionSummary.getSectionId()));
+        gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
 
-            gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, sectionSummary, attendanceAssignment);
+        List<AttendanceStudent> allStudents = studentRepository.findByCanvasCourseId(courseId);
 
-            submitSectionAttendances(isSimpleAttendance, sectionSummary, attendanceAssignment, courseId, oauthToken);
+        List<AttendanceStudent> studentsToGrade = new ArrayList<>();
 
+        Set<String> idList = new HashSet<>();
+
+        for (AttendanceStudent student: allStudents){
+            idList.add(student.getSisUserId());
         }
+
+        for (String id: idList){
+            List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
+            AttendanceStudent attendanceStudent = attendanceStudentList.stream().filter(x -> !x.getDeleted()).findFirst().orElse(null);
+            studentsToGrade.add(attendanceStudent);
+        }
+
+        submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
     }
 
     /**
@@ -72,9 +88,9 @@ public class AssignmentSubmitter {
      * associated to the attendance assignment then a new canvas assignment will be created and associate to the attendance assignment.
      */
     private void gradePushingValidation(Long courseId, OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup,
-                                        AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
+                                        AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
-        AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(model, attendanceAssignment);
+        AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment);
 
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
             validatingAssignment = assignmentValidator.validateAttendanceAssignment(courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
@@ -95,39 +111,37 @@ public class AssignmentSubmitter {
     /**
      * Handles the push grades and/or comments to canvas for just one section.
      */
-    private void submitSectionAttendances(boolean isSimpleAttendance, AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws AttendanceAssignmentException {
+    private void submitSectionAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, List<AttendanceStudent> students, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws AttendanceAssignmentException {
+
         Map<String, MultipleSubmissionsOptions.StudentSubmissionOption> studentMap;
-        MultipleSubmissionsOptions submissionOptions;
+        MultipleSubmissionsOptions submissionOptions = new MultipleSubmissionsOptions(courseId.toString(), attendanceAssignment.getCanvasAssignmentId().intValue(), null);
         studentMap = new HashMap<>();
-        submissionOptions = new MultipleSubmissionsOptions(((Long) model.getSectionId()).toString(), attendanceAssignment.getCanvasAssignmentId().intValue(), null);
 
-        AttendanceCourse course = attendanceCourseService.findByCanvasCourseId(courseId);
+        for (AttendanceStudent student: students){
 
-        Map<Long, String> studentCommentsMap = new HashMap<>();
-        if (course.getShowNotesToStudents()) {
-            studentCommentsMap = attendanceService.getAttendanceCommentsBySectionId(model.getSectionId());
-        }
+            AttendanceCourse course = attendanceCourseService.findByCanvasCourseId(courseId);
 
-        //Generates the map with the information to be submitted to Canvas
-        for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
-            if (!entry.isDropped() && entry.getSisUserId() != null) {
-                studentMap.put("sis_user_id:" + entry.getSisUserId(),
-                        generateStudentSubmissionOptions(isSimpleAttendance, submissionOptions, attendanceAssignment, course, studentCommentsMap, entry));
+            Map<Long, String> studentCommentsMap = new HashMap<>();
+            if (course.getShowNotesToStudents()) {
+                studentCommentsMap = attendanceService.getAttendanceCommentsBySectionId(student.getCanvasSectionId());
             }
+
+            //Generates the map with the information to be submitted to Canvas
+            studentMap.put("sis_user_id:" + student.getSisUserId(), generateStudentSubmissionOptions(isSimpleAttendance, submissionOptions, attendanceAssignment, course, studentCommentsMap, student, summaryForSections));
         }
 
         //Pushing the information to Canvas
         Optional<Progress> returnedProgress;
         submissionOptions.setStudentSubmissionOptionMap(studentMap);
+
         try {
-            returnedProgress = canvasApiWrapperService.gradeMultipleSubmissionsBySection(oauthToken, submissionOptions);
+            returnedProgress = canvasApiWrapperService.gradeMultipleSubmissionsByCourse(oauthToken, submissionOptions);
         } catch (IOException e) {
-            LOG.error("Error while pushing the grades of section: " + model.getSectionId(), e);
+            LOG.error("Error while pushing the grades of course: " + courseId, e);
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
-
         if (!isValidProgress(returnedProgress)) {
-            LOG.error("Error object returned while pushing the grades of section: " + model.getSectionId());
+            LOG.error("Error object returned while pushing the grades of course: " + courseId);
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
     }
@@ -136,16 +150,21 @@ public class AssignmentSubmitter {
      * Generates the parameters and data needed for push grades or comments to canvas
      */
     private MultipleSubmissionsOptions.StudentSubmissionOption generateStudentSubmissionOptions(boolean isSimpleAttendance, MultipleSubmissionsOptions submissionOptions,
-                                                                                               AttendanceAssignment attendanceAssignment, AttendanceCourse course, Map<Long, String> studentCommentsMap, AttendanceSummaryModel.Entry entry) {
+                                                                                               AttendanceAssignment attendanceAssignment, AttendanceCourse course, Map<Long, String> studentCommentsMap, AttendanceStudent student,
+                                                                                               List<AttendanceSummaryModel> summaryForSections) {
 
-        Double grade = calculateStudentGrade(attendanceAssignment, entry, isSimpleAttendance);
-        StringBuilder comments = new StringBuilder(getCommentHeader(entry, course, isSimpleAttendance));
+        Double grade = calculateStudentGrade(attendanceAssignment, summaryForSections, isSimpleAttendance, student);
 
-        if (course.getShowNotesToStudents() && studentCommentsMap.keySet().contains(entry.getStudentId())) {
-            comments.append("\nAdditional Comments: \n");
-            comments.append(studentCommentsMap.get(entry.getStudentId()));
+        StringBuilder comments = new StringBuilder();
+
+        for(AttendanceSummaryModel model: summaryForSections){
+            for (AttendanceSummaryModel.Entry entry: model.getEntries()){
+                if (entry.getSisUserId().equals(student.getSisUserId())){
+                    comments.append(getCommentHeader(entry, course, isSimpleAttendance));
+                    comments.append(studentCommentsMap.get(entry.getStudentId()));
+                }
+            }
         }
-
         return submissionOptions.createStudentSubmissionOption(comments.toString(), grade.toString(), null, null, null, null);
     }
 
@@ -157,8 +176,10 @@ public class AssignmentSubmitter {
      * Generates the header part of the comments, which is an explanation of the grades.
      */
     private String getCommentHeader(AttendanceSummaryModel.Entry entry, AttendanceCourse course, boolean isSimpleAttendance) {
+        String sectionName = sectionService.getSection(entry.getSectionId()).getName();
+
         if (isSimpleAttendance) {
-            return "Total number of classes: " + getTotalSimpleClasses(entry) + "\nNumber of classes present: " + entry.getTotalClassesPresent()
+            return "Section Name" + sectionName + "\nTotal number of classes: " + getTotalSimpleClasses(entry) + "\nNumber of classes present: " + entry.getTotalClassesPresent()
                     + "\nNumber of classes tardy: " + entry.getTotalClassesTardy() + "\nNumber of classes absent: " + entry.getTotalClassesMissed()
                     + "\nNumber of classes excused: " + entry.getTotalClassesExcused() + "\n";
         } else {
@@ -171,23 +192,48 @@ public class AssignmentSubmitter {
     /**
      * Calculates the grade of one student.
      */
-    private double calculateStudentGrade(AttendanceAssignment attendanceAssignment, AttendanceSummaryModel.Entry entry, boolean isSimpleAttendance) {
-        String presentPoints = attendanceAssignment.getPresentPoints();
-        String tardyPoints = attendanceAssignment.getTardyPoints();
-        String excusedPoints = attendanceAssignment.getExcusedPoints();
-        String absentPoints = attendanceAssignment.getAbsentPoints();
+    private double calculateStudentGrade(AttendanceAssignment attendanceAssignment, List<AttendanceSummaryModel> summaryForSections, boolean isSimpleAttendance, AttendanceStudent student) {
 
         if (isSimpleAttendance) {
-            int totalClasses = getTotalSimpleClasses(entry);
-            totalClasses = totalClasses == 0? 1 : totalClasses;
-            return ((((entry.getTotalClassesPresent() * (calculation(presentPoints))) +
-                    (entry.getTotalClassesTardy() * (calculation(tardyPoints))) +
-                    (entry.getTotalClassesExcused() * (calculation(excusedPoints))) +
-                    (entry.getTotalClassesMissed() * (calculation(absentPoints)))) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
+
+            int totalClasses = 0;
+            double presentPoints = calculation(attendanceAssignment.getPresentPoints());
+            double tardyPoints = calculation(attendanceAssignment.getTardyPoints());
+            double excusedPoints = calculation(attendanceAssignment.getExcusedPoints());
+            double absentPoints = calculation(attendanceAssignment.getAbsentPoints());
+            double totalClassesPresent = 0.0, totalClassesTardy = 0.0, totalClassesExcused = 0.0, totalClassesMissed = 0.0;
+
+            for (AttendanceSummaryModel model : summaryForSections) {
+                for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
+                    if (entry.getSisUserId() != null && entry.getSisUserId().equals(student.getSisUserId())) {
+                        totalClasses += getTotalSimpleClasses(entry);
+                        totalClassesPresent += entry.getTotalClassesPresent();
+                        totalClassesTardy += entry.getTotalClassesTardy();
+                        totalClassesExcused += entry.getTotalClassesExcused();
+                        totalClassesMissed += entry.getTotalClassesMissed();
+                    }
+                }
+            }
+            if (totalClasses == 0){
+                return 0.0;
+            }
+            else {
+                return ((((totalClassesPresent * presentPoints) +
+                    (totalClassesTardy * tardyPoints) +
+                    (totalClassesExcused * excusedPoints) +
+                    (totalClassesMissed * absentPoints)) / totalClasses) * Double.parseDouble(attendanceAssignment.getAssignmentPoints()));
+            }
         } else {
 
-            return ((100 - entry.getPercentCourseMissed()) / 100) * Double.parseDouble(attendanceAssignment.getAssignmentPoints());
+            for (AttendanceSummaryModel model : summaryForSections) {
+                for (AttendanceSummaryModel.Entry entry : model.getEntries()) {
+                    if (entry.getSisUserId() != null && entry.getSisUserId().equals(student.getSisUserId())) {
+                        return ((100 - entry.getPercentCourseMissed()) / 100) * Double.parseDouble(attendanceAssignment.getAssignmentPoints());
+                    }
+                }
+            }
         }
+        return 0.0;
     }
     private double calculation(String value) {
         return Double.parseDouble(value)/100;
