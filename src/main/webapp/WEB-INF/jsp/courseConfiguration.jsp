@@ -151,7 +151,7 @@
             <div class="col-md-7 col-md-offset-0">
                 <h5><i>Attendance Weights: </i></h5>
                 <p>Present, Tardy, Absent, and Excused are possible options for attendance status.
-                   Please enter the percentage of the attendance points that each type of status should receive.</p>
+                Enter the percentage of the attendance points that each type of status should receive.</p>
 
                 <div class="col-md-2 col-md-offset-0">
                     <label>Present: </label>
@@ -224,7 +224,7 @@
                     <h4 class="modal-title">Push Confirmation</h4>
                 </div>
                 <div class="modal-body">
-                    Please allow a few minutes for Canvas to update the gradebook.
+                    Depending on the size of your course, it may take up to 24 hours before the Gradebook is completely updated.
                 </div>
                 <div class="modal-footer">
                     <button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="button" onclick="submitPushForm()">
