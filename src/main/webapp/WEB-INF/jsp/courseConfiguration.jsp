@@ -135,6 +135,7 @@
             <br/>
             <p> Check out our new <a id="helpLink2" href="${context}/help/${selectedSectionId}">help section</a> for a
             quick guide on how to get the best out of Attendance.</p>
+            <p> To delete an Attendance Assignment from your course, un-check the "Convert Attendance to Assignment" box above.</p>
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
