@@ -82,7 +82,7 @@
                 <img src="${context}/img/PushModal.png">
                 <p>Once you've saved a Setup, the next step is to push your Attendance records to Canvas and convert
                 them into an assignment.</p>
-                <p>After you click "OK", you will be redirected back to the Course Setup page. Depending on the size of
+                <p>After you click "OK," you will be redirected back to the Course Setup page. Depending on the size of
                 your class, it may take up to 24 hours before Canvas has received all of your information. You
                 may close your browser or visit other websites without compromising the grades you're pushing. Please
                 keep this delay in mind if information in the "Grades" and "Assignments" tabs in Canvas is not completely
@@ -109,8 +109,8 @@
                 Setup on the Course Setup page then save.</p>
                 <br>
                 <h4>Deleting: </h4>
-                <p>If you'd like to delete an Attendance Assignment, un-check the "Convert Attendance to Assignment" checkbox. The
-                dialog box (pictured below) will appear. By selecting "Yes", all saved Setups and all Attendance Assignments
+                <p>If would also like to delete an Attendance Assignment, un-check the "Convert Attendance to Assignment" checkbox. The
+                dialog box (pictured below) will appear. By selecting "Yes," all saved Setups and all Attendance Assignments
                 will be removed. <strong>DO NOT</strong> delete the assignment through the Canvas Assignments tab. Changing or
                 deleting the assignment in the Attendance application will <strong>NOT</strong> have any affect on the attendance
                 records you have saved in the course</p>
@@ -159,18 +159,16 @@
         <div class="panel-heading" role="tab" id="headingFive">
             <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                What To Expect In "Assignments" and "Grades"
+                What To Expect In "Assignment" and "Grades"
                 </a>
             </h4>
         </div>
         <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
             <div class="panel-body">
                 <p>After pushing grades out to Canvas you will have one Attendance Assignment. By default, this assignment
-                is muted and assigned to every student. Though it is viewable in the Assignments tab, <strong>DO
-                NOT</strong> edit the assignments within the Assignments tab. The Attendance Assignment must be edited
+                is muted and assigned to every student. Though it is viewable in the Assignment tab, <strong>DO
+                NOT</strong> edit the assignments within the Assignment tab. The Attendance Assignment must be edited
                 in the K-State Attendance tool.</p>
-                <p>The Grades tab in Canvas will display all Attendance Assignments as regular assignments that have been
-                assigned only to their relative sections.
             </div>
         </div>
     </div>
@@ -186,10 +184,10 @@
         <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
             <div class="panel-body">
                 <p>The new update contains an updated list of Attendance statuses. All  old statuses are still listed,
-                    however the program now defaults to a state of "---" instead of defaulting to "Present". A status of
+                    however the program now defaults to a state of "---" instead of defaulting to "Present." A status of
                     "---" indicates that no record has yet been saved for the student. Note: This does <strong>NOT</strong>
-                    mean the student was "Absent", "Tardy", or "Excused". The recommended procedure for recording
-                    attendance is to mark all students who are "Absent", "Tardy", or "Excused". After marking all applicable
+                    mean the student was "Absent," "Tardy," or "Excused." The recommended procedure for recording
+                    attendance is to mark all students who are "Absent," "Tardy," or "Excused." After marking all applicable
                     students, click the "Set Unassigned to Present" button to change all remaining "---" statuses into
                     "Present" for the selected section.</p>
             </div>
