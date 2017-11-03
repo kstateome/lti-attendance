@@ -104,12 +104,12 @@
                 <p><strong>DO NOT EDIT OR DELETE THE ATTENDANCE ASSIGNMENT FROM THE ASSIGNMENTS TAB IN CANVAS.</strong> </p>
                 <br>
                 <h4>Editing: </h4>
-                <p>If you'd like to change the Assignment Name, Total Points, or Attendance Weights for an assignment, you must
+                <p>If you would like to change the Assignment Name, Total Points, or Attendance Weights for an assignment, you must
                 make all of your changes through the K-State Attendance application. To make the desired changes, create a new
                 Setup on the Course Setup page then save.</p>
                 <br>
                 <h4>Deleting: </h4>
-                <p>If would also like to delete an Attendance Assignment, un-check the "Convert Attendance to Assignment" checkbox. The
+                <p>If you would like to delete an Attendance Assignment, un-check the "Convert Attendance to Assignment" checkbox. The
                 dialog box (pictured below) will appear. By selecting "Yes," all saved Setups and all Attendance Assignments
                 will be removed. <strong>DO NOT</strong> delete the assignment through the Canvas Assignments tab. Changing or
                 deleting the assignment in the Attendance application will <strong>NOT</strong> have any affect on the attendance
@@ -167,7 +167,7 @@
             <div class="panel-body">
                 <p>After pushing grades out to Canvas you will have one Attendance Assignment. By default, this assignment
                 is muted and assigned to every student. Though it is viewable in the Assignment tab, <strong>DO
-                NOT</strong> edit the assignments within the Assignment tab. The Attendance Assignment must be edited
+                NOT</strong> edit the assignment within the Assignment tab. The Attendance Assignment must be edited
                 in the K-State Attendance tool.</p>
             </div>
         </div>
