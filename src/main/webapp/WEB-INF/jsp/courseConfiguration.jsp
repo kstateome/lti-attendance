@@ -43,10 +43,11 @@
             <li><a id="attendanceSummaryLink" href="${context}/attendanceSummary/${selectedSectionId}">Attendance
                 Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}">Class Roster</a></li>
+            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
         </ul>
     </div>
 </nav>
-<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown" method="POST"
+<form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown form-div" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
     <c:forEach items="${error}" var="oneError">
         <div class="alert alert-danger">
@@ -80,7 +81,7 @@
 
     <h3>Synchronization</h3>
 
-    <p>
+    <p class="synch-width">
         For performance reasons, this application does not automatically synchronize with Canvas. If you notice missing
         students, sections,
         or other problems, please click the button below to rectify the problem. It may take several seconds for this
@@ -93,7 +94,7 @@
 
     <h3>Setup</h3>
     <br/>
-    <div class="col-lg-3">
+    <div class="container-fluid">
         <label for="simpleAttendance">
             <form:radiobutton path="simpleAttendance" id="simpleAttendance" value="true"/> Use Simple Attendance (non-minute based)
         </label>
@@ -132,10 +133,9 @@
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
             <br/>
-            <p> <strong>NOTE:</strong> Select “Save Setup” every time changes are made. When this assignment is pushed to the gradebook, it will immediately be published.
-                <strong>Please DO NOT alter the assignment in the gradebook, but instead use this tool to update the assignment as needed.</strong>
-                Click the "Convert Attendance to Assignment" checkbox again to remove the assignment.
-            </p>
+            <p> Check out our new <a id="helpLink2" href="${context}/help/${selectedSectionId}">help section</a> for a
+            quick guide on how to get the best out of Attendance.</p>
+            <p> To delete an Attendance Assignment from your course, un-check the "Convert Attendance to Assignment" box above.</p>
             <br/>
             <div class="col-md-2 col-md-offset-0">
                 <label for="assignmentName">
@@ -152,7 +152,7 @@
             <div class="col-md-7 col-md-offset-0">
                 <h5><i>Attendance Weights: </i></h5>
                 <p>Present, Tardy, Absent, and Excused are possible options for attendance status.
-                   Please enter the percentage of the attendance points that each type of status should receive.</p>
+                Enter the percentage of the attendance points that each type of status should receive.</p>
 
                 <div class="col-md-2 col-md-offset-0">
                     <label>Present: </label>
@@ -225,7 +225,7 @@
                     <h4 class="modal-title">Push Confirmation</h4>
                 </div>
                 <div class="modal-body">
-                    Please allow a few minutes for Canvas to update the gradebook.
+                    Depending on the size of your course, it may take up to 24 hours before the Gradebook is completely updated.
                 </div>
                 <div class="modal-footer">
                     <button id="pushGradesToCanvas" name="pushGradesToCanvas" class="confirm btn btn-primary" type="button" onclick="submitPushForm()">

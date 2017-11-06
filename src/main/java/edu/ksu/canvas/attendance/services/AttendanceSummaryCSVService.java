@@ -17,7 +17,7 @@ public class AttendanceSummaryCSVService {
     public  StringBuilder createAttendanceSummaryCsv(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections) throws IOException {
         //Add headers to the cvs file
         StringBuilder csvStringBuilder = new StringBuilder();
-        List<String> headers = isSimpleAttendance ? Arrays.asList("Name", "Total Classes Absent", "Total Classes Tardy", "Total Classes Excused")
+        List<String> headers = isSimpleAttendance ? Arrays.asList("Name", "Total Classes Present", "Total Classes Tardy", "Total Classes Absent", "Total Classes Excused")
                 : Arrays.asList("Name", "Total Minutes Missed", "Minutes Made Up", "Minutes To Be Made Up", "% of Course Missed");
         writeLine(csvStringBuilder, headers);
 
@@ -26,7 +26,7 @@ public class AttendanceSummaryCSVService {
         for (AttendanceSummaryModel model : summaryForSections) {
             for (AttendanceSummaryModel.Entry entry: model.getEntries()) {
                 if (!entry.isDropped()) {
-                    row = isSimpleAttendance ? Arrays.asList(entry.getStudentName(), entry.getTotalClassesMissed() + "", entry.getTotalClassesTardy() + "", + entry.getTotalClassesExcused() + "")
+                    row = isSimpleAttendance ? Arrays.asList(entry.getStudentName(), entry.getTotalClassesPresent() + "", entry.getTotalClassesTardy() + "", entry.getTotalClassesMissed() + "", + entry.getTotalClassesExcused() + "")
                             : Arrays.asList(entry.getStudentName(), entry.getSumMinutesMissed() + "", entry.getSumMinutesMadeup() + "", entry.getRemainingMinutesMadeup() + "", entry.getPercentCourseMissed() + "");
                     writeLine(csvStringBuilder, row);
                 }

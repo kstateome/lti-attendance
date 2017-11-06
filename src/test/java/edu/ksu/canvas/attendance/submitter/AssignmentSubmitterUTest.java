@@ -1,11 +1,10 @@
 package edu.ksu.canvas.attendance.submitter;
 
-import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
-import edu.ksu.canvas.attendance.entity.AttendanceCourse;
-import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.entity.*;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
+import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.assignment.Assignment;
@@ -17,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.reflect.internal.WhiteboxImpl;
 
 import java.util.*;
 
@@ -81,6 +81,12 @@ public class AssignmentSubmitterUTest {
     @Mock
     private CanvasAssignmentAssistant canvasAssignmentAssistant;
 
+    @Mock
+    private AttendanceStudentRepository studentRepository;
+
+    @Mock
+    private AttendanceStudentService studentService;
+
 
 
     private NonRefreshableOauthToken oauthToken;
@@ -99,6 +105,11 @@ public class AssignmentSubmitterUTest {
     private AttendanceAssignment assignmentConfigurationFromSetup;
     private AttendanceSection section1;
     private AttendanceSection section2;
+    private List<AttendanceStudent> studentList;
+    private AttendanceStudent student1;
+    private AttendanceStudent student2;
+    private AttendanceStudent student3;
+    private AttendanceStudent student4;
 
     @Before
     public void setup() {
@@ -113,14 +124,48 @@ public class AssignmentSubmitterUTest {
         attendanceSummaryModel1.add(entry2);
 
         attendanceSummaryModel2 = new AttendanceSummaryModel(SECTION_2_ID);
-        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_3_ID, SIS_USER_ID_3, STUDENT_3_NAME, false, 0, 3, 0, 1);
-        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_1_ID, STUDENT_4_ID, SIS_USER_ID_4, STUDENT_4_NAME, false, 0, 0, 0, 4);
+        AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_2_ID, STUDENT_3_ID, SIS_USER_ID_3, STUDENT_3_NAME, false, 0, 3, 0, 1);
+        AttendanceSummaryModel.Entry entry4 = new AttendanceSummaryModel.Entry(COURSE_ID, SECTION_2_ID, STUDENT_4_ID, SIS_USER_ID_4, STUDENT_4_NAME, false, 0, 0, 0, 4);
         attendanceSummaryModel2.add(entry3);
         attendanceSummaryModel2.add(entry4);
 
         attendanceSummaryModelList = new ArrayList<>();
         attendanceSummaryModelList.add(attendanceSummaryModel1);
         attendanceSummaryModelList.add(attendanceSummaryModel2);
+
+        student1 = new AttendanceStudent();
+        student1.setCanvasSectionId(SECTION_1_ID);
+        student1.setName(STUDENT_1_NAME);
+        student1.setStudentId(STUDENT_1_ID);
+        student1.setSisUserId(SIS_USER_ID_1);
+        student1.setCanvasCourseId(COURSE_ID);
+
+        student2 = new AttendanceStudent();
+        student2.setCanvasSectionId(SECTION_1_ID);
+        student2.setName(STUDENT_2_NAME);
+        student2.setStudentId(STUDENT_2_ID);
+        student2.setSisUserId(SIS_USER_ID_2);
+        student2.setCanvasCourseId(COURSE_ID);
+
+        student3 = new AttendanceStudent();
+        student3.setCanvasSectionId(SECTION_2_ID);
+        student3.setName(STUDENT_3_NAME);
+        student3.setStudentId(STUDENT_3_ID);
+        student3.setSisUserId(SIS_USER_ID_3);
+        student3.setCanvasCourseId(COURSE_ID);
+
+        student4 = new AttendanceStudent();
+        student4.setCanvasSectionId(SECTION_2_ID);
+        student4.setName(STUDENT_4_NAME);
+        student4.setStudentId(STUDENT_4_ID);
+        student4.setSisUserId(SIS_USER_ID_4);
+        student4.setCanvasCourseId(COURSE_ID);
+
+        studentList = new ArrayList<>();
+        studentList.add(student1);
+        studentList.add(student2);
+        studentList.add(student3);
+        studentList.add(student4);
 
         assignmentConfigurationFromSetup = new AttendanceAssignment();
         assignmentConfigurationFromSetup.setAbsentPoints("0.0");
@@ -195,6 +240,8 @@ public class AssignmentSubmitterUTest {
         Whitebox.setInternalState(assignmentSubmitter, "attendanceService", attendanceService);
         Whitebox.setInternalState(assignmentSubmitter, "canvasApiWrapperService", canvasApiWrapperService);
         Whitebox.setInternalState(assignmentSubmitter, "assignmentValidator", assignmentValidator);
+        Whitebox.setInternalState(assignmentSubmitter, "studentRepository", studentRepository);
+        Whitebox.setInternalState(assignmentSubmitter, "studentService", studentService);
 
 
 
@@ -202,6 +249,15 @@ public class AssignmentSubmitterUTest {
 
     @Test
     public void submitCourseAttendancesHappyPath() throws Exception {
+        List<AttendanceStudent> student1List = new ArrayList<>();
+        student1List.add(student1);
+        List<AttendanceStudent> student2List = new ArrayList<>();
+        student2List.add(student2);
+        List<AttendanceStudent> student3List = new ArrayList<>();
+        student3List.add(student3);
+        List<AttendanceStudent> student4List = new ArrayList<>();
+        student4List.add(student4);
+
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
@@ -210,35 +266,67 @@ public class AssignmentSubmitterUTest {
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
-        when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
+        when(canvasApiWrapperService.gradeMultipleSubmissionsByCourse(any(), any())).thenReturn(progressOptional);
         when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
         when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
-        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel1, attendanceAssignment1)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment1)).thenReturn(attendanceAssignment1);
         when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment2, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment2);
         when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment2, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment2);
-        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel2, attendanceAssignment2)).thenReturn(attendanceAssignment2);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment2)).thenReturn(attendanceAssignment2);
+        when(sectionService.getFirstSectionOfCourse(course.getCanvasCourseId())).thenReturn(section1);
+        when(studentRepository.findByCanvasCourseId(course.getCanvasCourseId())).thenReturn(studentList);
+        when(studentService.getStudent(STUDENT_1_ID)).thenReturn(student1);
+        when(studentService.getStudent(STUDENT_2_ID)).thenReturn(student2);
+        when(studentService.getStudent(STUDENT_3_ID)).thenReturn(student3);
+        when(studentService.getStudent(STUDENT_4_ID)).thenReturn(student4);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_1, course.getCanvasCourseId())).thenReturn(student1List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_2, course.getCanvasCourseId())).thenReturn(student2List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_3, course.getCanvasCourseId())).thenReturn(student3List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_4, course.getCanvasCourseId())).thenReturn(student4List);
+        when(sectionService.getSection(SECTION_1_ID)).thenReturn(section1);
+        when(sectionService.getSection(SECTION_2_ID)).thenReturn(section2);
 
         assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        verify(canvasApiWrapperService, times(2)).gradeMultipleSubmissionsBySection(any(), any());
+        verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
     }
 
     @Test
     public void submitCourseAttendancesFailCanvasGradingError() throws Exception {
         progressOptional.get().setWorkflowState("failed");
+        List<AttendanceStudent> student1List = new ArrayList<>();
+        student1List.add(student1);
+        List<AttendanceStudent> student2List = new ArrayList<>();
+        student2List.add(student2);
+        List<AttendanceStudent> student3List = new ArrayList<>();
+        student3List.add(student3);
+        List<AttendanceStudent> student4List = new ArrayList<>();
+        student4List.add(student4);
 
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
+        when(sectionService.getFirstSectionOfCourse(course.getCanvasCourseId())).thenReturn(section1);
+        when(studentRepository.findByCanvasCourseId(course.getCanvasCourseId())).thenReturn(studentList);
+        when(studentService.getStudent(STUDENT_1_ID)).thenReturn(student1);
+        when(studentService.getStudent(STUDENT_2_ID)).thenReturn(student2);
+        when(studentService.getStudent(STUDENT_3_ID)).thenReturn(student3);
+        when(studentService.getStudent(STUDENT_4_ID)).thenReturn(student4);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_1, course.getCanvasCourseId())).thenReturn(student1List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_2, course.getCanvasCourseId())).thenReturn(student2List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_3, course.getCanvasCourseId())).thenReturn(student3List);
+        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_4, course.getCanvasCourseId())).thenReturn(student4List);
+        when(sectionService.getSection(SECTION_1_ID)).thenReturn(section1);
+        when(sectionService.getSection(SECTION_2_ID)).thenReturn(section2);
         when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
-        when(canvasApiWrapperService.gradeMultipleSubmissionsBySection(any(), any())).thenReturn(progressOptional);
+        when(canvasApiWrapperService.gradeMultipleSubmissionsByCourse(any(), any())).thenReturn(progressOptional);
         when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
         when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
-        when(assignmentValidator.validateConfigurationSetupExistence(attendanceSummaryModel1, attendanceAssignment1)).thenReturn(attendanceAssignment1);
+        when(assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment1)).thenReturn(attendanceAssignment1);
 
         try {
             assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-            verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsBySection(any(), any());
+            verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
         } catch (AttendanceAssignmentException exception) {
             Assert.assertEquals(AttendanceAssignmentException.Error.FAILED_PUSH, exception.error);
         }

@@ -153,6 +153,11 @@ public class CanvasApiWrapperService {
         return submissionWriter.gradeMultipleSubmissionsBySection(submissionOptions);
     }
 
+    public Optional<Progress> gradeMultipleSubmissionsByCourse(OauthToken oauthToken, MultipleSubmissionsOptions submissionOptions) throws IOException {
+        SubmissionWriter submissionWriter = canvasApiFactory.getWriter(SubmissionWriter.class, oauthToken);
+        return submissionWriter.gradeMultipleSubmissionsByCourse(submissionOptions);
+    }
+
     public Optional<Assignment> createAssignment(Long courseId, Assignment assignment, OauthToken oauthToken) throws IOException {
         AssignmentWriter assignmentWriter = canvasApiFactory.getWriter(AssignmentWriter.class, oauthToken);
         return assignmentWriter.createAssignment(courseId.toString(), assignment);

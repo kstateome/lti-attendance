@@ -63,7 +63,7 @@ public class CanvasApiWrapperServiceUTest {
     @SuppressWarnings("unchecked")
     public void getEnrollmentsFromCanvas_HappyPath() throws Exception {
         Section firstSection = new Section();
-        int firstSectiondId = 1;
+        Long firstSectiondId = 1L;
         firstSection.setId(firstSectiondId);
         Section secondSection = new Section();
         int secondSectionId = 2;

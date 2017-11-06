@@ -28,6 +28,7 @@ public class SectionModelFactory {
         ret.setCanvasSectionId(attendanceSection.getCanvasSectionId());
         ret.setCanvasCourseId(attendanceSection.getCanvasCourseId());
         ret.setSectionName(attendanceSection.getName());
+        ret.setSectionId(attendanceSection.getSectionId());
 
         return ret;
     }
