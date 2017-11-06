@@ -28,7 +28,7 @@ public class RosterControllerArquillianTest extends BaseArquillianTest {
     public void shouldBeAbleToSave(@InitialPage RosterPage rosterPage) throws Exception {
         rosterPage.clickSaveButtonOnTop();
 
-        assertTrue("Expected save success mesage to be displayed after saving attendence", driver.findElement(By.id("saveSuccessMessage")).isDisplayed());
+        assertTrue("Expected save success message to be displayed after saving attendance", driver.findElement(By.id("saveSuccessMessage")).isDisplayed());
     }
 
     @Test

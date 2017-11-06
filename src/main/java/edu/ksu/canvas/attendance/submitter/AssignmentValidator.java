@@ -86,10 +86,9 @@ public class AssignmentValidator {
     /**
      * Checks if the configuration setup have been saved before pushing. Throw AttendanceAssignmentException if not.
      */
-    public AttendanceAssignment validateConfigurationSetupExistence(AttendanceSummaryModel model, AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
+    public AttendanceAssignment validateConfigurationSetupExistence(AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
         if (attendanceAssignment == null || (attendanceAssignment.getAssignmentName() == null && attendanceAssignment.getAssignmentPoints() == null)) {
-            LOG.info("There is no Attendance Assignment associated to section " + model.getSectionId());
             throw new AttendanceAssignmentException(Error.NOT_SAVED);
         }
         attendanceAssignment.setStatus(AttendanceAssignment.Status.UNKNOWN);

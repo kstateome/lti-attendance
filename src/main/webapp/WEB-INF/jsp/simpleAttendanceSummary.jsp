@@ -37,10 +37,12 @@
             <li><a id="classSetupLink" href="${context}/classSetup/${selectedSectionId}">Setup</a></li>
             <li class="active"><a id="attendanceSummaryLink" href="#">Attendance Summary</a></li>
             <li><a id="rosterLink" href="${context}/roster/${selectedSectionId}}">Class Roster</a></li>
+            <li><a id="helpLink" href="${context}/help/${selectedSectionId}">Help</a></li>
+
         </ul>
     </div>
 </nav>
-<div class="container">
+<div class="container container-adjustment" >
 
     <div class="visible-print page-header">${courseName}</div>
     <div class="section-dropdown">
@@ -66,9 +68,10 @@
             <table class="table table-bordered sectionTable" style="display:none" id="${summaryForSection.sectionId}">
                 <tr>
                     <th class="text-center">Name</th>
+                    <th class="text-center">Total Classes Present</th>
+                    <th class="text-center">Total Classes Tardy</th>
                     <th class="text-center">Total Classes Absent</th>
                     <th class="text-center">Total Classes Excused</th>
-                    <th class="text-center">Total Classes Tardy</th>
                 </tr>
 
                 <c:forEach items="${summaryForSection.entries}" var="attendanceSummaryEntry" varStatus="loop">
@@ -76,9 +79,10 @@
                         <td class="${attendanceSummaryEntry.dropped ? 'dropped' : ''}">
                             <span><a href="${context}/studentSummary/${attendanceSummaryEntry.sectionId}/${attendanceSummaryEntry.studentId}">${attendanceSummaryEntry.studentName}</a></span>
                         </td>
+                        <td class="text-center">${attendanceSummaryEntry.totalClassesPresent}</td>
+                        <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
                         <td class="text-center">${attendanceSummaryEntry.totalClassesMissed}</td>
                         <td class="text-center">${attendanceSummaryEntry.totalClassesExcused}</td>
-                        <td class="text-center">${attendanceSummaryEntry.totalClassesTardy}</td>
                     </tr>
                 </c:forEach>
             </table>

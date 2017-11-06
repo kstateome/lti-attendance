@@ -87,6 +87,26 @@ pipeline {
             steps {
                 sh 'mvn verify -Pintegration '
             }
+            post {
+                always {
+                    junit '**/target/failsafe-reports/*.xml'
+                }
+                changed {
+                    script {
+                        if (currentBuild.currentResult == 'SUCCESS') {
+                            if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
+                                rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance now has passing Integrtion tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                            }
+                        }
+                    }
+                }
+                failure {
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance had Integrtion test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+                unstable {
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/}ce7853c9/images/headshot.png', message: "Attendance had Integrtion test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+            }
         }
 
         stage("Arquillian Tests") {
@@ -95,7 +115,7 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml'
+                    junit '**/target/failsafe-reports/*.xml'
                 }
                 changed {
                     script {

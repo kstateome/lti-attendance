@@ -244,11 +244,10 @@ public class RosterControllerITest extends BaseControllerITest {
         rosterForm.setSectionModels(new SectionModelFactory().createSectionModels(sections));
         courseService.loadIntoForm(rosterForm, existingSection.getCanvasCourseId());
         attendanceService.loadIntoForm(rosterForm, dateOfAttendance);
-        
         mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/save")
                 .param("saveAttendance", "Save Attendance")
                 .param("currentDate", dateOfAttendanceAsString)
-                .param("sectionId", existingSection.getSectionId().toString())
+                .param("sectionId", existingSection.getCanvasSectionId().toString())
                 .param("sectionModels[0].attendances[0].attendanceId", "")
                 .param("sectionModels[0].attendances[0].attendanceStudentId", existingStudent.getStudentId().toString())
                 .param("sectionModels[0].attendances[0].status", expectedStatus.toString())
@@ -341,11 +340,10 @@ public class RosterControllerITest extends BaseControllerITest {
         //attendanceList.add(new Attendance());
         //attendanceRepository = mock(AttendanceRepositoryCustom.class);
         //when(attendanceRepository.getAttendanceByCourseAndDayOfClass(any(), any())).thenReturn(attendanceList);
-
         mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/save")
                         .param("saveAttendance", "Save Attendance")
                         .param("currentDate", dateOfAttendanceAsString)
-                        .param("sectionId", existingSection.getSectionId().toString())
+                        .param("sectionId", existingSection.getCanvasSectionId().toString())
                         .param("sectionModels[0].attendances[0].attendanceId", "")
                         .param("sectionModels[0].attendances[0].attendanceStudentId", existingStudent.getStudentId().toString())
                         .param("sectionModels[0].attendances[0].status", expectedStatus.toString())
