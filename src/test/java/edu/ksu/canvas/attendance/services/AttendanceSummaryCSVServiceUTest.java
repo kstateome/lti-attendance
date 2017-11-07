@@ -22,7 +22,7 @@ public class AttendanceSummaryCSVServiceUTest {
     //Student 1 Data
     private static final long ARBITRARY_STUDENT_1 = 111784;
     private static final String ARBITRARY_STUDENT_NAME_1 = "Student, Uno";
-    private static final boolean ARBITRARY_STUDENT_DROPED_1 = false;
+    private static final boolean ARBITRARY_STUDENT_DROPPED_1 = false;
     private static final int ARBITRARY_STUDENT_TARDY_1 = 5;
     private static final int ARBITRARY_STUDENT_MISSED_1 = 2;
     private static final int ARBITRARY_STUDENT_TOT_MADEUP_1 = 2;
@@ -35,7 +35,7 @@ public class AttendanceSummaryCSVServiceUTest {
     //Student 2 Data
     private static final long ARBITRARY_STUDENT_2 = 222784;
     private static final String ARBITRARY_STUDENT_NAME_2 = "Student, Dos";
-    private static final boolean ARBITRARY_STUDENT_DROPED_2 = false;
+    private static final boolean ARBITRARY_STUDENT_DROPPED_2 = false;
     private static final int ARBITRARY_STUDENT_TARDY_2 = 1;
     private static final int ARBITRARY_STUDENT_MISSED_2 = 5;
     private static final int ARBITRARY_STUDENT_TOT_MADEUP_2 = 0;
@@ -48,7 +48,7 @@ public class AttendanceSummaryCSVServiceUTest {
     //Student 3 Data (dropped)
     private static final long ARBITRARY_STUDENT_3 = 222784;
     private static final String ARBITRARY_STUDENT_NAME_3 = "Student, Tres";
-    private static final boolean ARBITRARY_STUDENT_DROPED_3 = true;
+    private static final boolean ARBITRARY_STUDENT_DROPPED_3 = true;
     private static final int ARBITRARY_STUDENT_TARDY_3 = 1;
     private static final int ARBITRARY_STUDENT_MISSED_3 = 5;
     private static final int ARBITRARY_STUDENT_TOT_MADEUP_3 = 0;
@@ -72,9 +72,9 @@ public class AttendanceSummaryCSVServiceUTest {
         boolean isSimpleAttendance = true;
 
         StringBuilder shouldGetThis = new StringBuilder();
-        shouldGetThis.append("\"Name\",\"Total Classes Absent\",\"Total Classes Tardy\",\"Total Classes Excused\"\n");
-        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_1 +"\",\""+ARBITRARY_STUDENT_MISSED_1+"\",\""+ARBITRARY_STUDENT_TARDY_1+"\",\""+ ARBITRARY_STUDENT_EXCUSED_1 +"\"\n");
-        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_2 +"\",\""+ARBITRARY_STUDENT_MISSED_2+"\",\""+ARBITRARY_STUDENT_TARDY_2+"\",\""+ ARBITRARY_STUDENT_EXCUSED_2 +"\"\n");
+        shouldGetThis.append("\"Name\",\"Total Classes Present\",\"Total Classes Tardy\",\"Total Classes Absent\",\"Total Classes Excused\"\n");
+        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_1 +"\",\""+ARBITRARY_STUDENT_PRESENT_1+"\",\""+ARBITRARY_STUDENT_TARDY_1+"\",\""+ARBITRARY_STUDENT_MISSED_1+"\",\""+ ARBITRARY_STUDENT_EXCUSED_1 +"\"\n");
+        shouldGetThis.append("\""+ARBITRARY_STUDENT_NAME_2 +"\",\""+ARBITRARY_STUDENT_PRESENT_2+"\",\""+ARBITRARY_STUDENT_TARDY_2+"\",\""+ARBITRARY_STUDENT_MISSED_2+"\",\""+ ARBITRARY_STUDENT_EXCUSED_2 +"\"\n");
 
         StringBuilder returned = attendanceSummaryCSVService.createAttendanceSummaryCsv(isSimpleAttendance, attendanceSummaryModelList);
         assertEquals(shouldGetThis.toString(), returned.toString());
@@ -97,11 +97,11 @@ public class AttendanceSummaryCSVServiceUTest {
 
     private List<AttendanceSummaryModel> generateSimpleSummaryModelList() {
         AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_1,
-                ARBITRARY_SIS_USER_ID_1, ARBITRARY_STUDENT_NAME_1, ARBITRARY_STUDENT_DROPED_1, ARBITRARY_STUDENT_TARDY_1, ARBITRARY_STUDENT_MISSED_1, ARBITRARY_STUDENT_EXCUSED_1, ARBITRARY_STUDENT_PRESENT_1);
+                ARBITRARY_SIS_USER_ID_1, ARBITRARY_STUDENT_NAME_1, ARBITRARY_STUDENT_DROPPED_1, ARBITRARY_STUDENT_TARDY_1, ARBITRARY_STUDENT_MISSED_1, ARBITRARY_STUDENT_EXCUSED_1, ARBITRARY_STUDENT_PRESENT_1);
         AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_2,
-                ARBITRARY_SIS_USER_ID_2, ARBITRARY_STUDENT_NAME_2, ARBITRARY_STUDENT_DROPED_2, ARBITRARY_STUDENT_TARDY_2, ARBITRARY_STUDENT_MISSED_2, ARBITRARY_STUDENT_EXCUSED_2, ARBITRARY_STUDENT_PRESENT_2);
+                ARBITRARY_SIS_USER_ID_2, ARBITRARY_STUDENT_NAME_2, ARBITRARY_STUDENT_DROPPED_2, ARBITRARY_STUDENT_TARDY_2, ARBITRARY_STUDENT_MISSED_2, ARBITRARY_STUDENT_EXCUSED_2, ARBITRARY_STUDENT_PRESENT_2);
         AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_3,
-                ARBITRARY_SIS_USER_ID_3, ARBITRARY_STUDENT_NAME_3, ARBITRARY_STUDENT_DROPED_3, ARBITRARY_STUDENT_TARDY_3, ARBITRARY_STUDENT_MISSED_3, ARBITRARY_STUDENT_EXCUSED_3, ARBITRARY_STUDENT_PRESENT_3);
+                ARBITRARY_SIS_USER_ID_3, ARBITRARY_STUDENT_NAME_3, ARBITRARY_STUDENT_DROPPED_3, ARBITRARY_STUDENT_TARDY_3, ARBITRARY_STUDENT_MISSED_3, ARBITRARY_STUDENT_EXCUSED_3, ARBITRARY_STUDENT_PRESENT_3);
 
         AttendanceSummaryModel attendanceSummaryModel = new AttendanceSummaryModel(ARBITRARY_SECTION);
         attendanceSummaryModel.add(entry1);
@@ -115,11 +115,11 @@ public class AttendanceSummaryCSVServiceUTest {
 
     private List<AttendanceSummaryModel> generateAviationSummaryModelList() {
         AttendanceSummaryModel.Entry entry1 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_1,
-                ARBITRARY_SIS_USER_ID_1, ARBITRARY_STUDENT_NAME_1 , ARBITRARY_STUDENT_DROPED_1, ARBITRARY_STUDENT_TOT_MADEUP_1, ARBITRARY_STUDENT_TOBE_MADEUP_1, ARBITRARY_STUDENT_MIN_MISSED_1, ARBITRARY_STUDENT_PERCENT_1);
+                ARBITRARY_SIS_USER_ID_1, ARBITRARY_STUDENT_NAME_1 , ARBITRARY_STUDENT_DROPPED_1, ARBITRARY_STUDENT_TOT_MADEUP_1, ARBITRARY_STUDENT_TOBE_MADEUP_1, ARBITRARY_STUDENT_MIN_MISSED_1, ARBITRARY_STUDENT_PERCENT_1);
         AttendanceSummaryModel.Entry entry2 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_2,
-                ARBITRARY_SIS_USER_ID_2, ARBITRARY_STUDENT_NAME_2 , ARBITRARY_STUDENT_DROPED_2, ARBITRARY_STUDENT_TOT_MADEUP_2, ARBITRARY_STUDENT_TOBE_MADEUP_2, ARBITRARY_STUDENT_MIN_MISSED_2, ARBITRARY_STUDENT_PERCENT_2);
+                ARBITRARY_SIS_USER_ID_2, ARBITRARY_STUDENT_NAME_2 , ARBITRARY_STUDENT_DROPPED_2, ARBITRARY_STUDENT_TOT_MADEUP_2, ARBITRARY_STUDENT_TOBE_MADEUP_2, ARBITRARY_STUDENT_MIN_MISSED_2, ARBITRARY_STUDENT_PERCENT_2);
         AttendanceSummaryModel.Entry entry3 = new AttendanceSummaryModel.Entry(ARBITRARY_COURSE, ARBITRARY_SECTION, ARBITRARY_STUDENT_3,
-                ARBITRARY_SIS_USER_ID_3, ARBITRARY_STUDENT_NAME_3, ARBITRARY_STUDENT_DROPED_3, ARBITRARY_STUDENT_TOT_MADEUP_3, ARBITRARY_STUDENT_TOBE_MADEUP_3, ARBITRARY_STUDENT_MIN_MISSED_3, ARBITRARY_STUDENT_PERCENT_3);
+                ARBITRARY_SIS_USER_ID_3, ARBITRARY_STUDENT_NAME_3, ARBITRARY_STUDENT_DROPPED_3, ARBITRARY_STUDENT_TOT_MADEUP_3, ARBITRARY_STUDENT_TOBE_MADEUP_3, ARBITRARY_STUDENT_MIN_MISSED_3, ARBITRARY_STUDENT_PERCENT_3);
 
         AttendanceSummaryModel attendanceSummaryModel = new AttendanceSummaryModel(ARBITRARY_SECTION);
         attendanceSummaryModel.add(entry1);

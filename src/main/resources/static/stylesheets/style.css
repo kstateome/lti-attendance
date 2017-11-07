@@ -50,3 +50,15 @@
 .navbar-option {
     box-shadow: 0 0 1px 0 #33332a;
 }
+
+.form-div {
+    width: 1080px;
+}
+
+.synch-width{
+    width: 864px
+}
+
+.container-adjustment{
+    float: left;
+}
