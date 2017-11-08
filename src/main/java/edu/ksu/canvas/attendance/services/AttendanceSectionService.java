@@ -5,12 +5,12 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.repository.AttendanceAssignmentRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceSectionRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,12 +126,13 @@ public class AttendanceSectionService {
             attendanceAssignment = new AttendanceAssignment();
         }
 
-        courseForm.setAssignmentName(StringUtils.isEmpty(attendanceAssignment.getAssignmentName()) ? "Attendance" : attendanceAssignment.getAssignmentName());
-        courseForm.setAssignmentPoints(String.valueOf(attendanceAssignment.getAssignmentPoints() == null ? 100 : attendanceAssignment.getAssignmentPoints()));
-        courseForm.setPresentPoints(String.valueOf(attendanceAssignment.getPresentPoints() == null ? 100 : attendanceAssignment.getPresentPoints()));
-        courseForm.setExcusedPoints(String.valueOf(attendanceAssignment.getExcusedPoints() == null ? 0 : attendanceAssignment.getExcusedPoints()));
-        courseForm.setTardyPoints(String.valueOf(attendanceAssignment.getTardyPoints() == null ? 0 : attendanceAssignment.getTardyPoints()));
-        courseForm.setAbsentPoints(String.valueOf(attendanceAssignment.getAbsentPoints() == null ? 0 : attendanceAssignment.getAbsentPoints()));
+        courseForm.setAssignmentName(StringUtils.defaultIfEmpty(attendanceAssignment.getAssignmentName(), "Attendance"));
+        courseForm.setAssignmentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getAssignmentPoints(), "100"));
+        //default to full points for present or excused
+        courseForm.setPresentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getPresentPoints(), attendanceAssignment.getAssignmentPoints()));
+        courseForm.setExcusedPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getExcusedPoints(), attendanceAssignment.getAssignmentPoints()));
+        courseForm.setTardyPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getTardyPoints(), "0"));
+        courseForm.setAbsentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getAbsentPoints(), "0"));
         courseForm.setGradingOn(attendanceAssignment.getGradingOn());
     }
 
