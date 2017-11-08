@@ -129,8 +129,8 @@ public class AttendanceSectionService {
         courseForm.setAssignmentName(StringUtils.defaultIfEmpty(attendanceAssignment.getAssignmentName(), "Attendance"));
         courseForm.setAssignmentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getAssignmentPoints(), "100"));
         //default to full points for present or excused
-        courseForm.setPresentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getPresentPoints(), attendanceAssignment.getAssignmentPoints()));
-        courseForm.setExcusedPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getExcusedPoints(), attendanceAssignment.getAssignmentPoints()));
+        courseForm.setPresentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getPresentPoints(), courseForm.getAssignmentPoints()));
+        courseForm.setExcusedPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getExcusedPoints(), courseForm.getAssignmentPoints()));
         courseForm.setTardyPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getTardyPoints(), "0"));
         courseForm.setAbsentPoints(StringUtils.defaultIfEmpty(attendanceAssignment.getAbsentPoints(), "0"));
         courseForm.setGradingOn(attendanceAssignment.getGradingOn());
