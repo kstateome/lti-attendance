@@ -75,8 +75,9 @@ public class AssignmentSubmitter {
 
         for (String id: idList){
             List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
-            AttendanceStudent attendanceStudent = attendanceStudentList.stream().filter(x -> !x.getDeleted()).findFirst().orElse(null);
-            studentsToGrade.add(attendanceStudent);
+            attendanceStudentList.stream().filter(x -> !x.getDeleted())
+                .findFirst()
+                .ifPresent(studentsToGrade::add);
         }
 
         submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
