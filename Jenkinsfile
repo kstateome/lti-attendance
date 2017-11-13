@@ -35,7 +35,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh 'mvn test -Dmaven.test.failure.ignore=true'
+                sh 'mvn test'
             }
             post {
                 always {
@@ -89,16 +89,16 @@ pipeline {
                     script {
                         if (currentBuild.currentResult == 'SUCCESS') {
                             if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
-                                rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance now has passing Integrtion tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                                rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance now has passing Integration tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
                             }
                         }
                     }
                 }
                 failure {
-                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance had Integrtion test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png', message: "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
                 }
                 unstable {
-                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/}ce7853c9/images/headshot.png', message: "Attendance had Integrtion test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    rocketSend avatar: 'https://jenkins.ome.ksu.edu/static/}ce7853c9/images/headshot.png', message: "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
                 }
             }
         }
