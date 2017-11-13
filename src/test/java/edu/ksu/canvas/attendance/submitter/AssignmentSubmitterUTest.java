@@ -17,21 +17,28 @@ import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
+import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -276,6 +283,24 @@ public class AssignmentSubmitterUTest {
             verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
         } catch (AttendanceAssignmentException exception) {
             Assert.assertEquals(AttendanceAssignmentException.Error.FAILED_PUSH, exception.error);
+        }
+    }
+
+    @Test
+    public void deletedStudentsNotSubmitted() throws Exception {
+        student4.setDeleted(true);
+        Collection<String> nonDeletedStudentIds = Stream
+            .of(student2.getSisUserId(), student1.getSisUserId(), student3.getSisUserId())
+            .map(id -> "sis_user_id:" + id)
+            .collect(toList());
+        setupMocks();
+        ArgumentCaptor<MultipleSubmissionsOptions> submissionsOptionsArgumentCaptor = ArgumentCaptor.forClass(MultipleSubmissionsOptions.class);
+        assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
+        verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), submissionsOptionsArgumentCaptor.capture());
+        Set<String> submittedStudentIds = submissionsOptionsArgumentCaptor.getValue().getStudentSubmissionOptionMap().keySet();
+
+        for (String submittedStudentId : submittedStudentIds) {
+            assertTrue("Only non-deleted students should be submitted!", nonDeletedStudentIds.contains(submittedStudentId));
         }
     }
 
