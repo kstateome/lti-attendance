@@ -41,7 +41,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh 'mvn test -Dmaven.test.failure.ignore=true'
+                sh 'mvn test'
             }
             post {
                 always {
