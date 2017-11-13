@@ -1,11 +1,19 @@
 package edu.ksu.canvas.attendance.submitter;
 
-import edu.ksu.canvas.attendance.entity.*;
+import edu.ksu.canvas.attendance.entity.AttendanceAssignment;
+import edu.ksu.canvas.attendance.entity.AttendanceCourse;
+import edu.ksu.canvas.attendance.entity.AttendanceSection;
+import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.enums.AttendanceType;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
-import edu.ksu.canvas.attendance.services.*;
+import edu.ksu.canvas.attendance.services.AttendanceAssignmentService;
+import edu.ksu.canvas.attendance.services.AttendanceCourseService;
+import edu.ksu.canvas.attendance.services.AttendanceSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceService;
+import edu.ksu.canvas.attendance.services.AttendanceStudentService;
+import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
@@ -16,13 +24,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.internal.WhiteboxImpl;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AssignmentSubmitterUTest {
@@ -242,13 +256,30 @@ public class AssignmentSubmitterUTest {
         Whitebox.setInternalState(assignmentSubmitter, "assignmentValidator", assignmentValidator);
         Whitebox.setInternalState(assignmentSubmitter, "studentRepository", studentRepository);
         Whitebox.setInternalState(assignmentSubmitter, "studentService", studentService);
-
-
-
     }
 
     @Test
     public void submitCourseAttendancesHappyPath() throws Exception {
+        setupMocks();
+
+        assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
+        verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
+    }
+
+    @Test
+    public void submitCourseAttendancesFailCanvasGradingError() throws Exception {
+        progressOptional.get().setWorkflowState("failed");
+        setupMocks();
+
+        try {
+            assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
+            verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
+        } catch (AttendanceAssignmentException exception) {
+            Assert.assertEquals(AttendanceAssignmentException.Error.FAILED_PUSH, exception.error);
+        }
+    }
+
+    private void setupMocks() throws IOException, AttendanceAssignmentException {
         List<AttendanceStudent> student1List = new ArrayList<>();
         student1List.add(student1);
         List<AttendanceStudent> student2List = new ArrayList<>();
@@ -285,51 +316,6 @@ public class AssignmentSubmitterUTest {
         when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_4, course.getCanvasCourseId())).thenReturn(student4List);
         when(sectionService.getSection(SECTION_1_ID)).thenReturn(section1);
         when(sectionService.getSection(SECTION_2_ID)).thenReturn(section2);
-
-        assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-        verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
-    }
-
-    @Test
-    public void submitCourseAttendancesFailCanvasGradingError() throws Exception {
-        progressOptional.get().setWorkflowState("failed");
-        List<AttendanceStudent> student1List = new ArrayList<>();
-        student1List.add(student1);
-        List<AttendanceStudent> student2List = new ArrayList<>();
-        student2List.add(student2);
-        List<AttendanceStudent> student3List = new ArrayList<>();
-        student3List.add(student3);
-        List<AttendanceStudent> student4List = new ArrayList<>();
-        student4List.add(student4);
-
-        when(sectionService.getSectionInListById(COURSE_ID, SECTION_1_ID)).thenReturn(section1);
-        when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
-        when(sectionService.getFirstSectionOfCourse(course.getCanvasCourseId())).thenReturn(section1);
-        when(studentRepository.findByCanvasCourseId(course.getCanvasCourseId())).thenReturn(studentList);
-        when(studentService.getStudent(STUDENT_1_ID)).thenReturn(student1);
-        when(studentService.getStudent(STUDENT_2_ID)).thenReturn(student2);
-        when(studentService.getStudent(STUDENT_3_ID)).thenReturn(student3);
-        when(studentService.getStudent(STUDENT_4_ID)).thenReturn(student4);
-        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_1, course.getCanvasCourseId())).thenReturn(student1List);
-        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_2, course.getCanvasCourseId())).thenReturn(student2List);
-        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_3, course.getCanvasCourseId())).thenReturn(student3List);
-        when(studentService.getStudentByCourseAndSisId(SIS_USER_ID_4, course.getCanvasCourseId())).thenReturn(student4List);
-        when(sectionService.getSection(SECTION_1_ID)).thenReturn(section1);
-        when(sectionService.getSection(SECTION_2_ID)).thenReturn(section2);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
-        when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
-        when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
-        when(canvasApiWrapperService.gradeMultipleSubmissionsByCourse(any(), any())).thenReturn(progressOptional);
-        when(assignmentValidator.validateAttendanceAssignment(COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
-        when(assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, COURSE_ID, attendanceAssignment1, canvasApiWrapperService, oauthToken)).thenReturn(attendanceAssignment1);
-        when(assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment1)).thenReturn(attendanceAssignment1);
-
-        try {
-            assignmentSubmitter.submitCourseAttendances(true, attendanceSummaryModelList, COURSE_ID, oauthToken, assignmentConfigurationFromSetup);
-            verify(canvasApiWrapperService, times(1)).gradeMultipleSubmissionsByCourse(any(), any());
-        } catch (AttendanceAssignmentException exception) {
-            Assert.assertEquals(AttendanceAssignmentException.Error.FAILED_PUSH, exception.error);
-        }
     }
 
 }
