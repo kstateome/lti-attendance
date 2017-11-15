@@ -3,8 +3,8 @@ package edu.ksu.canvas.attendance.config;
 import com.google.common.collect.ImmutableList;
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.attendance.util.RoleChecker;
-import edu.ksu.canvas.entity.config.ConfigItem;
-import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.canvas.attendance.entity.ConfigItem;
+import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.List;
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
-@EnableJpaRepositories({"edu.ksu.canvas.repository", "edu.ksu.canvas.attendance.repository"})
+@EnableJpaRepositories({"edu.ksu.canvas.attendance.repository"})
 @ComponentScan({"edu.ksu.lti", "edu.ksu.canvas"})
 @EntityScan({"edu.ksu.canvas", "edu.ksu.canvas.interfaces" })
 @PropertySource({"classpath:application.properties"})

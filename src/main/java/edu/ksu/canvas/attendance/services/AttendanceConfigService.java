@@ -1,6 +1,6 @@
 package edu.ksu.canvas.attendance.services;
 
-import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

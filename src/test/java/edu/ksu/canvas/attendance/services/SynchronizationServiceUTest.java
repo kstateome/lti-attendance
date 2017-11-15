@@ -12,7 +12,7 @@ import edu.ksu.canvas.model.User;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.oauth.OauthTokenRefresher;
 import edu.ksu.canvas.oauth.RefreshableOauthToken;
-import edu.ksu.canvas.repository.ConfigRepository;
+import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiSession;
 import edu.ksu.lti.launch.service.LtiSessionService;

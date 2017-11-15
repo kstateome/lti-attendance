@@ -1,10 +1,5 @@
 package edu.ksu.canvas.attendance.config.arquillian;
 
-import java.util.Properties;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,11 +14,15 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Properties;
+
 
 @Configuration
-@EnableJpaRepositories({"edu.ksu.canvas.attendance.repository","edu.ksu.canvas.repository"})
-@ComponentScan({"edu.ksu.canvas.attendance.repository","edu.ksu.canvas.repository"})
-@EntityScan({"edu.ksu.canvas.attendance.entity","edu.ksu.canvas.entity"})
+@EnableJpaRepositories({"edu.ksu.canvas.attendance.repository"})
+@ComponentScan({"edu.ksu.canvas.attendance.repository"})
+@EntityScan({"edu.ksu.canvas.attendance.entity"})
 @Profile("Arquillian")
 @EnableTransactionManagement
 public class ArquillianDatabaseConfig {

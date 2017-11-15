@@ -469,21 +469,10 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc7</artifactId>
-            <version>12.1.0.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.0.11</version>
+            <version>1.0.13</version>
         </dependency>
-		<dependency>
-			<groupId>edu.ksu.ome.lti</groupId>
-			<artifactId>lti-persist</artifactId>
-			<version>1.2.18</version>
-		</dependency>
 		<dependency>
 			<groupId>edu.ksu.ome.lti</groupId>
 			<artifactId>lti-launch</artifactId>
@@ -509,6 +498,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -565,17 +558,6 @@
             <artifactId>el-ri</artifactId>
             <version>1.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>OME</groupId>
-            <artifactId>ome-ldap-config</artifactId>
-            <version>1.14.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>jboss</groupId>
-                    <artifactId>jboss-system</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
