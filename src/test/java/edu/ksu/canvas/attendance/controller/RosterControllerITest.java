@@ -354,7 +354,7 @@ public class RosterControllerITest extends BaseControllerITest {
         mockMvc.perform(post("/roster/"+existingSection.getCanvasSectionId()+"/delete")
                         .param("deleteAttendance", "Delete Attendance")
                         .param("currentDate", dateOfAttendanceAsString)
-                        .param("sectionId", existingSection.getSectionId().toString())
+                        .param("sectionId", existingSection.getCanvasSectionId().toString())
                         .sessionAttr("rosterForm", rosterForm)
         )
                 .andExpect(status().isOk())
