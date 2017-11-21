@@ -173,7 +173,7 @@ public class StudentSummaryController extends AttendanceBaseController {
 
     private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {
 
-        if (assignment != null && totalDays != 0 && !StringUtils.isBlank(assignment.getPresentPoints())) {
+        if (assignment != null && !StringUtils.isBlank(assignment.getPresentPoints())) {
             double presentWeight = Long.valueOf(assignment.getPresentPoints());
             double tardyWeight = Long.valueOf(assignment.getTardyPoints());
             double absentWeight = Long.valueOf(assignment.getAbsentPoints());
@@ -196,8 +196,13 @@ public class StudentSummaryController extends AttendanceBaseController {
             double totalExcusedPoints = Math.round(excusedDaysTimesMultiplier * assignmentPoints);
 
             double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
-
-            double studentFinalGrade = Math.round((sumStudentsPoints / totalDays) * 100.0) / 100.0;
+            double studentFinalGrade;
+            if (totalDays == 0){
+                studentFinalGrade = Math.round(sumStudentsPoints * 100.0) / 100.0;
+            }
+            else{
+                studentFinalGrade = Math.round((sumStudentsPoints / totalDays) * 100.0) / 100.0;
+            }
 
             page.addObject("presentWeight", Math.round(presentWeight));
             page.addObject("tardyWeight", Math.round(tardyWeight));

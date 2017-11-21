@@ -54,7 +54,7 @@
     <form:input type="hidden" id="sectionId" path="sectionId" />
     <form:input type="hidden" id="studentId" path="studentId" />
 
-    <h3>Student Attendance Summary</h3>
+    <h2>Student Attendance Summary</h2>
 
     <table class="table table-bordered">
 
@@ -128,41 +128,37 @@
             </div>
         </div>
     </c:if>
+    </br>
+    <h2>Attendance Logs</h2>
 
-    <h3>Attendance Logs</h3>
-
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th class="col-md-1">Class Date</th>
-            <th class="col-md-1">Status</th>
-            <th class="col-md-1">Section</th>
-            <th class="col-md-2">Notes</th>
-        </tr>
-        </thead>
-
-        <tbody id="summaryTableBody">
-        <c:forEach items="${studentList}" var="student" varStatus="studentLoop">
-            <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
-              <c:if test="${attendance.status != 'NA'}">  
-              <tr>
-                    <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
-                    <td>${attendance.status}</td>
-                    <c:forEach items="${sectionList}" var="section" varStatus="sectionLoop">
-                        <c:if test="${section.canvasSectionId == student.canvasSectionId}">
-                            <td>${section.name}</td>
-                        </c:if>
-                    </c:forEach>
-                    <td>${attendance.notes}</td>
-                </tr>
-                </c:if>
-            </c:forEach>
-
+    <c:forEach items="${studentList}" var="student" varStatus="studentLoop">
+        <c:forEach items="${sectionList}" var="section" varStatus="sectionLoop">
+            <c:if test="${section.canvasSectionId == student.canvasSectionId}">
+                <h3>${section.name}</h3>
+                </br>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">Class Date</th>
+                        <th class="col-md-1">Status</th>
+                        <th class="col-md-2">Notes</th>
+                    </tr>
+                    </thead>
+                <tbody id="summaryTableBody">
+                <c:forEach items="${student.attendances}" var="attendance" varStatus="attendanceLoop">
+                    <c:if test="${attendance.status != 'NA'}">
+                        <tr>
+                        <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
+                        <td>${attendance.status}</td>
+                        <td>${attendance.notes}</td>
+                        </tr>
+                    </c:if>
+                </c:forEach>
+                </tbody>
+                </table>
+            </c:if>
         </c:forEach>
-
-        </tbody>
-
-    </table>
+    </c:forEach>
 
 </form:form>
 <script src="${context}/js/moment.js"></script>

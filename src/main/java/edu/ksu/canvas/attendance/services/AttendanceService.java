@@ -143,7 +143,7 @@ public class AttendanceService {
         List<Attendance> attendancesInDBForCourse = null;
         boolean sectionHasAttendancesForDate = false;
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
-            if (sectionModel.getSectionId() != null && sectionModel.getSectionId().equals(rosterForm.getSectionId())) {
+            if (sectionModel.getCanvasSectionId() != null && sectionModel.getCanvasSectionId().equals(rosterForm.getSectionId())) {
                 attendancesInDBForCourse = attendanceRepository.getAttendanceByCourseAndDayOfClass(sectionModel.getCanvasCourseId(), rosterForm.getCurrentDate());
                 if (!attendancesInDBForCourse.isEmpty()) {
                     sectionHasAttendancesForDate = true;
