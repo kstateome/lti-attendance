@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 @Controller
 @Scope("session")
 @RequestMapping("/studentSummary")
-public class SummaryController extends AttendanceBaseController {
+public class StudentSummaryController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(SummaryController.class);
+    private static final Logger LOG = Logger.getLogger(StudentSummaryController.class);
 
     @Autowired
     private MakeupService makeupService;
