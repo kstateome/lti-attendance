@@ -318,6 +318,8 @@
                 .appendTo("#sectionSelect");
         $('#sectionSelect').submit();
         $('#saveUnassignedAsPresent').attr("disabled", "disabled");
+        $('#saveAttendanceOnTop').attr("disabled", "disabled");
+        $('#saveAttendanceOnBottom').attr("disabled", "disabled");
     }
 
     function submitRoster(){
@@ -328,6 +330,7 @@
                 .appendTo("#sectionSelect");
         $('#sectionSelect').submit();
         $('#saveAttendanceOnTop').attr("disabled", "disabled");
+        $('#saveUnassignedAsPresent').attr("disabled", "disabled");
         $('#saveAttendanceOnBottom').attr("disabled", "disabled");
     }
 </script>
