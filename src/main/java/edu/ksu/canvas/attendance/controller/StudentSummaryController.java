@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 @Controller
 @Scope("session")
 @RequestMapping("/studentSummary")
-public class SummaryController extends AttendanceBaseController {
+public class StudentSummaryController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(SummaryController.class);
+    private static final Logger LOG = Logger.getLogger(StudentSummaryController.class);
 
     @Autowired
     private MakeupService makeupService;
@@ -71,26 +71,11 @@ public class SummaryController extends AttendanceBaseController {
     }
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
-        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        Long validatedSectionId = validateSection(sectionId);
+        AttendanceStudent student = validateStudent(studentId);
 
-        if(validatedSectionId == null) {
-            throw new IllegalArgumentException("Invalid section id.");
-        }
+        MakeupForm makeupForm = makeupService.createMakeupForm(student.getStudentId(), validatedSectionId, addEmptyEntry);
 
-        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-
-        if(validatedStudentId == null || validatedStudentId < 0) {
-            throw new MissingSisIdException("Invalid student id", false);
-        }
-
-        AttendanceStudent student = studentService.getStudent(validatedStudentId);
-        if(student == null) {
-            throw new IllegalArgumentException("Student does not exist in database.");
-        }
-
-        MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
-
-        //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         AttendanceAssignment assignment = assignmentService.findBySection(selectedSection);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
@@ -122,6 +107,49 @@ public class SummaryController extends AttendanceBaseController {
                     .collect(Collectors.toList());
         }
 
+        createAssignmentSummary(entries, page, assignment);
+
+        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
+        institutionRoles.stream()
+                .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
+                .findFirst()
+                .ifPresent(role -> page.addObject("isStudent", true));
+
+        page.addObject("student", student);
+        page.addObject("sectionId", sectionId);
+        page.addObject("studentList", studentList);
+        page.addObject("sectionList", sectionList);
+        page.addObject("summaryForm", makeupForm);
+        page.addObject("entryList", entries);
+        return page;
+    }
+
+    private Long validateSection(String sectionId){
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+
+        if(validatedSectionId == null) {
+            throw new IllegalArgumentException("Invalid section id.");
+        }
+
+        return validatedSectionId;
+    }
+
+    private AttendanceStudent validateStudent(String studentId){
+        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
+
+        if(validatedStudentId == null || validatedStudentId < 0) {
+            throw new MissingSisIdException("Invalid student id", false);
+        }
+
+        AttendanceStudent student = studentService.getStudent(validatedStudentId);
+        if(student == null) {
+            throw new IllegalArgumentException("Student does not exist in database.");
+        }
+        return student;
+    }
+
+    private void createAssignmentSummary(List<AttendanceSummaryModel.Entry> entries, ModelAndView page, AttendanceAssignment assignment){
+
         int totalPresentDays = 0, totalTardyDays  = 0, totalAbsentDays = 0, totalExcusedDays = 0;
 
         for (AttendanceSummaryModel.Entry entry : entries) {
@@ -132,27 +160,15 @@ public class SummaryController extends AttendanceBaseController {
         }
 
         int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
-        
-        addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
 
-        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
-        institutionRoles.stream()
-                .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
-                .findFirst()
-                .ifPresent(role -> page.addObject("isStudent", true));
+        addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
 
         page.addObject("totalPresentDays", totalPresentDays);
         page.addObject("totalTardyDays", totalTardyDays);
         page.addObject("totalAbsentDays", totalAbsentDays);
         page.addObject("totalExcusedDays", totalExcusedDays);
         page.addObject("totalDays", totalDays);
-        page.addObject("student", student);
-        page.addObject("sectionId", sectionId);
-        page.addObject("studentList", studentList);
-        page.addObject("sectionList", sectionList);
-        page.addObject("summaryForm", makeupForm);
-        page.addObject("entryList", entries);
-        return page;
+
     }
 
     private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {

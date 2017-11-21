@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SummaryControllerITest extends BaseControllerITest {
+public class StudentSummaryControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
