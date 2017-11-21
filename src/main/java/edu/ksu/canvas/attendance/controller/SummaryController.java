@@ -182,7 +182,7 @@ public class SummaryController extends AttendanceBaseController {
             double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
             double studentFinalGrade;
             if (totalDays == 0){
-                studentFinalGrade = Math.round((sumStudentsPoints / 1) * 100.0) / 100.0;
+                studentFinalGrade = Math.round(sumStudentsPoints * 100.0) / 100.0;
             }
             else{
                 studentFinalGrade = Math.round((sumStudentsPoints / totalDays) * 100.0) / 100.0;
