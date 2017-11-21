@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AttendanceSummaryControllerITest extends BaseControllerITest {
+public class AttendanceStudentSummaryControllerITest extends BaseControllerITest {
 
     
     @Autowired

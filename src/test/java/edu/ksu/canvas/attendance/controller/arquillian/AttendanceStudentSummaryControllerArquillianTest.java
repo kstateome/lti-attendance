@@ -10,7 +10,7 @@ import static org.junit.Assert.assertFalse;
 
 @RunAsClient
 @RunWith(Arquillian.class)
-public class AttendanceSummaryControllerArquillianTest extends BaseArquillianTest {
+public class AttendanceStudentSummaryControllerArquillianTest extends BaseArquillianTest {
 
     @Test
     public void pageShouldHaveReportTable() throws Exception {
