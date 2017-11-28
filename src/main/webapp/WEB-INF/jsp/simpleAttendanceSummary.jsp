@@ -95,7 +95,7 @@
 
         // Update the selected section information
         val = ${selectedSectionId};
-        document.getElementById('sectionId').value = val;
+        $("#sectionId").val(val);
         contextPath = '${context}';
         console.log('value in body - ' + val);
         toggleSection(val, contextPath);
