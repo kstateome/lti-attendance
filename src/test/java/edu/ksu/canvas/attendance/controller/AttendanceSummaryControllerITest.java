@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class AttendanceStudentSummaryControllerITest extends BaseControllerITest {
+public class AttendanceSummaryControllerITest extends BaseControllerITest {
 
     
     @Autowired
@@ -76,7 +76,15 @@ public class AttendanceStudentSummaryControllerITest extends BaseControllerITest
             .andExpect(status().isOk())
             .andExpect(view().name("forward:roster"));
     }
-    
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void attendanceSummary_nullSectionId() throws Exception {
+        mockMvc.perform(get("/attendanceSummary/"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("ltiConfigure"));
+
+    }
     
     @Test
     public void attendanceSummary_existingSectionId_HappyPath() throws Exception {

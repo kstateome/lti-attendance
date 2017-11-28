@@ -64,6 +64,10 @@ public class StudentSummaryController extends AttendanceBaseController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
+    @RequestMapping()
+    public ModelAndView studentSummary() throws NoLtiSessionException {
+        return studentSummary(null, null, false);
+    }
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentSummary(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
@@ -71,9 +75,19 @@ public class StudentSummaryController extends AttendanceBaseController {
     }
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
-        Long validatedSectionId = validateSection(sectionId);
-        AttendanceStudent student = validateStudent(studentId);
+        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
+        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
 
+        if (validatedSectionId == null || validatedStudentId == null) {
+            return new ModelAndView("forward:roster");
+        }
+
+        AttendanceStudent student = studentService.getStudent(validatedStudentId);
+
+        if (student == null){
+            return new ModelAndView("forward:roster");
+
+        }
         MakeupForm makeupForm = makeupService.createMakeupForm(student.getStudentId(), validatedSectionId, addEmptyEntry);
 
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
@@ -122,30 +136,6 @@ public class StudentSummaryController extends AttendanceBaseController {
         page.addObject("summaryForm", makeupForm);
         page.addObject("entryList", entries);
         return page;
-    }
-
-    private Long validateSection(String sectionId){
-        Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-
-        if(validatedSectionId == null) {
-            throw new IllegalArgumentException("Invalid section id.");
-        }
-
-        return validatedSectionId;
-    }
-
-    private AttendanceStudent validateStudent(String studentId){
-        Long validatedStudentId = LongValidator.getInstance().validate(studentId);
-
-        if(validatedStudentId == null || validatedStudentId < 0) {
-            throw new MissingSisIdException("Invalid student id", false);
-        }
-
-        AttendanceStudent student = studentService.getStudent(validatedStudentId);
-        if(student == null) {
-            throw new IllegalArgumentException("Student does not exist in database.");
-        }
-        return student;
     }
 
     private void createAssignmentSummary(List<AttendanceSummaryModel.Entry> entries, ModelAndView page, AttendanceAssignment assignment){
