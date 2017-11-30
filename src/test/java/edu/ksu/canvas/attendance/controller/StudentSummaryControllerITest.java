@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SummaryControllerITest extends BaseControllerITest {
+public class StudentSummaryControllerITest extends BaseControllerITest {
 
     private AttendanceCourse existingCourse;
     private AttendanceSection existingSection;
@@ -100,15 +100,13 @@ public class SummaryControllerITest extends BaseControllerITest {
         when(mockLtiSession.getCanvasCourseId()).thenReturn(String.valueOf(existingCourse.getCanvasCourseId()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void studentSummary_NonNumberSectionId() throws Throwable {
         Long studentId = existingStudent.getStudentId();
         String nonNumberSectionId = "Numbers";
-        try {
-            mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId));
-        } catch (NestedServletException ne) {
-            throw ne.getCause();
-        }
+        mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId))
+            .andExpect(view().name("forward:roster"));
+
     }
 
 
@@ -117,7 +115,7 @@ public class SummaryControllerITest extends BaseControllerITest {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
         mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId))
-                .andExpect(view().name("studentSyncFailed"));
+                .andExpect(view().name("forward:roster"));
 
     }
 
@@ -126,11 +124,15 @@ public class SummaryControllerITest extends BaseControllerITest {
         Long sectionId = existingSection.getCanvasSectionId();
         Long nonExistStudentId = -1L;
         mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId))
-                .andExpect(view().name("studentSyncFailed"));
+                .andExpect(view().name("forward:roster"));
 
     }
 
-
+    @Test
+    public void studentSummary_NullSectionId() throws Throwable {
+        mockMvc.perform(get("/studentSummary/"))
+            .andExpect(view().name("ltiConfigure"));
+    }
 
     @Test
     @SuppressWarnings("unchecked")

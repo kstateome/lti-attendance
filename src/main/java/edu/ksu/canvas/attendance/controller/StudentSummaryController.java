@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 @Controller
 @Scope("session")
 @RequestMapping("/studentSummary")
-public class SummaryController extends AttendanceBaseController {
+public class StudentSummaryController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(SummaryController.class);
+    private static final Logger LOG = Logger.getLogger(StudentSummaryController.class);
 
     @Autowired
     private MakeupService makeupService;
@@ -64,6 +64,10 @@ public class SummaryController extends AttendanceBaseController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
+    @RequestMapping()
+    public ModelAndView studentSummary() throws NoLtiSessionException {
+        return studentSummary(null, null, false);
+    }
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentSummary(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
@@ -72,25 +76,20 @@ public class SummaryController extends AttendanceBaseController {
 
     private ModelAndView studentSummary(String sectionId, String studentId, boolean addEmptyEntry) throws NoLtiSessionException {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
-
-        if(validatedSectionId == null) {
-            throw new IllegalArgumentException("Invalid section id.");
-        }
-
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
 
-        if(validatedStudentId == null || validatedStudentId < 0) {
-            throw new MissingSisIdException("Invalid student id", false);
+        if (validatedSectionId == null || validatedStudentId == null) {
+            return new ModelAndView("forward:roster");
         }
 
         AttendanceStudent student = studentService.getStudent(validatedStudentId);
-        if(student == null) {
-            throw new IllegalArgumentException("Student does not exist in database.");
+
+        if (student == null){
+            return new ModelAndView("forward:roster");
+
         }
+        MakeupForm makeupForm = makeupService.createMakeupForm(student.getStudentId(), validatedSectionId, addEmptyEntry);
 
-        MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId, validatedSectionId, addEmptyEntry);
-
-        //Checking if Attendance Summary is Simple or Aviation
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
         AttendanceAssignment assignment = assignmentService.findBySection(selectedSection);
         CourseConfigurationForm courseConfigurationForm = new CourseConfigurationForm();
@@ -122,6 +121,25 @@ public class SummaryController extends AttendanceBaseController {
                     .collect(Collectors.toList());
         }
 
+        createAssignmentSummary(entries, page, assignment);
+
+        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
+        institutionRoles.stream()
+                .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
+                .findFirst()
+                .ifPresent(role -> page.addObject("isStudent", true));
+
+        page.addObject("student", student);
+        page.addObject("sectionId", sectionId);
+        page.addObject("studentList", studentList);
+        page.addObject("sectionList", sectionList);
+        page.addObject("summaryForm", makeupForm);
+        page.addObject("entryList", entries);
+        return page;
+    }
+
+    private void createAssignmentSummary(List<AttendanceSummaryModel.Entry> entries, ModelAndView page, AttendanceAssignment assignment){
+
         int totalPresentDays = 0, totalTardyDays  = 0, totalAbsentDays = 0, totalExcusedDays = 0;
 
         for (AttendanceSummaryModel.Entry entry : entries) {
@@ -132,32 +150,20 @@ public class SummaryController extends AttendanceBaseController {
         }
 
         int totalDays = totalPresentDays + totalTardyDays + totalAbsentDays + totalExcusedDays;
-        
-        addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
 
-        List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
-        institutionRoles.stream()
-                .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
-                .findFirst()
-                .ifPresent(role -> page.addObject("isStudent", true));
+        addAssignmentSummaryToPage(page, totalPresentDays, totalTardyDays, totalAbsentDays, totalExcusedDays, totalDays, assignment);
 
         page.addObject("totalPresentDays", totalPresentDays);
         page.addObject("totalTardyDays", totalTardyDays);
         page.addObject("totalAbsentDays", totalAbsentDays);
         page.addObject("totalExcusedDays", totalExcusedDays);
         page.addObject("totalDays", totalDays);
-        page.addObject("student", student);
-        page.addObject("sectionId", sectionId);
-        page.addObject("studentList", studentList);
-        page.addObject("sectionList", sectionList);
-        page.addObject("summaryForm", makeupForm);
-        page.addObject("entryList", entries);
-        return page;
+
     }
 
     private void addAssignmentSummaryToPage(ModelAndView page, int totalPresentDays, int totalTardyDays, int totalAbsentDays, int totalExcusedDays, int totalDays, AttendanceAssignment assignment) {
 
-        if (assignment != null && totalDays != 0 && !StringUtils.isBlank(assignment.getPresentPoints())) {
+        if (assignment != null && !StringUtils.isBlank(assignment.getPresentPoints())) {
             double presentWeight = Long.valueOf(assignment.getPresentPoints());
             double tardyWeight = Long.valueOf(assignment.getTardyPoints());
             double absentWeight = Long.valueOf(assignment.getAbsentPoints());
@@ -180,8 +186,13 @@ public class SummaryController extends AttendanceBaseController {
             double totalExcusedPoints = Math.round(excusedDaysTimesMultiplier * assignmentPoints);
 
             double sumStudentsPoints = totalPresentPoints + totalTardyPoints + totalAbsentPoints + totalExcusedPoints;
-
-            double studentFinalGrade = Math.round((sumStudentsPoints / totalDays) * 100.0) / 100.0;
+            double studentFinalGrade;
+            if (totalDays == 0){
+                studentFinalGrade = Math.round(sumStudentsPoints * 100.0) / 100.0;
+            }
+            else{
+                studentFinalGrade = Math.round((sumStudentsPoints / totalDays) * 100.0) / 100.0;
+            }
 
             page.addObject("presentWeight", Math.round(presentWeight));
             page.addObject("tardyWeight", Math.round(tardyWeight));

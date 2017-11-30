@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SectionModel {
 
-    private long canvasSectionId;
+    private Long canvasSectionId;
     private String sectionName;
     private Long canvasCourseId;
     private Long sectionId;
@@ -25,11 +25,11 @@ public class SectionModel {
     }
 
 
-    public long getCanvasSectionId() {
+    public Long getCanvasSectionId() {
         return canvasSectionId;
     }
 
-    public void setCanvasSectionId(long canvasSectionId) {
+    public void setCanvasSectionId(Long canvasSectionId) {
         this.canvasSectionId = canvasSectionId;
     }
 
