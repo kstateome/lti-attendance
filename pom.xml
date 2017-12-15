@@ -15,6 +15,11 @@
     <version>1.2.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <properties>
+        <!-- Suppress false positive hits in the dependency check plugin -->
+        <suppressionFiles>https://jenkins.ome.k-state.edu/maven-site/suppression.xml</suppressionFiles>
+    </properties>
+
     <scm>
         <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
@@ -35,7 +40,7 @@
         <site>
             <id>${project.artifactId}-site</id>
             <name>Default Site</name>
-            <url>file:///var/www/html/lti-attendance</url>
+            <url>file:///var/www/maven-site/lti-attendance</url>
         </site>
     </distributionManagement>
 
