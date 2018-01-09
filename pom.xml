@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.3.RELEASE</version>
+        <version>1.2.8.RELEASE</version>
     </parent>
 
     <groupId>edu.ksu.ome.lti</groupId>
@@ -18,6 +18,9 @@
     <properties>
         <!-- Suppress false positive hits in the dependency check plugin -->
         <suppressionFiles>https://jenkins.ome.k-state.edu/maven-site/suppression.xml</suppressionFiles>
+        <spring.version>4.3.12.RELEASE</spring.version>
+        <jackson.version>2.6.2</jackson.version>
+        <logback.version>1.2.2</logback.version>
     </properties>
 
     <scm>
