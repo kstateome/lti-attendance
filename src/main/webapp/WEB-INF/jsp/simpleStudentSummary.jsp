@@ -28,8 +28,7 @@
     <title>Student Makeup</title>
 </head>
 
-<body onload='sortByDateDesc("summaryTableBody");'>
-<%--<body>--%>
+<body>
 <c:if test="${!isStudent}">
     <a id="backToAttendanceSummary" href="${context}/attendanceSummary/${sectionId}">Back to Attendance Summary</a>
 </c:if>
