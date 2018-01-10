@@ -76,7 +76,15 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
             .andExpect(status().isOk())
             .andExpect(view().name("forward:roster"));
     }
-    
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void attendanceSummary_nullSectionId() throws Exception {
+        mockMvc.perform(get("/attendanceSummary/"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("ltiConfigure"));
+
+    }
     
     @Test
     public void attendanceSummary_existingSectionId_HappyPath() throws Exception {
