@@ -100,16 +100,16 @@ public class AttendanceService {
     public void loadIntoForm(RosterForm rosterForm, Date date) {
         long begin = System.currentTimeMillis();
 
-        Long canvaseCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
-        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvaseCourseId, date);
-        LOG.debug("attendances found for a given couse and a given day of class: " + attendancesInDb.size());
+        Long canvasCourseId = rosterForm.getSectionModels().get(0).getCanvasCourseId();
+        List<Attendance> attendancesInDb = attendanceRepository.getAttendanceByCourseAndDayOfClass(canvasCourseId, date);
+        LOG.debug("attendances found for a given course and a given day of class: " + attendancesInDb.size());
 
         for (SectionModel sectionModel : rosterForm.getSectionModels()) {
             List<AttendanceModel> sectionAttendances = new ArrayList<>();
             List<AttendanceStudent> attendanceStudents = studentRepository.findByCanvasSectionIdOrderByNameAsc(sectionModel.getCanvasSectionId());
 
             attendanceStudents.sort(Comparator.comparing(AttendanceStudent::getDeleted));
-            
+
             for (AttendanceStudent student : attendanceStudents) {
                 Attendance foundAttendance = findAttendanceFrom(attendancesInDb, student);
                 if (foundAttendance == null) {

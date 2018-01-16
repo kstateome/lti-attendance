@@ -110,6 +110,10 @@ public class StudentSummaryController extends AttendanceBaseController {
                 reportService.getSimpleAttendanceSummaryReport(validatedSectionId) :
                 reportService.getAviationAttendanceSummaryReport(validatedSectionId);
 
+        for(AttendanceStudent s: studentList){
+            s.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
+        }
+
         student.getAttendances().sort(Comparator.comparing(Attendance::getDateOfClass).reversed());
 
         List<AttendanceSummaryModel.Entry> entries = new ArrayList<>();
