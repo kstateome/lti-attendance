@@ -1,10 +1,29 @@
 pipeline {
+    agent any
     environment {
+        // Default to the current branch in order to always deploy test branches
+        testDeploy = "${BRANCH_NAME}"
+
+        // Regex expressions to use in order to ignore commits. If the latest commit matches any of these then the build is skipped
+        regexIgnore = ".*maven-release-plugin.*;.*skipJenkins.*"
+
+        // Configure for the correct test environments. Option 'none' is added in the stage 'prompt-for-test-deploy'
+        testBranches = "test1\ntest2\ntest3"
+
+        // Regex for branches which Jenkins should prompt for test deployment
+        promptTestBranchRegex = "merge-.*"
+
+        // Channels for rocket chat notifications
+        testDeployPromptChannel = "javajavajava"
+        releaseConfirmChannel = "javajavajava"
+        buildFailureNotificationChannel = "javabuilds"
+        releaseBuiltNotificationChannel = "javajavajava"
+
+        // Avatar to use for Rocket Chat messages
         JENKINS_AVATAR_URL = "https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png"
     }
-    agent any
     tools {
-        maven "Maven 3.3.9"
+        maven "Maven 3.3.9" //todo: upgrade to 3.5
         jdk "Java 8"
     }
 
@@ -24,15 +43,6 @@ pipeline {
                         }
                     }
                 }
-            }
-        }
-        
-        stage('sonar') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh "mvn sonar:sonar -P sonar -Dsonar.branch=${env.branch_name}"
             }
         }
 
@@ -60,6 +70,36 @@ pipeline {
             }
         }
 
+        stage('Test Deploy') {
+            when {
+                expression { return env.testDeploy ==~ /test(\d+)/ }
+            }
+            steps {
+                sh "mvn -X wildfly:undeploy -P lti-${env.BRANCH_NAME}"
+                sh "mvn -X wildfly:execute-commands -P lti-${env.BRANCH_NAME}"
+                sh "sleep 45"
+                sh "mvn -X clean package wildfly:deploy -P lti-${env.BRANCH_NAME} -DskipTests"
+            }
+            post {
+                success {
+                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+                failure {
+                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                }
+            }
+        }
+
+        stage('Sonar') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh 'mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install'
+                sh "mvn sonar:sonar -P sonar -Dsonar.branch=${env.branch_name}"
+            }
+        }
+
         stage('Maven Site') {
             when { branch 'master' }
             steps {
@@ -68,26 +108,6 @@ pipeline {
             post {
                 success {
                     rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javabuilds', message: "Successfully generated Maven site documentation for Attendance: https://jenkins.ome.ksu.edu/maven-site/lti-attendance/", rawMessage: true
-                }
-            }
-        }
-
-        stage('Test Deploy') {
-            when {
-                expression { return env.BRANCH_NAME ==~ /test(\d+)/ }
-            }
-            steps {
-                sh "mvn -X wildfly:undeploy -P lti-${env.BRANCH_NAME}"
-                sh "mvn -X wildfly:execute-commands -P lti-${env.BRANCH_NAME}"
-                sh "sleep 45"
-                sh "mvn -X wildfly:deploy -P lti-${env.BRANCH_NAME} -DskipTests"
-            }
-            post {
-                success {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
-                }
-                failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
                 }
             }
         }
@@ -143,12 +163,67 @@ pipeline {
                 }
             }
         }
+
+        stage('release-dry-run') {
+            agent any
+            when {
+                branch 'release'
+            }
+            steps {
+                sh 'mvn --batch-mode -DdryRun=true release:clean release:prepare release:perform'
+                // This must be run in an agent in order to resolve the version. There is probably a better alternative that we could use in the future
+                rocketSend avatar: "${env.JENKINS_AVATAR_URL}", channel: "${env.releaseConfirmChannel}", message: "Release Dry Run of ${JOB_NAME} ${version()} finished. Continue Release? - ${BUILD_URL}console", rawMessage: true
+            }
+        }
+
+        stage('confirm-release') {
+            agent none
+            when {
+                branch 'release'
+            }
+            steps {
+                input "Click continue to release ${JOB_NAME}"
+            }
+        }
+
+        stage('release') {
+            agent any
+            when {
+                branch 'release'
+            }
+            steps {
+                sh 'mvn --batch-mode release:clean release:prepare release:perform'
+            }
+
+            post {
+                success {
+                    rocketSend avatar: "${env.JENKINS_AVATAR_URL}", channel: "${env.releaseBuiltNotificationChannel}", message: "Successfully built release  ${version()}\n Build: ${BUILD_URL}", rawMessage: true
+                }
+            }
+        }
     }
     post {
         always {
             deleteDir()
         }
     }
+}
+
+@NonCPS
+def version() {
+    pom = readMavenPom file: 'pom.xml'
+    pom.version
+}
+
+def shouldIgnoreCommit(regexIgnoreList) {
+    def lastCommit = sh (script: 'git log --pretty=oneline | head -n 1', returnStdout: true)
+    // For loop is used because [].each is not serializable
+    for (int i = 0; i < regexIgnoreList.size(); i++) {
+        if (lastCommit =~ /${regexIgnoreList[i]}/) {
+            return true
+        }
+    }
+    return false
 }
 
 @NonCPS
