@@ -23,7 +23,7 @@ pipeline {
         JENKINS_AVATAR_URL = "https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png"
     }
     tools {
-        maven "Maven 3.3.9" //todo: upgrade to 3.5
+        maven "Maven 3.5"
         jdk "Java 8"
     }
 
