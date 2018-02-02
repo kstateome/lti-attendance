@@ -48,6 +48,13 @@ pipeline {
                         }
                     }
                 }
+                always {
+                    script {
+                        if (shouldIgnoreCommit(env.regexIgnore.split(';'))) {
+                            currentBuild.result = 'NOT_BUILT'
+                        }
+                    }
+                }
             }
         }
 
