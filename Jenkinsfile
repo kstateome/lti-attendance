@@ -30,6 +30,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                script {
+                    if (shouldIgnoreCommit(env.regexIgnore.split(';'))) {
+                        error "Ignoring commit"
+                    }
+                }
                 sh 'mvn clean package -DskipTests'
             }
             post {
@@ -40,6 +45,13 @@ pipeline {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
                             rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                        }
+                    }
+                }
+                always {
+                    script {
+                        if (shouldIgnoreCommit(env.regexIgnore.split(';'))) {
+                            currentBuild.result = 'NOT_BUILT'
                         }
                     }
                 }
