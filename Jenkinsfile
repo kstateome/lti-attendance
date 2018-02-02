@@ -30,6 +30,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                script {
+                    if (shouldIgnoreCommit(env.regexIgnore.split(';'))) {
+                        error "Ignoring commit"
+                    }
+                }
                 sh 'mvn clean package -DskipTests'
             }
             post {
