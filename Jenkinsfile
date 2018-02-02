@@ -101,7 +101,7 @@ pipeline {
         }
 
         stage('Maven Site') {
-            when { branch 'master' }
+            when { branch 'maven-site' }
             steps {
                 sh 'mvn site-deploy'
             }
