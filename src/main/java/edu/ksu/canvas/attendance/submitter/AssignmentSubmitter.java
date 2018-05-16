@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.*;
-
+import org.apache.log4j.Logger;
 @Component
 @Scope(value="session")
 public class AssignmentSubmitter {
@@ -58,29 +58,34 @@ public class AssignmentSubmitter {
      */
     public void submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId,
                                         OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws AttendanceAssignmentException{
+        try{
+            AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
+            LOG.info("set attendanceAssignment");
+            gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
+            LOG.info("got past gradePushingValidation");
+            List<AttendanceStudent> allStudents = studentRepository.findByCanvasCourseId(courseId);
+            LOG.info("set AttendanceStudent list");
+            List<AttendanceStudent> studentsToGrade = new ArrayList<>();
 
-        AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
+            Set<String> idList = new HashSet<>();
 
-        gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
+            for (AttendanceStudent student: allStudents){
+                idList.add(student.getSisUserId());
+            }
+            LOG.info("set idList");
+            for (String id: idList){
+                List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
+                attendanceStudentList.stream().filter(x -> !x.getDeleted())
+                    .findFirst()
+                    .ifPresent(studentsToGrade::add);
+            }
+            LOG.info("added studentsToGrade");
+            submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
+        } catch(Exception e){
+            LOG.warn(e);
 
-        List<AttendanceStudent> allStudents = studentRepository.findByCanvasCourseId(courseId);
-
-        List<AttendanceStudent> studentsToGrade = new ArrayList<>();
-
-        Set<String> idList = new HashSet<>();
-
-        for (AttendanceStudent student: allStudents){
-            idList.add(student.getSisUserId());
         }
 
-        for (String id: idList){
-            List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
-            attendanceStudentList.stream().filter(x -> !x.getDeleted())
-                .findFirst()
-                .ifPresent(studentsToGrade::add);
-        }
-
-        submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
     }
 
     /**
@@ -92,17 +97,21 @@ public class AssignmentSubmitter {
                                         AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
         AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment);
-
+        LOG.info("validated attendance assignment");
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            LOG.info("status unknown");
             validatingAssignment = assignmentValidator.validateAttendanceAssignment(courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
+            LOG.info("status unknown");
             validatingAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY){
+            LOG.info("status discrepency");
             canvasAssignmentAssistant.editAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
         else if (validatingAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
+            LOG.info("status not linked");
             canvasAssignmentAssistant.createAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
         validatingAssignment.setStatus(AttendanceAssignment.Status.OKAY);
@@ -113,7 +122,7 @@ public class AssignmentSubmitter {
      * Handles the push grades and/or comments to canvas for just one section.
      */
     private void submitSectionAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, List<AttendanceStudent> students, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws AttendanceAssignmentException {
-
+        LOG.info("submitSectionAttendances");
         Map<String, MultipleSubmissionsOptions.StudentSubmissionOption> studentMap;
         MultipleSubmissionsOptions submissionOptions = new MultipleSubmissionsOptions(courseId.toString(), attendanceAssignment.getCanvasAssignmentId().intValue(), null);
         studentMap = new HashMap<>();
@@ -132,18 +141,18 @@ public class AssignmentSubmitter {
         }
 
         //Pushing the information to Canvas
-        Optional<Progress> returnedProgress;
+        Optional<Progress> returnedProgress = Optional.empty();
         submissionOptions.setStudentSubmissionOptionMap(studentMap);
 
         try {
             returnedProgress = canvasApiWrapperService.gradeMultipleSubmissionsByCourse(oauthToken, submissionOptions);
         } catch (IOException e) {
-            LOG.error("Error while pushing the grades of course: " + courseId, e);
-            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
+            LOG.warn("Error while pushing the grades of course: " + courseId, e);
+            //throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
         if (!isValidProgress(returnedProgress)) {
-            LOG.error("Error object returned while pushing the grades of course: " + courseId);
-            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
+            LOG.warn("Error object returned while pushing the grades of course: " + courseId);
+            //throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
     }
 

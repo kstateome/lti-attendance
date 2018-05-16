@@ -163,7 +163,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
             List<AttendanceSummaryModel> summaryForSections = isSimpleAttendance ?
                     reportService.getSimpleAttendanceSummaryReport(sectionId) :
                     reportService.getAviationAttendanceSummaryReport(sectionId);
-
             AttendanceAssignment assignmentConfigurationFromSetup = generateAssignmentFromClassSetupForm(classSetupForm);
             try {
                 assignmentSubmitter.submitCourseAttendances(isSimpleAttendance, summaryForSections, courseId, canvasService.getOauthToken(), assignmentConfigurationFromSetup);
@@ -196,7 +195,6 @@ public class CourseConfigurationController extends AttendanceBaseController {
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
         try {
-
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
             LOG.warn("The following error occurred when deleting the Assignment: " + exception);
