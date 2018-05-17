@@ -147,11 +147,9 @@ public class AssignmentSubmitter {
             returnedProgress = canvasApiWrapperService.gradeMultipleSubmissionsByCourse(oauthToken, submissionOptions);
         } catch (IOException e) {
             LOG.error("Error while pushing the grades of course: " + courseId, e);
-            //throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
         if (!isValidProgress(returnedProgress)) {
             LOG.error("Error object returned while pushing the grades of course: " + courseId);
-            //throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.FAILED_PUSH);
         }
     }
 
