@@ -58,6 +58,7 @@ public class AssignmentSubmitter {
      */
     public void submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId,
                                         OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws AttendanceAssignmentException{
+
         AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
 
         gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
@@ -91,6 +92,7 @@ public class AssignmentSubmitter {
                                         AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
         AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment);
+
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
             validatingAssignment = assignmentValidator.validateAttendanceAssignment(courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
