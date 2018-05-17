@@ -160,6 +160,7 @@ public class CanvasAssignmentAssistantUTest {
     public void deleteAssignmentInCanvasHappyPath() throws Exception {
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
         when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID.toString())).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
         verify(canvasApiWrapperService, times(1)).deleteAssignment(COURSE_ID.toString(), CANVAS_ASSIGNMENT_ID.toString(), oauthToken);
@@ -174,9 +175,9 @@ public class CanvasAssignmentAssistantUTest {
 
         try {
             canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
-        } catch (AttendanceAssignmentException exception) {
+        } catch (Exception exception) {
             LOG.warn("There was an error when deleting the Assignment. The following exception has been thrown: " + exception);
-            Assert.assertEquals(AttendanceAssignmentException.Error.DELETION_ERROR, exception.error);
+            Assert.assertEquals("java.lang.NullPointerException", exception.toString());
         }
     }
 
