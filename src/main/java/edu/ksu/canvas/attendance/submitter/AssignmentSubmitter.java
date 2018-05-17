@@ -58,33 +58,28 @@ public class AssignmentSubmitter {
      */
     public void submitCourseAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, Long courseId,
                                         OauthToken oauthToken, AttendanceAssignment assignmentConfigurationFromSetup) throws AttendanceAssignmentException{
-        try{
-            AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
+        AttendanceAssignment attendanceAssignment = assignmentService.findBySection(sectionService.getFirstSectionOfCourse(courseId));
 
-            gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
+        gradePushingValidation(courseId, oauthToken, assignmentConfigurationFromSetup, attendanceAssignment);
 
-            List<AttendanceStudent> allStudents = studentRepository.findByCanvasCourseId(courseId);
+        List<AttendanceStudent> allStudents = studentRepository.findByCanvasCourseId(courseId);
 
-            List<AttendanceStudent> studentsToGrade = new ArrayList<>();
+        List<AttendanceStudent> studentsToGrade = new ArrayList<>();
 
-            Set<String> idList = new HashSet<>();
+        Set<String> idList = new HashSet<>();
 
-            for (AttendanceStudent student: allStudents){
-                idList.add(student.getSisUserId());
-            }
-
-            for (String id: idList){
-                List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
-                attendanceStudentList.stream().filter(x -> !x.getDeleted())
-                    .findFirst()
-                    .ifPresent(studentsToGrade::add);
-            }
-
-            submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
-        } catch(Exception e){
-            LOG.warn(e);
+        for (AttendanceStudent student: allStudents){
+            idList.add(student.getSisUserId());
         }
 
+        for (String id: idList){
+            List<AttendanceStudent> attendanceStudentList = studentService.getStudentByCourseAndSisId(id, courseId);
+            attendanceStudentList.stream().filter(x -> !x.getDeleted())
+                .findFirst()
+                .ifPresent(studentsToGrade::add);
+        }
+
+        submitSectionAttendances(isSimpleAttendance, summaryForSections, studentsToGrade, attendanceAssignment, courseId, oauthToken);
     }
 
     /**
@@ -96,21 +91,16 @@ public class AssignmentSubmitter {
                                         AttendanceAssignment attendanceAssignment) throws AttendanceAssignmentException{
 
         AttendanceAssignment validatingAssignment = assignmentValidator.validateConfigurationSetupExistence(attendanceAssignment);
-        LOG.info("validated attendance assignment");
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
-            LOG.info("status unknown");
             validatingAssignment = assignmentValidator.validateAttendanceAssignment(courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.UNKNOWN){
-            LOG.info("status unknown");
             validatingAssignment = assignmentValidator.validateCanvasAssignment(assignmentConfigurationFromSetup, courseId, validatingAssignment, canvasApiWrapperService, oauthToken);
         }
         if (validatingAssignment.getStatus() == AttendanceAssignment.Status.CANVAS_AND_DB_DISCREPANCY){
-            LOG.info("status discrepency");
             canvasAssignmentAssistant.editAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
         else if (validatingAssignment.getStatus() == AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS){
-            LOG.info("status not linked");
             canvasAssignmentAssistant.createAssignmentInCanvas(courseId, validatingAssignment, oauthToken);
         }
         validatingAssignment.setStatus(AttendanceAssignment.Status.OKAY);
