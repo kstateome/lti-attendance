@@ -116,13 +116,13 @@ public class CanvasAssignmentAssistant {
             LOG.warn("Sections empty");
         }
 
-        AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));;
+        AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));
 
         Optional<Assignment> canvasAssignment = Optional.empty();
         try{
             canvasAssignment = canvasApiWrapperService.getSingleAssignment(canvasCourseId, oauthToken, assignment.getCanvasAssignmentId().toString());
         } catch(IOException e){
-            LOG.warn("Assignment not found on canvas");
+            LOG.warn("Assignment not found on canvas. " + e);
         }
 
         if(!canvasAssignment.isPresent()) {
