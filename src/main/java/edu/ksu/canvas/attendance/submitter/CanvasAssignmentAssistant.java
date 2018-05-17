@@ -111,17 +111,12 @@ public class CanvasAssignmentAssistant {
     }
 
     public void deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) throws AttendanceAssignmentException{
-        LOG.info("in deleteAssignmentInCanvas method");
         List<AttendanceSection> sections = attendanceSectionService.getSectionByCanvasCourseId(canvasCourseId);
-        LOG.info("made sections list");
         if(CollectionUtils.isEmpty(sections)) {
-            LOG.info("Sections empty!");
-            //throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NON_EXISTENT_SECTION_ERROR);
+            LOG.warn("Sections empty");
         }
 
-        AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));
-        LOG.info("made attendanceAssignment");
-        LOG.info(assignment.toString());
+        AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));;
 
         Optional<Assignment> canvasAssignment = Optional.empty();
         try{
@@ -130,9 +125,7 @@ public class CanvasAssignmentAssistant {
             LOG.warn("Assignment not found on canvas");
         }
 
-        boolean assignmentExists = canvasAssignment.isPresent();
-
-        if(!assignmentExists) {
+        if(!canvasAssignment.isPresent()) {
             LOG.error("Attendance assignment not found for section: " + sections.get(0).getName());
             return;
         } else if (assignment.getCanvasAssignmentId() == null) {

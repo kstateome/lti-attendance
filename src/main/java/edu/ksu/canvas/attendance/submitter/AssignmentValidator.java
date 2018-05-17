@@ -27,7 +27,7 @@ public class AssignmentValidator {
             attendanceAssignment.setStatus(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS);
             return attendanceAssignment;
         }
-        LOG.info("Assignment is linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
+
         // Looks for the linked assignment in canvas
         Optional<Assignment> assignmentOptional = lookForAssignmentInCanvas(courseId, attendanceAssignment, canvasApiWrapperService, oauthToken);
 
@@ -36,7 +36,7 @@ public class AssignmentValidator {
             LOG.info("No Canvas assignment linked to section: " + attendanceAssignment.getAttendanceSection().getCanvasSectionId());
             attendanceAssignment.setStatus(AttendanceAssignment.Status.NOT_LINKED_TO_CANVAS);
         }
-        LOG.info("Assignment is present on canvas");
+
         return attendanceAssignment;
     }
 
@@ -101,11 +101,9 @@ public class AssignmentValidator {
         Optional<Assignment> assignmentOptional;
         try {
             assignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
-            LOG.info("Set assignment optional");
         } catch (IOException e) {
             LOG.info("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
             assignmentOptional = Optional.empty();
-            //throw new AttendanceAssignmentException(Error.NO_CONNECTION);
         }
         return assignmentOptional;
     }
