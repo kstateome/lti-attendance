@@ -15,12 +15,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +53,6 @@ public class RosterController extends AttendanceBaseController {
 
     @Autowired
     private RosterFormValidator validator;
-
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -104,7 +107,7 @@ public class RosterController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws NoLtiSessionException {
+    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult, HttpServletResponse response) throws NoLtiSessionException {
         validator.validate(rosterForm, bindingResult);
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
@@ -153,4 +156,8 @@ public class RosterController extends AttendanceBaseController {
         return page;
     }
 
+    @ExceptionHandler(HttpSessionRequiredException.class)
+    public String handleSessionExpired(){
+        return "NoLtiSession";
+    }
 }
