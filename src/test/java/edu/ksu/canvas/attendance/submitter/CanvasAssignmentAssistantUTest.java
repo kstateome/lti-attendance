@@ -175,9 +175,9 @@ public class CanvasAssignmentAssistantUTest {
 
         try {
             canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
-        } catch (Exception exception) {
+        } catch (AttendanceAssignmentException exception) {
             LOG.warn("There was an error when deleting the Assignment. The following exception has been thrown: " + exception);
-            Assert.assertEquals("java.lang.NullPointerException", exception.toString());
+            Assert.assertEquals(AttendanceAssignmentException.Error.DELETION_ERROR, exception.error);
         }
     }
 

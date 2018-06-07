@@ -32,6 +32,8 @@ import java.util.*;
 @Scope(value="session")
 public class CanvasApiWrapperService {
 
+    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
+
     @Autowired
     protected LtiLaunch ltiLaunch;
 
@@ -42,8 +44,6 @@ public class CanvasApiWrapperService {
     private CanvasApiFactory canvasApiFactory;
 
     private EnrollmentOptionsFactory enrollmentOptionsFactory = new EnrollmentOptionsFactory();
-
-    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
 
     public Integer getCourseId() throws NoLtiSessionException {
         LtiSession ltiSession = ltiSessionService.getLtiSession();
@@ -146,7 +146,8 @@ public class CanvasApiWrapperService {
         try{
             return assignmentReader.getSingleAssignment(singleAssignmentOptions);
         } catch(Exception e){
-            LOG.info("Assignment not found. " + e);
+            LOG.warn("Assignment " + assignmentId + " not found for course " + courseId);
+            LOG.warn(e);
             return Optional.empty();
         }
     }
