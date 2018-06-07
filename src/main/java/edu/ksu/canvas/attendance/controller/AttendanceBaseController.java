@@ -70,11 +70,7 @@ public class AttendanceBaseController extends LtiLaunchController {
     }
 
     @RequestMapping("/initialize")
-    public ModelAndView initialize(HttpSession session) throws NoLtiSessionException, IOException {
-
-        //Set timeout session to 4 seconds for testing
-        session.setMaxInactiveInterval(4);
-
+    public ModelAndView initialize() throws NoLtiSessionException, IOException {
         ensureCanvasApiTokenPresent();
         canvasService.validateOAuthToken();
 
