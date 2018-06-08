@@ -146,8 +146,7 @@ public class CanvasApiWrapperService {
         try{
             return assignmentReader.getSingleAssignment(singleAssignmentOptions);
         } catch(Exception e){
-            LOG.warn("Assignment " + assignmentId + " not found for course " + courseId);
-            LOG.warn(e);
+            LOG.warn("Assignment " + assignmentId + " not found for course " + courseId, e);
             return Optional.empty();
         }
     }

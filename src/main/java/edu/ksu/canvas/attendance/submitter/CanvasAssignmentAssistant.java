@@ -127,8 +127,7 @@ public class CanvasAssignmentAssistant {
         try{
             canvasAssignment = canvasApiWrapperService.getSingleAssignment(canvasCourseId, oauthToken, assignment.getCanvasAssignmentId().toString());
         } catch(IOException e){
-            LOG.warn("Assignment " + assignment.getAssignmentId() + " not found on canvas for course " + canvasCourseId);
-            LOG.warn(e);
+            LOG.warn("Assignment " + assignment.getAssignmentId() + " not found on canvas for course " + canvasCourseId, e);
         }
 
         if(!canvasAssignment.isPresent()) {
