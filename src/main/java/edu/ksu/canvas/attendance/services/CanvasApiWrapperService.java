@@ -22,6 +22,7 @@ import edu.ksu.lti.launch.service.LtiSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,6 +31,8 @@ import java.util.*;
 @Component
 @Scope(value="session")
 public class CanvasApiWrapperService {
+
+    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
 
     @Autowired
     protected LtiLaunch ltiLaunch;
@@ -140,7 +143,12 @@ public class CanvasApiWrapperService {
     public Optional<Assignment> getSingleAssignment(Long courseId, OauthToken oauthToken, String assignmentId) throws IOException {
         AssignmentReader assignmentReader = canvasApiFactory.getReader(AssignmentReader.class, oauthToken);
         GetSingleAssignmentOptions singleAssignmentOptions = new GetSingleAssignmentOptions(courseId.toString(), assignmentId);
-        return assignmentReader.getSingleAssignment(singleAssignmentOptions);
+        try{
+            return assignmentReader.getSingleAssignment(singleAssignmentOptions);
+        } catch(Exception e){
+            LOG.warn("Assignment " + assignmentId + " not found for course " + courseId, e);
+            return Optional.empty();
+        }
     }
 
     public void editAssignment(String courseId, Assignment canvasAssignment, OauthToken oauthToken) throws IOException {

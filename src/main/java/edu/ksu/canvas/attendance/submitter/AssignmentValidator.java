@@ -102,8 +102,8 @@ public class AssignmentValidator {
         try {
             assignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
         } catch (IOException e) {
-            LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
-            throw new AttendanceAssignmentException(Error.NO_CONNECTION);
+            LOG.warn("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
+            assignmentOptional = Optional.empty();
         }
         return assignmentOptional;
     }

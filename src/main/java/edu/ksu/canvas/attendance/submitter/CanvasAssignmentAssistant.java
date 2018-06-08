@@ -111,19 +111,30 @@ public class CanvasAssignmentAssistant {
     }
 
     public void deleteAssignmentInCanvas(Long canvasCourseId, OauthToken oauthToken) throws AttendanceAssignmentException{
-
         List<AttendanceSection> sections = attendanceSectionService.getSectionByCanvasCourseId(canvasCourseId);
         if(CollectionUtils.isEmpty(sections)) {
+            LOG.warn("Non existent sections for course when deleting assignment. Canvas course ID: " + canvasCourseId);
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NON_EXISTENT_SECTION_ERROR);
         }
 
         AttendanceAssignment assignment = assignmentRepository.findByAttendanceSection(sections.get(0));
+        if(assignment == null || assignment.getAssignmentId() == null){
+            LOG.warn("No assignments found in assignment repository for section " + sections.get(0).getCanvasSectionId());
+            throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.DELETION_ERROR);
+        }
 
-        if(assignment == null) {
-            LOG.error("Attendance assignment not found for section: " + sections.get(0).getName());
+        Optional<Assignment> canvasAssignment = Optional.empty();
+        try{
+            canvasAssignment = canvasApiWrapperService.getSingleAssignment(canvasCourseId, oauthToken, assignment.getCanvasAssignmentId().toString());
+        } catch(IOException e){
+            LOG.warn("Assignment " + assignment.getAssignmentId() + " not found on canvas for course " + canvasCourseId, e);
+        }
+
+        if(!canvasAssignment.isPresent()) {
+            LOG.warn("Attendance assignment not found for section: " + sections.get(0).getName());
             return;
         } else if (assignment.getCanvasAssignmentId() == null) {
-            LOG.info("No Canvas assignment associated to Attendance assignment  to be deleted for section: " + sections.get(0).getName());
+            LOG.warn("No Canvas assignment associated with Attendance assignment " + assignment.getAssignmentId() + " to be deleted for section: " + sections.get(0).getName());
             return;
         }
 
