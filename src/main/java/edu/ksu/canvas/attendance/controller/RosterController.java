@@ -4,12 +4,11 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.form.RosterFormValidator;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
-import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
-
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -152,10 +150,5 @@ public class RosterController extends AttendanceBaseController {
             page.addObject("noAttendanceToDelete", true);
         }
         return page;
-    }
-
-    @ExceptionHandler(HttpSessionRequiredException.class)
-    public String handleSessionExpired(){
-        return "NoLtiSession";
     }
 }
