@@ -4,12 +4,11 @@ import edu.ksu.canvas.attendance.entity.AttendanceSection;
 import edu.ksu.canvas.attendance.form.RosterForm;
 import edu.ksu.canvas.attendance.form.RosterFormValidator;
 import edu.ksu.canvas.attendance.model.SectionModelFactory;
-import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.services.AttendanceCourseService;
 import edu.ksu.canvas.attendance.services.AttendanceSectionService;
+import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
-
 import org.apache.commons.validator.routines.LongValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +49,6 @@ public class RosterController extends AttendanceBaseController {
 
     @Autowired
     private RosterFormValidator validator;
-
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -104,7 +103,7 @@ public class RosterController extends AttendanceBaseController {
     }
 
     @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
-    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult) throws NoLtiSessionException {
+    public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult, HttpServletResponse response) throws NoLtiSessionException {
         validator.validate(rosterForm, bindingResult);
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
@@ -152,5 +151,4 @@ public class RosterController extends AttendanceBaseController {
         }
         return page;
     }
-
 }

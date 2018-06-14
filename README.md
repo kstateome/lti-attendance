@@ -9,7 +9,7 @@ The FAA required minutely reporting feature is optional. If it is disabled, the 
 Technologies Used in this project
 ------------
 - Spring MVC 4
-- Maven 3.1.1
+- Maven 3.5.2
 - Arquillian 1.11.11
 - Java 8
 - Wildfly 8

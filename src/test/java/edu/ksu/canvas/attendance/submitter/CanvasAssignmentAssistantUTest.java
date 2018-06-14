@@ -160,6 +160,7 @@ public class CanvasAssignmentAssistantUTest {
     public void deleteAssignmentInCanvasHappyPath() throws Exception {
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
         when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID.toString())).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
         verify(canvasApiWrapperService, times(1)).deleteAssignment(COURSE_ID.toString(), CANVAS_ASSIGNMENT_ID.toString(), oauthToken);
