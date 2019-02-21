@@ -120,15 +120,6 @@ public class SynchronizationService {
             List<AttendanceStudent> existingStudentsInDb = studentRepository.findByCanvasSectionIdOrderByNameAsc(section.getId());
             droppedStudents.addAll(existingStudentsInDb);
 
-            // Fix data when student changes section and somehow changes canvasCourseId. It is not known
-            // how this happens within Canvas.
-            for(AttendanceStudent studentInDb: existingStudentsInDb) {
-                if(!studentInDb.getCanvasCourseId().equals(canvasCourseId)) {
-                    LOG.info("Found student with the wrong canvasCourseId.. "+studentInDb+ " canvasCourseId should be: "+canvasCourseId);
-                    studentInDb.setCanvasCourseId(canvasCourseId);
-                    studentRepository.save(studentInDb);
-                }
-            }
 
             for(Enrollment enrollment: canvasSectionMap.get(section)) {
 
@@ -160,6 +151,16 @@ public class SynchronizationService {
             }
             droppedStudents.forEach(c -> c.setDeleted(Boolean.TRUE));
             addDroppedStudents(ret, droppedStudents);
+
+            // Fix data when student changes section and somehow changes canvasCourseId. It is not known
+            // how this happens within Canvas.
+            for(AttendanceStudent studentInDb: existingStudentsInDb) {
+                if(studentInDb.getCanvasCourseId()!=null && !studentInDb.getCanvasCourseId().equals(canvasCourseId)) {
+                    LOG.info("Found student with the wrong canvasCourseId.. "+studentInDb+ " canvasCourseId should be: "+canvasCourseId);
+                    studentInDb.setCanvasCourseId(canvasCourseId);
+                    studentRepository.save(studentInDb);
+                }
+            }
         }
 
 
