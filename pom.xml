@@ -22,11 +22,10 @@
     </properties>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
-        <url>https://github.com/kstateome/aviation-reporting</url>
-      <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</developerConnection>
+        <url>https://github.com/kstateome/lti-attendance</url>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -70,6 +69,11 @@
                     <goals>deploy</goals>
                     <tagNameFormat>@{version}</tagNameFormat>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
             </plugin>
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
