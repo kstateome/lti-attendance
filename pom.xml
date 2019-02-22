@@ -24,9 +24,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/kstateome/aviation-reporting.git</developerConnection>
-        <url>https://github.com/kstateome/aviation-reporting</url>
+        <connection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</developerConnection>
+        <url>https://github.com/kstateome/lti-attendance</url>
     </scm>
 
     <distributionManagement>
