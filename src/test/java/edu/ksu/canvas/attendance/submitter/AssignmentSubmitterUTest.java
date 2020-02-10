@@ -318,7 +318,7 @@ public class AssignmentSubmitterUTest {
         when(sectionService.getSectionInListById(COURSE_ID, SECTION_2_ID)).thenReturn(section2);
         when(assignmentService.findBySection(section1)).thenReturn(attendanceAssignment1);
         when(assignmentService.findBySection(section2)).thenReturn(attendanceAssignment2);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID)).thenReturn(assignmentOptional);
         when(attendanceCourseService.findByCanvasCourseId(eq(COURSE_ID))).thenReturn(course);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_1_ID)).thenReturn(studentCommentsMap1);
         when(attendanceService.getAttendanceCommentsBySectionId(SECTION_2_ID)).thenReturn(studentCommentsMap2);
