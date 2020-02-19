@@ -87,7 +87,7 @@ public class CanvasAssignmentAssistant {
 
         Optional<Assignment> canvasAssignmentOptional;
         try {
-            canvasAssignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId().toString());
+            canvasAssignmentOptional = canvasApiWrapperService.getSingleAssignment(courseId, oauthToken, attendanceAssignment.getCanvasAssignmentId());
         } catch (IOException e) {
             LOG.error("Error while getting assignment from canvas for section: " + attendanceAssignment.getAttendanceSection().getSectionId(), e);
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.NO_CONNECTION);
@@ -125,7 +125,7 @@ public class CanvasAssignmentAssistant {
 
         Optional<Assignment> canvasAssignment = Optional.empty();
         try{
-            canvasAssignment = canvasApiWrapperService.getSingleAssignment(canvasCourseId, oauthToken, assignment.getCanvasAssignmentId().toString());
+            canvasAssignment = canvasApiWrapperService.getSingleAssignment(canvasCourseId, oauthToken, assignment.getCanvasAssignmentId());
         } catch(IOException e){
             LOG.warn("Assignment " + assignment.getAssignmentId() + " not found on canvas for course " + canvasCourseId, e);
         }
@@ -139,7 +139,7 @@ public class CanvasAssignmentAssistant {
         }
 
         try {
-            canvasApiWrapperService.deleteAssignment(canvasCourseId.toString(), assignment.getCanvasAssignmentId().toString(), oauthToken);
+            canvasApiWrapperService.deleteAssignment(canvasCourseId.toString(), assignment.getCanvasAssignmentId(), oauthToken);
         } catch (IOException e) {
             LOG.error("Error while deleting canvas assignment: " + assignment.getCanvasAssignmentId(), e);
             throw new AttendanceAssignmentException(AttendanceAssignmentException.Error.DELETION_ERROR);

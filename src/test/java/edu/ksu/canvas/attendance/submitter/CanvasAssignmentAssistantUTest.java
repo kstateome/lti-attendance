@@ -34,7 +34,7 @@ public class CanvasAssignmentAssistantUTest {
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistantUTest.class);
     private static final Long COURSE_ID = 2121212121L;
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
-    private static final Long ASSIGNMENT_ID = 8484848484L;
+    private static final Integer ASSIGNMENT_ID = 84848484;
     private static final String ASSIGNMENT_NAME = "NAME OF THE ASSIGNMENT";
     private static final Double ASSIGNMENT_POINTS = 100.0;
     private static final Long CANVAS_ASSIGNMENT_ID = 514514514L;
@@ -74,7 +74,7 @@ public class CanvasAssignmentAssistantUTest {
         oauthToken = new NonRefreshableOauthToken(OAUTH_STRING);
 
         attendanceAssignment = new AttendanceAssignment();
-        attendanceAssignment.setAssignmentId(ASSIGNMENT_ID);
+        attendanceAssignment.setAssignmentId((Long.valueOf(ASSIGNMENT_ID)));
         attendanceAssignment.setAssignmentName(ASSIGNMENT_NAME);
         attendanceAssignment.setCanvasAssignmentId(CANVAS_ASSIGNMENT_ID);
         attendanceAssignment.setGradingOn(true);
@@ -85,7 +85,7 @@ public class CanvasAssignmentAssistantUTest {
         attendanceAssignment.setPresentPoints("100.0");
 
         assignment = new Assignment();
-        assignment.setId(Long.toString(ASSIGNMENT_ID));
+        assignment.setId(Math.toIntExact(ASSIGNMENT_ID));
         assignment.setName(attendanceAssignment.getAssignmentName());
         assignment.setPointsPossible(Double.valueOf(attendanceAssignment.getAssignmentPoints()));
         assignment.setCourseId(Long.toString(COURSE_ID));
@@ -136,7 +136,7 @@ public class CanvasAssignmentAssistantUTest {
 
     @Test
     public void editAssignmentInCanvasHappyPath() throws Exception {
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID)).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
         verify(canvasApiWrapperService, times(1)).editAssignment(COURSE_ID.toString(), assignment, oauthToken);
@@ -146,7 +146,7 @@ public class CanvasAssignmentAssistantUTest {
     public void editAssignmentInCanvasCanvasAssignmentNotFound() throws Exception {
         assignmentOptional = Optional.empty();
 
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, Long.toString(CANVAS_ASSIGNMENT_ID))).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID)).thenReturn(assignmentOptional);
 
         try {
             canvasAssignmentAssistant.editAssignmentInCanvas(COURSE_ID, attendanceAssignment, oauthToken);
@@ -160,10 +160,10 @@ public class CanvasAssignmentAssistantUTest {
     public void deleteAssignmentInCanvasHappyPath() throws Exception {
         when(attendanceSectionService.getSectionByCanvasCourseId(COURSE_ID)).thenReturn(sectionList);
         when(assignmentRepository.findByAttendanceSection(sectionList.get(0))).thenReturn(attendanceAssignment);
-        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID.toString())).thenReturn(assignmentOptional);
+        when(canvasApiWrapperService.getSingleAssignment(COURSE_ID, oauthToken, CANVAS_ASSIGNMENT_ID)).thenReturn(assignmentOptional);
 
         canvasAssignmentAssistant.deleteAssignmentInCanvas(COURSE_ID, oauthToken);
-        verify(canvasApiWrapperService, times(1)).deleteAssignment(COURSE_ID.toString(), CANVAS_ASSIGNMENT_ID.toString(), oauthToken);
+        verify(canvasApiWrapperService, times(1)).deleteAssignment(COURSE_ID.toString(), CANVAS_ASSIGNMENT_ID, oauthToken);
     }
 
     @Test
