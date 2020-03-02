@@ -150,7 +150,14 @@
                         <tr>
                         <td><fmt:formatDate pattern="MM/dd/yyyy" value="${attendance.dateOfClass}"/></td>
                         <td>${attendance.status}</td>
-                        <td>${attendance.notes}</td>
+                        <c:choose>
+                            <c:when test="${showNotes || !isStudent}">
+                                <td>${attendance.notes}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>&nbsp;</td>
+                            </c:otherwise>
+                        </c:choose>
                         </tr>
                     </c:if>
                 </c:forEach>
