@@ -125,6 +125,8 @@ public class StudentSummaryController extends AttendanceBaseController {
                     .collect(Collectors.toList());
         }
 
+
+
         createAssignmentSummary(entries, page, assignment);
 
         List<LtiLaunchData.InstitutionRole> institutionRoles = canvasService.getRoles();
@@ -132,6 +134,8 @@ public class StudentSummaryController extends AttendanceBaseController {
                 .filter(institutionRole -> institutionRole.equals(LtiLaunchData.InstitutionRole.Learner))
                 .findFirst()
                 .ifPresent(role -> page.addObject("isStudent", true));
+
+        page.addObject("showNotes", courseConfigurationForm.getShowNotesToStudents());
 
         page.addObject("student", student);
         page.addObject("sectionId", sectionId);
