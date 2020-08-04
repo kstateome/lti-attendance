@@ -52,6 +52,7 @@ public class AppConfig {
                 .add(LtiLaunchData.InstitutionRole.Instructor)
                 .add(LtiLaunchData.InstitutionRole.TeachingAssistant)
                 .add(LtiLaunchData.InstitutionRole.Learner)
+                .add(LtiLaunchData.InstitutionRole.Designer)
                 .add(LtiLaunchData.InstitutionRole.Administrator).build();
         return new RoleChecker(validRoles);
     }
