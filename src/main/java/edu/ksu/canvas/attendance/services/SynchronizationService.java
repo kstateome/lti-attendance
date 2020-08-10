@@ -63,7 +63,9 @@ public class SynchronizationService {
         OauthToken token = ltiSessionService.getLtiSession().getOauthToken();
 
         List<LtiLaunchData.InstitutionRole> roleList = canvasService.getRoles();
-        boolean hasOneAuthorityRole = roleList.contains(LtiLaunchData.InstitutionRole.Instructor) || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant);
+        boolean hasOneAuthorityRole = roleList.contains(LtiLaunchData.InstitutionRole.Instructor)
+            || roleList.contains(LtiLaunchData.InstitutionRole.TeachingAssistant)
+            || roleList.contains(LtiLaunchData.InstitutionRole.ContentDeveloper);
 
         if(roleList.contains(LtiLaunchData.InstitutionRole.Learner) && !hasOneAuthorityRole) {
             ConfigItem adminToken = configRepository.findByLtiApplicationAndKey("Attendance", "admin_token");
