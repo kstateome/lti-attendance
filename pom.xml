@@ -104,11 +104,9 @@
                     <port>${wildfly.port}</port>
                     <username>${wildfly.user}</username>
                     <password>${wildfly.pass}</password>
-                    <domain>
-                        <server-groups>
-                            <server-group>blue_cluster_a</server-group>
-                        </server-groups>
-                    </domain>
+                    <server-groups>
+                        <server-group>blue_cluster_a</server-group>
+                    </server-groups>
                     <filename>${project.artifactId}-${project.version}.${project.packaging}</filename>
                     <execute-commands>
                         <batch>true</batch>
