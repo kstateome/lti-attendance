@@ -38,7 +38,7 @@ pipeline {
                 changed {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                            itsChat Constants.BUILD_WEBHOOK_URL, message: "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                         }
                     }
                 }
