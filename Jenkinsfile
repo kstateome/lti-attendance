@@ -1,3 +1,6 @@
+@Library('jenkins-shared-libs')
+import edu.ksu.jenkins.*
+
 pipeline {
     agent any
     environment {
