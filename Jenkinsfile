@@ -33,12 +33,12 @@ pipeline {
             }
             post {
                 failure {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance did *not compile* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance did *not compile* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Compilation Failed!"
                 }
                 changed {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Build finished"
                         }
                     }
                 }
@@ -61,15 +61,15 @@ pipeline {
                     junit '**/target/surefire-reports/*.xml'
                 }
                 failure {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Unit Tests Failed"
                 }
                 unstable {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Unit Tests Unstable"
                 }
                 changed {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing unit tests on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing unit tests on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Unit Tests Passed"
                         }
                     }
                 }
@@ -88,10 +88,10 @@ pipeline {
             }
             post {
                 success {
-                    itsChat Constants.DEFAULT_CHANNEL, "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Deployed to Test"
                 }
                 failure {
-                    itsChat Constants.DEFAULT_CHANNEL, "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Test Deploy Failed"
                 }
             }
         }
@@ -113,7 +113,7 @@ pipeline {
             }
             post {
                 success {
-                    itsChat Constants.BUILD_WEBHOOK_URL, "Successfully generated Maven site documentation for Attendance: https://jenkins.ome.ksu.edu/maven-site/lti-attendance/"
+                    itsChat Constants.BUILD_WEBHOOK_URL, "Successfully generated Maven site documentation for Attendance: https://jenkins.ome.ksu.edu/maven-site/lti-attendance/", "Maven Site Deployed"
                 }
             }
         }
@@ -130,16 +130,16 @@ pipeline {
                     script {
                         if (currentBuild.currentResult == 'SUCCESS') {
                             if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
-                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Integration tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Integration tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Integration Tests Passed"
                             }
                         }
                     }
                 }
                 failure {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Integration Tests Failed"
                 }
                 unstable {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Integration Tests Unstable"
                 }
             }
         }
@@ -156,16 +156,16 @@ pipeline {
                     script {
                         if (currentBuild.currentResult == 'SUCCESS') {
                             if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
-                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Arquillian tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Arquillian tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Arquillian Tests Passed"
                             }
                         }
                     }
                 }
                 failure {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Arquillian Tests Failed"
                 }
                 unstable {
-                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", "Arquillian Tests Unstable"
                 }
             }
         }
@@ -178,7 +178,7 @@ pipeline {
             steps {
                 sh 'mvn --batch-mode -DdryRun=true release:clean release:prepare release:perform'
                 // This must be run in an agent in order to resolve the version. There is probably a better alternative that we could use in the future
-                itsChat Constants.RELEASE_CONFIRM_CHANNEL, "Release Dry Run of ${JOB_NAME} ${version()} finished. Continue Release? - ${BUILD_URL}console"
+                itsChat Constants.RELEASE_CONFIRM_CHANNEL, "Release Dry Run of ${JOB_NAME} ${version()} finished. Continue Release? - ${BUILD_URL}console", "Confirm Release"
             }
         }
 
@@ -203,7 +203,7 @@ pipeline {
 
             post {
                 success {
-                    itsChat Constants.RELEASE_BUILT_NOTIFICATION_CHANNEL, "Successfully built release  ${version()}\n Build: ${BUILD_URL}"
+                    itsChat Constants.RELEASE_BUILT_NOTIFICATION_CHANNEL, "Successfully built release  ${version()}\n Build: ${BUILD_URL}", "Release Built"
                 }
             }
         }
