@@ -12,15 +12,6 @@ pipeline {
 
         // Regex for branches which Jenkins should prompt for test deployment
         promptTestBranchRegex = "merge-.*"
-
-        // Channels for rocket chat notifications
-        testDeployPromptChannel = "javajavajava"
-        releaseConfirmChannel = "javajavajava"
-        buildFailureNotificationChannel = "javabuilds"
-        releaseBuiltNotificationChannel = "javajavajava"
-
-        // Avatar to use for Rocket Chat messages
-        JENKINS_AVATAR_URL = "https://jenkins.ome.ksu.edu/static/ce7853c9/images/headshot.png"
     }
     tools {
         maven "Maven 3.5"
@@ -39,12 +30,12 @@ pipeline {
             }
             post {
                 failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance did *not compile* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance did *not compile* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 changed {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                            rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                            itsChat Constants.BUILD_WEBHOOK_URL, message: "Attendance is now *compiling* on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                         }
                     }
                 }
@@ -67,15 +58,15 @@ pipeline {
                     junit '**/target/surefire-reports/*.xml'
                 }
                 failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 unstable {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had unit test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 changed {
                     script {
                         if (currentBuild.result == null || currentBuild.result == 'SUCCESS') {
-                            rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance now has passing unit tests on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                            itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing unit tests on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                         }
                     }
                 }
@@ -94,10 +85,10 @@ pipeline {
             }
             post {
                 success {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Successfully deployed Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javajavajava', message: "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Failed to deploy Attendance to ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
             }
         }
@@ -119,7 +110,7 @@ pipeline {
             }
             post {
                 success {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", channel: 'javabuilds', message: "Successfully generated Maven site documentation for Attendance: https://jenkins.ome.ksu.edu/maven-site/lti-attendance/", rawMessage: true
+                    itsChat Constants.BUILD_WEBHOOK_URL, "Successfully generated Maven site documentation for Attendance: https://jenkins.ome.ksu.edu/maven-site/lti-attendance/"
                 }
             }
         }
@@ -136,16 +127,16 @@ pipeline {
                     script {
                         if (currentBuild.currentResult == 'SUCCESS') {
                             if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
-                                rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance now has passing Integration tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Integration tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                             }
                         }
                     }
                 }
                 failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 unstable {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Integration test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
             }
         }
@@ -162,16 +153,16 @@ pipeline {
                     script {
                         if (currentBuild.currentResult == 'SUCCESS') {
                             if (currentBuild.previousBuild == null || currentBuild.previousBuild.result != 'SUCCESS') {
-                                rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance now has passing Arquillian tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                                itsChat Constants.BUILD_WEBHOOK_URL, "Attendance now has passing Arquillian tests ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                             }
                         }
                     }
                 }
                 failure {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
                 unstable {
-                    rocketSend avatar: "$JENKINS_AVATAR_URL", message: "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.DEFAULT_CHANNEL, "Attendance had Arquillian test failures on branch ${env.BRANCH_NAME} \nRecent Changes - ${getChangeString(10)}\nBuild: ${BUILD_URL}"
                 }
             }
         }
@@ -184,7 +175,7 @@ pipeline {
             steps {
                 sh 'mvn --batch-mode -DdryRun=true release:clean release:prepare release:perform'
                 // This must be run in an agent in order to resolve the version. There is probably a better alternative that we could use in the future
-                rocketSend avatar: "${env.JENKINS_AVATAR_URL}", channel: "${env.releaseConfirmChannel}", message: "Release Dry Run of ${JOB_NAME} ${version()} finished. Continue Release? - ${BUILD_URL}console", rawMessage: true
+                itsChat Constants.RELEASE_CONFIRM_CHANNEL, "Release Dry Run of ${JOB_NAME} ${version()} finished. Continue Release? - ${BUILD_URL}console"
             }
         }
 
@@ -209,7 +200,7 @@ pipeline {
 
             post {
                 success {
-                    rocketSend avatar: "${env.JENKINS_AVATAR_URL}", channel: "${env.releaseBuiltNotificationChannel}", message: "Successfully built release  ${version()}\n Build: ${BUILD_URL}", rawMessage: true
+                    itsChat Constants.RELEASE_BUILT_NOTIFICATION_CHANNEL, "Successfully built release  ${version()}\n Build: ${BUILD_URL}"
                 }
             }
         }
