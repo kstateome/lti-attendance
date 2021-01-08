@@ -52,7 +52,7 @@
             <plugin> <!-- copy .jsp files from lti-common -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -61,7 +61,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.3.2</version>
+                <version>6.0.4</version>
                 <configuration>
                     <skipSystemScope>true</skipSystemScope>
                 </configuration>
@@ -69,7 +69,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <goals>deploy</goals>
                     <tagNameFormat>@{version}</tagNameFormat>
@@ -78,12 +78,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.9.1</version>
             </plugin>
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>
-                <version>1.1.5</version>
+                <version>1.1.10</version>
                 <executions>
                     <execution>
                         <id>generate-rebel-xml</id>
@@ -97,7 +97,7 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.1.0.Final</version>
+                <version>2.0.2.Final</version>
                 <configuration>
                     <match-pattern>${project.artifactId}-.*.${project.packaging}</match-pattern>
                     <hostname>${wildfly.dc.hostname}</hostname>
