@@ -545,7 +545,7 @@
         <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.0.24</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
