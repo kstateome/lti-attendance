@@ -172,7 +172,7 @@ public class SynchronizationServiceUTest {
         Section section = new Section();
         section.setName(expectedSectionName);
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
+        section.setCourseId(expectedCanvasCourseId);
         sections.add(section);
         AttendanceSection expectedDbSection = new AttendanceSection();
         ArgumentCaptor<AttendanceSection> capturedSection = ArgumentCaptor.forClass(AttendanceSection.class);
@@ -201,7 +201,7 @@ public class SynchronizationServiceUTest {
         Section section = new Section();
         section.setName(expectedSectionName);
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
+        section.setCourseId(expectedCanvasCourseId);
         sections.add(section);
         AttendanceSection expectedDbSection = new AttendanceSection();
         expectedDbSection.setName(previousSectionName);
@@ -238,7 +238,7 @@ public class SynchronizationServiceUTest {
         enrollments.add(enrollment);
         Section section = new Section();
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
+        section.setCourseId(expectedCanvasCourseId);
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
         ArgumentCaptor<AttendanceStudent> capturedStudent = ArgumentCaptor.forClass(AttendanceStudent.class);
@@ -287,7 +287,7 @@ public class SynchronizationServiceUTest {
         enrollments.add(enrollment);
         Section section = new Section();
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
+        section.setCourseId(expectedCanvasCourseId);
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, enrollments);
 
@@ -313,7 +313,7 @@ public class SynchronizationServiceUTest {
 
         Section section = new Section();
         section.setId(expectedCanvasSectionId);
-        section.setCourseId(expectedCanvasCourseId.intValue());
+        section.setCourseId(expectedCanvasCourseId);
         Map<Section, List<Enrollment>> canvasSectionMap = new HashMap<>();
         canvasSectionMap.put(section, Collections.emptyList());
         ArgumentCaptor<AttendanceStudent> capturedStudent = ArgumentCaptor.forClass(AttendanceStudent.class);

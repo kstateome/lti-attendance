@@ -142,7 +142,7 @@ public class CanvasApiWrapperService {
 
     public Optional<Assignment> getSingleAssignment(Long courseId, OauthToken oauthToken, Long assignmentId) throws IOException {
         AssignmentReader assignmentReader = canvasApiFactory.getReader(AssignmentReader.class, oauthToken);
-        GetSingleAssignmentOptions singleAssignmentOptions = new GetSingleAssignmentOptions(courseId.toString(), Math.toIntExact(assignmentId));
+        GetSingleAssignmentOptions singleAssignmentOptions = new GetSingleAssignmentOptions(courseId.toString(), assignmentId);
         try{
             return assignmentReader.getSingleAssignment(singleAssignmentOptions);
         } catch(Exception e){
@@ -173,7 +173,7 @@ public class CanvasApiWrapperService {
 
     public void deleteAssignment(String courseId, Long canvasAssignmentId, OauthToken oauthToken) throws IOException {
         AssignmentWriter assignmentWriter = canvasApiFactory.getWriter(AssignmentWriter.class, oauthToken);
-        assignmentWriter.deleteAssignment(courseId, Math.toIntExact(canvasAssignmentId));
+        assignmentWriter.deleteAssignment(courseId, canvasAssignmentId);
     }
 
     class EnrollmentOptionsFactory {
