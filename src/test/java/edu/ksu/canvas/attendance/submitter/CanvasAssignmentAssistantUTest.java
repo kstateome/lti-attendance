@@ -34,7 +34,7 @@ public class CanvasAssignmentAssistantUTest {
     private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistantUTest.class);
     private static final Long COURSE_ID = 2121212121L;
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
-    private static final Integer ASSIGNMENT_ID = 84848484;
+    private static final Long ASSIGNMENT_ID = 84848484L;
     private static final String ASSIGNMENT_NAME = "NAME OF THE ASSIGNMENT";
     private static final Double ASSIGNMENT_POINTS = 100.0;
     private static final Long CANVAS_ASSIGNMENT_ID = 514514514L;
@@ -85,7 +85,7 @@ public class CanvasAssignmentAssistantUTest {
         attendanceAssignment.setPresentPoints("100.0");
 
         assignment = new Assignment();
-        assignment.setId(Math.toIntExact(ASSIGNMENT_ID));
+        assignment.setId(ASSIGNMENT_ID);
         assignment.setName(attendanceAssignment.getAssignmentName());
         assignment.setPointsPossible(Double.valueOf(attendanceAssignment.getAssignmentPoints()));
         assignment.setCourseId(Long.toString(COURSE_ID));
