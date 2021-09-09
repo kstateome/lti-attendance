@@ -33,12 +33,12 @@
         <repository>
             <id>ome-appdev-release</id>
             <name>artifactory releases</name>
-            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-release</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-release</url>
         </repository>
         <snapshotRepository>
             <id>ome-appdev-snapshot</id>
             <name>artifactory snapshots</name>
-            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-snapshot</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-snapshot</url>
         </snapshotRepository>
         <site>
             <id>${project.artifactId}-site</id>
