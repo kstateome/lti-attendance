@@ -115,7 +115,7 @@ public class AssignmentSubmitter {
     private void submitSectionAttendances(boolean isSimpleAttendance, List<AttendanceSummaryModel> summaryForSections, List<AttendanceStudent> students, AttendanceAssignment attendanceAssignment, Long courseId, OauthToken oauthToken) throws AttendanceAssignmentException {
 
         Map<String, MultipleSubmissionsOptions.StudentSubmissionOption> studentMap;
-        MultipleSubmissionsOptions submissionOptions = new MultipleSubmissionsOptions(courseId.toString(), attendanceAssignment.getCanvasAssignmentId().intValue(), null);
+        MultipleSubmissionsOptions submissionOptions = new MultipleSubmissionsOptions(courseId.toString(), attendanceAssignment.getCanvasAssignmentId(), null);
         studentMap = new HashMap<>();
 
         for (AttendanceStudent student: students){

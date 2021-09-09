@@ -32,12 +32,12 @@
         <repository>
             <id>ome-appdev-release</id>
             <name>artifactory releases</name>
-            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-release</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-release</url>
         </repository>
         <snapshotRepository>
             <id>ome-appdev-snapshot</id>
             <name>artifactory snapshots</name>
-            <url>https://artifactory.ome.k-state.edu/artifactory/ome-appdev-snapshot</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-snapshot</url>
         </snapshotRepository>
         <site>
             <id>${project.artifactId}-site</id>
@@ -51,7 +51,7 @@
             <plugin> <!-- copy .jsp files from lti-common -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -60,7 +60,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.3.2</version>
+                <version>6.0.4</version>
                 <configuration>
                     <skipSystemScope>true</skipSystemScope>
                 </configuration>
@@ -68,7 +68,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <goals>deploy</goals>
                     <tagNameFormat>@{version}</tagNameFormat>
@@ -77,12 +77,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
+                <version>3.9.1</version>
             </plugin>
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>
-                <version>1.1.5</version>
+                <version>1.1.10</version>
                 <executions>
                     <execution>
                         <id>generate-rebel-xml</id>
@@ -96,18 +96,16 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
-                <version>1.1.0.Final</version>
+                <version>2.0.2.Final</version>
                 <configuration>
                     <match-pattern>${project.artifactId}-.*.${project.packaging}</match-pattern>
                     <hostname>${wildfly.dc.hostname}</hostname>
                     <port>${wildfly.port}</port>
                     <username>${wildfly.user}</username>
                     <password>${wildfly.pass}</password>
-                    <domain>
-                        <server-groups>
-                            <server-group>blue_cluster_a</server-group>
-                        </server-groups>
-                    </domain>
+                    <server-groups>
+                        <server-group>blue_cluster_a</server-group>
+                    </server-groups>
                     <filename>${project.artifactId}-${project.version}.${project.packaging}</filename>
                     <execute-commands>
                         <batch>true</batch>
@@ -546,12 +544,12 @@
         <dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
-            <version>1.0.24</version>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-launch</artifactId>
-            <version>1.4.2</version>
+            <version>1.4.3</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

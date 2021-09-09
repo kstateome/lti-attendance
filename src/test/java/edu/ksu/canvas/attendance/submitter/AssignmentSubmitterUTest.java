@@ -75,7 +75,7 @@ public class AssignmentSubmitterUTest {
     private static final String ASSIGNMENT_NAME_2 = "NAME OF THE SECOND ASSIGNMENT";
     private static final Double ASSIGNMENT_POINTS = 100.0;
     private static final long CANVAS_ASSIGNMENT_ID = 514514514L;
-    private static final int PROGRESS_ID = 19781971;
+    private static final long PROGRESS_ID = 19781971L;
     private static final String SECTION_1_NAME = "SECTION NUMBER 1";
     private static final String SECTION_2_NAME = "SECTION NUMBER 2";
 

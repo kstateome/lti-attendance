@@ -125,7 +125,7 @@ public class ArquillianSpringMVCConfig extends WebMvcConfigurerAdapter {
     private Section buildFakeSection() {
         Section section = new Section();
         section.setId(10L);
-        section.setCourseId(COURSE_ID_EXISTING.intValue());
+        section.setCourseId(COURSE_ID_EXISTING);
         return section;
     }
 
