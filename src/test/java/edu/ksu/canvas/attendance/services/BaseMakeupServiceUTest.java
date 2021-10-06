@@ -2,10 +2,10 @@ package edu.ksu.canvas.attendance.services;
 
 import org.junit.Before;
 import org.mockito.Mock;
-import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
 import edu.ksu.canvas.attendance.repository.MakeupRepository;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
 public class BaseMakeupServiceUTest {
@@ -22,8 +22,8 @@ public class BaseMakeupServiceUTest {
     @Before
     public void setup() {
         makeupService = new MakeupService();
-        Whitebox.setInternalState(makeupService, mockMakeupRepository);
-        Whitebox.setInternalState(makeupService, mockStudentRepository);
+        ReflectionTestUtils.setField(makeupService, "makeupRepository", mockMakeupRepository);
+        ReflectionTestUtils.setField(makeupService, "attendanceStudentRepository", mockStudentRepository);
     }
     
 }

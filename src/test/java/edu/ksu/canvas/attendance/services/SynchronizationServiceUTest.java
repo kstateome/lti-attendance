@@ -22,11 +22,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
-import org.powermock.reflect.internal.WhiteboxImpl;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -84,12 +84,12 @@ public class SynchronizationServiceUTest {
     @Before
     public void setup() {
         synchronizationService = new SynchronizationService();
-        Whitebox.setInternalState(synchronizationService, mockCourseRepository);
-        Whitebox.setInternalState(synchronizationService, mockStudentRepository);
-        Whitebox.setInternalState(synchronizationService, mockSectionRepository);
-        Whitebox.setInternalState(synchronizationService, mockCanvasService);
-        Whitebox.setInternalState(synchronizationService, mockLtiSessionService);
-        Whitebox.setInternalState(synchronizationService, mockConfigRepository);
+        ReflectionTestUtils.setField(synchronizationService, "attendanceCourseRepository", mockCourseRepository);
+        ReflectionTestUtils.setField(synchronizationService, "studentRepository", mockStudentRepository);
+        ReflectionTestUtils.setField(synchronizationService, "sectionRepository", mockSectionRepository);
+        ReflectionTestUtils.setField(synchronizationService, "canvasService", mockCanvasService);
+        ReflectionTestUtils.setField(synchronizationService, "ltiSessionService", mockLtiSessionService);
+        ReflectionTestUtils.setField(synchronizationService, "configRepository", mockConfigRepository);
     }
 
     @Test
@@ -118,10 +118,10 @@ public class SynchronizationServiceUTest {
         OauthToken oauthToken = new RefreshableOauthToken(mockOauthTokenRefresher, ARBITRARY_REFRESH_TOKEN, ARBITRARY_ACCESS_TOKEN);
         LtiSession ltiSession = new LtiSession();
         ltiSession.setOauthToken(oauthToken);
-        Whitebox.setInternalState(neuteredSync, mockCourseRepository);
-        Whitebox.setInternalState(neuteredSync, mockCanvasService);
-        Whitebox.setInternalState(neuteredSync, mockLtiSessionService);
-        Whitebox.setInternalState(neuteredSync, mockConfigRepository);
+        ReflectionTestUtils.setField(neuteredSync, "attendanceCourseRepository", mockCourseRepository);
+        ReflectionTestUtils.setField(neuteredSync, "canvasService", mockCanvasService);
+        ReflectionTestUtils.setField(neuteredSync, "ltiSessionService", mockLtiSessionService);
+        ReflectionTestUtils.setField(neuteredSync, "configRepository", mockConfigRepository);
         SynchronizationService spy = spy(neuteredSync);
         when(mockCourseRepository.findByCanvasCourseId(canvasCourseId)).thenReturn(null);
         when(mockLtiSessionService.getLtiSession()).thenReturn(ltiSession);
@@ -155,7 +155,7 @@ public class SynchronizationServiceUTest {
         AttendanceCourse expectedDbCourse = new AttendanceCourse();
 
         when(mockCourseRepository.save(any(AttendanceCourse.class))).thenReturn(expectedDbCourse);
-        AttendanceCourse actualCourse = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_COURSE_TO_DB, expectedCanvasCourseId);
+        AttendanceCourse actualCourse = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_COURSE_TO_DB, expectedCanvasCourseId);
 
         verify(mockCourseRepository, atLeastOnce()).save(capturedCourse.capture());
         assertEquals(expectedCanvasCourseId, capturedCourse.getValue().getCanvasCourseId());
@@ -180,7 +180,7 @@ public class SynchronizationServiceUTest {
         ArgumentCaptor<AttendanceSection> capturedSection = ArgumentCaptor.forClass(AttendanceSection.class);
 
         when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
-        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
+        List<AttendanceSection> actualSections = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(capturedSection.capture());
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));
@@ -212,7 +212,7 @@ public class SynchronizationServiceUTest {
 
         when(mockSectionRepository.findByCanvasSectionId(expectedCanvasSectionId)).thenReturn(expectedDbSection);
         when(mockSectionRepository.save(any(AttendanceSection.class))).thenReturn(expectedDbSection);
-        List<AttendanceSection> actualSections = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
+        List<AttendanceSection> actualSections = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_SECTIONS_TO_DB, sections);
 
         verify(mockSectionRepository, atLeastOnce()).save(expectedDbSection);
         assertThat(actualSections.size(), is(equalTo(expectedListSize)));
@@ -247,7 +247,7 @@ public class SynchronizationServiceUTest {
         AttendanceStudent expectedStudentSavedToDb = new AttendanceStudent();
 
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentSavedToDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
+        List<AttendanceStudent> actualStudents = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
 
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -295,7 +295,7 @@ public class SynchronizationServiceUTest {
 
         when(mockStudentRepository.findByCanvasSectionIdOrderByNameAsc(expectedCanvasSectionId)).thenReturn(studentsInDbForCourse);
         when(mockStudentRepository.save(any(AttendanceStudent.class))).thenReturn(expectedStudentInDb);
-        List<AttendanceStudent> actualStudents = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
+        List<AttendanceStudent> actualStudents = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
 
         verify(mockStudentRepository, atLeastOnce()).save(expectedStudentInDb);
         //assertThat(actualStudents.size(), is(equalTo(expectedStudentsSavedToDb)));
@@ -327,11 +327,11 @@ public class SynchronizationServiceUTest {
         droppedStudent.setDeleted(true);
         when(mockStudentRepository.save(
                 argThat(
-                        Matchers.both(
+                    (Matchers.both(
                                 Matchers.isA(AttendanceStudent.class)).
-                                and(Matchers.hasProperty("deleted", Matchers.hasValue(true))))))
+                                and(Matchers.hasProperty("deleted", Matchers.hasValue(true)))))))
                 .thenReturn(droppedStudent);
-        List<AttendanceStudent> secondSetOfStudents = WhiteboxImpl.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
+        List<AttendanceStudent> secondSetOfStudents = ReflectionTestUtils.invokeMethod(synchronizationService, SYNC_STUDENTS_TO_DB, expectedCanvasCourseId, canvasSectionMap, anyBoolean());
         verify(mockStudentRepository, atLeastOnce()).save(capturedStudent.capture());
         assertEquals(droppedStudent, secondSetOfStudents.get(0));
         assertTrue("Dropped student should be marked as deleted", secondSetOfStudents.get(0).getDeleted());

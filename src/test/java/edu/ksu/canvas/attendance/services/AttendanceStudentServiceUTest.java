@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.entity.AttendanceStudent;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -26,7 +26,7 @@ public class AttendanceStudentServiceUTest {
     @Before
     public void setup() {
         studentService = new AttendanceStudentService();
-        Whitebox.setInternalState(studentService, mockStudentRepository);
+        ReflectionTestUtils.setField(studentService, "studentRepository", mockStudentRepository);
     }
     
     
