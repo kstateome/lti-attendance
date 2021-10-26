@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,8 @@ public class AttendanceSectionServiceUTest {
     @Before
     public void setup() {
         sectionService = new AttendanceSectionService();
-        Whitebox.setInternalState(sectionService, mockSectionRepository);
-        Whitebox.setInternalState(sectionService, mockAssignmentRepository);
+        ReflectionTestUtils.setField(sectionService, "sectionRepository", mockSectionRepository);
+        ReflectionTestUtils.setField(sectionService, "assignmentRepository", mockAssignmentRepository);
     }
     
     

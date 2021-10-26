@@ -14,8 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
-import org.powermock.reflect.internal.WhiteboxImpl;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CanvasApiWrapperServiceUTest {
@@ -51,8 +50,8 @@ public class CanvasApiWrapperServiceUTest {
     @Before
     public void setup() throws NoLtiSessionException {
         canvasService = new CanvasApiWrapperService();
-        Whitebox.setInternalState(canvasService, mockLtiSessionService);
-        Whitebox.setInternalState(canvasService, mockCanvasApiFactory);
+        ReflectionTestUtils.setField(canvasService, "ltiSessionService", mockLtiSessionService);
+        ReflectionTestUtils.setField(canvasService, "canvasApiFactory", mockCanvasApiFactory);
         canvasService.setEnrollmentOptionsFactory(enrollmentOptionsFactory);
         
         when(mockLtiSessionService.getLtiSession()).thenReturn(mockLtiSession);
@@ -96,7 +95,7 @@ public class CanvasApiWrapperServiceUTest {
         when(enrollmentOptionsFactory.buildEnrollmentOptions(eq(secondSection))).thenReturn(enrollmentOptions2);
         when(mockEnrollmentReader.getSectionEnrollments(enrollmentOptions1)).thenReturn(firstSectionEnrollments);
         when(mockEnrollmentReader.getSectionEnrollments(enrollmentOptions2)).thenReturn(secondSectionEnrollments);
-        Map<Section, List<Enrollment>> actualMap = WhiteboxImpl.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections, mockLtiSession.getOauthToken());
+        Map<Section, List<Enrollment>> actualMap = ReflectionTestUtils.invokeMethod(canvasService, "getEnrollmentsFromCanvas", sections, mockLtiSession.getOauthToken());
 
         assertEquals(expectedMapSize, actualMap.keySet().size());
         assertThat(actualMap.keySet(), containsInAnyOrder(firstSection, secondSection));

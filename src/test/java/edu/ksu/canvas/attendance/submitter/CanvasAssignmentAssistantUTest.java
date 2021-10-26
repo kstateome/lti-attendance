@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,10 +103,10 @@ public class CanvasAssignmentAssistantUTest {
         sectionList.add(attendanceSection);
         attendanceAssignment.setAttendanceSection(attendanceSection);
 
-        Whitebox.setInternalState(canvasAssignmentAssistant, "assignmentService", assignmentService);
-        Whitebox.setInternalState(canvasAssignmentAssistant, "attendanceSectionService", attendanceSectionService);
-        Whitebox.setInternalState(canvasAssignmentAssistant, "assignmentRepository", assignmentRepository);
-        Whitebox.setInternalState(canvasAssignmentAssistant, "canvasApiWrapperService", canvasApiWrapperService);
+        ReflectionTestUtils.setField(canvasAssignmentAssistant, "assignmentService", assignmentService);
+        ReflectionTestUtils.setField(canvasAssignmentAssistant, "attendanceSectionService", attendanceSectionService);
+        ReflectionTestUtils.setField(canvasAssignmentAssistant, "assignmentRepository", assignmentRepository);
+        ReflectionTestUtils.setField(canvasAssignmentAssistant, "canvasApiWrapperService", canvasApiWrapperService);
     }
 
     @Test

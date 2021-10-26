@@ -48,13 +48,12 @@
 
     <build>
         <plugins>
-            <plugin> <!-- copy .jsp files from lti-common -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>11</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -304,7 +303,7 @@
             <properties>
                 <browser>phantomjs</browser>
                 <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
-                <org.wildfly.version>8.2.0.Final</org.wildfly.version>
+                <org.wildfly.version>15.0.1.Final</org.wildfly.version>
                 <org.wildfly.groupId>org.wildfly</org.wildfly.groupId>
                 <org.wildfly.artifactId>wildfly-servlet-feature-pack</org.wildfly.artifactId>
                 <org.wildfly.dist-name>wildfly-${org.wildfly.version}</org.wildfly.dist-name>
@@ -343,7 +342,7 @@
                                         <artifactItem>
                                             <groupId>org.wildfly</groupId>
                                             <artifactId>wildfly-dist</artifactId>
-                                            <version>8.2.0.Final</version>
+                                            <version>15.0.1.Final</version>
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
                                             <outputDirectory>target</outputDirectory>
@@ -407,7 +406,7 @@
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-dist</artifactId>
-                <version>8.2.0.Final</version>
+                <version>15.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
@@ -498,9 +497,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wildfly</groupId>
+            <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <version>8.2.0.Final</version>
+            <version>2.2.0.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -510,9 +509,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wildfly</groupId>
+            <groupId>org.wildfly.common</groupId>
+            <artifactId>wildfly-common</artifactId>
+            <version>1.5.4.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-protocol</artifactId>
-            <version>8.2.0.Final</version>
+            <version>15.0.1.Final</version>
             <scope>test</scope>
         </dependency>
         <!-- End of Arquillian related dependencies for running the tests -->
@@ -549,7 +554,7 @@
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-launch</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.4</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -610,7 +615,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
