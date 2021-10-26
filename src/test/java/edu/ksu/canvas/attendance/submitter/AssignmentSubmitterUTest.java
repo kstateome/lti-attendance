@@ -24,8 +24,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -254,15 +254,15 @@ public class AssignmentSubmitterUTest {
         progress.setWorkflowState("queued");
         progressOptional = Optional.of(progress);
 
-        Whitebox.setInternalState(assignmentSubmitter, "canvasAssignmentAssistant", canvasAssignmentAssistant);
-        Whitebox.setInternalState(assignmentSubmitter, "assignmentService", assignmentService);
-        Whitebox.setInternalState(assignmentSubmitter, "sectionService", sectionService);
-        Whitebox.setInternalState(assignmentSubmitter, "attendanceCourseService", attendanceCourseService);
-        Whitebox.setInternalState(assignmentSubmitter, "attendanceService", attendanceService);
-        Whitebox.setInternalState(assignmentSubmitter, "canvasApiWrapperService", canvasApiWrapperService);
-        Whitebox.setInternalState(assignmentSubmitter, "assignmentValidator", assignmentValidator);
-        Whitebox.setInternalState(assignmentSubmitter, "studentRepository", studentRepository);
-        Whitebox.setInternalState(assignmentSubmitter, "studentService", studentService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "canvasAssignmentAssistant", canvasAssignmentAssistant);
+        ReflectionTestUtils.setField(assignmentSubmitter, "assignmentService", assignmentService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "sectionService", sectionService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "attendanceCourseService", attendanceCourseService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "attendanceService", attendanceService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "canvasApiWrapperService", canvasApiWrapperService);
+        ReflectionTestUtils.setField(assignmentSubmitter, "assignmentValidator", assignmentValidator);
+        ReflectionTestUtils.setField(assignmentSubmitter, "studentRepository", studentRepository);
+        ReflectionTestUtils.setField(assignmentSubmitter, "studentService", studentService);
     }
 
     @Test

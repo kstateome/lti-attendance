@@ -8,12 +8,12 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.form.CourseConfigurationForm;
 import edu.ksu.canvas.attendance.repository.AttendanceCourseRepository;
 
 import org.apache.commons.lang3.exception.ContextedRuntimeException;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -31,7 +31,7 @@ public class AttendanceCourseServiceUTest {
     @Before
     public void setup() {
         courseService = new AttendanceCourseService();
-        Whitebox.setInternalState(courseService, mockCourseRepository);
+        ReflectionTestUtils.setField(courseService, "attendanceCourseRepository", mockCourseRepository);
     }
     
     @Test

@@ -8,10 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.powermock.reflect.Whitebox;
 
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.repository.ReportRepository;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -29,7 +29,7 @@ public class ReportServiceUTest {
     @Before
     public void setup() {
         reportService = new ReportService();
-        Whitebox.setInternalState(reportService,  mockReportRepository);
+        ReflectionTestUtils.setField(reportService, "reportRepository", mockReportRepository);
     }
     
     
