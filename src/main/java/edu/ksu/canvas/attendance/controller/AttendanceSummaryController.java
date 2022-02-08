@@ -10,7 +10,8 @@ import edu.ksu.canvas.attendance.services.AttendanceSummaryCSVService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ import java.util.*;
 @RequestMapping("/attendanceSummary")
 public class AttendanceSummaryController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(AttendanceSummaryController.class);
+    private static final Logger LOG = LogManager.getLogger(AttendanceSummaryController.class);
 
     @Autowired
     private ReportService reportService;

@@ -9,7 +9,8 @@ import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class CanvasAssignmentAssistantUTest {
 
-    private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistantUTest.class);
+    private static final Logger LOG = LogManager.getLogger(CanvasAssignmentAssistantUTest.class);
     private static final Long COURSE_ID = 2121212121L;
     private static final String OAUTH_STRING = "sdfsdfSDFSDFsdfsdFSDFsdfSDFSDgfsdSFDFSDF";
     private static final Long ASSIGNMENT_ID = 84848484L;

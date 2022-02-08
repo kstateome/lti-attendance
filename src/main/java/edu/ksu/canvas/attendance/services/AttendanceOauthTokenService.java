@@ -3,7 +3,8 @@ package edu.ksu.canvas.attendance.services;
 import edu.ksu.canvas.attendance.entity.lti.OauthToken;
 import edu.ksu.canvas.attendance.repository.OauthTokenRepository;
 import edu.ksu.lti.launch.service.OauthTokenService;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class AttendanceOauthTokenService implements OauthTokenService{
 
     private static final String APPLICATION_NAME = "Attendance";
-    private static final Logger LOG = Logger.getLogger(AttendanceOauthTokenService.class);
+    private static final Logger LOG = LogManager.getLogger(AttendanceOauthTokenService.class);
 
     @Autowired
     private OauthTokenRepository oauthTokenRepository;

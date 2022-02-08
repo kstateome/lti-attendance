@@ -8,7 +8,8 @@ import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.attendance.exception.AttendanceAssignmentException.Error;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Component
 public class AssignmentValidator {
 
-    private static final Logger LOG = Logger.getLogger(AssignmentValidator.class);
+    private static final Logger LOG = LogManager.getLogger(AssignmentValidator.class);
 
     public AttendanceAssignment validateAttendanceAssignment(Long courseId, AttendanceAssignment attendanceAssignment, CanvasApiWrapperService canvasApiWrapperService, OauthToken oauthToken) throws AttendanceAssignmentException {
 
