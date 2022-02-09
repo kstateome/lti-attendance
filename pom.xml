@@ -556,7 +556,7 @@
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-launch</artifactId>
-            <version>1.5.0-SNAPSHOT</version>
+            <version>1.5.0-LOG4J-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
