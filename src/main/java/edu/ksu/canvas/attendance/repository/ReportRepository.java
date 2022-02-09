@@ -2,7 +2,8 @@ package edu.ksu.canvas.attendance.repository;
 
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel;
 import edu.ksu.canvas.attendance.model.AttendanceSummaryModel.Entry;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public class ReportRepository {
 
-    private static final Logger LOG = Logger.getLogger(ReportRepository.class);
+    private static final Logger LOG = LogManager.getLogger(ReportRepository.class);
 
 
     @PersistenceContext

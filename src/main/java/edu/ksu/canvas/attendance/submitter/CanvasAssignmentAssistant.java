@@ -10,7 +10,8 @@ import edu.ksu.canvas.attendance.services.AttendanceSectionService;
 import edu.ksu.canvas.attendance.services.CanvasApiWrapperService;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.OauthToken;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ import java.util.Optional;
 @Scope(value="session")
 public class CanvasAssignmentAssistant {
 
-    private static final Logger LOG = Logger.getLogger(CanvasAssignmentAssistant.class);
+    private static final Logger LOG = LogManager.getLogger(CanvasAssignmentAssistant.class);
     
     @Autowired
     private AttendanceAssignmentService assignmentService;

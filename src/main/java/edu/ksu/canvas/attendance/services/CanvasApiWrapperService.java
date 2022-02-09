@@ -22,7 +22,8 @@ import edu.ksu.lti.launch.service.LtiSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,7 +33,7 @@ import java.util.*;
 @Scope(value="session")
 public class CanvasApiWrapperService {
 
-    private static final Logger LOG = Logger.getLogger(CanvasApiWrapperService.class);
+    private static final Logger LOG = LogManager.getLogger(CanvasApiWrapperService.class);
 
     @Autowired
     protected LtiLaunch ltiLaunch;
