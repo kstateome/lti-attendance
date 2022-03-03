@@ -13,7 +13,8 @@ import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/studentSummary")
 public class StudentSummaryController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(StudentSummaryController.class);
+    private static final Logger LOG = LogManager.getLogger(StudentSummaryController.class);
 
     @Autowired
     private MakeupService makeupService;

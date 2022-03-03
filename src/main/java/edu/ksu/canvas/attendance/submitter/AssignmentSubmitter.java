@@ -11,7 +11,8 @@ import edu.ksu.canvas.attendance.services.*;
 import edu.ksu.canvas.model.Progress;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.MultipleSubmissionsOptions;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import java.util.*;
 @Component
 @Scope(value="session")
 public class AssignmentSubmitter {
-    private static final Logger LOG = Logger.getLogger(AssignmentSubmitter.class);
+    private static final Logger LOG = LogManager.getLogger(AssignmentSubmitter.class);
 
     @Autowired
     private AttendanceAssignmentService assignmentService;

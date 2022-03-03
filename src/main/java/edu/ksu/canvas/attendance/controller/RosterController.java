@@ -10,7 +10,8 @@ import edu.ksu.canvas.attendance.services.AttendanceService;
 import edu.ksu.canvas.attendance.util.DropDownOrganizer;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -33,7 +34,7 @@ import java.util.List;
 @RequestMapping("/roster")
 public class RosterController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(RosterController.class);
+    private static final Logger LOG = LogManager.getLogger(RosterController.class);
 
     @Autowired
     private SectionModelFactory sectionModelFactory;

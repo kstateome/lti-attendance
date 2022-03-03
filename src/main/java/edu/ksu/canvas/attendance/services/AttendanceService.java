@@ -8,7 +8,8 @@ import edu.ksu.canvas.attendance.model.AttendanceModel;
 import edu.ksu.canvas.attendance.model.SectionModel;
 import edu.ksu.canvas.attendance.repository.AttendanceRepository;
 import edu.ksu.canvas.attendance.repository.AttendanceStudentRepository;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Component
 public class AttendanceService {
 
-    private static final Logger LOG = Logger.getLogger(AttendanceService.class);
+    private static final Logger LOG = LogManager.getLogger(AttendanceService.class);
 
     @Autowired
     private AttendanceRepository attendanceRepository;
