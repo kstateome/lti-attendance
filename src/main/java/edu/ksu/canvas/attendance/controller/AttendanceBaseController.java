@@ -11,7 +11,8 @@ import edu.ksu.lti.launch.controller.LtiLaunchController;
 import edu.ksu.lti.launch.controller.OauthController;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,7 +29,7 @@ import java.util.List;
 @Scope("session")
 public class AttendanceBaseController extends LtiLaunchController {
 
-    private static final Logger LOG = Logger.getLogger(AttendanceBaseController.class);
+    private static final Logger LOG = LogManager.getLogger(AttendanceBaseController.class);
 
     @Autowired
     protected SynchronizationService synchronizationService;

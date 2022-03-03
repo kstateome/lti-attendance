@@ -1,14 +1,15 @@
 package edu.ksu.canvas.attendance.util;
 
 import edu.ksu.lti.launch.model.LtiLaunchData;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
 
 //FIXME: This is cut and paste from the canvas-lti project
 public class RoleChecker {
     
-    private static final Logger LOG = Logger.getLogger(RoleChecker.class);
+    private static final Logger LOG = LogManager.getLogger(RoleChecker.class);
     private final List<LtiLaunchData.InstitutionRole> validRoles;
 
     

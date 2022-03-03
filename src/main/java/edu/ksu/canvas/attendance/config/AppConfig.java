@@ -6,7 +6,8 @@ import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.attendance.entity.ConfigItem;
 import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.model.LtiLaunchData;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -29,7 +30,7 @@ import java.util.List;
 @Profile("prod")
 public class AppConfig {
 
-    private static final Logger LOG = Logger.getLogger(AppConfig.class);
+    private static final Logger LOG = LogManager.getLogger(AppConfig.class);
 
     @Autowired
     private ConfigRepository configRepo;

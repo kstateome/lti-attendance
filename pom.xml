@@ -19,6 +19,7 @@
         <spring.version>4.3.12.RELEASE</spring.version>
         <jackson.version>2.6.7</jackson.version>
         <logback.version>1.2.3</logback.version>
+        <log4j2.version>2.17.1</log4j2.version>
     </properties>
 
     <scm>
@@ -554,7 +555,7 @@
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
             <artifactId>lti-launch</artifactId>
-            <version>1.4.4</version>
+            <version>1.4.5</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -638,9 +639,19 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>test</scope>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

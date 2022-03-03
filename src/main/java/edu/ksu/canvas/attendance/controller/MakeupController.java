@@ -8,7 +8,8 @@ import edu.ksu.canvas.attendance.services.AttendanceStudentService;
 import edu.ksu.canvas.attendance.services.MakeupService;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import org.apache.commons.validator.routines.LongValidator;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -27,7 +28,7 @@ import java.util.Date;
 @RequestMapping("/studentMakeup")
 public class MakeupController extends AttendanceBaseController {
 
-    private static final Logger LOG = Logger.getLogger(MakeupController.class);
+    private static final Logger LOG = LogManager.getLogger(MakeupController.class);
 
     @Autowired
     private MakeupService makeupService;

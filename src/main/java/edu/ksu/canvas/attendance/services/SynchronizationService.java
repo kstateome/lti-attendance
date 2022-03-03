@@ -17,7 +17,8 @@ import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.exception.NoLtiSessionException;
 import edu.ksu.lti.launch.model.LtiLaunchData;
 import edu.ksu.lti.launch.service.LtiSessionService;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class SynchronizationService {
     public static final int DEFAULT_TOTAL_CLASS_MINUTES = 2160; //DEFAULT_MINUTES_PER_CLASS * 3 days a week * 16 weeks
     public static final int DEFAULT_MINUTES_PER_CLASS = 45;
 
-    private static final Logger LOG = Logger.getLogger(SynchronizationService.class);
+    private static final Logger LOG = LogManager.getLogger(SynchronizationService.class);
 
     @Autowired
     private AttendanceCourseRepository attendanceCourseRepository;
