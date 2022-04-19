@@ -25,8 +25,8 @@
     </properties>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/kstateome/lti-attendance.git</developerConnection>
+        <connection>scm:git:https://${github.token}@github.com/kstateome/lti-attendance.git</connection>
+        <developerConnection>scm:git:https://${github.token}@github.com/kstateome/lti-attendance.git</developerConnection>
         <url>https://github.com/kstateome/lti-attendance</url>
     </scm>
 
