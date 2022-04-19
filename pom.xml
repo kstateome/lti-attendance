@@ -17,7 +17,7 @@
 
     <properties>
         <!-- Suppress false positive hits in the dependency check plugin -->
-        <suppressionFiles>https://jenkins.ome.k-state.edu/maven-site/suppression.xml</suppressionFiles>
+        <suppressionFiles>${user.home}/dependency-check-suppression.xml</suppressionFiles>
         <spring.version>4.3.12.RELEASE</spring.version>
         <jackson.version>2.6.7</jackson.version>
         <logback.version>1.2.3</logback.version>
