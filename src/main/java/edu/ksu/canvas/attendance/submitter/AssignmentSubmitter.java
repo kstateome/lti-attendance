@@ -161,7 +161,7 @@ public class AssignmentSubmitter {
             for (AttendanceSummaryModel.Entry entry: model.getEntries()){
                 if (entry.getSisUserId().equals(student.getSisUserId())){
                     comments.append(getCommentHeader(entry, course, isSimpleAttendance));
-                    comments.append(studentCommentsMap.get(entry.getStudentId()));
+                    comments.append(entry.getSisUserId());
                 }
             }
         }
@@ -179,7 +179,7 @@ public class AssignmentSubmitter {
         String sectionName = sectionService.getSection(entry.getSectionId()).getName();
 
         if (isSimpleAttendance) {
-            return "Section Name" + sectionName + "\nTotal number of classes: " + getTotalSimpleClasses(entry) + "\nNumber of classes present: " + entry.getTotalClassesPresent()
+            return "Section Name: " + sectionName + "\nTotal number of classes: " + getTotalSimpleClasses(entry) + "\nNumber of classes present: " + entry.getTotalClassesPresent()
                     + "\nNumber of classes tardy: " + entry.getTotalClassesTardy() + "\nNumber of classes absent: " + entry.getTotalClassesMissed()
                     + "\nNumber of classes excused: " + entry.getTotalClassesExcused() + "\n";
         } else {
