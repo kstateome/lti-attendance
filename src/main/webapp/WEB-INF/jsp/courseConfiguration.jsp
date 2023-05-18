@@ -126,9 +126,9 @@
             <form:checkbox path="showNotesToStudents" id="showNotesToStudents"/> Show Notes entered on Class Roster page to students
         </label>
         <br/>
-        <label>
-            <form:checkbox  path ="gradingOn" id="conversionConfirm"/> Convert Attendance to Assignment
-        </label>
+            <label>
+                <form:checkbox  path ="gradingOn" id="conversionConfirm"/> Convert Attendance to Assignment
+            </label>
         <br/>
 
         <div class = "container-fluid ${courseConfigurationForm.gradingOn? '' : 'hidden'}" id="conversionConfig" >
@@ -191,7 +191,7 @@
         <button id="saveCourseConfiguration" name="saveCourseConfiguration" class="hovering-purple-button pull-left buffer-top" type="button" onclick="submitSaveForm()">
             Save Setup
         </button>
-        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'visible'}" type="button" onclick="$('#pushModal').modal('show')">
+        <button id="pushConfirmation" name="pushConfirmation" class="hovering-purple-button pull-right buffer-top ${courseConfigurationForm.gradingOn? '' : 'hidden'}" type="button" onclick="$('#pushModal').modal('show')">
             Push Attendance to Gradebook
         </button>
     </div>
