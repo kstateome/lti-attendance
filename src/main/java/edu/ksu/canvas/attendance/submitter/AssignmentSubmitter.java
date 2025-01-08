@@ -161,7 +161,6 @@ public class AssignmentSubmitter {
             for (AttendanceSummaryModel.Entry entry: model.getEntries()){
                 if (entry.getSisUserId().equals(student.getSisUserId())){
                     comments.append(getCommentHeader(entry, course, isSimpleAttendance));
-                    comments.append(entry.getSisUserId());
                 }
             }
         }
@@ -177,16 +176,28 @@ public class AssignmentSubmitter {
      */
     private String getCommentHeader(AttendanceSummaryModel.Entry entry, AttendanceCourse course, boolean isSimpleAttendance) {
         String sectionName = sectionService.getSection(entry.getSectionId()).getName();
+        StringBuilder commentBuilder = new StringBuilder();
 
         if (isSimpleAttendance) {
-            return "Section Name: " + sectionName + "\nTotal number of classes: " + getTotalSimpleClasses(entry) + "\nNumber of classes present: " + entry.getTotalClassesPresent()
-                    + "\nNumber of classes tardy: " + entry.getTotalClassesTardy() + "\nNumber of classes absent: " + entry.getTotalClassesMissed()
-                    + "\nNumber of classes excused: " + entry.getTotalClassesExcused() + "\n";
+            commentBuilder.append("Section Name: ").append(sectionName)
+                .append("\nTotal number of classes: ").append(getTotalSimpleClasses(entry))
+                .append("\nNumber of classes present: ").append(entry.getTotalClassesPresent())
+                .append("\nNumber of classes tardy: ").append(entry.getTotalClassesTardy())
+                .append("\nNumber of classes absent: ").append(entry.getTotalClassesMissed())
+                .append("\nNumber of classes excused: ").append(entry.getTotalClassesExcused())
+                .append("\n");
         } else {
-            return "Total number of minutes: " + course.getTotalMinutes() + "\nTotal minutes missed: " + entry.getSumMinutesMissed()
-                    + "\nNumber of minutes made up: " + entry.getSumMinutesMadeup() + "\nNumber of minutes remaining to be made up: "
-                    + entry.getRemainingMinutesMadeup() + "\n";
+            commentBuilder.append("Total number of minutes: ").append(course.getTotalMinutes())
+                .append("\nTotal minutes missed: ").append(entry.getSumMinutesMissed())
+                .append("\nNumber of minutes made up: ").append(entry.getSumMinutesMadeup())
+                .append("\nNumber of minutes remaining to be made up: ").append(entry.getRemainingMinutesMadeup())
+                .append("\n");
         }
+        commentBuilder.append(entry.getSisUserId());
+        commentBuilder.append("\n\nTo see a date-by-date breakdown of your attendance, " +
+            "please navigate to the \"K-State Attendance\" tab in the navigation menu of this Canvas course.");
+
+        return commentBuilder.toString();
     }
 
     /**
