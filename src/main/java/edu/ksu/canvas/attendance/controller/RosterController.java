@@ -62,7 +62,7 @@ public class RosterController extends AttendanceBaseController {
         return roster(date, null);
     }
 
-    @RequestMapping("/{sectionId}")
+    @RequestMapping("/roster/{sectionId}")
     public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException {
         ensureCanvasApiTokenPresent();
 
