@@ -31,7 +31,7 @@ import java.util.List;
 @Controller
 @Scope("session")
 @SessionAttributes("rosterForm")
-@RequestMapping("/roster")
+@RequestMapping("")
 public class RosterController extends AttendanceBaseController {
 
     private static final Logger LOG = LogManager.getLogger(RosterController.class);
@@ -62,7 +62,7 @@ public class RosterController extends AttendanceBaseController {
         return roster(date, null);
     }
 
-    @RequestMapping("/roster/{sectionId}")
+    @RequestMapping("{sectionId}")
     public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException {
         ensureCanvasApiTokenPresent();
 
