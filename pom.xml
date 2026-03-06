@@ -61,10 +61,22 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.0.4</version>
+                <version>12.2.0</version>
+                <inherited>false</inherited>
                 <configuration>
+                    <ossIndexServerId>ossindex</ossIndexServerId>
+                    <scanPlugins>true</scanPlugins>
                     <skipSystemScope>true</skipSystemScope>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>aggregate-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -711,8 +723,10 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.3.2</version>
+                <version>12.2.0</version>
                 <configuration>
+                    <ossIndexServerId>ossindex</ossIndexServerId>
+                    <scanPlugins>true</scanPlugins>
                     <skipSystemScope>true</skipSystemScope>
                 </configuration>
                 <reportSets>
