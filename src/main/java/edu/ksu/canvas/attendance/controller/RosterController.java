@@ -62,7 +62,7 @@ public class RosterController extends AttendanceBaseController {
         return roster(date, null);
     }
 
-    @RequestMapping("/roster/{sectionId}")
+    @RequestMapping("/{sectionId}")
     public ModelAndView roster(@RequestParam(required = false) Date date, @PathVariable String sectionId) throws NoLtiSessionException {
         ensureCanvasApiTokenPresent();
 
@@ -98,12 +98,12 @@ public class RosterController extends AttendanceBaseController {
         return page;
     }
 
-    @RequestMapping(value = "/roster/{sectionId}/save", params = "changeDate", method = RequestMethod.POST)
+    @RequestMapping(value = "/{sectionId}/save", params = "changeDate", method = RequestMethod.POST)
     public ModelAndView changeDate(@PathVariable String sectionId, @ModelAttribute("rosterForm") RosterForm rosterForm) throws NoLtiSessionException {
         return roster(rosterForm.getCurrentDate(), sectionId);
     }
 
-    @RequestMapping(value = "/roster/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
+    @RequestMapping(value = "/{sectionId}/save", params = "saveAttendance", method = RequestMethod.POST)
     public ModelAndView saveAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm, BindingResult bindingResult, HttpServletResponse response) throws NoLtiSessionException {
         validator.validate(rosterForm, bindingResult);
 
@@ -133,7 +133,7 @@ public class RosterController extends AttendanceBaseController {
         }
     }
 
-    @RequestMapping("/roster/{sectionId}/delete")
+    @RequestMapping("/{sectionId}/delete")
     public ModelAndView deleteAttendance(@PathVariable String sectionId, @ModelAttribute("rosterForm") @Valid RosterForm rosterForm) throws NoLtiSessionException {
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
