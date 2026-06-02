@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Keeps test output readable: silences framework DEBUG noise while still showing
+     the application's own log lines. Logback's default root level is DEBUG, which is
+     very verbose for the Spring/Hibernate context started by the *ITest classes. -->
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{36}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Show INFO and above for application code. -->
+    <logger name="edu.ksu" level="INFO"/>
+
+    <!-- Everything else (Spring, Hibernate, etc.) only at WARN to cut the noise. -->
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
