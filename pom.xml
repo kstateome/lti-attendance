@@ -427,6 +427,14 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Ingalls-SR11</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-data-commons version is managed by the Spring Boot parent BOM -->
         </dependencies>
     </dependencyManagement>
 
