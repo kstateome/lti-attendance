@@ -294,11 +294,6 @@
 
             <dependencies>
                 <dependency>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                    <version>2.0</version>
-                </dependency>
-                <dependency>
                     <groupId>org.jacoco</groupId>
                     <artifactId>org.jacoco.agent</artifactId>
                     <classifier>runtime</classifier>
