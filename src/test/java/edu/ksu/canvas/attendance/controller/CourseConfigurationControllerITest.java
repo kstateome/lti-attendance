@@ -68,7 +68,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/courseConfiguration/"+nonExistentSectionId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class CourseConfigurationControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/courseConfiguration/"+badSectionId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
     }
 
     @Test

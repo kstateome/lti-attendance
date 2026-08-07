@@ -109,7 +109,7 @@ public class RosterController extends AttendanceBaseController {
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if(validatedSectionId == null) {
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
         }
 
         if (bindingResult.hasErrors()) {
