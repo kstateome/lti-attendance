@@ -71,7 +71,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
     public ModelAndView classSetup(@PathVariable String sectionId,
                                    @RequestParam(defaultValue = "false", value = "updateSuccessful") boolean successful) throws NoLtiSessionException {
 
-        LOG.info("eid: " + canvasService.getEid() + " is viewing course configuration...");
+        LOG.info("Course configuration page requested.");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AttendanceSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
@@ -112,8 +112,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LOG.info("eid: " + canvasService.getEid() + " is saving course settings for " + canvasService.getCourseId() + ", minutes: "
-                    + classSetupForm.getTotalClassMinutes() + ", per session: " + classSetupForm.getDefaultMinutesPerSession());
+            LOG.info("Saving course configuration.");
 
             courseService.save(classSetupForm, canvasService.getCourseId());
             sectionService.save(classSetupForm, canvasService.getCourseId());
@@ -124,7 +123,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "synchronizeWithCanvas", method = RequestMethod.POST)
     public ModelAndView synchronizeWithCanvas(@PathVariable String sectionId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is forcing a synchronization with Canvas for Canvas Course ID: " + canvasService.getCourseId());
+        LOG.info("Canvas synchronization requested.");
         synchronizationService.synchronize(canvasService.getCourseId());
         
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
@@ -155,7 +154,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LOG.info("eid: " + canvasService.getEid() + " is pushing grades for course # " + canvasService.getCourseId() + " to Canvas");
+            LOG.info("Submitting grades to Canvas.");
             ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
             Long courseId = Long.valueOf(canvasService.getCourseId());
@@ -171,7 +170,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
                 page.addObject("pushingSuccessful", true);
             }
             catch (AttendanceAssignmentException e){
-                LOG.warn("The following error occurred when submitting the Assignment: " + e);
+                LOG.warn("Assignment submission encountered an error.");
                 page.addObject("error", e.getMessage());
             }
 
@@ -193,14 +192,14 @@ public class CourseConfigurationController extends AttendanceBaseController {
 
     @RequestMapping(value = "/{sectionId}/save", params = "deleteAssignment", method = RequestMethod.POST)
     public ModelAndView deleteAttendanceAssignment(@PathVariable String sectionId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is turning off grading feature and deleting the assignment from Canvas for section: " + sectionId);
+        LOG.info("Deleting attendance assignment from Canvas.");
         ModelAndView page = new ModelAndView("forward:/courseConfiguration/" + sectionId);
 
         try {
 
             assignmentAssistant.deleteAssignmentInCanvas(canvasService.getCourseId().longValue(), canvasService.getOauthToken());
         } catch (Exception exception) {
-            LOG.warn("The following error occurred when deleting the Assignment: " + exception);
+            LOG.warn("Assignment deletion encountered an error.");
             page.addObject("error", exception.getMessage());
             return page;
         }
