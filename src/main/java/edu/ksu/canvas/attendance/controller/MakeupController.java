@@ -67,8 +67,8 @@ public class MakeupController extends AttendanceBaseController {
             return new ModelAndView("forward:roster/"+validatedSectionId);
         }
 
-        AttendanceStudent student = studentService.getStudent(new Long(studentId));
-        MakeupForm makeupForm = makeupService.createMakeupForm(Long.valueOf(studentId), Long.valueOf(sectionId), addEmptyEntry);
+        AttendanceStudent student = selectedStudent;
+        MakeupForm makeupForm = makeupService.createMakeupForm(validatedStudentId.longValue(), validatedSectionId.longValue(), addEmptyEntry);
 
         ModelAndView page = new ModelAndView("studentMakeup");
         page.addObject("sectionId", sectionId);
