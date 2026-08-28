@@ -29,7 +29,7 @@ public class MakeupService {
      * @throws IllegalArgumentException when a student cannot be found in the database for the given studentId
      */
     public MakeupForm createMakeupForm(long studentId, long sectionId, boolean addEmptyEntry) {
-        AttendanceStudent student = attendanceStudentRepository.findByStudentId(new Long(studentId));
+        AttendanceStudent student = attendanceStudentRepository.findByStudentId(Long.valueOf(studentId));
         if(student == null) {
             RuntimeException e = new IllegalArgumentException("student does not exist in the database");
             throw new ContextedRuntimeException(e).addContextValue("studentId", studentId);

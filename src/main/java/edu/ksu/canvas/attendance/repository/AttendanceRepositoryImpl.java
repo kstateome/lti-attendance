@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 
 @Repository
@@ -17,6 +19,8 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private static final Logger LOG = LogManager.getLogger(AttendanceRepositoryImpl.class);
 
 
     /**
@@ -50,12 +54,18 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                     "FROM Attendance att " +
                     "WHERE att.notes IS NOT NULL AND att.attendanceStudent.canvasSectionId = :canvasSectionId ";
 
-        Query query = entityManager.createQuery(jpql);
+        TypedQuery<AttendanceCommentEntry> query = entityManager.createQuery(jpql, AttendanceCommentEntry.class);
         query.setParameter("canvasSectionId", sectionId);
 
-        List<AttendanceCommentEntry> results = (List<AttendanceCommentEntry>) query.getResultList();
+        List<AttendanceCommentEntry> results;
+        try {
+            results = query.getResultList();
+        } catch (PersistenceException | ClassCastException e) {
+            LOG.error("Error executing attendance comments query for sectionId {}", sectionId, e);
+            return Collections.emptyMap();
+        }
 
-        return groupCommentsByStudents(results);
+        return groupCommentsByStudents(results == null ? Collections.emptyList() : results);
     }
 
     /**
