@@ -51,4 +51,15 @@
 		<nature>org.zeroturnaround.eclipse.jrebelNature</nature>
 		<nature>org.zeroturnaround.eclipse.remoting.remotingNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1787942609805</id>
+			<name></name>
+			<type>30</type>
+			<matcher>
+				<id>org.eclipse.core.resources.regexFilterMatcher</id>
+				<arguments>node_modules|\.git|__CREATED_BY_JAVA_LANGUAGE_SERVER__</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

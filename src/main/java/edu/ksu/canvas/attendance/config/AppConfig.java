@@ -20,6 +20,16 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import java.util.List;
 
 
+/**
+ * Main application configuration.
+ * 
+ * Security Notes:
+ * - Jackson is configured in JacksonConfig with defensive settings against:
+ *   - CVE-2020-36518: Deeply nested JSON causing stack overflow (DoS)
+ *   - CVE-2022-42003: UNWRAP_SINGLE_VALUE_ARRAYS unbounded resource consumption
+ *   - CVE-2022-42004: BeanDeserializer._deserialize unbounded resource consumption
+ * - Jackson version 2.17.1 includes patches for these vulnerabilities
+ */
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
