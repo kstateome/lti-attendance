@@ -159,7 +159,7 @@ public class SynchronizationService {
             // how this happens within Canvas.
             for(AttendanceStudent studentInDb: existingStudentsInDb) {
                 if(studentInDb.getCanvasCourseId()!=null && !studentInDb.getCanvasCourseId().equals(canvasCourseId)) {
-                    LOG.info("Found student with the wrong canvasCourseId.. "+studentInDb+ " canvasCourseId should be: "+canvasCourseId);
+                    LOG.info("Found student record with inconsistent canvas course mapping.");
                     studentInDb.setCanvasCourseId(canvasCourseId);
                     studentRepository.save(studentInDb);
                 }
@@ -184,7 +184,7 @@ public class SynchronizationService {
             droppedStudents.forEach(student -> {
                 student.setDeleted(true);
                 studentList.add(studentRepository.save(student));
-                LOG.debug("Added dropped student to course list: " + student.getName());
+                LOG.debug("Added dropped student to course list.");
             });
         }
     }

@@ -1,7 +1,5 @@
 package edu.ksu.canvas.attendance.form;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -13,8 +11,6 @@ import edu.ksu.canvas.attendance.model.SectionModel;
 
 @Component
 public class RosterFormValidator implements Validator {
-
-    private static final Logger LOG = LogManager.getLogger(RosterFormValidator.class);
 
     public static final String MINIMUM_MINUTES_MISSED_ERROR_CODE = "Min.rosterForm.sectionModels.attendances.minutesMissed";
     public static final String SELECTIVELY_REQUIRED_MINUTES_MISSED_ERROR_CODE = "SelectivelyRequired.rosterForm.sectionModels.attendances.minutesMissed";

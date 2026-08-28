@@ -19,7 +19,7 @@ public class AttendanceOauthTokenService implements OauthTokenService{
 
     @Override
     public String storeToken(String eid, String token) {
-        LOG.info("Storing token for " + eid);
+        LOG.info("Storing OAuth token.");
         OauthToken oauthToken = new OauthToken();
         oauthToken.seteID(eid);
         oauthToken.setToken(token);
@@ -30,7 +30,7 @@ public class AttendanceOauthTokenService implements OauthTokenService{
 
     @Override
     public String updateToken(String eid, String token) {
-        LOG.info("Updating token for " + eid);
+        LOG.info("Updating OAuth token.");
         OauthToken oauthToken = oauthTokenRepository.findByEIDAndApplicationName(eid, APPLICATION_NAME);
         if (oauthToken == null) {
             return storeToken(eid, token);
@@ -42,7 +42,7 @@ public class AttendanceOauthTokenService implements OauthTokenService{
 
     @Override
     public String getRefreshToken(String eid) {
-        LOG.info("Getting refresh token for " + eid);
+        LOG.info("Retrieving OAuth refresh token.");
         OauthToken token = oauthTokenRepository.findByEIDAndApplicationName(eid, APPLICATION_NAME);
         if (token == null) {
             return null;
