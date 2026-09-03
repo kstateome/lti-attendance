@@ -99,7 +99,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/studentMakeup/"+nonNumberSectionId+"/"+studentId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
     }
     
     @Test
@@ -109,7 +109,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/studentMakeup/"+nonExistantSectionId+"/"+studentId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
     }
     
     @Test
@@ -119,7 +119,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/studentMakeup/"+sectionId+"/"+nonNumberstudentId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster/"+sectionId));
+            .andExpect(view().name("forward:/roster/"+sectionId));
     }
     
     @Test
@@ -129,7 +129,7 @@ public class MakeupControllerITest extends BaseControllerITest {
         
         mockMvc.perform(get("/studentMakeup/"+sectionId+"/"+nonExistStudentId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster/"+sectionId));
+            .andExpect(view().name("forward:/roster/"+sectionId));
     }
     
     @Test
