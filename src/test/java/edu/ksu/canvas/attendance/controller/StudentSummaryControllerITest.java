@@ -105,7 +105,7 @@ public class StudentSummaryControllerITest extends BaseControllerITest {
         Long studentId = existingStudent.getStudentId();
         String nonNumberSectionId = "Numbers";
         mockMvc.perform(get("/studentSummary/" + nonNumberSectionId + "/" + studentId))
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
 
     }
 
@@ -115,7 +115,7 @@ public class StudentSummaryControllerITest extends BaseControllerITest {
         Long sectionId = existingSection.getCanvasSectionId();
         String nonNumberstudentId = "L33t";
         mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonNumberstudentId))
-                .andExpect(view().name("forward:roster"));
+                .andExpect(view().name("forward:/roster"));
 
     }
 
@@ -124,7 +124,7 @@ public class StudentSummaryControllerITest extends BaseControllerITest {
         Long sectionId = existingSection.getCanvasSectionId();
         Long nonExistStudentId = -1L;
         mockMvc.perform(get("/studentSummary/" + sectionId + "/" + nonExistStudentId))
-                .andExpect(view().name("forward:roster"));
+                .andExpect(view().name("forward:/roster"));
 
     }
 

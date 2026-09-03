@@ -426,6 +426,14 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Ingalls-SR11</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-data-commons version is managed by the Spring Boot parent BOM -->
         </dependencies>
     </dependencyManagement>
 
@@ -554,6 +562,17 @@
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
             <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
         </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
@@ -592,6 +611,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
