@@ -53,7 +53,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
     @RequestMapping("/{sectionId}")
     public ModelAndView attendanceSummary(@PathVariable String sectionId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is viewing the attendance summary report.");
+        LOG.info("Attendance summary page requested.");
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if (validatedSectionId == null) {
@@ -96,7 +96,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
     @RequestMapping("/{sectionId}/csv")
     public void exportSummaryCVS(@PathVariable("sectionId") String sectionId, HttpServletResponse response) throws IOException, NoLtiSessionException {
 
-        LOG.info("eid:" + canvasService.getEid() + " has requested a CSV export of the Attendance Summary.");
+        LOG.info("Attendance summary CSV export requested.");
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if (validatedSectionId == null) {
             return;

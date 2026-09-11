@@ -49,7 +49,7 @@ public class MakeupController extends AttendanceBaseController {
 
     @RequestMapping("/{sectionId}/{studentId}")
     public ModelAndView studentMakeup(@PathVariable String sectionId, @PathVariable String studentId) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is viewing makeup data");
+        LOG.info("Makeup data page requested.");
 
         return studentMakeup(sectionId, studentId, false);
     }
@@ -80,7 +80,7 @@ public class MakeupController extends AttendanceBaseController {
 
     @RequestMapping(value = "/save", params = "saveMakeup", method = RequestMethod.POST)
     public ModelAndView saveMakeup(@ModelAttribute MakeupForm makeupForm, BindingResult bindingResult) throws NoLtiSessionException {
-        LOG.info("eid: " + canvasService.getEid() + " is saving makeup data.");
+        LOG.info("Attempting to save makeup data.");
         validator.validate(makeupForm, bindingResult);
 
         boolean allUnsavedAndToBeDeleted = false;
@@ -92,7 +92,7 @@ public class MakeupController extends AttendanceBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            LOG.debug("There were user input errors saving the Makeup form" + bindingResult.getAllErrors());
+            LOG.debug("User input errors detected while saving makeup form.");
             String errorMessage = "Please correct user input and try saving again.";
 
             ModelAndView page = new ModelAndView("studentMakeup");
