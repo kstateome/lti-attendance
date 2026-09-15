@@ -47,6 +47,9 @@
 <div class="container container-adjustment">
     <form:form id="sectionSelect" modelAttribute="rosterForm" class="sectionDropdown" method="POST"
                action="${context}/roster/${selectedSectionId}/save">
+        <c:if test="${not empty _csrf}">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </c:if>
 
         <c:if test="${not empty error}">
             <div class="alert alert-info">

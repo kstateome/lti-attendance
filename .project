@@ -26,17 +26,17 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.m2e.core.maven2Builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.zeroturnaround.eclipse.rebelXmlBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 		<buildCommand>
 			<name>org.zeroturnaround.eclipse.remoting.remotingBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
@@ -53,7 +53,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1787942609805</id>
+			<id>1786991649609</id>
 			<name></name>
 			<type>30</type>
 			<matcher>

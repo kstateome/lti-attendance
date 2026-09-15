@@ -76,6 +76,9 @@
 
     <br/>
     <form:form id="makeupForm" modelAttribute="makeupForm" method="POST" action="${context}/studentMakeup/save">
+        <c:if test="${not empty _csrf}">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </c:if>
         <c:if test="${not empty error}">
             <div class="alert alert-info">
                 <p>${error}</p>

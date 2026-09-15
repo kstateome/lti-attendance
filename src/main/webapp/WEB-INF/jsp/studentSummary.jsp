@@ -50,6 +50,9 @@
 
 <br/>
 <form:form id="summaryForm" modelAttribute="summaryForm">
+    <c:if test="${not empty _csrf}">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </c:if>
 
     <form:input type="hidden" id="sectionId" path="sectionId" />
     <form:input type="hidden" id="studentId" path="studentId" />

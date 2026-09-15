@@ -49,6 +49,9 @@
 </nav>
 <form:form id="sectionSelect" modelAttribute="courseConfigurationForm" class="sectionDropdown form-div" method="POST"
            action="${context}/courseConfiguration/${selectedSectionId}/save">
+    <c:if test="${not empty _csrf}">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </c:if>
     <c:forEach items="${error}" var="oneError">
         <div class="alert alert-danger">
             <p>${oneError}</p>
