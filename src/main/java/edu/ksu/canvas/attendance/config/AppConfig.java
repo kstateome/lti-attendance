@@ -6,8 +6,6 @@ import edu.ksu.canvas.attendance.util.RoleChecker;
 import edu.ksu.canvas.attendance.entity.ConfigItem;
 import edu.ksu.canvas.attendance.repository.ConfigRepository;
 import edu.ksu.lti.launch.model.LtiLaunchData;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -20,6 +18,16 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import java.util.List;
 
 
+/**
+ * Main application configuration.
+ * 
+ * Security Notes:
+ * - Jackson is configured in JacksonConfig with defensive settings against:
+ *   - CVE-2020-36518: Deeply nested JSON causing stack overflow (DoS)
+ *   - CVE-2022-42003: UNWRAP_SINGLE_VALUE_ARRAYS unbounded resource consumption
+ *   - CVE-2022-42004: BeanDeserializer._deserialize unbounded resource consumption
+ * - Jackson version 2.17.1 includes patches for these vulnerabilities
+ */
 @Configuration
 @EnableAutoConfiguration
 @EnableWebMvcSecurity
@@ -29,8 +37,6 @@ import java.util.List;
 @PropertySource({"classpath:application.properties"})
 @Profile("prod")
 public class AppConfig {
-
-    private static final Logger LOG = LogManager.getLogger(AppConfig.class);
 
     @Autowired
     private ConfigRepository configRepo;

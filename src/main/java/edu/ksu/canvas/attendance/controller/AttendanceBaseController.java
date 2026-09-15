@@ -85,7 +85,7 @@ public class AttendanceBaseController extends LtiLaunchController {
 
         for(LtiLaunchData.InstitutionRole role : roleList) {
             if (role.compareTo(LtiLaunchData.InstitutionRole.Learner) == 0 && !hasOneAuthorityRole) {
-                LOG.info(canvasService.getEid() + " is accessing student summary information");
+                LOG.info("Student summary access requested for a learner account.");
                 List<AttendanceStudent> attendanceStudentList = attendanceStudentService.getStudentByCourseAndSisId(canvasService.getSisID(), canvasService.getCourseId().longValue());
                 AttendanceStudent attendanceStudent = attendanceStudentList.stream().filter(x -> !x.getDeleted()).findFirst().orElse(null);
                 if (attendanceStudent == null) {
@@ -124,7 +124,7 @@ public class AttendanceBaseController extends LtiLaunchController {
 
         List<LtiLaunchData.InstitutionRole> roles = canvasService.getRoles();
         if (!roleChecker.roleAllowed(roles)) {
-            LOG.error("User (" + canvasService.getEid() + ") with insufficient privileges tried to launch. Roles: " + roles);
+            LOG.error("User with insufficient privileges attempted to access the tool");
             throw new AccessDeniedException("You do not have sufficient privileges to use this tool");
         }
     }

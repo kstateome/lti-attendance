@@ -77,7 +77,7 @@ public class RosterController extends AttendanceBaseController {
         List<AttendanceSection> sections = sectionService.getSectionsByCourse(selectedSection.getCanvasCourseId());
         sectionId = selectedSection.getCanvasSectionId().toString();
 
-        LOG.info("eid: " + canvasService.getEid() + " is viewing the roster.");
+        LOG.info("Roster page requested.");
 
         //Sets the date to today if not already set
         if (date == null) {
@@ -113,7 +113,7 @@ public class RosterController extends AttendanceBaseController {
         }
 
         if (bindingResult.hasErrors()) {
-            LOG.warn(bindingResult.getAllErrors().toString());
+            LOG.warn("Roster form validation failed.");
             ModelAndView page = new ModelAndView("roster");
             page.addObject("error", "Please check all sections when correcting user input. Then try saving again.");
 
@@ -124,7 +124,7 @@ public class RosterController extends AttendanceBaseController {
             page.addObject("selectedSectionId", sectionId);
             return page;
         } else {
-            LOG.info("eid: " + canvasService.getEid() + " is attempting to save section attendance for section : " + sectionId);
+            LOG.info("Attempting to save section attendance.");
 
             attendanceService.save(rosterForm);
             ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
@@ -141,7 +141,7 @@ public class RosterController extends AttendanceBaseController {
             return new ModelAndView("redirect:/roster");
         }
 
-        LOG.info("eid: " + canvasService.getEid() + " is attempting to delete section attendance for section : " + sectionId);
+        LOG.info("Attempting to delete section attendance.");
 
         boolean deleted = attendanceService.delete(rosterForm);
         ModelAndView page = roster(rosterForm.getCurrentDate(), sectionId);
