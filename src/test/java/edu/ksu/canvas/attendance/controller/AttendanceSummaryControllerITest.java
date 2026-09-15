@@ -74,7 +74,7 @@ public class AttendanceSummaryControllerITest extends BaseControllerITest {
         String badSectionId = "hackerDelight";
         mockMvc.perform(get("/attendanceSummary/"+badSectionId))
             .andExpect(status().isOk())
-            .andExpect(view().name("forward:roster"));
+            .andExpect(view().name("forward:/roster"));
     }
 
     @Test

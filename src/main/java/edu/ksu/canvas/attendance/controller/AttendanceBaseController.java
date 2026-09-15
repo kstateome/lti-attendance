@@ -98,10 +98,10 @@ public class AttendanceBaseController extends LtiLaunchController {
                         return new ModelAndView("studentSyncFailed");
                     }
                 }
-                return new ModelAndView("forward:studentSummary/"+ attendanceStudent.getCanvasSectionId().toString()+"/"+ attendanceStudent.getStudentId().toString());
+                return new ModelAndView("forward:/studentSummary/"+ attendanceStudent.getCanvasSectionId().toString()+"/"+ attendanceStudent.getStudentId().toString());
             }
         }
-        return new ModelAndView("forward:roster");
+        return new ModelAndView("forward:/roster");
     }
 
     protected AttendanceSection getSelectedSection(Long previousSelectedSectionId) throws NoLtiSessionException {

@@ -76,7 +76,7 @@ public class CourseConfigurationController extends AttendanceBaseController {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AttendanceSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
         }
 
         ModelAndView page = new ModelAndView("courseConfiguration");

@@ -57,7 +57,7 @@ public class AttendanceSummaryController extends AttendanceBaseController {
 
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         if (validatedSectionId == null) {
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
         }
 
         AttendanceSection selectedSection = getSelectedSection(validatedSectionId);
