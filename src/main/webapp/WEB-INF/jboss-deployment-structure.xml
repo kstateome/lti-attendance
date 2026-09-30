@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-deployment-structure>
     <deployment>
+        <!--
+            The application packages Jackson 2.17.1. WildFly 15 also adds its
+            Jackson 2.9.5 modules as implicit dependencies, and server modules
+            take precedence over WEB-INF/lib. Exclude the complete core set so
+            Jackson classes are always loaded from the application's aligned
+            version.
+        -->
+        <exclusions>
+            <module name="com.fasterxml.jackson.core.jackson-annotations"/>
+            <module name="com.fasterxml.jackson.core.jackson-core"/>
+            <module name="com.fasterxml.jackson.core.jackson-databind"/>
+        </exclusions>
         <dependencies>
             <module name="edu.ksu.canvas"/>
         </dependencies>
