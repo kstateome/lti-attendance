@@ -18,7 +18,8 @@
     <properties>
         <!-- Suppress false positive hits in the dependency check plugin -->
         <suppressionFiles>${user.home}/dependency-check-suppression.xml</suppressionFiles>
-        <spring.version>4.3.12.RELEASE</spring.version>
+        <spring.version>5.3.39</spring.version>
+        <hibernate.version>5.6.15.Final</hibernate.version>
         <jackson.version>2.17.1</jackson.version>
         <logback.version>1.2.3</logback.version>
         <log4j2.version>2.26.0</log4j2.version>
@@ -34,12 +35,12 @@
 
     <distributionManagement>
         <repository>
-            <id>ome-appdev-release</id>
+            <id>appdev-release</id>
             <name>artifactory releases</name>
             <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-release</url>
         </repository>
         <snapshotRepository>
-            <id>ome-appdev-snapshot</id>
+            <id>appdev-snapshot</id>
             <name>artifactory snapshots</name>
             <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-snapshot</url>
         </snapshotRepository>
