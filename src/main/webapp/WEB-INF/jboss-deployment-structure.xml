@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jboss-deployment-structure>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
     <deployment>
+        <!--
+            The application packages Jackson 2.17.1, while WildFly 15 provides
+            Jackson 2.9.5 through server modules and may expose it through its
+            RESTEasy/JAX-RS integration. Exclude those subsystems and the direct
+            Jackson modules so the deployment uses the aligned libraries in
+            WEB-INF/lib.
+        -->
+        <exclude-subsystems>
+            <subsystem name="resteasy"/>
+            <subsystem name="jaxrs"/>
+        </exclude-subsystems>
+
+        <exclusions>
+            <module name="com.fasterxml.jackson.core.jackson-annotations"/>
+            <module name="com.fasterxml.jackson.core.jackson-core"/>
+            <module name="com.fasterxml.jackson.core.jackson-databind"/>
+        </exclusions>
+
         <dependencies>
             <module name="edu.ksu.canvas"/>
         </dependencies>
