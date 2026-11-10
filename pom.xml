@@ -20,6 +20,7 @@
         <suppressionFiles>${user.home}/dependency-check-suppression.xml</suppressionFiles>
         <spring.version>5.3.39</spring.version>
         <hibernate.version>5.6.15.Final</hibernate.version>
+        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
         <jackson.version>2.17.1</jackson.version>
         <logback.version>1.2.3</logback.version>
         <log4j2.version>2.26.0</log4j2.version>
@@ -556,6 +557,12 @@
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
             <version>2.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.validation</groupId>
+                    <artifactId>validation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
@@ -666,6 +673,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-validator</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
@@ -674,6 +685,11 @@
                     <artifactId>spring-boot-w</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
         </dependency>
     </dependencies>
     <reporting>
