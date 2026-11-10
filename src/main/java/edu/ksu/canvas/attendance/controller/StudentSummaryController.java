@@ -80,13 +80,13 @@ public class StudentSummaryController extends AttendanceBaseController {
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
 
         if (validatedSectionId == null || validatedStudentId == null) {
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
         }
 
         AttendanceStudent student = studentService.getStudent(validatedStudentId);
 
         if (student == null){
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
 
         }
         MakeupForm makeupForm = makeupService.createMakeupForm(student.getStudentId(), validatedSectionId, addEmptyEntry);

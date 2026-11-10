@@ -58,13 +58,13 @@ public class MakeupController extends AttendanceBaseController {
         Long validatedSectionId = LongValidator.getInstance().validate(sectionId);
         AttendanceSection selectedSection = validatedSectionId == null ? null : getSelectedSection(validatedSectionId);
         if(validatedSectionId == null || selectedSection == null) {
-            return new ModelAndView("forward:roster");
+            return new ModelAndView("forward:/roster");
         }
 
         Long validatedStudentId = LongValidator.getInstance().validate(studentId);
         AttendanceStudent selectedStudent = validatedStudentId == null ? null : studentService.getStudent(validatedStudentId);
         if(validatedStudentId == null || selectedStudent == null) {
-            return new ModelAndView("forward:roster/"+validatedSectionId);
+            return new ModelAndView("forward:/roster/"+validatedSectionId);
         }
 
         AttendanceStudent student = studentService.getStudent(new Long(studentId));

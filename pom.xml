@@ -38,12 +38,12 @@
         <repository>
             <id>appdev-release</id>
             <name>artifactory releases</name>
-            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-release</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/appdev-release</url>
         </repository>
         <snapshotRepository>
             <id>appdev-snapshot</id>
             <name>artifactory snapshots</name>
-            <url>https://artifactory.its.ksu.edu/artifactory/ome-appdev-snapshot</url>
+            <url>https://artifactory.its.ksu.edu/artifactory/appdev-snapshot</url>
         </snapshotRepository>
         <site>
             <id>${project.artifactId}-site</id>
@@ -429,6 +429,14 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Ingalls-SR11</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- spring-data-commons version is managed by the Spring Boot parent BOM -->
         </dependencies>
     </dependencyManagement>
 
@@ -468,7 +476,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>22.0</version>
+            <version>30.1.1-jre</version>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -559,10 +567,19 @@
             <version>2.0.0</version>
             <exclusions>
                 <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>javax.validation</groupId>
                     <artifactId>validation-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
         </dependency>
         <dependency>
             <groupId>edu.ksu.ome.lti</groupId>
@@ -601,6 +618,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
