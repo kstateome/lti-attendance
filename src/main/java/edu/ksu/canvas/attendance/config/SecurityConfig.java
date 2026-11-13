@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -34,6 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		};
 
+		http.headers().frameOptions().disable();
+		http.headers().addHeaderWriter(new StaticHeadersWriter(
+				"Content-Security-Policy",
+				"frame-ancestors https://k-state.test.instructure.com"));
 		http
 			.csrf()
 				.requireCsrfProtectionMatcher(csrfRequestMatcher)

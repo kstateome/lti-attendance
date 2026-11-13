@@ -4,7 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockFilterChain;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.junit.Assert.*;
@@ -147,5 +152,28 @@ public class SecurityConfigUTest {
 				securityConfig.getClass().getDeclaredMethods().length > 0);
 	}
 
-}
+	@Test
+	public void testCanvasFramingHeaders() throws Exception {
+		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+		context.setServletContext(new MockServletContext());
+		context.register(SecurityConfig.class);
 
+		try {
+			context.refresh();
+			FilterChainProxy securityFilter = context.getBean("springSecurityFilterChain", FilterChainProxy.class);
+			MockHttpServletRequest request = new MockHttpServletRequest("GET", "/");
+			request.setServletPath("/");
+			MockHttpServletResponse response = new MockHttpServletResponse();
+
+			securityFilter.doFilter(request, response, new MockFilterChain());
+
+			assertNull("Spring Security should not deny iframe rendering", response.getHeader("X-Frame-Options"));
+			assertEquals("Canvas should be permitted to frame the response",
+					"frame-ancestors https://k-state.test.instructure.com",
+					response.getHeader("Content-Security-Policy"));
+		} finally {
+			context.close();
+		}
+	}
+
+}
